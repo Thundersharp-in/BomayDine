@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@id/dilevery_area">
+
+    <fragment
+        android:name="com.thundersharp.bombaydine.home.HomeFragment"
+        android:id="@+id/home"
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
+        <action
+            android:id="@+id/home_to_dilevery_area"
+            app:destination="@id/dilevery_area"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment android:name="com.thundersharp.bombaydine.location.Service_areas"
+        android:id="@+id/dilevery_area"
+        android:label="Delivery area"
+        tools:layout="@layout/fragment_service_areas">
+        <action
+            android:id="@+id/dilevery_area_to_discover"
+            app:destination="@id/discover"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+    <fragment android:name="com.thundersharp.bombaydine.discover.Discover"
+        android:id="@+id/discover"
+        android:label="Discover"
+        tools:layout="@layout/fragment_discover">
+        <action
+            android:id="@+id/discover_to_cart"
+            app:destination="@id/cart"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+    <fragment android:name="com.thundersharp.bombaydine.orders.Cart"
+        android:id="@+id/cart"
+        android:label="Cart"
+        tools:layout="@layout/fragment_cart">
+        <action
+            android:id="@+id/cart_to_profile"
+            app:destination="@id/profile"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
+    </fragment>
+
+
+    <fragment android:name="com.thundersharp.bombaydine.Profile"
+        android:id="@+id/profile"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile">
+        <action
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right" />
+    </fragment>
+
+
+</navigation>

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".login.LoginActivity">
+    tools:context=".login.EmailLoginActivity">
 
 
     <ImageView
@@ -29,34 +29,36 @@
             android:layout_weight="1">
 
             <TextView
-                android:id="@+id/skip"
-                android:layout_width="60dp"
+                android:id="@+id/phoneback"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minHeight="30dp"
-                android:fontFamily="@font/calibrib"
-                android:text="Skip"
-                android:textColor="#fff"
-                android:gravity="center"
-                android:textAllCaps="false"
-                android:background="@drawable/btn_blk"
                 android:layout_alignParentEnd="true"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginTop="10dp"/>
+                android:background="@drawable/btn_blk"
+                android:fontFamily="@font/calibrib"
+                android:gravity="center"
+                android:minHeight="30dp"
+                android:paddingStart="15dp"
+                android:paddingEnd="15dp"
+                android:text="Phone login"
+                android:textAllCaps="false"
+                android:textColor="#E3E3E3" />
+
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
                 android:layout_gravity="center_vertical"
                 android:elevation="4dp"
                 android:fontFamily="@font/amita_bold"
                 android:text="Delicious food ahead !"
-                android:layout_centerVertical="true"
                 android:textAlignment="center"
                 android:textColor="#fff"
                 android:textSize="25sp"
                 android:textStyle="bold"
                 tools:ignore="RtlCompat" />
-
 
         </RelativeLayout>
 
@@ -77,32 +79,36 @@
                 android:minHeight="52dp"
                 android:orientation="horizontal">
 
-                <com.hbb20.CountryCodePicker
-                    android:id="@+id/pkr"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="5dp"
-                    app:ccp_defaultLanguage="ENGLISH"
-                    app:ccp_defaultNameCode="IND"
-                    app:ccp_defaultPhoneCode="91"
-                    app:ccp_showArrow="true"
-                    app:ccp_showFlag="true"
-                    app:ccp_showNameCode="true" />
-
                 <EditText
-                    android:id="@+id/editText_carrierNumber"
+                    android:id="@+id/email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
+                    android:layout_marginStart="15dp"
                     android:layout_marginEnd="10dp"
                     android:background="@null"
-                    android:hint="Phone Number"
-                    android:inputType="phone"
+                    android:hint="Email address"
+                    android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textColorHint="#b7b7b7" />
             </LinearLayout>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:layout_marginTop="10dp"
+                android:drawableStart="@drawable/ic_outline_info_24"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/calibri"
+                android:gravity="center"
+                android:text="We will send a email that will instantly log you in"
+                android:textAlignment="viewStart"
+                android:textColor="#E3E3E3"
+                app:drawableTint="#FFEB3B"
+                tools:ignore="RtlCompat" />
+
 
             <androidx.appcompat.widget.AppCompatButton
                 android:id="@+id/sendotp"
@@ -112,7 +118,7 @@
                 android:layout_marginTop="10dp"
                 android:background="@drawable/button_curved_round"
                 android:minHeight="52dp"
-                android:text="Send OTP"
+                android:text="Login"
                 android:textAllCaps="false"
                 android:textColor="#dddddd"
                 android:textSize="16sp" />
@@ -136,25 +142,25 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:fontFamily="@font/calibrib"
-                    android:text="OR"
-                    android:textColor="#fff"
                     android:layout_centerInParent="true"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="22dp"
-                    android:textSize="18sp"/>
+                    android:fontFamily="@font/calibrib"
+                    android:text="OR"
+                    android:textColor="#fff"
+                    android:textSize="18sp" />
 
             </RelativeLayout>
 
 
             <LinearLayout
+                android:id="@+id/emaillogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_above="@id/otherholder"
                 android:layout_marginHorizontal="15dp"
                 android:background="@drawable/edittext_curved"
                 android:elevation="7dp"
-                android:id="@+id/emaillogin"
-                android:layout_above="@id/otherholder"
                 android:minHeight="52dp"
                 android:orientation="horizontal">
 
@@ -163,9 +169,10 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:drawableStart="@drawable/ic_outline_alternate_email_24"
-                    android:gravity="center"
+                    android:drawablePadding="-30dp"
                     android:fontFamily="@font/calibri"
-                    android:text="Continue with Email"
+                    android:gravity="center"
+                    android:text="Join us now"
                     android:textColor="#252525"
                     android:textSize="18sp" />
 
@@ -173,13 +180,13 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/otherholder"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_above="@id/tos"
                 android:layout_marginTop="10dp"
                 android:layout_marginBottom="20dp"
                 android:minHeight="52dp"
-                android:id="@+id/otherholder"
-                android:layout_above="@id/tos"
                 android:orientation="horizontal"
                 android:weightSum="2">
 
@@ -194,11 +201,11 @@
                     android:drawableStart="@drawable/facebook"
                     android:drawablePadding="20dp"
                     android:elevation="7dp"
+                    android:fontFamily="@font/calibri"
                     android:gravity="center_vertical"
                     android:minHeight="52dp"
                     android:orientation="horizontal"
                     android:paddingStart="15dp"
-                    android:fontFamily="@font/calibri"
                     android:text="Facebook"
                     android:textAlignment="textStart"
                     android:textAllCaps="false"
@@ -217,12 +224,12 @@
                     android:drawableStart="@drawable/google"
                     android:drawablePadding="20dp"
                     android:elevation="7dp"
+                    android:fontFamily="@font/calibri"
                     android:gravity="center_vertical"
                     android:minHeight="52dp"
                     android:orientation="horizontal"
                     android:paddingStart="15dp"
                     android:text="Google"
-                    android:fontFamily="@font/calibri"
                     android:textAlignment="textStart"
                     android:textAllCaps="false"
                     android:textColor="#252525"
@@ -233,12 +240,12 @@
             </LinearLayout>
 
             <TextView
+                android:id="@+id/tos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
                 android:layout_marginHorizontal="15dp"
                 android:layout_marginBottom="15dp"
-                android:layout_alignParentBottom="true"
-                android:id="@+id/tos"
                 android:fontFamily="@font/calibri"
                 android:text="By continuning you are agreeing to our \nTerms of service, privacy policy, Content Policy."
                 android:textAlignment="center"
