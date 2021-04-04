@@ -1,4 +1,4 @@
-package com.thundersharp.bombaydine.startup;
+package com.thundersharp.bombaydine.user.startup;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.thundersharp.bombaydine.R;
-import com.thundersharp.bombaydine.login.LoginActivity;
+import com.thundersharp.bombaydine.user.login.LoginActivity;
 
 public class MainActivity extends AppCompatActivity {
 

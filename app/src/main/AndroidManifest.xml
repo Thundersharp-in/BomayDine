@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.thundersharp.bombaydine" >
+    package="com.thundersharp.bombaydine">
 
     <application
         android:allowBackup="true"
@@ -9,13 +9,14 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.BombayDine" >
-        <activity android:name=".home.HomePage" />
-        <activity android:name=".login.EmailAccountCreate" />
-        <activity android:name=".login.EmailLoginActivity" />
-        <activity android:name=".login.OtpVerificationActivity" />
-        <activity android:name=".login.LoginActivity" />
-        <activity android:name=".startup.MainActivity" >
+        android:theme="@style/Theme.BombayDine">
+        <activity
+            android:name=".user.home.MainPage" />
+        <activity android:name=".user.login.EmailAccountCreate" />
+        <activity android:name=".user.login.EmailLoginActivity" />
+        <activity android:name=".user.login.OtpVerificationActivity" />
+        <activity android:name=".user.login.LoginActivity" />
+        <activity android:name=".user.startup.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

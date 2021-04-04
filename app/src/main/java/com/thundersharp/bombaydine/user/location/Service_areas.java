@@ -1,4 +1,4 @@
-package com.thundersharp.bombaydine.location;
+package com.thundersharp.bombaydine.user.location;
 
 import android.os.Bundle;
 

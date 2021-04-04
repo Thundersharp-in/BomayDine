@@ -1,4 +1,4 @@
-package com.thundersharp.bombaydine.login;
+package com.thundersharp.bombaydine.user.login;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;

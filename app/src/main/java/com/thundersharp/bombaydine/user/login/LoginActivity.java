@@ -1,4 +1,4 @@
-package com.thundersharp.bombaydine.login;
+package com.thundersharp.bombaydine.user.login;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,8 +24,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.hbb20.CountryCodePicker;
+import com.thundersharp.bombaydine.user.home.MainPage;
 import com.thundersharp.bombaydine.R;
-import com.thundersharp.bombaydine.home.HomePage;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
         skip.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(LoginActivity.this, HomePage.class));
+                startActivity(new Intent(LoginActivity.this, MainPage.class));
             }
         });
 
