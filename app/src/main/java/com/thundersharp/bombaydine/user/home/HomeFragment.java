@@ -4,6 +4,7 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import com.glide.slider.library.tricks.ViewPagerEx;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.CategoryAdapter;
+import com.thundersharp.bombaydine.user.core.Adapters.TopsellingAdapter;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -35,7 +37,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     List<Object> data = new ArrayList<>();
 
     private AllItemAdapter allItemAdapter;
-    private RecyclerView horizontalScrollView, categoryRecycler;
+    private RecyclerView horizontalScrollView, categoryRecycler,topsellingholder;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -45,6 +47,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
 
         mDemoSlider = view.findViewById(R.id.slider);
         horizontalScrollView = view.findViewById(R.id.allitems);
+        topsellingholder = view.findViewById(R.id.topsellingholder);
         horizontalScrollView.setHasFixedSize(true);
 
         categoryRecycler = view.findViewById(R.id.recentordcategoryholderer);
@@ -166,8 +169,71 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         mDemoSlider.setDuration(4000);
         mDemoSlider.addOnPageChangeListener(this);
         mDemoSlider.stopCyclingWhenTouch(false);
+        dunny();
 
         return view;
+    }
+
+    public void dunny(){
+        List<Object> datac = new ArrayList<>();
+        int fgi;
+
+        for (int i = 0; i <= 5; i++) {
+            fgi = i;
+
+            if (String.valueOf(fgi).equals("0")) {
+                //datac.clear();
+                HashMap<String, String> datacat = new HashMap<>();
+
+                datacat.put("imageuri", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTopOh0jXO5zHnsfQ1nA3RhDEXLkdxNWKRJZg&usqp=CAU");
+                datacat.put("name", "Dum Biriyani");
+                datac.add(datacat);
+            }else if (i == 1) {
+                HashMap<String, String> datacat = new HashMap<>();
+
+                datacat.put("imageuri", "https://previews.123rf.com/images/lblinova/lblinova1809/lblinova180900117/108167439-indian-food-rogan-josh-curry-sauce-pork-rogan-josh-with-rice-.jpg");
+                datacat.put("name", "Rogan josh");
+                datac.add(datacat);
+            }
+
+            else if (i == 2) {
+                HashMap<String, String> datacat = new HashMap<>();
+                datacat.put("imageuri", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbbyCCITkO0CtqqwmykxgkYUiQXoc8gk_arQ&usqp=CAU");
+                datacat.put("name", "Chole Bhature");
+                datac.add(datacat);
+            }
+            else if (i == 3) {
+                HashMap<String, String> datacat = new HashMap<>();
+                datacat.put("imageuri", "https://i.pinimg.com/originals/0d/41/c0/0d41c048fc3b1d3fd83330926feda7db.jpg");
+                datacat.put("name", "Chicken Roll");
+                datac.add(datacat);
+            }
+
+            else if (i == 4) {
+                HashMap<String, String> datacat = new HashMap<>();
+                datacat.put("imageuri", "https://www.cookwithmanali.com/wp-content/uploads/2016/01/Chilli-Paneer-Restaurant-Style.jpg");
+                datacat.put("name", "Paneer Chillli");
+                datac.add(datacat);
+            }else if (i == 5) {
+                HashMap<String, String> datacat = new HashMap<>();
+                datacat.put("imageuri", "https://thesimplemenu.com/wp-content/uploads/2020/06/IMG_6924-855x1024.jpg");
+                datacat.put("name", "Set Dosa");
+                datac.add(datacat);
+            }
+
+
+
+
+
+        }
+
+        TopsellingAdapter categoryAdapter = new TopsellingAdapter(getContext(),datac);
+        //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
+
+        //GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+        //topsellingholder.setLayoutManager(gridLayoutManager);
+        topsellingholder.setAdapter(categoryAdapter);
+
     }
 
     @Override

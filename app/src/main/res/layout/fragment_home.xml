@@ -89,30 +89,38 @@
             android:id="@+id/recent"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:minHeight="50dp"
             android:orientation="vertical"
+            android:background="@drawable/curved_dark"
+            android:elevation="4dp"
+            android:layout_marginHorizontal="10dp"
             android:layout_marginTop="20dp"
             android:layout_below="@id/slider">
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                >
                 <TextView
+                    android:id="@+id/text2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="#E4E4E4"
+                    android:textColor="#B8BABD"
                     android:fontFamily="sans-serif-smallcaps"
                     android:text="Recent orders"
                     android:layout_centerVertical="true"
-                    android:layout_marginStart="15dp"
+                    android:layout_marginStart="10dp"
                     android:textStyle="bold"
                     android:textSize="17sp"/>
+
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="15dp"
-                    android:textColor="#9b9c9e"
-                    android:text="View all"
+                    android:textColor="#ff975d"
+                    android:text="View Orders"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="15dp"
                     android:textSize="13sp"/>
@@ -120,10 +128,17 @@
 
             </RelativeLayout>
 
-            <HorizontalScrollView
-                android:layout_width="match_parent"
+            <TextView
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/recentorder"/>
+                android:layout_marginEnd="15dp"
+                android:textColor="#959698"
+                android:text="View your 6 recent orders if you are craving to have your last order again !!"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
+                android:textSize="13sp"/>
+
 
         </LinearLayout>
 
@@ -360,7 +375,7 @@
 
                 <androidx.recyclerview.widget.RecyclerView
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:orientation="vertical"
+                    android:orientation="horizontal"
                     android:scrollbars="none"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
