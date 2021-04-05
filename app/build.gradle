@@ -51,7 +51,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.3.4'
     implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
-
+    implementation 'com.cepheuen.elegant-number-button:lib:1.0.2'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
