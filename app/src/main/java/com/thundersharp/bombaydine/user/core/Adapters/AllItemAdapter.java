@@ -59,7 +59,7 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
 
     @Override
     public int OnTextChangeListner(int val) {
-        //Toast.makeText(context,""+val,Toast.LENGTH_SHORT).show();
+        Toast.makeText(context,""+val,Toast.LENGTH_SHORT).show();
         return 0;
     }
 
