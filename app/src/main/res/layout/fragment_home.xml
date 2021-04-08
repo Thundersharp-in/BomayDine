@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#1e2026"
-    tools:context=".user.home.HomeFragment">
+    tools:context=".user.ui.home.HomeFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,25 +16,53 @@
             android:layout_height="wrap_content"
             android:elevation="4dp">
 
-            <TextView
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="#fff"
-                android:text="Hello Hrishikesh"
+                android:orientation="vertical"
                 android:layout_centerVertical="true"
-                android:layout_marginStart="15dp"
-                android:textStyle="bold"
-                android:textSize="29sp"/>
+                android:layout_marginStart="15dp">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#fff"
+                    android:drawableStart="@drawable/ic_outline_pin_drop_24"
+                    android:drawablePadding="10dp"
+                    android:layout_marginEnd="15dp"
+                    android:text="Soldevahanalli"
+                    android:fontFamily="@font/calibri"
+                    android:textSize="24sp"/>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="1.2dp"
+                    android:layout_marginTop="5dp"
+                    android:background="#fff"/>
+
+            </LinearLayout>
+
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="10dp"
+                android:src="@drawable/ic_baseline_qr_code_scanner_24"
+                android:layout_toStartOf="@id/profile"
+                android:layout_marginBottom="10dp"
+                android:layout_gravity="end"/>
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:layout_width="45dp"
-                android:layout_height="45dp"
+                android:id="@+id/profile"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="15dp"
                 android:src="@drawable/prateek"
                 android:layout_marginBottom="10dp"
                 android:layout_alignParentEnd="true"
                 android:layout_gravity="end"/>
+
 
         </RelativeLayout>
 
@@ -115,6 +143,7 @@
 
 
                 <TextView
+                    android:id="@+id/recentorders"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"

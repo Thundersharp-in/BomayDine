@@ -1,4 +1,4 @@
-package com.thundersharp.bombaydine.user.home;
+package com.thundersharp.bombaydine.user.ui.home;
 
 import android.os.Bundle;
 

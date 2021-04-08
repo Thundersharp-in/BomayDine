@@ -38,6 +38,7 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view =  LayoutInflater.from(context).inflate(R.layout.uneversal_holder,parent,false);
         elegentNumberHelper = new ElegentNumberHelper(context,this,view);
+
         return new  ViewHolder(view);
     }
 

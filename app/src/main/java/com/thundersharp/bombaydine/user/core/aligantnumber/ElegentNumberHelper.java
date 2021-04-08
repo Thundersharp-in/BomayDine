@@ -33,6 +33,7 @@ public class ElegentNumberHelper implements ElegantNumberInteractor.ViewBinder,E
      * @param minusbuttonId
      * @param textviewid
      */
+
     @Override
     public void bindviewHolder(LinearLayout initialView, LinearLayout finalview, int plusbuttonId, int minusbuttonId, int textviewid, int plusinitial) {
         ImageButton plus = view.findViewById(plusbuttonId);

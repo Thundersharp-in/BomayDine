@@ -1,4 +1,4 @@
-package com.thundersharp.bombaydine.user.discover;
+package com.thundersharp.bombaydine.user.ui.discover;
 
 import android.os.Bundle;
 

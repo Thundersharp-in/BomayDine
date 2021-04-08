@@ -1,16 +1,16 @@
-package com.thundersharp.bombaydine.user.home;
+package com.thundersharp.bombaydine.user.ui.home;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.HorizontalScrollView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.request.RequestOptions;
@@ -19,13 +19,15 @@ import com.glide.slider.library.animations.DescriptionAnimation;
 import com.glide.slider.library.slidertypes.BaseSliderView;
 import com.glide.slider.library.slidertypes.DefaultSliderView;
 import com.glide.slider.library.tricks.ViewPagerEx;
+import com.google.firebase.auth.FirebaseAuth;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.CategoryAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.TopsellingAdapter;
+import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
+import com.thundersharp.bombaydine.user.ui.orders.RecentOrders;
 
 import java.util.ArrayList;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 
@@ -36,6 +38,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     private SliderLayout mDemoSlider;
     List<Object> data = new ArrayList<>();
 
+    private TextView recentorders;
     private AllItemAdapter allItemAdapter;
     private RecyclerView horizontalScrollView, categoryRecycler,topsellingholder;
 
@@ -49,6 +52,20 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         horizontalScrollView = view.findViewById(R.id.allitems);
         topsellingholder = view.findViewById(R.id.topsellingholder);
         horizontalScrollView.setHasFixedSize(true);
+        recentorders = view.findViewById(R.id.recentorders);
+
+        recentorders.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (FirebaseAuth.getInstance().getCurrentUser() != null){
+                    startActivity(new Intent(getActivity(), RecentOrders.class));
+                }else{
+                    Toast.makeText(getContext(), "Kindly login to see your recent orders.", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                }
+            }
+        });
+
 
         categoryRecycler = view.findViewById(R.id.recentordcategoryholderer);
         categoryRecycler.setHasFixedSize(true);

@@ -1,4 +1,4 @@
-package com.thundersharp.bombaydine.user.login;
+package com.thundersharp.bombaydine.user.ui.login;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -24,7 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 import com.hbb20.CountryCodePicker;
-import com.thundersharp.bombaydine.user.home.MainPage;
+import com.thundersharp.bombaydine.user.ui.home.MainPage;
 import com.thundersharp.bombaydine.R;
 
 public class LoginActivity extends AppCompatActivity {

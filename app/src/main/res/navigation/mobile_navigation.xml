@@ -7,25 +7,25 @@
 
 
     <fragment
-        android:name="com.thundersharp.bombaydine.user.home.HomeFragment"
+        android:name="com.thundersharp.bombaydine.user.ui.home.HomeFragment"
         android:id="@+id/home"
         android:label="Home"
         tools:layout="@layout/fragment_home">
     </fragment>
 
-    <fragment android:name="com.thundersharp.bombaydine.user.location.Service_areas"
+    <fragment android:name="com.thundersharp.bombaydine.user.ui.location.Service_areas"
         android:id="@+id/dilevery_area"
         android:label="Delivery area"
         tools:layout="@layout/fragment_service_areas">
     </fragment>
 
-    <fragment android:name="com.thundersharp.bombaydine.user.discover.Discover"
+    <fragment android:name="com.thundersharp.bombaydine.user.ui.discover.Discover"
         android:id="@+id/discover"
         android:label="Discover"
         tools:layout="@layout/fragment_discover">
     </fragment>
 
-    <fragment android:name="com.thundersharp.bombaydine.user.orders.Cart"
+    <fragment android:name="com.thundersharp.bombaydine.user.ui.orders.Cart"
         android:id="@+id/cart"
         android:label="Cart"
         tools:layout="@layout/fragment_cart">

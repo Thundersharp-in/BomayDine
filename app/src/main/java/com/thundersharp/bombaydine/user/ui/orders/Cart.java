@@ -1,4 +1,4 @@
-package com.thundersharp.bombaydine.user.orders;
+package com.thundersharp.bombaydine.user.ui.orders;
 
 import android.os.Bundle;
 
