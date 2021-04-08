@@ -1,4 +1,4 @@
-package com.thundersharp.bombaydine;
+package com.thundersharp.bombaydine.user.ui.account;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.thundersharp.bombaydine.R;
 
 public class Profile extends Fragment {
 
