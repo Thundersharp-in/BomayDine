@@ -26,6 +26,7 @@ import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.CategoryAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.TopsellingAdapter;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
+import com.thundersharp.bombaydine.user.ui.menu.AllItemsActivity;
 import com.thundersharp.bombaydine.user.ui.orders.RecentOrders;
 import com.thundersharp.bombaydine.user.ui.scanner.QrScanner;
 
@@ -41,7 +42,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     List<Object> data = new ArrayList<>();
 
     private ImageView qrcode;
-    private TextView recentorders;
+    private TextView recentorders,allitemsview;
     private AllItemAdapter allItemAdapter;
     private RecyclerView horizontalScrollView, categoryRecycler,topsellingholder;
 
@@ -55,8 +56,16 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         horizontalScrollView = view.findViewById(R.id.allitems);
         topsellingholder = view.findViewById(R.id.topsellingholder);
         qrcode = view.findViewById(R.id.qrcode);
+        allitemsview = view.findViewById(R.id.allitemsview);
         horizontalScrollView.setHasFixedSize(true);
         recentorders = view.findViewById(R.id.recentorders);
+
+        allitemsview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), AllItemsActivity.class));
+            }
+        });
 
         recentorders.setOnClickListener(new View.OnClickListener() {
             @Override
