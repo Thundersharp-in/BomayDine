@@ -1,0 +1,24 @@
+<resources>
+    <!--
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=B4:20:B5:F9:3B:46:6B:5E:1D:07:3B:D5:21:0B:0C:62:AB:54:0B:E1%3Bcom.thundersharp.bombaydine.user.ui.location
+
+    You can also add your credentials to an existing key, using these values:
+
+    Package name:
+    com.thundersharp.bombaydine.user.ui.location
+
+    SHA-1 certificate fingerprint:
+    B4:20:B5:F9:3B:46:6B:5E:1D:07:3B:D5:21:0B:0C:62:AB:54:0B:E1
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/android/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyAvQNivHNQM-Bt4_8kNbMctDLkmQy8vbQs</string>
+</resources>
