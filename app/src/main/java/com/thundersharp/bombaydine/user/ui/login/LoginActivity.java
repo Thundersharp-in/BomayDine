@@ -18,16 +18,24 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
 import com.hbb20.CountryCodePicker;
+import com.thundersharp.bombaydine.user.core.login.FirebaseLoginClient;
+import com.thundersharp.bombaydine.user.core.login.LoginHelper;
 import com.thundersharp.bombaydine.user.ui.home.MainPage;
 import com.thundersharp.bombaydine.R;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity implements FirebaseLoginClient.loginSucessListner,
+        FirebaseLoginClient.loginFailureListner,
+FirebaseLoginClient.otpListner{
 
     private CountryCodePicker countryCodePicker;
     EditText editTextCarrierNumber;
@@ -35,12 +43,19 @@ public class LoginActivity extends AppCompatActivity {
     private AppCompatButton sendotp,facebok_login,google_login;
     private LinearLayout emaillogin;
     private TextView skip;
+    private LoginHelper loginHelper;
+
+    private String verificationId;
+
+    public static FirebaseLoginClient.ActivityHandler activityHandler;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        loginHelper = new LoginHelper(this,this,this,this);
         countryCodePicker = findViewById(R.id.pkr);
         editTextCarrierNumber = (EditText) findViewById(R.id.editText_carrierNumber);
         sendotp = findViewById(R.id.sendotp);
@@ -52,7 +67,11 @@ public class LoginActivity extends AppCompatActivity {
         sendotp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(LoginActivity.this,countryCodePicker.getFormattedFullNumber(),Toast.LENGTH_LONG).show();
+               // Toast.makeText(LoginActivity.this,countryCodePicker.getFormattedFullNumber(),Toast.LENGTH_LONG).show();
+                if (!editTextCarrierNumber.getText().toString().isEmpty()){
+                    loginHelper.loginwithfirebase(countryCodePicker.getFormattedFullNumber());
+                }
+                //startActivity(new Intent(LoginActivity.this,OtpVerificationActivity.class));
             }
         });
 
@@ -107,33 +126,39 @@ public class LoginActivity extends AppCompatActivity {
             // The Task returned from this call is always completed, no need to attach
             // a listener.
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            firebaseAuthWithGoogle(task.getResult().getIdToken());
+            loginHelper.loginfirebaseAuthWithGoogle(task.getResult().getIdToken());
 
-        }else {
-
+        }else if (requestCode == 10001 && resultCode == RESULT_OK){
+            PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, data.getAction());
+            activityHandler.postOtpSentListner(true,credential);
         }
     }
 
-    private void firebaseAuthWithGoogle(String idToken) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(idToken, null);
-        FirebaseAuth.getInstance().signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            //Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            //updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            //Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            //Snackbar.make(mBinding.mainLayout, "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                            //updateUI(null);
-                        }
+    @Override
+    public void setOnLoginFailureListner(Exception exception,int type) {
+        if (type == 1) {
+            if (exception instanceof FirebaseAuthInvalidCredentialsException) {
+                // The verification code entered was invalid
+            }else if (exception instanceof FirebaseTooManyRequestsException) {
+                // The SMS quota for the project has been exceeded
 
-                        // ...
-                    }
-                });
+            }
+        }
+
+        Toast.makeText(this,exception.getMessage(),Toast.LENGTH_SHORT).show();
     }
+
+    @Override
+    public void setOnLoginSucessListner(Task<AuthResult> task) {
+        Toast.makeText(this,task.getResult().getUser().getDisplayName(),Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void postOtpSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken token) {
+        this.verificationId = verificationId;
+        startActivityForResult(new Intent(LoginActivity.this,OtpVerificationActivity.class),10001);
+
+    }
+
+
 }
