@@ -32,6 +32,7 @@ public class LoginHelper implements FirebaseLoginClient.loginContract ,FirebaseL
     private FirebaseLoginClient.loginFailureListner failureListner;
     private FirebaseLoginClient.loginSucessListner loginSucessListner;
     private FirebaseLoginClient.otpListner otpListner;
+    private Activity activity;
 
 
 
@@ -40,11 +41,12 @@ public class LoginHelper implements FirebaseLoginClient.loginContract ,FirebaseL
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
 
 
-    public LoginHelper(Context context, FirebaseLoginClient.loginFailureListner failureListner, FirebaseLoginClient.loginSucessListner loginSucessListner, FirebaseLoginClient.otpListner otpListner) {
+    public LoginHelper(Context context, FirebaseLoginClient.loginFailureListner failureListner, FirebaseLoginClient.loginSucessListner loginSucessListner, FirebaseLoginClient.otpListner otpListner,Activity activity) {
         this.context = context;
         this.failureListner = failureListner;
         this.loginSucessListner = loginSucessListner;
         this.otpListner = otpListner;
+        this.activity = activity;
 
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override

@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -50,12 +51,13 @@ FirebaseLoginClient.otpListner{
     public static FirebaseLoginClient.ActivityHandler activityHandler;
 
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        loginHelper = new LoginHelper(this,this,this,this);
+        loginHelper = new LoginHelper(this,this,this,this,LoginActivity.this);
         countryCodePicker = findViewById(R.id.pkr);
         editTextCarrierNumber = (EditText) findViewById(R.id.editText_carrierNumber);
         sendotp = findViewById(R.id.sendotp);
@@ -70,6 +72,7 @@ FirebaseLoginClient.otpListner{
                // Toast.makeText(LoginActivity.this,countryCodePicker.getFormattedFullNumber(),Toast.LENGTH_LONG).show();
                 if (!editTextCarrierNumber.getText().toString().isEmpty()){
                     loginHelper.loginwithfirebase(countryCodePicker.getFormattedFullNumber());
+
                 }
                 //startActivity(new Intent(LoginActivity.this,OtpVerificationActivity.class));
             }
@@ -121,6 +124,7 @@ FirebaseLoginClient.otpListner{
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        Toast.makeText(this, "fgfgds :"+requestCode, Toast.LENGTH_SHORT).show();
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == 101 && resultCode == RESULT_OK) {
             // The Task returned from this call is always completed, no need to attach
@@ -128,7 +132,9 @@ FirebaseLoginClient.otpListner{
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             loginHelper.loginfirebaseAuthWithGoogle(task.getResult().getIdToken());
 
-        }else if (requestCode == 10001 && resultCode == RESULT_OK){
+        }
+        if (requestCode == 10001){
+            Toast.makeText(this, "fgfgds", Toast.LENGTH_SHORT).show();
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, data.getAction());
             activityHandler.postOtpSentListner(true,credential);
         }
