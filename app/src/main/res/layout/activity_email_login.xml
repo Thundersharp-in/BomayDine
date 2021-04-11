@@ -88,11 +88,41 @@
                     android:layout_marginEnd="10dp"
                     android:background="@null"
                     android:hint="Email address"
+                    android:drawableStart="@drawable/ic_outline_alternate_email_24"
+                    android:drawablePadding="10dp"
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textColorHint="#b7b7b7" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:background="@drawable/edittext_curved"
+                android:elevation="7dp"
+                android:minHeight="52dp"
+                android:layout_marginTop="10dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@null"
+                    android:drawableStart="@drawable/ic_baseline_password_24"
+                    android:drawablePadding="10dp"
+                    android:hint="Password"
+                    android:inputType="textPassword"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColorHint="#b7b7b7" />
+            </LinearLayout>
+
 
             <TextView
                 android:layout_width="match_parent"
@@ -103,7 +133,7 @@
                 android:drawablePadding="10dp"
                 android:fontFamily="@font/calibri"
                 android:gravity="center"
-                android:text="We will send a email that will instantly log you in"
+                android:text="Your password that will instantly log you in"
                 android:textAlignment="viewStart"
                 android:textColor="#E3E3E3"
                 app:drawableTint="#FFEB3B"

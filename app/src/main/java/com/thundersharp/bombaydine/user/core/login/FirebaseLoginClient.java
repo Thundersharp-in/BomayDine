@@ -13,10 +13,14 @@ public interface FirebaseLoginClient {
         void postOtpSentListner(boolean isVerified, PhoneAuthCredential credential);
     }
 
+    interface registerContract{
+        void registerData(@NonNull String name, @NonNull String email, @NonNull String password);
+    }
+
     interface loginContract{
         void loginwithfirebase(String PhoneNo);
 
-        void loginwithfirebase(String email, boolean isPasswordless);
+        void loginwithfirebase(String email, String passWord);
 
         void loginfirebaseAuthWithGoogle(String idToken);
 
@@ -34,6 +38,13 @@ public interface FirebaseLoginClient {
 
     interface loginSucessListner{
         void setOnLoginSucessListner( Task<AuthResult> task);
+    }
+
+    interface registerSucessFailureListner{
+
+        void onRegisterSucessListner(Task<AuthResult> task,boolean isDataRegisteredToDatabase);
+
+        void onRegisterFailureListner(Exception exception);
     }
 
 }

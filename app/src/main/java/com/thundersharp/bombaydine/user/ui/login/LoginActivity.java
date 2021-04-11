@@ -36,7 +36,7 @@ import com.thundersharp.bombaydine.R;
 
 public class LoginActivity extends AppCompatActivity implements FirebaseLoginClient.loginSucessListner,
         FirebaseLoginClient.loginFailureListner,
-FirebaseLoginClient.otpListner{
+        FirebaseLoginClient.otpListner{
 
     private CountryCodePicker countryCodePicker;
     EditText editTextCarrierNumber;
@@ -51,13 +51,12 @@ FirebaseLoginClient.otpListner{
     public static FirebaseLoginClient.ActivityHandler activityHandler;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        loginHelper = new LoginHelper(this,this,this,this,LoginActivity.this);
+        loginHelper = new LoginHelper(this,this,this,this);
         countryCodePicker = findViewById(R.id.pkr);
         editTextCarrierNumber = (EditText) findViewById(R.id.editText_carrierNumber);
         sendotp = findViewById(R.id.sendotp);
@@ -109,6 +108,7 @@ FirebaseLoginClient.otpListner{
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(LoginActivity.this,EmailLoginActivity.class));
+                finish();
             }
         });
 
@@ -124,7 +124,6 @@ FirebaseLoginClient.otpListner{
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        Toast.makeText(this, "fgfgds :"+requestCode, Toast.LENGTH_SHORT).show();
         // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
         if (requestCode == 101 && resultCode == RESULT_OK) {
             // The Task returned from this call is always completed, no need to attach
@@ -134,14 +133,22 @@ FirebaseLoginClient.otpListner{
 
         }
         if (requestCode == 10001){
-            Toast.makeText(this, "fgfgds", Toast.LENGTH_SHORT).show();
+
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, data.getAction());
             activityHandler.postOtpSentListner(true,credential);
         }
     }
 
+
     @Override
-    public void setOnLoginFailureListner(Exception exception,int type) {
+    public void postOtpSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken token) {
+        this.verificationId = verificationId;
+        startActivityForResult(new Intent(LoginActivity.this,OtpVerificationActivity.class),10001);
+
+    }
+
+    @Override
+    public void setOnLoginFailureListner(Exception exception, int type) {
         if (type == 1) {
             if (exception instanceof FirebaseAuthInvalidCredentialsException) {
                 // The verification code entered was invalid
@@ -150,21 +157,14 @@ FirebaseLoginClient.otpListner{
 
             }
         }
-
         Toast.makeText(this,exception.getMessage(),Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void setOnLoginSucessListner(Task<AuthResult> task) {
-        Toast.makeText(this,task.getResult().getUser().getDisplayName(),Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,task.getResult().getUser().getPhoneNumber(),Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void postOtpSent(@NonNull String verificationId, @NonNull PhoneAuthProvider.ForceResendingToken token) {
-        this.verificationId = verificationId;
-        startActivityForResult(new Intent(LoginActivity.this,OtpVerificationActivity.class),10001);
-
-    }
 
 
 }

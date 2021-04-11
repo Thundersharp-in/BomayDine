@@ -8,6 +8,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
@@ -26,27 +27,43 @@ import java.util.concurrent.TimeUnit;
 
 import static com.google.firebase.messaging.Constants.TAG;
 
-public class LoginHelper implements FirebaseLoginClient.loginContract ,FirebaseLoginClient.ActivityHandler{
+public class LoginHelper implements FirebaseLoginClient.loginContract ,FirebaseLoginClient.ActivityHandler,FirebaseLoginClient.registerContract{
 
     private Context context;
     private FirebaseLoginClient.loginFailureListner failureListner;
     private FirebaseLoginClient.loginSucessListner loginSucessListner;
     private FirebaseLoginClient.otpListner otpListner;
-    private Activity activity;
 
 
-
+    /**
+     * Parameters required for phone auth callbacks
+     */
     private String mVerificationId;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
 
 
-    public LoginHelper(Context context, FirebaseLoginClient.loginFailureListner failureListner, FirebaseLoginClient.loginSucessListner loginSucessListner, FirebaseLoginClient.otpListner otpListner,Activity activity) {
+    private FirebaseLoginClient.registerSucessFailureListner sucessFailureListner;
+
+
+    public LoginHelper(Context context, FirebaseLoginClient.registerSucessFailureListner sucessFailureListner) {
+        this.context = context;
+        this.sucessFailureListner = sucessFailureListner;
+    }
+
+    /**
+     * Call this constructor if using otp login with success and failure Listeners
+     * @param context
+     * @param failureListner
+     * @param loginSucessListner
+     * @param otpListner
+     */
+
+    public LoginHelper(Context context, FirebaseLoginClient.loginFailureListner failureListner, FirebaseLoginClient.loginSucessListner loginSucessListner, FirebaseLoginClient.otpListner otpListner) {
         this.context = context;
         this.failureListner = failureListner;
         this.loginSucessListner = loginSucessListner;
         this.otpListner = otpListner;
-        this.activity = activity;
 
         mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
             @Override
@@ -80,6 +97,11 @@ public class LoginHelper implements FirebaseLoginClient.loginContract ,FirebaseL
         this.loginSucessListner = loginSucessListner;
     }
 
+    public LoginHelper(Context context, FirebaseLoginClient.loginFailureListner failureListner, FirebaseLoginClient.loginSucessListner loginSucessListner) {
+        this.context = context;
+        this.failureListner = failureListner;
+        this.loginSucessListner = loginSucessListner;
+    }
 
     @Override
     public void loginwithfirebase(String PhoneNo) {
@@ -93,45 +115,26 @@ public class LoginHelper implements FirebaseLoginClient.loginContract ,FirebaseL
                         .build();
         PhoneAuthProvider.verifyPhoneNumber(options);
 
-/*
-        mCallbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
-            @Override
-            public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
-                Toast.makeText(context,"Otp verified",Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onVerificationFailed(@NonNull FirebaseException e) {
-                throwfailure(e,1);
-            }
-
-            @Override
-            public void onCodeSent(@NonNull String verificationId,
-                                   @NonNull PhoneAuthProvider.ForceResendingToken token) {
-
-                // Save verification ID and resending token so we can use them later
-                mVerificationId = verificationId;
-                mResendToken = token;
-                otpListner.postOtpSent(verificationId, token);
-                LoginActivity.activityHandler = LoginHelper.this;
-
-            }
-
-        };
-*/
-
-
-
 
     }
 
 
-
     @Override
-    public void loginwithfirebase(String email, boolean isPasswordless) {
-        if (isPasswordless){
-
-        }
+    public void loginwithfirebase(String email, String passWord) {
+        FirebaseAuth
+                .getInstance()
+                .signInWithEmailAndPassword(email,passWord)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) setLoginSucessListner(task);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                throwfailure(e,2);
+            }
+        });
     }
 
     @Override
@@ -163,6 +166,14 @@ public class LoginHelper implements FirebaseLoginClient.loginContract ,FirebaseL
         loginSucessListner.setOnLoginSucessListner(task);
     }
 
+    private void setOnRegisterSucess(Task<AuthResult> task,boolean isDataRegisteredToDatabase){
+        sucessFailureListner.onRegisterSucessListner(task,isDataRegisteredToDatabase);
+    }
+
+    private void setOnRegisterFailure(Exception e){
+        sucessFailureListner.onRegisterFailureListner(e);
+    }
+
     @Override
     public void postOtpSentListner(boolean isVerified, PhoneAuthCredential credential) {
         FirebaseAuth
@@ -183,5 +194,26 @@ public class LoginHelper implements FirebaseLoginClient.loginContract ,FirebaseL
                     }
                 });
 
+    }
+
+    @Override
+    public void registerData(@NonNull String name, @NonNull String email, @NonNull String password) {
+        FirebaseAuth
+                .getInstance()
+                .createUserWithEmailAndPassword(email,password)
+                .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()){
+
+                        }
+                    }
+                })
+                .addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        setOnRegisterFailure(e);
+                    }
+                });
     }
 }
