@@ -270,8 +270,8 @@ public class LoginHelper implements FirebaseLoginClient.loginContract ,FirebaseL
                                                             }
 
                                                         }).addOnFailureListener(e -> {
-                                                    setLoginSucessListner(task,false,false);
-                                                    throwfailure(e,1);
+                                                            setLoginSucessListner(task,false,false);
+                                                            throwfailure(e,1);
                                                 });
                                             }
                                         }
