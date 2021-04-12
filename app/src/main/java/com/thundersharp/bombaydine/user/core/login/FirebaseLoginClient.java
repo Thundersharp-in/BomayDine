@@ -37,7 +37,7 @@ public interface FirebaseLoginClient {
     }
 
     interface loginSucessListner{
-        void setOnLoginSucessListner( Task<AuthResult> task);
+        void setOnLoginSucessListner( Task<AuthResult> task,boolean isDataRegisteredToDatabase, boolean isDataExists);
     }
 
     interface registerSucessFailureListner{

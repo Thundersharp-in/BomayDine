@@ -21,8 +21,14 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
 
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import static com.google.firebase.messaging.Constants.TAG;
@@ -127,7 +133,7 @@ public class LoginHelper implements FirebaseLoginClient.loginContract ,FirebaseL
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) setLoginSucessListner(task);
+                        if (task.isSuccessful()) setLoginSucessListner(task,true,true);
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -146,7 +152,52 @@ public class LoginHelper implements FirebaseLoginClient.loginContract ,FirebaseL
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            setLoginSucessListner(task);
+
+                            FirebaseDatabase
+                                    .getInstance()
+                                    .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
+                                    .child(FirebaseAuth.getInstance().getUid())
+                                    .child(CONSTANTS.DATABASE_NODE_PERSONAL_DATA)
+                                    .child("UID")
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if (snapshot.exists()){
+                                                setLoginSucessListner(task,true,true);
+                                            }else {
+                                                HashMap<String,Object> data = new HashMap<>();
+                                                data.put("NAME",FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                                                data.put("EMAIL",FirebaseAuth.getInstance().getCurrentUser().getEmail());
+                                                data.put("PHONE",FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+                                                data.put("PROFILEPICURI",FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
+                                                data.put("CREATEDON",System.currentTimeMillis());
+                                                data.put("UID",FirebaseAuth.getInstance().getUid());
+
+                                                FirebaseDatabase
+                                                        .getInstance()
+                                                        .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
+                                                        .child(FirebaseAuth.getInstance().getUid())
+                                                        .child(CONSTANTS.DATABASE_NODE_PERSONAL_DATA)
+                                                        .setValue(data)
+                                                        .addOnCompleteListener(task1 -> {
+
+                                                            if (task1.isSuccessful()){
+                                                                setLoginSucessListner(task,true,true);
+                                                            }
+
+                                                        }).addOnFailureListener(e -> {
+                                                            setLoginSucessListner(task,false,false);
+                                                            throwfailure(e,0);
+                                                });
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+
       
                         } else {
                             throwfailure(task.getException(),0);
@@ -162,8 +213,8 @@ public class LoginHelper implements FirebaseLoginClient.loginContract ,FirebaseL
         failureListner.setOnLoginFailureListner(e,type);
     }
 
-    private void setLoginSucessListner(Task<AuthResult> task){
-        loginSucessListner.setOnLoginSucessListner(task);
+    private void setLoginSucessListner(Task<AuthResult> task, boolean isDataRegisteredToDatabase, boolean isDataExists){
+        loginSucessListner.setOnLoginSucessListner(task,isDataRegisteredToDatabase,isDataExists);
     }
 
     private void setOnRegisterSucess(Task<AuthResult> task,boolean isDataRegisteredToDatabase){
@@ -184,7 +235,52 @@ public class LoginHelper implements FirebaseLoginClient.loginContract ,FirebaseL
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser user = task.getResult().getUser();
-                            setLoginSucessListner(task);
+                            //setLoginSucessListner(task,true,true);
+
+                            FirebaseDatabase
+                                    .getInstance()
+                                    .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
+                                    .child(FirebaseAuth.getInstance().getUid())
+                                    .child(CONSTANTS.DATABASE_NODE_PERSONAL_DATA)
+                                    .child("UID")
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            if (snapshot.exists()){
+                                                setLoginSucessListner(task,true,true);
+                                            }else {
+                                                HashMap<String,Object> data = new HashMap<>();
+                                                data.put("NAME",null);
+                                                data.put("EMAIL",null);
+                                                data.put("PHONE",FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+                                                data.put("PROFILEPICURI",null);
+                                                data.put("CREATEDON",System.currentTimeMillis());
+                                                data.put("UID",FirebaseAuth.getInstance().getUid());
+
+                                                FirebaseDatabase
+                                                        .getInstance()
+                                                        .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
+                                                        .child(FirebaseAuth.getInstance().getUid())
+                                                        .child(CONSTANTS.DATABASE_NODE_PERSONAL_DATA)
+                                                        .setValue(data)
+                                                        .addOnCompleteListener(task1 -> {
+
+                                                            if (task1.isSuccessful()){
+                                                                setLoginSucessListner(task,true,true);
+                                                            }
+
+                                                        }).addOnFailureListener(e -> {
+                                                    setLoginSucessListner(task,false,false);
+                                                    throwfailure(e,1);
+                                                });
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
 
                         } else {
                             // Sign in failed, display a message and update the UI
@@ -205,7 +301,27 @@ public class LoginHelper implements FirebaseLoginClient.loginContract ,FirebaseL
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()){
+                            HashMap<String,Object> data = new HashMap<>();
+                            data.put("NAME",name);
+                            data.put("EMAIL",email);
+                            data.put("CREATEDON",System.currentTimeMillis());
+                            data.put("UID",FirebaseAuth.getInstance().getUid());
 
+                            FirebaseDatabase
+                                    .getInstance()
+                                    .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
+                                    .child(FirebaseAuth.getInstance().getUid())
+                                    .child(CONSTANTS.DATABASE_NODE_PERSONAL_DATA)
+                                    .setValue(data)
+                            .addOnFailureListener(e -> {
+                                setOnRegisterSucess(task,false);
+                                setOnRegisterFailure(e);
+                            })
+                            .addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()){
+                                    setOnRegisterSucess(task,true);
+                                }
+                            });
                         }
                     }
                 })

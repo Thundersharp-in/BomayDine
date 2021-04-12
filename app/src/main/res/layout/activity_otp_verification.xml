@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:background="#22242c"
     android:layout_height="match_parent"
+    android:id="@+id/main"
     tools:context=".user.ui.login.OtpVerificationActivity">
 
     <ImageView
@@ -79,7 +80,7 @@
             android:background="@drawable/btn_tr_green"/>
 
         <androidx.appcompat.widget.AppCompatButton
-
+            android:id="@+id/cancel"
             android:layout_width="0dp"
             android:layout_height="45dp"
             android:text="CANCEL"

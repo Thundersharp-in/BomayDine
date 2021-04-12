@@ -1,12 +1,17 @@
 package com.thundersharp.bombaydine.user.ui.login;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -51,10 +56,23 @@ public class LoginActivity extends AppCompatActivity implements FirebaseLoginCli
     public static FirebaseLoginClient.ActivityHandler activityHandler;
 
 
+    private AlertDialog.Builder builder;
+    private Dialog dialog;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        builder = new AlertDialog.Builder(this);
+        View dialogview = LayoutInflater.from(this).inflate(R.layout.progress_dialog,null,false);
+        builder.setView(dialogview);
+        builder.setCancelable(false);
+
+        dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
 
         loginHelper = new LoginHelper(this,this,this,this);
         countryCodePicker = findViewById(R.id.pkr);
@@ -70,6 +88,7 @@ public class LoginActivity extends AppCompatActivity implements FirebaseLoginCli
             public void onClick(View view) {
                // Toast.makeText(LoginActivity.this,countryCodePicker.getFormattedFullNumber(),Toast.LENGTH_LONG).show();
                 if (!editTextCarrierNumber.getText().toString().isEmpty()){
+                    dialog.show();
                     loginHelper.loginwithfirebase(countryCodePicker.getFormattedFullNumber());
 
                 }
@@ -98,6 +117,7 @@ public class LoginActivity extends AppCompatActivity implements FirebaseLoginCli
         google_login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                dialog.show();
                 Intent signInIntent = mGoogleSignInClient.getSignInIntent();
                 startActivityForResult(signInIntent, 101);
             }
@@ -131,12 +151,12 @@ public class LoginActivity extends AppCompatActivity implements FirebaseLoginCli
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             loginHelper.loginfirebaseAuthWithGoogle(task.getResult().getIdToken());
 
-        }
+        }else dialog.dismiss();
         if (requestCode == 10001){
 
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, data.getAction());
             activityHandler.postOtpSentListner(true,credential);
-        }
+        }else dialog.dismiss();
     }
 
 
@@ -157,14 +177,25 @@ public class LoginActivity extends AppCompatActivity implements FirebaseLoginCli
 
             }
         }
+        dialog.dismiss();
         Toast.makeText(this,exception.getMessage(),Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void setOnLoginSucessListner(Task<AuthResult> task) {
-        Toast.makeText(this,task.getResult().getUser().getPhoneNumber(),Toast.LENGTH_SHORT).show();
+    public void setOnLoginSucessListner(Task<AuthResult> task, boolean isDataRegisteredToDatabase, boolean isDataExists) {
+        //Toast.makeText(this,task.getResult().getUser().getPhoneNumber(),Toast.LENGTH_SHORT).show();
+        startActivity(new Intent(this, MainPage.class));
+        finish();
+        dialog.dismiss();
     }
 
 
-
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (FirebaseAuth.getInstance().getCurrentUser() != null){
+            startActivity(new Intent(this, MainPage.class));
+            finish();
+        }
+    }
 }
