@@ -318,6 +318,7 @@ public class LoginHelper implements FirebaseLoginClient.loginContract ,FirebaseL
                                 setOnRegisterFailure(e);
                             })
                             .addOnCompleteListener(task1 -> {
+
                                 if (task1.isSuccessful()){
                                     setOnRegisterSucess(task,true);
                                 }

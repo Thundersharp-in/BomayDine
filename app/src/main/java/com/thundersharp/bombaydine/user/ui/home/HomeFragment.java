@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -20,6 +21,7 @@ import com.glide.slider.library.animations.DescriptionAnimation;
 import com.glide.slider.library.slidertypes.BaseSliderView;
 import com.glide.slider.library.slidertypes.DefaultSliderView;
 import com.glide.slider.library.tricks.ViewPagerEx;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapter;
@@ -34,6 +36,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
+import static com.thundersharp.bombaydine.user.ui.home.MainPage.navController;
+
 
 public class HomeFragment extends Fragment implements BaseSliderView.OnSliderClickListener,
         ViewPagerEx.OnPageChangeListener {
@@ -41,10 +47,12 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     private SliderLayout mDemoSlider;
     List<Object> data = new ArrayList<>();
 
+    private CircleImageView profile;
     private ImageView qrcode;
     private TextView recentorders,allitemsview;
     private AllItemAdapter allItemAdapter;
     private RecyclerView horizontalScrollView, categoryRecycler,topsellingholder;
+    private LinearLayout current_loc;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,12 +67,28 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         allitemsview = view.findViewById(R.id.allitemsview);
         horizontalScrollView.setHasFixedSize(true);
         recentorders = view.findViewById(R.id.recentorders);
+        profile = view.findViewById(R.id.profile);
+        current_loc = view.findViewById(R.id.current_loc);
 
         allitemsview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), AllItemsActivity.class));
             }
+        });
+
+        current_loc.setOnClickListener(viewlocation ->{
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext(),R.style.BottomSheetDialogTheme);
+            View bottomview = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout,view.findViewById(R.id.botomcontainer));
+
+
+
+            bottomSheetDialog.setContentView(bottomview);
+            bottomSheetDialog.show();
+        });
+
+        profile.setOnClickListener(viewclick -> {
+            navController.navigate(R.id.profile);
         });
 
         recentorders.setOnClickListener(new View.OnClickListener() {

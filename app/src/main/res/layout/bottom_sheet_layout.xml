@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/botomcontainer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#1e2026"
+    android:layout_width="match_parent"
+    android:minHeight="190dp"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:background="@drawable/curved_dark"
+        android:elevation="9dp"
+        android:layout_marginTop="15dp"
+        android:minHeight="52dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="15dp"
+                app:tint="#ff995e"
+                android:src="@drawable/ic_baseline_search_24"/>
+
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="10dp"
+                android:background="@null"
+                android:hint="Search for your location"
+                android:layout_marginStart="10dp"
+                android:inputType="text"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="#d3d3d3"
+                android:textColorHint="#b7b7b7" />
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/places_recycler_view"
+            android:orientation="vertical"
+            android:background="#535353"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        </androidx.recyclerview.widget.RecyclerView>
+
+    </LinearLayout>
+
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:layout_width="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_height="match_parent"
+        android:layout_below="@id/search">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <include layout="@layout/locationupdateplaceholder"/>
+
+            <include layout="@layout/locationupdateplaceholder"/>
+
+            <include layout="@layout/locationupdateplaceholder"/>
+
+            <include layout="@layout/locationupdateplaceholder"/>
+
+            <include layout="@layout/locationupdateplaceholder"/>
+
+            <include layout="@layout/locationupdateplaceholder"/>
+
+            <include layout="@layout/locationupdateplaceholder"/>
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+</RelativeLayout>

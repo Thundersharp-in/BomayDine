@@ -17,6 +17,7 @@
             android:elevation="4dp">
 
             <LinearLayout
+                android:id="@+id/current_loc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
