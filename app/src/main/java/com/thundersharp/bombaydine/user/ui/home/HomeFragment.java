@@ -3,13 +3,19 @@ package com.thundersharp.bombaydine.user.ui.home;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -21,11 +27,18 @@ import com.glide.slider.library.animations.DescriptionAnimation;
 import com.glide.slider.library.slidertypes.BaseSliderView;
 import com.glide.slider.library.slidertypes.DefaultSliderView;
 import com.glide.slider.library.tricks.ViewPagerEx;
+import com.google.android.gms.common.api.Status;
+import com.google.android.libraries.places.api.Places;
+import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.widget.Autocomplete;
+import com.google.android.libraries.places.widget.AutocompleteActivity;
+import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.CategoryAdapter;
+import com.thundersharp.bombaydine.user.core.Adapters.PlacesAutoCompleteAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.TopsellingAdapter;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
 import com.thundersharp.bombaydine.user.ui.menu.AllItemsActivity;
@@ -33,19 +46,26 @@ import com.thundersharp.bombaydine.user.ui.orders.RecentOrders;
 import com.thundersharp.bombaydine.user.ui.scanner.QrScanner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static android.app.Activity.RESULT_CANCELED;
+import static android.app.Activity.RESULT_OK;
+import static android.content.ContentValues.TAG;
 import static com.thundersharp.bombaydine.user.ui.home.MainPage.navController;
 
 
 public class HomeFragment extends Fragment implements BaseSliderView.OnSliderClickListener,
-        ViewPagerEx.OnPageChangeListener {
+        ViewPagerEx.OnPageChangeListener,PlacesAutoCompleteAdapter.ClickListener {
 
     private SliderLayout mDemoSlider;
     List<Object> data = new ArrayList<>();
+
+    private PlacesAutoCompleteAdapter mAutoCompleteAdapter;
+    private RecyclerView recyclerView;
 
     private CircleImageView profile;
     private ImageView qrcode;
@@ -70,6 +90,12 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         profile = view.findViewById(R.id.profile);
         current_loc = view.findViewById(R.id.current_loc);
 
+
+        Places.initialize(getActivity(), getResources().getString(R.string.google_maps_key));
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.places_recycler_view);
+
+
         allitemsview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -81,7 +107,30 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext(),R.style.BottomSheetDialogTheme);
             View bottomview = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout,view.findViewById(R.id.botomcontainer));
 
+            recyclerView = bottomview.findViewById(R.id.places_recycler_view);
+            EditText editText = (EditText) bottomview.findViewById(R.id.searchedit);
 
+            editText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // Set the fields to specify which types of place data to
+                    // return after the user has made a selection.
+                    List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+
+                    // Start the autocomplete intent.
+                    Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                            .build(getActivity());
+                    startActivityForResult(intent, 1);
+
+                }
+            });
+
+            /*mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(getContext());
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            mAutoCompleteAdapter.setClickListener(this);
+            recyclerView.setAdapter(mAutoCompleteAdapter);
+            mAutoCompleteAdapter.notifyDataSetChanged();*/
 
             bottomSheetDialog.setContentView(bottomview);
             bottomSheetDialog.show();
@@ -235,6 +284,42 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         return view;
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+                Place place = Autocomplete.getPlaceFromIntent(data);
+                Toast.makeText(getContext(),place.getLatLng().toString(),Toast.LENGTH_SHORT).show();
+            } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
+                // TODO: Handle the error.
+                Status status = Autocomplete.getStatusFromIntent(data);
+                Log.d("ERROR",status.getStatusMessage());
+            } else if (resultCode == RESULT_CANCELED) {
+                // The user canceled the operation.
+            }
+            return;
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    private TextWatcher filterTextWatcher = new TextWatcher() {
+        public void afterTextChanged(Editable s) {
+            if (!s.toString().equals("")) {
+                mAutoCompleteAdapter.getFilter().filter(s.toString());
+                if (recyclerView.getVisibility() == View.GONE) {recyclerView.setVisibility(View.VISIBLE);}
+            } else {
+                if (recyclerView.getVisibility() == View.VISIBLE) {recyclerView.setVisibility(View.GONE);}
+            }
+        }
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+        public void onTextChanged(CharSequence s, int start, int before, int count) { }
+    };
+
+    @Override
+    public void click(Place place) {
+        Toast.makeText(getContext(), place.getAddress()+", "+place.getLatLng().latitude+place.getLatLng().longitude, Toast.LENGTH_SHORT).show();
+    }
+
     public void dunny(){
         List<Object> datac = new ArrayList<>();
         int fgi;
@@ -323,4 +408,5 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     public void onPageScrollStateChanged(int state) {
 
     }
+
 }
