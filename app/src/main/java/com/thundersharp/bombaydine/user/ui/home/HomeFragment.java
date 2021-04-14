@@ -47,6 +47,9 @@ import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.CategoryAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.PlacesAutoCompleteAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.TopsellingAdapter;
+import com.thundersharp.bombaydine.user.core.Model.AddressData;
+import com.thundersharp.bombaydine.user.core.address.AddressHelper;
+import com.thundersharp.bombaydine.user.core.address.AddressLoader;
 import com.thundersharp.bombaydine.user.core.location.PinCodeContract;
 import com.thundersharp.bombaydine.user.core.location.PinCodeInteractor;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
@@ -73,25 +76,38 @@ import static com.thundersharp.bombaydine.user.ui.home.MainPage.navController;
 
 public class HomeFragment extends Fragment implements BaseSliderView.OnSliderClickListener,
         ViewPagerEx.OnPageChangeListener,
-        PlacesAutoCompleteAdapter.ClickListener, PinCodeContract.onPinDatafetchListner {
+        PlacesAutoCompleteAdapter.ClickListener,
+        PinCodeContract.onPinDatafetchListner,
+        AddressLoader.onAddresLoadListner {
 
+    /**
+     * Slider layout and other ui components
+     */
     private SliderLayout mDemoSlider;
     List<Object> data = new ArrayList<>();
-
-    private PlacesAutoCompleteAdapter mAutoCompleteAdapter;
-    private RecyclerView recyclerView;
-
-
-    String pinCode;
-    private RequestQueue mRequestQueue;
-
     private CircleImageView profile;
     private ImageView qrcode;
     private TextView recentorders,allitemsview;
     private AllItemAdapter allItemAdapter;
     private RecyclerView horizontalScrollView, categoryRecycler,topsellingholder;
+
+    private PlacesAutoCompleteAdapter mAutoCompleteAdapter;
+    private RecyclerView recyclerView;
+
+    /**
+     * Pin code details from API
+     */
+    String pinCode;
+    private RequestQueue mRequestQueue;
     private LinearLayout current_loc;
     private PinCodeInteractor pinCodeInteractor;
+
+    /**
+     *Address Listeners and helpers
+     */
+    private AddressHelper addressHelper;
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -111,13 +127,13 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
 
         mRequestQueue = Volley.newRequestQueue(getContext());
 
-
         Places.initialize(getActivity(), getResources().getString(R.string.google_maps_key));
         pinCodeInteractor = new PinCodeInteractor(getContext(),this);
+        addressHelper = new AddressHelper(getActivity(),this);
 
         //recyclerView = (RecyclerView) view.findViewById(R.id.places_recycler_view);
 
-
+        addressHelper.loaduseraddress();
         allitemsview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -476,5 +492,15 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     @Override
     public void onDataFetchFailureListner(Exception e) {
         Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onAddressLoaded(List<AddressData> addressData) {
+        Toast.makeText(getActivity(), ""+addressData.get(0).getADDRESS_LINE1(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onAddressLoadFailure(Exception e) {
+
     }
 }
