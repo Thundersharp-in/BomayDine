@@ -21,6 +21,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonArrayRequest;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.request.RequestOptions;
 import com.glide.slider.library.SliderLayout;
 import com.glide.slider.library.animations.DescriptionAnimation;
@@ -40,10 +47,16 @@ import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.CategoryAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.PlacesAutoCompleteAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.TopsellingAdapter;
+import com.thundersharp.bombaydine.user.core.location.PinCodeContract;
+import com.thundersharp.bombaydine.user.core.location.PinCodeInteractor;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
 import com.thundersharp.bombaydine.user.ui.menu.AllItemsActivity;
 import com.thundersharp.bombaydine.user.ui.orders.RecentOrders;
 import com.thundersharp.bombaydine.user.ui.scanner.QrScanner;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -59,7 +72,8 @@ import static com.thundersharp.bombaydine.user.ui.home.MainPage.navController;
 
 
 public class HomeFragment extends Fragment implements BaseSliderView.OnSliderClickListener,
-        ViewPagerEx.OnPageChangeListener,PlacesAutoCompleteAdapter.ClickListener {
+        ViewPagerEx.OnPageChangeListener,
+        PlacesAutoCompleteAdapter.ClickListener, PinCodeContract.onPinDatafetchListner {
 
     private SliderLayout mDemoSlider;
     List<Object> data = new ArrayList<>();
@@ -67,12 +81,17 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     private PlacesAutoCompleteAdapter mAutoCompleteAdapter;
     private RecyclerView recyclerView;
 
+
+    String pinCode;
+    private RequestQueue mRequestQueue;
+
     private CircleImageView profile;
     private ImageView qrcode;
     private TextView recentorders,allitemsview;
     private AllItemAdapter allItemAdapter;
     private RecyclerView horizontalScrollView, categoryRecycler,topsellingholder;
     private LinearLayout current_loc;
+    private PinCodeInteractor pinCodeInteractor;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -90,10 +109,13 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         profile = view.findViewById(R.id.profile);
         current_loc = view.findViewById(R.id.current_loc);
 
+        mRequestQueue = Volley.newRequestQueue(getContext());
+
 
         Places.initialize(getActivity(), getResources().getString(R.string.google_maps_key));
+        pinCodeInteractor = new PinCodeInteractor(getContext(),this);
 
-        recyclerView = (RecyclerView) view.findViewById(R.id.places_recycler_view);
+        //recyclerView = (RecyclerView) view.findViewById(R.id.places_recycler_view);
 
 
         allitemsview.setOnClickListener(new View.OnClickListener() {
@@ -107,9 +129,29 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext(),R.style.BottomSheetDialogTheme);
             View bottomview = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout,view.findViewById(R.id.botomcontainer));
 
-            recyclerView = bottomview.findViewById(R.id.places_recycler_view);
+            //recyclerView = bottomview.findViewById(R.id.places_recycler_view);
             EditText editText = (EditText) bottomview.findViewById(R.id.searchedit);
 
+            editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (charSequence.toString().length() == 6){
+                        pinCodeInteractor.getdetailsfromPincode(charSequence.toString());
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
+
+/*
             editText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -125,6 +167,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
 
                 }
             });
+*/
 
             /*mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(getContext());
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -373,6 +416,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
 
         }
 
+
         TopsellingAdapter categoryAdapter = new TopsellingAdapter(getContext(),datac);
         //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
 
@@ -409,4 +453,28 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
 
     }
 
+
+    @Override
+    public void onDataFetch(JSONObject obj) {
+        String district = null,state = null,country = null,name = null;
+        try {
+            district = obj.getString("District");
+             state = obj.getString("State");
+             country = obj.getString("Country");
+             name = obj.getString("Name");
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        Toast.makeText(getContext(),"Details of pin code is : \n" + "District is : " + district + "\n" + "State : " +
+                state + "\n" + "Country : " + country+"\nName : "+name,Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onDataFetchFailureListner(Exception e) {
+        Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
+    }
 }

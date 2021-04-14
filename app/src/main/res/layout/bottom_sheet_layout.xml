@@ -31,30 +31,39 @@
                 android:src="@drawable/ic_baseline_search_24"/>
 
 
-            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+            <EditText
                 android:id="@+id/searchedit"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="10dp"
                 android:background="@null"
-                android:hint="Search for your location"
+                android:hint="Search for your pin code"
                 android:layout_marginStart="10dp"
-                android:inputType="text"
+                android:inputType="number"
                 android:maxLines="1"
+                android:maxLength="6"
                 android:singleLine="true"
                 android:textColor="#d3d3d3"
                 android:textColorHint="#b7b7b7" />
+
+
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/places_recycler_view"
-            android:orientation="vertical"
-            android:background="#535353"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-        </androidx.recyclerview.widget.RecyclerView>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:textColor="#E91E63"
+            android:text="OR Use your current location"
+            android:layout_marginStart="15dp"
+            android:drawableStart="@drawable/ic_baseline_gps_fixed_24"
+            android:gravity="center"
+            android:drawableTint="#E91E63"
+            android:drawablePadding="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"/>
+
 
     </LinearLayout>
 
