@@ -103,4 +103,6 @@ public class Service_areas extends Fragment implements OnMapReadyCallback {
         googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Brisbane, 13));
 
     }
+
+
 }

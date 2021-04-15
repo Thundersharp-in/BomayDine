@@ -29,6 +29,7 @@ import com.android.volley.toolbox.JsonArrayRequest;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.request.RequestOptions;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.glide.slider.library.SliderLayout;
 import com.glide.slider.library.animations.DescriptionAnimation;
 import com.glide.slider.library.slidertypes.BaseSliderView;
@@ -43,6 +44,7 @@ import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
 import com.thundersharp.bombaydine.R;
+import com.thundersharp.bombaydine.user.core.Adapters.AllAddressHolderAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.CategoryAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.PlacesAutoCompleteAdapter;
@@ -101,6 +103,8 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     private RequestQueue mRequestQueue;
     private LinearLayout current_loc;
     private PinCodeInteractor pinCodeInteractor;
+    private ShimmerFrameLayout shimmerFrameLayout;
+    private RecyclerView addressholder;
 
     /**
      *Address Listeners and helpers
@@ -133,7 +137,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
 
         //recyclerView = (RecyclerView) view.findViewById(R.id.places_recycler_view);
 
-        addressHelper.loaduseraddress();
+
         allitemsview.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -144,8 +148,10 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         current_loc.setOnClickListener(viewlocation ->{
             BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext(),R.style.BottomSheetDialogTheme);
             View bottomview = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout,view.findViewById(R.id.botomcontainer));
-
+            addressHelper.loaduseraddress();
             //recyclerView = bottomview.findViewById(R.id.places_recycler_view);
+            shimmerFrameLayout = bottomview.findViewById(R.id.shimmerlayout);
+            recyclerView = bottomview.findViewById(R.id.addressholder);
             EditText editText = (EditText) bottomview.findViewById(R.id.searchedit);
 
             editText.addTextChangedListener(new TextWatcher() {
@@ -475,17 +481,21 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         String district = null,state = null,country = null,name = null;
         try {
             district = obj.getString("District");
-             state = obj.getString("State");
-             country = obj.getString("Country");
-             name = obj.getString("Name");
+            state = obj.getString("State");
+            country = obj.getString("Country");
+            name = obj.getString("Name");
 
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-
-        Toast.makeText(getContext(),"Details of pin code is : \n" + "District is : " + district + "\n" + "State : " +
-                state + "\n" + "Country : " + country+"\nName : "+name,Toast.LENGTH_SHORT).show();
+        Toast.makeText(getContext(),
+                "Details of pin code is : \n" +
+                        "District is : " + district + "\n" +
+                        "State : " + state + "\n" +
+                        "Country : " + country+
+                        "\nName : "+name,
+                Toast.LENGTH_SHORT).show();
 
     }
 
@@ -496,11 +506,17 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
 
     @Override
     public void onAddressLoaded(List<AddressData> addressData) {
+        shimmerFrameLayout.stopShimmer();
+        shimmerFrameLayout.setVisibility(View.GONE);
+        AllAddressHolderAdapter allAddressHolderAdapter = new AllAddressHolderAdapter(getActivity(),addressData);
+        recyclerView.setAdapter(allAddressHolderAdapter);
+        recyclerView.setVisibility(View.VISIBLE);
         Toast.makeText(getActivity(), ""+addressData.get(0).getADDRESS_LINE1(), Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onAddressLoadFailure(Exception e) {
-
+        Toast.makeText(getActivity(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,6 +1,8 @@
 package com.thundersharp.bombaydine.user.core.Model;
 
-public class AddressData {
+import java.io.Serializable;
+
+public class AddressData implements Serializable {
 
     public AddressData(){}
 
@@ -78,13 +80,5 @@ public class AddressData {
         this.ZIP = ZIP;
     }
 
-    @Override
-    public String toString() {
-        return "AddressData{" +
-                "ADDRESS_LINE1='" + ADDRESS_LINE1 + '\'' +
-                ", ADDRESS_LINE2='" + ADDRESS_LINE2 + '\'' +
-                ", CITY='" + CITY + '\'' +
-                ", ZIP=" + ZIP +
-                '}';
-    }
+
 }

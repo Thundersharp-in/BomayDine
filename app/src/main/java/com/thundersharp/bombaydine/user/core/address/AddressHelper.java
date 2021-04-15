@@ -15,15 +15,21 @@ import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AddressHelper implements AddressLoader {
+public class AddressHelper implements AddressLoader,AddressUpdater.onAddressDataUpdateToFirbase {
 
     private Context context;
     private AddressLoader.onAddresLoadListner onAddresLoadListner;
+    private AddressUpdater.OnAddressUpdateListner onAddressUpdateListner;
 
 
     public AddressHelper(Context context, AddressLoader.onAddresLoadListner onAddresLoadListner) {
         this.context = context;
         this.onAddresLoadListner = onAddresLoadListner;
+    }
+
+    public AddressHelper(Context context, AddressUpdater.OnAddressUpdateListner onAddressUpdateListner,String string) {
+        this.context = context;
+        this.onAddressUpdateListner = onAddressUpdateListner;
     }
 
     @Override
@@ -60,5 +66,24 @@ public class AddressHelper implements AddressLoader {
     @Override
     public void refreshAddress() {
         loaduseraddress();
+    }
+
+    @Override
+    public void dataUpdate(AddressData adata) {
+        FirebaseDatabase
+                .getInstance()
+                .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
+                .child(FirebaseAuth.getInstance().getUid())
+                .child(CONSTANTS.DATABASE_NODE_ADDRESS)
+                .child(String.valueOf(adata.getID()))
+                .setValue(adata)
+                .addOnCompleteListener(task -> {
+                   if (task.isSuccessful()){
+                       onAddressUpdateListner.onAddressUpdate(task,true);
+                   }else onAddressUpdateListner.onAddressUpdateFailure(task.getException());
+                }).addOnFailureListener(e -> {
+                    onAddressUpdateListner.onAddressUpdateFailure(e);
+        });
+
     }
 }

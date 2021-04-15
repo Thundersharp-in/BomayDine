@@ -1,0 +1,259 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1e2026"
+    tools:context=".user.ui.location.AddressEdit">
+
+    <fragment
+        android:id="@+id/map"
+        android:layout_above="@id/bottomholder"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:id="@+id/bottomholder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="180dp"
+        android:elevation="8dp"
+        android:layout_alignParentBottom="true">
+
+        <LinearLayout
+            android:id="@+id/data1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:minHeight="130dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:drawableStart="@drawable/ic_outline_pin_drop_24"
+                android:drawablePadding="10dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Select Delivery Location"
+                android:fontFamily="@font/calibri"
+                android:textSize="20sp"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginHorizontal="15dp"
+                android:background="@drawable/edittextcurved_dark"
+                android:elevation="7dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/addressline1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@null"
+                    android:hint="Address Line 1"
+                    android:drawableStart="@drawable/ic_outline_home_work_24"
+                    android:drawablePadding="10dp"
+                    android:inputType="textPostalAddress"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="#b7b7b7"
+                    android:textColorHint="#b7b7b7" />
+            </LinearLayout>
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/worktype"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:elevation="4dp"
+                app:singleSelection="true">
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/home"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipStrokeColor="#fff"
+                    android:textColor="#fff"
+                    style="@style/CustomChipChoice"
+                    android:clickable="true"
+                    app:chipStrokeWidth="1dp"
+                    app:chipBackgroundColor="@color/chip_bg"
+                    android:text="Home"
+                    android:focusable="true" />
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/office"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipStrokeColor="#fff"
+                    android:textColor="#fff"
+                    style="@style/CustomChipChoice"
+                    app:chipStrokeWidth="1dp"
+                    android:clickable="true"
+                    android:focusable="true"
+                    app:chipBackgroundColor="@color/chip_bg"
+                    android:text="Office"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/other"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:chipStrokeColor="#fff"
+                    style="@style/CustomChipChoice"
+                    android:clickable="true"
+                    android:textColor="#fff"
+                    app:chipStrokeWidth="1dp"
+                    app:chipBackgroundColor="@color/chip_bg"
+                    android:text="Others"
+                    android:focusable="true" />
+
+
+            </com.google.android.material.chip.ChipGroup>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/data2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:visibility="gone"
+            android:minHeight="130dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#fff"
+                android:drawableStart="@drawable/ic_outline_pin_drop_24"
+                android:drawablePadding="10dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:text="Select Delivery Location"
+                android:fontFamily="@font/calibri"
+                android:textSize="20sp"/>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="45dp"
+                android:layout_marginHorizontal="15dp"
+                android:background="@drawable/edittextcurved_dark"
+                android:elevation="7dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/addressline2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@null"
+                    android:hint="Address Line 2"
+                    android:drawableStart="@drawable/ic_outline_home_work_24"
+                    android:drawablePadding="10dp"
+                    android:inputType="textPostalAddress"
+                    android:maxLines="1"
+                    android:singleLine="true"
+                    android:textColor="#b7b7b7"
+                    android:textColorHint="#b7b7b7" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:weightSum="2"
+                android:layout_marginBottom="5dp"
+                android:layout_marginHorizontal="15dp">
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="45dp"
+                    android:layout_marginEnd="10dp"
+                    android:background="@drawable/edittextcurved_dark"
+                    android:elevation="7dp"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/city"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@null"
+                        android:hint="City"
+                        android:drawableStart="@drawable/ic_outline_home_work_24"
+                        android:drawablePadding="10dp"
+                        android:inputType="textPostalAddress"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="#b7b7b7"
+                        android:textColorHint="#b7b7b7" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="45dp"
+                    android:background="@drawable/edittextcurved_dark"
+                    android:elevation="7dp"
+                    android:orientation="horizontal">
+
+                    <EditText
+                        android:id="@+id/pin"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginEnd="10dp"
+                        android:background="@null"
+                        android:hint="Pin code"
+                        android:drawableStart="@drawable/ic_outline_home_work_24"
+                        android:drawablePadding="10dp"
+                        android:inputType="number"
+                        android:maxLines="1"
+                        android:singleLine="true"
+                        android:textColor="#b7b7b7"
+                        android:textColorHint="#b7b7b7" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/savenproceed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="15dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="#fff"
+            android:textAllCaps="false"
+            android:text="Save and Continue"
+            android:background="@drawable/btn_round_red"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
