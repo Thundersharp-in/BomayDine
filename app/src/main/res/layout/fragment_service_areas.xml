@@ -24,14 +24,29 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
 
-        <androidx.recyclerview.widget.RecyclerView
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/hovercard"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:elevation="4dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_marginHorizontal="10dp"
+            android:clipChildren="false"
+            android:minHeight="140dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="7dp"
+            app:cardBackgroundColor="#22242c"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginBottom="10dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="140dp">
+
+
+
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
     </RelativeLayout>
 
 

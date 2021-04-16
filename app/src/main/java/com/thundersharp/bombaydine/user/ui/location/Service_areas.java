@@ -123,6 +123,6 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
 
     @Override
     public void onCordinatesFailure(Exception exception) {
-
+        Toast.makeText(getActivity(), ""+exception.getMessage(), Toast.LENGTH_SHORT).show();
     }
 }

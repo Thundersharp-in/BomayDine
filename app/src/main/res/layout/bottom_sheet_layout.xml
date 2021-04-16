@@ -19,6 +19,7 @@
         android:orientation="vertical">
 
         <LinearLayout
+            android:id="@+id/searchedit"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:orientation="horizontal">
@@ -28,21 +29,19 @@
                 android:layout_gravity="center_vertical"
                 android:layout_marginStart="15dp"
                 app:tint="#ff995e"
-                android:src="@drawable/ic_baseline_search_24"/>
+                android:src="@drawable/ic_outline_pin_drop_24"/>
 
 
-            <EditText
-                android:id="@+id/searchedit"
+            <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="10dp"
                 android:background="@null"
-                android:hint="Search for your pin code"
+                android:hint="Choose your address on map"
+                android:enabled="false"
                 android:layout_marginStart="10dp"
-                android:inputType="number"
                 android:maxLines="1"
-                android:maxLength="6"
                 android:singleLine="true"
                 android:textColor="#d3d3d3"
                 android:textColorHint="#b7b7b7" />
@@ -55,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="15dp"
             android:textColor="#E91E63"
-            android:text="OR Use your current location"
+            android:text="Use current location or mark on map"
             android:layout_marginStart="15dp"
             android:drawableStart="@drawable/ic_baseline_gps_fixed_24"
             android:gravity="center"

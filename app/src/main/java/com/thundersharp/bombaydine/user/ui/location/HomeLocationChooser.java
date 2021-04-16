@@ -7,10 +7,10 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
@@ -23,17 +23,23 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.ChipGroup;
 import com.google.maps.android.PolyUtil;
@@ -50,8 +56,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback,
-        AddressUpdater.OnAddressUpdateListner, Cordinateslistner.fetchSuccessListener {
+public class HomeLocationChooser extends AppCompatActivity implements OnMapReadyCallback,
+        AddressUpdater.OnAddressUpdateListner, Cordinateslistner.fetchSuccessListener{
 
     private GoogleMap mMap;
     private AddressData addressData;
@@ -64,30 +70,20 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
     private EditText addressline1,addressline2,city,zip;
     private ChipGroup worktype;
 
-
-/*    private LatLng TamWorth = new LatLng(13.083925, 77.479119);
-    private LatLng NewCastle = new LatLng(13.093330, 77.489017);
-    private LatLng Brisbane = new LatLng(13.075816, 77.480262);
-    private LatLng point5 = new LatLng(13.068875, 77.507298);
-    private LatLng point6 = new LatLng(13.070047, 77.465500);*/
-
     List<LatLng> latLngs = new ArrayList<>();
-    private LinearLayout bottomholder,data2;
+    private LinearLayout bottomholder;
 
-    /**
-     * Calling this activity requires searlized data
-     * @param savedInstanceState
-     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_address_edit);
+        setContentView(R.layout.activity_home_location_chooser);
+        createLocationRequest();
 
         addressData = (AddressData) getIntent().getSerializableExtra("data");
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        addressHelper = new AddressHelper(AddressEdit.this,this,"");
+        addressHelper = new AddressHelper(this,this,"");
         cordinatesInteractor = new CordinatesInteractor(this);
 
 
@@ -98,24 +94,13 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
         zip = findViewById(R.id.pin);
         worktype = findViewById(R.id.worktype);
         bottomholder = findViewById(R.id.data1);
-        data2 = findViewById(R.id.data2);
 
 
-        if (addressData.getADDRESS_NICKNAME().equalsIgnoreCase("Home")){
-            worktype.check(R.id.home);
-        }else if (addressData.getADDRESS_NICKNAME().equalsIgnoreCase("Office")){
-            worktype.check(R.id.office);
-        }else worktype.check(R.id.other);
 
-        addressline1.setText(addressData.getADDRESS_LINE1());
-        addressline2.setText(addressData.getADDRESS_LINE2());
-        city.setText(addressData.getCITY());
-        zip.setText(addressData.getZIP()+"");
 
         savencontinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (bottomholder.getVisibility() == View.GONE){
                     String nickname=null;
                     if (worktype.getCheckedChipId() == R.id.home){
                         nickname= "Home";
@@ -132,15 +117,15 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
                             addressData.getID(),
                             lat_long,
                             Integer.parseInt(zip.getText().toString()));
-                    addressHelper.dataUpdate(addressDataf);
+                    //TODO update data to shared prefrences here
+                    //addressHelper.dataUpdate(addressDataf);
 
 
-                }else {
-                    bottomholder.setVisibility(View.GONE);
-                    data2.setVisibility(View.VISIBLE);
-                }
+
             }
         });
+
+
 
     }
 
@@ -157,6 +142,7 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
         markerOptions.title("Your Marked Address");
         //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
         //Toast.makeText(this, ""+getlatlang(addressData.getLAT_LONG()).latitude+","+getlatlang(addressData.getLAT_LONG()).longitude, Toast.LENGTH_SHORT).show();
+        //TODO UPDATE DEVICE CURRENT LOCATION HERE
         markerOptions.position(getlatlang(addressData.getLAT_LONG()));
         markerOptions.draggable(true);
 
@@ -188,7 +174,7 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }else Toast.makeText(AddressEdit.this,"Sorry we are not yet serving to your location.",Toast.LENGTH_SHORT).show();
+                }else Toast.makeText(HomeLocationChooser.this,"Sorry we are not yet serving to your location.",Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -217,7 +203,7 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }else Toast.makeText(AddressEdit.this,"Sorry we are not yet serving to your location.",Toast.LENGTH_SHORT).show();
+                }else Toast.makeText(HomeLocationChooser.this,"Sorry we are not yet serving to your location.",Toast.LENGTH_SHORT).show();
 
                 //Toast.makeText(AddressEdit.this,String.valueOf(marker.getPosition().longitude)+"\naddress : "+ address.getAddressLine(0)+"\nPostal : "+address.getPostalCode(),Toast.LENGTH_LONG).show();
             }
@@ -234,7 +220,6 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
 
         cordinatesInteractor.fetchAllCoordinates();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(getlatlang(addressData.getLAT_LONG()), 18));
-
 
 
 
@@ -259,12 +244,12 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
         return addresses.get(0);
     }
 
-
     private LatLng getlatlang(String lat_long) {
         double lat = Double.parseDouble(lat_long.substring(0,lat_long.indexOf(",") ));
         double longitude = Double.parseDouble(lat_long.substring(lat_long.indexOf(",")+1));
         return new LatLng(lat,longitude);
     }
+
 
     private void checkForPermissions() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -318,17 +303,17 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onAddressUpdate(Task<Void> task, boolean isTaskSucessful) {
-        Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onAddressUpdateFailure(Exception e) {
-        Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+
     }
 
     @Override
     public void onCordinatesSuccess(LatLng... coOrdinates) {
-        //Toast.makeText(this, ""+coOrdinates[0].latitude+","+coOrdinates[0].longitude, Toast.LENGTH_SHORT).show();
+
         latLngs = Arrays.asList(coOrdinates);
 
         try {
@@ -343,12 +328,54 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
             Log.d("EXXXXXX",e.getMessage());
         }
 
-
-
     }
 
     @Override
     public void onCordinatesFailure(Exception exception) {
-        Toast.makeText(this,exception.getMessage(),Toast.LENGTH_SHORT).show();
+
+    }
+
+    protected void createLocationRequest() {
+        LocationRequest locationRequest = LocationRequest.create();
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(5000);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest);
+
+// ...
+
+        SettingsClient client = LocationServices.getSettingsClient(this);
+        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+
+        task.addOnSuccessListener(this, new OnSuccessListener<LocationSettingsResponse>() {
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                // All location settings are satisfied. The client can initialize
+                // location requests here.
+                // ...
+
+            }
+        });
+
+        task.addOnFailureListener(this, new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                if (e instanceof ResolvableApiException) {
+                    // Location settings are not satisfied, but this can be fixed
+                    // by showing the user a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+                        ResolvableApiException resolvable = (ResolvableApiException) e;
+                        resolvable.startResolutionForResult(HomeLocationChooser.this,
+                                101);
+                    } catch (IntentSender.SendIntentException sendEx) {
+                        // Ignore the error.
+                    }
+                }
+            }
+        });
     }
 }

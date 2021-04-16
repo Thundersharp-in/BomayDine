@@ -1,14 +1,17 @@
 package com.thundersharp.bombaydine.user.ui.home;
 
 import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -35,7 +38,16 @@ import com.glide.slider.library.animations.DescriptionAnimation;
 import com.glide.slider.library.slidertypes.BaseSliderView;
 import com.glide.slider.library.slidertypes.DefaultSliderView;
 import com.glide.slider.library.tricks.ViewPagerEx;
+import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.widget.Autocomplete;
@@ -58,6 +70,7 @@ import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
 import com.thundersharp.bombaydine.user.ui.menu.AllItemsActivity;
 import com.thundersharp.bombaydine.user.ui.orders.RecentOrders;
 import com.thundersharp.bombaydine.user.ui.scanner.QrScanner;
+import com.thundersharp.bombaydine.user.ui.startup.MainActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -79,7 +92,7 @@ import static com.thundersharp.bombaydine.user.ui.home.MainPage.navController;
 public class HomeFragment extends Fragment implements BaseSliderView.OnSliderClickListener,
         ViewPagerEx.OnPageChangeListener,
         PlacesAutoCompleteAdapter.ClickListener,
-        PinCodeContract.onPinDatafetchListner,
+       /* PinCodeContract.onPinDatafetchListner,*/
         AddressLoader.onAddresLoadListner {
 
     /**
@@ -102,7 +115,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     String pinCode;
     private RequestQueue mRequestQueue;
     private LinearLayout current_loc;
-    private PinCodeInteractor pinCodeInteractor;
+    //private PinCodeInteractor pinCodeInteractor;
     private ShimmerFrameLayout shimmerFrameLayout;
     private RecyclerView addressholder;
 
@@ -132,7 +145,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         mRequestQueue = Volley.newRequestQueue(getContext());
 
         Places.initialize(getActivity(), getResources().getString(R.string.google_maps_key));
-        pinCodeInteractor = new PinCodeInteractor(getContext(),this);
+        //pinCodeInteractor = new PinCodeInteractor(getContext(),this);
         addressHelper = new AddressHelper(getActivity(),this);
 
         //recyclerView = (RecyclerView) view.findViewById(R.id.places_recycler_view);
@@ -152,8 +165,15 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
             //recyclerView = bottomview.findViewById(R.id.places_recycler_view);
             shimmerFrameLayout = bottomview.findViewById(R.id.shimmerlayout);
             recyclerView = bottomview.findViewById(R.id.addressholder);
-            EditText editText = (EditText) bottomview.findViewById(R.id.searchedit);
+            LinearLayout linearLayout =  bottomview.findViewById(R.id.searchedit);
+            linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
+                }
+            });
+
+/*
             editText.addTextChangedListener(new TextWatcher() {
                 @Override
                 public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -172,6 +192,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
 
                 }
             });
+*/
 
 /*
             editText.setOnClickListener(new View.OnClickListener() {
@@ -476,6 +497,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     }
 
 
+/*
     @Override
     public void onDataFetch(JSONObject obj) {
         String district = null,state = null,country = null,name = null;
@@ -503,6 +525,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     public void onDataFetchFailureListner(Exception e) {
         Toast.makeText(getContext(),e.getMessage(),Toast.LENGTH_SHORT).show();
     }
+*/
 
     @Override
     public void onAddressLoaded(List<AddressData> addressData) {
@@ -519,4 +542,8 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     public void onAddressLoadFailure(Exception e) {
         Toast.makeText(getActivity(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
     }
+
+
+
+
 }
