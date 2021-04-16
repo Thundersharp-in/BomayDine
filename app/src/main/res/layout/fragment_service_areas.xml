@@ -6,19 +6,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".user.ui.location.Service_areas">
 
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.facebook.shimmer.ShimmerFrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:elevation="4dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"/>
+        android:layout_height="match_parent"
+        android:elevation="3dp"
+        android:id="@+id/shimmermap">
+        <include layout="@layout/mapsupdateplaceholder"/>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/mapholder">
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:elevation="4dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp"/>
+    </RelativeLayout>
+
 
 </RelativeLayout>

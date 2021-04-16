@@ -17,6 +17,7 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -40,18 +41,22 @@ import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Model.AddressData;
 import com.thundersharp.bombaydine.user.core.address.AddressHelper;
 import com.thundersharp.bombaydine.user.core.address.AddressUpdater;
+import com.thundersharp.bombaydine.user.core.address.CordinatesInteractor;
+import com.thundersharp.bombaydine.user.core.address.Cordinateslistner;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback, AddressUpdater.OnAddressUpdateListner {
+public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback,
+        AddressUpdater.OnAddressUpdateListner, Cordinateslistner.fetchSuccessListener {
 
     private GoogleMap mMap;
     private AddressData addressData;
     private Address address;
     private Marker marker;
+    private CordinatesInteractor cordinatesInteractor;
     private AddressHelper addressHelper;
 
     private AppCompatButton savencontinue;
@@ -59,11 +64,11 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
     private ChipGroup worktype;
 
 
-    private LatLng TamWorth = new LatLng(13.083925, 77.479119);
+/*    private LatLng TamWorth = new LatLng(13.083925, 77.479119);
     private LatLng NewCastle = new LatLng(13.093330, 77.489017);
     private LatLng Brisbane = new LatLng(13.075816, 77.480262);
     private LatLng point5 = new LatLng(13.068875, 77.507298);
-    private LatLng point6 = new LatLng(13.070047, 77.465500);
+    private LatLng point6 = new LatLng(13.070047, 77.465500);*/
 
     List<LatLng> latLngs = new ArrayList<>();
     private LinearLayout bottomholder,data2;
@@ -72,8 +77,6 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
      * Calling this activity requires searlized data
      * @param savedInstanceState
      */
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,6 +87,8 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         addressHelper = new AddressHelper(AddressEdit.this,this,"");
+        cordinatesInteractor = new CordinatesInteractor(this);
+
 
         savencontinue = findViewById(R.id.savenproceed);
         addressline1 = findViewById(R.id.addressline1);
@@ -146,6 +151,7 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
     @SuppressLint("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
         MapStyleOptions style = MapStyleOptions.loadRawResourceStyle(this, R.raw.mapstyle_night);
         MarkerOptions markerOptions = new MarkerOptions();
         mMap = googleMap;
@@ -154,6 +160,7 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
         //mMap.setMaxZoomPreference(10f);
         markerOptions.title("Your Marked Address");
         //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
+        //Toast.makeText(this, ""+getlatlang(addressData.getLAT_LONG()).latitude+","+getlatlang(addressData.getLAT_LONG()).longitude, Toast.LENGTH_SHORT).show();
         markerOptions.position(getlatlang(addressData.getLAT_LONG()));
         markerOptions.draggable(true);
 
@@ -218,13 +225,17 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
+
+/*
         mMap.addPolyline((new PolylineOptions())
                 .add(Brisbane, NewCastle, TamWorth, point5,point6,Brisbane)
                 .width(8)
                 .color(Color.RED)
                 .geodesic(true));
+*/
 
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(getlatlang(addressData.getLAT_LONG()), 18));
+        cordinatesInteractor.fetchAllCoordinates();
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(getlatlang(addressData.getLAT_LONG()), 18));
 
 
 
@@ -249,8 +260,9 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
         return addresses.get(0);
     }
 
+
     private LatLng getlatlang(String lat_long) {
-        double lat = Double.parseDouble(lat_long.substring(0,lat_long.indexOf(",") - 1));
+        double lat = Double.parseDouble(lat_long.substring(0,lat_long.indexOf(",") ));
         double longitude = Double.parseDouble(lat_long.substring(lat_long.indexOf(",")+1));
         return new LatLng(lat,longitude);
     }
@@ -313,5 +325,30 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onAddressUpdateFailure(Exception e) {
         Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onCordinatesSuccess(LatLng... coOrdinates) {
+        //Toast.makeText(this, ""+coOrdinates[0].latitude+","+coOrdinates[0].longitude, Toast.LENGTH_SHORT).show();
+
+        try {
+
+            mMap.addPolyline((new PolylineOptions())
+                    .add(coOrdinates)
+                    .width(8)
+                    .color(Color.RED)
+                    .geodesic(true));
+
+        }catch (Exception e){
+            Log.d("EXXXXXX",e.getMessage());
+        }
+
+
+
+    }
+
+    @Override
+    public void onCordinatesFailure(Exception exception) {
+        Toast.makeText(this,exception.getMessage(),Toast.LENGTH_SHORT).show();
     }
 }

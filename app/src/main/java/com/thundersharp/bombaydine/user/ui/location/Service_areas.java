@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -24,17 +26,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.thundersharp.bombaydine.R;
+import com.thundersharp.bombaydine.user.core.address.CordinatesInteractor;
+import com.thundersharp.bombaydine.user.core.address.Cordinateslistner;
 
 
-public class Service_areas extends Fragment implements OnMapReadyCallback {
+public class Service_areas extends Fragment implements OnMapReadyCallback, Cordinateslistner.fetchSuccessListener {
 
     private GoogleMap mMap;
-    private LatLng TamWorth = new LatLng(13.083925, 77.479119);
-    private LatLng NewCastle = new LatLng(13.093330, 77.489017);
-    private LatLng Brisbane = new LatLng(13.075816, 77.480262);
-    private LatLng point5 = new LatLng(13.068875, 77.507298);
-    private LatLng point6 = new LatLng(13.070047, 77.465500);
-
+    private ShimmerFrameLayout shimmerFrameLayout;
+    private RelativeLayout relativeLayout;
     private LatLng bombaydine = new LatLng(13.083519,77.4822703);
 
 
@@ -52,6 +52,10 @@ public class Service_areas extends Fragment implements OnMapReadyCallback {
         mapFragment.getMapAsync(this);
 
 
+        shimmerFrameLayout = view.findViewById(R.id.shimmermap);
+        shimmerFrameLayout.startShimmer();
+        relativeLayout = view.findViewById(R.id.mapholder);
+        relativeLayout.setVisibility(View.GONE);
 
 
         return view;
@@ -74,6 +78,8 @@ public class Service_areas extends Fragment implements OnMapReadyCallback {
         mMap.setMyLocationEnabled(true);
         mMap.addMarker(markerOptions);
 
+        CordinatesInteractor cordinatesInteractor = new CordinatesInteractor(this);
+        cordinatesInteractor.fetchAllCoordinates();
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -94,15 +100,29 @@ public class Service_areas extends Fragment implements OnMapReadyCallback {
         mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));*/
 
-        mMap.addPolyline((new PolylineOptions())
-                .add(Brisbane, NewCastle, TamWorth, point5,point6,Brisbane)
-                .width(8)
-                .color(Color.RED)
-                .geodesic(true));
-        // on below line we will be starting the drawing of polyline.
-        googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Brisbane, 13));
+
 
     }
 
 
+    @Override
+    public void onCordinatesSuccess(LatLng... coOrdinates) {
+        mMap.addPolyline((new PolylineOptions())
+                .add(coOrdinates)
+                .width(8)
+                .color(Color.RED)
+                .geodesic(true));
+        // on below line we will be starting the drawing of polyline.
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(bombaydine, 13));
+
+        shimmerFrameLayout.stopShimmer();
+        shimmerFrameLayout.hideShimmer();
+        shimmerFrameLayout.setVisibility(View.GONE);
+        relativeLayout.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    public void onCordinatesFailure(Exception exception) {
+
+    }
 }
