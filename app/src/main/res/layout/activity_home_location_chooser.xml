@@ -8,12 +8,28 @@
     android:background="#1e2026"
     tools:context=".user.ui.location.HomeLocationChooser">
 
-    <fragment
-        android:id="@+id/map"
-        android:layout_above="@id/bottomholder"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
+    <com.facebook.shimmer.ShimmerFrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:elevation="3dp"
+        android:layout_above="@id/bottomholder"
+        android:id="@+id/shimmermap1">
+        <include layout="@layout/mapsupdateplaceholder"/>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+    <RelativeLayout
+        android:id="@+id/mapholder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/bottomholder"
+        >
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+    </RelativeLayout>
 
 
     <LinearLayout
@@ -23,6 +39,7 @@
         android:layout_height="wrap_content"
         android:minHeight="180dp"
         android:elevation="8dp"
+        android:background="@drawable/curved_dark"
         android:layout_alignParentBottom="true">
 
         <LinearLayout

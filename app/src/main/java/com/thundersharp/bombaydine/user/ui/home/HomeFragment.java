@@ -64,8 +64,11 @@ import com.thundersharp.bombaydine.user.core.Adapters.TopsellingAdapter;
 import com.thundersharp.bombaydine.user.core.Model.AddressData;
 import com.thundersharp.bombaydine.user.core.address.AddressHelper;
 import com.thundersharp.bombaydine.user.core.address.AddressLoader;
+import com.thundersharp.bombaydine.user.core.address.SharedPrefHelper;
+import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
 import com.thundersharp.bombaydine.user.core.location.PinCodeContract;
 import com.thundersharp.bombaydine.user.core.location.PinCodeInteractor;
+import com.thundersharp.bombaydine.user.ui.location.HomeLocationChooser;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
 import com.thundersharp.bombaydine.user.ui.menu.AllItemsActivity;
 import com.thundersharp.bombaydine.user.ui.orders.RecentOrders;
@@ -93,7 +96,8 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         ViewPagerEx.OnPageChangeListener,
         PlacesAutoCompleteAdapter.ClickListener,
        /* PinCodeContract.onPinDatafetchListner,*/
-        AddressLoader.onAddresLoadListner {
+        AddressLoader.onAddresLoadListner,
+        SharedPrefUpdater.OnSharedprefUpdated {
 
     /**
      * Slider layout and other ui components
@@ -102,13 +106,13 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     List<Object> data = new ArrayList<>();
     private CircleImageView profile;
     private ImageView qrcode;
-    private TextView recentorders,allitemsview;
+    private TextView recentorders,allitemsview,textcurrloc;
     private AllItemAdapter allItemAdapter;
     private RecyclerView horizontalScrollView, categoryRecycler,topsellingholder;
 
     private PlacesAutoCompleteAdapter mAutoCompleteAdapter;
     private RecyclerView recyclerView;
-
+    private BottomSheetDialog bottomSheetDialog;
     /**
      * Pin code details from API
      */
@@ -123,7 +127,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
      *Address Listeners and helpers
      */
     private AddressHelper addressHelper;
-
+    private SharedPrefHelper sharedPrefHelper;
 
 
     @Override
@@ -132,6 +136,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
+        sharedPrefHelper = new SharedPrefHelper(getContext(),this);
         mDemoSlider = view.findViewById(R.id.slider);
         horizontalScrollView = view.findViewById(R.id.allitems);
         topsellingholder = view.findViewById(R.id.topsellingholder);
@@ -141,6 +146,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         recentorders = view.findViewById(R.id.recentorders);
         profile = view.findViewById(R.id.profile);
         current_loc = view.findViewById(R.id.current_loc);
+        textcurrloc = view.findViewById(R.id.textcurrloc);
 
         mRequestQueue = Volley.newRequestQueue(getContext());
 
@@ -159,7 +165,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         });
 
         current_loc.setOnClickListener(viewlocation ->{
-            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext(),R.style.BottomSheetDialogTheme);
+            bottomSheetDialog = new BottomSheetDialog(getContext(),R.style.BottomSheetDialogTheme);
             View bottomview = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout,view.findViewById(R.id.botomcontainer));
             addressHelper.loaduseraddress();
             //recyclerView = bottomview.findViewById(R.id.places_recycler_view);
@@ -169,7 +175,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
             linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    startActivityForResult(new Intent(getActivity(), HomeLocationChooser.class),101);
                 }
             });
 
@@ -470,6 +476,12 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        sharedPrefHelper.updatehomelocationData();
+    }
+
+    @Override
     public void onStop() {
         super.onStop();
         mDemoSlider.stopAutoCycle();
@@ -534,7 +546,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         AllAddressHolderAdapter allAddressHolderAdapter = new AllAddressHolderAdapter(getActivity(),addressData);
         recyclerView.setAdapter(allAddressHolderAdapter);
         recyclerView.setVisibility(View.VISIBLE);
-        Toast.makeText(getActivity(), ""+addressData.get(0).getADDRESS_LINE1(), Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), ""+addressData.get(0).getADDRESS_LINE1(), Toast.LENGTH_SHORT).show();
 
     }
 
@@ -544,6 +556,14 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     }
 
 
+    @Override
+    public void onSharedPrefUpdate(AddressData addressData) {
+        if (bottomSheetDialog != null) {
+            if (bottomSheetDialog.isShowing()) {
+                bottomSheetDialog.cancel();
+            }
+        }
+        textcurrloc.setText(addressData.getADDRESS_NICKNAME()+": "+addressData.getADDRESS_LINE1());
 
-
+    }
 }
