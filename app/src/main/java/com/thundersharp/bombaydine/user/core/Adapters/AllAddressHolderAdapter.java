@@ -15,18 +15,23 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Model.AddressData;
+import com.thundersharp.bombaydine.user.core.address.SharedPrefHelper;
+import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
+import com.thundersharp.bombaydine.user.ui.home.HomeFragment;
 import com.thundersharp.bombaydine.user.ui.location.AddressEdit;
 
 import java.util.List;
 
-public class AllAddressHolderAdapter extends RecyclerView.Adapter<AllAddressHolderAdapter.ViewHolder> {
+public class AllAddressHolderAdapter extends RecyclerView.Adapter<AllAddressHolderAdapter.ViewHolder> implements SharedPrefUpdater.OnSharedprefUpdated {
 
     private Context context;
     private List<AddressData> addressData;
+    private SharedPrefHelper sharedPrefHelper;
 
     public AllAddressHolderAdapter(Context context, List<AddressData> addressData) {
         this.context = context;
         this.addressData = addressData;
+        sharedPrefHelper = new SharedPrefHelper(context, this);
     }
 
     @NonNull
@@ -68,7 +73,13 @@ public class AllAddressHolderAdapter extends RecyclerView.Adapter<AllAddressHold
         if (addressData != null) return addressData.size(); else return 0;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public void onSharedPrefUpdate(AddressData addressData) {
+        HomeFragment.bottomSheetDialog.cancel();
+        HomeFragment.textcurrloc.setText(addressData.getADDRESS_NICKNAME()+": "+addressData.getADDRESS_LINE1());
+    }
+
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         private ImageView homeicon,endicon;
         private TextView tittle,recentorders;
@@ -81,12 +92,12 @@ public class AllAddressHolderAdapter extends RecyclerView.Adapter<AllAddressHold
             recentorders = itemView.findViewById(R.id.recentorders);
             endicon = itemView.findViewById(R.id.endicon);
 
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
+            itemView.setOnClickListener(this);
+        }
 
-                }
-            });
+        @Override
+        public void onClick(View view) {
+            sharedPrefHelper.SaveDataToSharedPref(addressData.get(getAdapterPosition()));
         }
     }
 }

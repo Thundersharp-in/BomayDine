@@ -38,8 +38,8 @@ public class CategoryAdapter  extends RecyclerView.Adapter<CategoryAdapter.ViewH
     public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, int position) {
         HashMap<String,String> hashMap = (HashMap<String,String>)itemObjectlist.get(position);
 
-        holder.name.setText(hashMap.get("name"));
-        Glide.with(context).load(hashMap.get("imageuri")).into(holder.imageView);
+        holder.name.setText(hashMap.get("NAME"));
+        Glide.with(context).load(hashMap.get("IMAGES")).into(holder.imageView);
     }
 
     @Override

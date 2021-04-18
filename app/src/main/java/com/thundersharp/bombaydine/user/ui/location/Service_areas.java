@@ -2,8 +2,11 @@ package com.thundersharp.bombaydine.user.ui.location;
 
 import android.annotation.SuppressLint;
 import android.graphics.Color;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -11,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -29,6 +33,10 @@ import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.address.CordinatesInteractor;
 import com.thundersharp.bombaydine.user.core.address.Cordinateslistner;
 
+import java.io.IOException;
+import java.util.List;
+import java.util.Locale;
+
 
 public class Service_areas extends Fragment implements OnMapReadyCallback, Cordinateslistner.fetchSuccessListener {
 
@@ -39,6 +47,9 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
 
 
     private RecyclerView recyclerView;
+
+
+    private TextView coordinates,addresst;
 
 
     @SuppressLint("MissingPermission")
@@ -57,6 +68,8 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
         relativeLayout = view.findViewById(R.id.mapholder);
         relativeLayout.setVisibility(View.GONE);
 
+        coordinates = view.findViewById(R.id.coord);
+        addresst = view.findViewById(R.id.address);
 
         return view;
     }
@@ -83,7 +96,18 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
-                Toast.makeText(getActivity(),"Lat :"+latLng.latitude+"Lon : "+latLng.longitude,Toast.LENGTH_SHORT).show();
+                Address address = null;
+                try {
+                    address = getLocationfromLat(latLng.latitude,latLng.longitude);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                if (address != null){
+                    coordinates.setText(""+latLng.latitude+latLng.longitude);
+                    addresst.setText(address.getAddressLine(0));
+                }
+
             }
         });
 
@@ -124,5 +148,24 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
     @Override
     public void onCordinatesFailure(Exception exception) {
         Toast.makeText(getActivity(), ""+exception.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @NonNull
+    private Address getLocationfromLat(double lat, double longi) throws IOException {
+
+        Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(getActivity(), Locale.getDefault());
+
+        addresses = geocoder.getFromLocation(lat, longi, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+        String address = addresses.get(0).getAddressLine(0);
+        String city = addresses.get(0).getLocality();
+        String state = addresses.get(0).getAdminArea();
+        String country = addresses.get(0).getCountryName();
+        String postalCode = addresses.get(0).getPostalCode();
+        String knownName = addresses.get(0).getFeatureName();
+
+        return addresses.get(0);
     }
 }

@@ -1,16 +1,22 @@
 package com.thundersharp.bombaydine.user.ui.home;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.location.Address;
+import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Looper;
 import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -38,13 +44,19 @@ import com.glide.slider.library.animations.DescriptionAnimation;
 import com.glide.slider.library.slidertypes.BaseSliderView;
 import com.glide.slider.library.slidertypes.DefaultSliderView;
 import com.glide.slider.library.tricks.ViewPagerEx;
+import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -55,15 +67,20 @@ import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.maps.android.PolyUtil;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllAddressHolderAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.CategoryAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.PlacesAutoCompleteAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.TopsellingAdapter;
+import com.thundersharp.bombaydine.user.core.Data.HomeDataContract;
+import com.thundersharp.bombaydine.user.core.Data.HomeDataProvider;
 import com.thundersharp.bombaydine.user.core.Model.AddressData;
 import com.thundersharp.bombaydine.user.core.address.AddressHelper;
 import com.thundersharp.bombaydine.user.core.address.AddressLoader;
+import com.thundersharp.bombaydine.user.core.address.CordinatesInteractor;
+import com.thundersharp.bombaydine.user.core.address.Cordinateslistner;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefHelper;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
 import com.thundersharp.bombaydine.user.core.location.PinCodeContract;
@@ -79,26 +96,36 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static android.app.Activity.RESULT_CANCELED;
 import static android.app.Activity.RESULT_OK;
 import static android.content.ContentValues.TAG;
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 import static com.thundersharp.bombaydine.user.ui.home.MainPage.navController;
 
 
-public class HomeFragment extends Fragment implements BaseSliderView.OnSliderClickListener,
+public class HomeFragment extends Fragment implements
+        BaseSliderView.OnSliderClickListener,
         ViewPagerEx.OnPageChangeListener,
         PlacesAutoCompleteAdapter.ClickListener,
-       /* PinCodeContract.onPinDatafetchListner,*/
+        /* PinCodeContract.onPinDatafetchListner,*/
         AddressLoader.onAddresLoadListner,
-        SharedPrefUpdater.OnSharedprefUpdated {
+        SharedPrefUpdater.OnSharedprefUpdated,
+        Cordinateslistner.fetchSuccessListener,
+        HomeDataContract.DataLoadFailure,
+        HomeDataContract.topSellingFetch,
+        HomeDataContract.categoryFetch,
+        HomeDataContract.HomeAllItems {
 
+    private static final int REQUEST_CHECK_SETTINGS = 140;
     /**
      * Slider layout and other ui components
      */
@@ -106,29 +133,35 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     List<Object> data = new ArrayList<>();
     private CircleImageView profile;
     private ImageView qrcode;
-    private TextView recentorders,allitemsview,textcurrloc;
+    private TextView recentorders, allitemsview;
+    public static TextView textcurrloc;
     private AllItemAdapter allItemAdapter;
-    private RecyclerView horizontalScrollView, categoryRecycler,topsellingholder;
+    private RecyclerView horizontalScrollView, categoryRecycler, topsellingholder;
 
     private PlacesAutoCompleteAdapter mAutoCompleteAdapter;
     private RecyclerView recyclerView;
-    private BottomSheetDialog bottomSheetDialog;
+    public static BottomSheetDialog bottomSheetDialog;
     /**
      * Pin code details from API
      */
     String pinCode;
     private RequestQueue mRequestQueue;
     private LinearLayout current_loc;
+    private LocationRequest locationRequest;
     //private PinCodeInteractor pinCodeInteractor;
     private ShimmerFrameLayout shimmerFrameLayout;
     private RecyclerView addressholder;
+    private Address address;
 
     /**
-     *Address Listeners and helpers
+     * Address Listeners and helpers
      */
     private AddressHelper addressHelper;
     private SharedPrefHelper sharedPrefHelper;
+    private List<LatLng> latLngs;
+    private HomeDataProvider homeDataProvider;
 
+    private ShimmerFrameLayout shimmerplace_cat,shimmerplace_topsell;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -136,8 +169,10 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        sharedPrefHelper = new SharedPrefHelper(getContext(),this);
+        sharedPrefHelper = new SharedPrefHelper(getContext(), this);
         mDemoSlider = view.findViewById(R.id.slider);
+        shimmerplace_cat = view.findViewById(R.id.shimmerplace_cat);
+        shimmerplace_topsell = view.findViewById(R.id.shimmerplace_topsell);
         horizontalScrollView = view.findViewById(R.id.allitems);
         topsellingholder = view.findViewById(R.id.topsellingholder);
         qrcode = view.findViewById(R.id.qrcode);
@@ -147,12 +182,13 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         profile = view.findViewById(R.id.profile);
         current_loc = view.findViewById(R.id.current_loc);
         textcurrloc = view.findViewById(R.id.textcurrloc);
+        homeDataProvider = new HomeDataProvider(getActivity(), this, this, this, this);
 
         mRequestQueue = Volley.newRequestQueue(getContext());
 
         Places.initialize(getActivity(), getResources().getString(R.string.google_maps_key));
         //pinCodeInteractor = new PinCodeInteractor(getContext(),this);
-        addressHelper = new AddressHelper(getActivity(),this);
+        addressHelper = new AddressHelper(getActivity(), this);
 
         //recyclerView = (RecyclerView) view.findViewById(R.id.places_recycler_view);
 
@@ -164,18 +200,27 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
             }
         });
 
-        current_loc.setOnClickListener(viewlocation ->{
-            bottomSheetDialog = new BottomSheetDialog(getContext(),R.style.BottomSheetDialogTheme);
-            View bottomview = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout,view.findViewById(R.id.botomcontainer));
+        current_loc.setOnClickListener(viewlocation -> {
+            bottomSheetDialog = new BottomSheetDialog(getContext(), R.style.BottomSheetDialogTheme);
+            View bottomview = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout, view.findViewById(R.id.botomcontainer));
             addressHelper.loaduseraddress();
             //recyclerView = bottomview.findViewById(R.id.places_recycler_view);
             shimmerFrameLayout = bottomview.findViewById(R.id.shimmerlayout);
             recyclerView = bottomview.findViewById(R.id.addressholder);
-            LinearLayout linearLayout =  bottomview.findViewById(R.id.searchedit);
+            TextView currentloc = bottomview.findViewById(R.id.current_loc);
+            LinearLayout linearLayout = bottomview.findViewById(R.id.searchedit);
             linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    startActivityForResult(new Intent(getActivity(), HomeLocationChooser.class),101);
+                    startActivityForResult(new Intent(getActivity(), HomeLocationChooser.class), 101);
+                }
+            });
+            CordinatesInteractor cordinatesInteractor = new CordinatesInteractor(HomeFragment.this);
+
+            currentloc.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    cordinatesInteractor.fetchAllCoordinates();
                 }
             });
 
@@ -235,9 +280,9 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         recentorders.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if (FirebaseAuth.getInstance().getCurrentUser() != null){
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                     startActivity(new Intent(getActivity(), RecentOrders.class));
-                }else{
+                } else {
                     Toast.makeText(getContext(), "Kindly login to see your recent orders.", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getActivity(), LoginActivity.class));
                 }
@@ -270,63 +315,9 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
         horizontalScrollView.setAdapter(allItemAdapter);
 
 
+        homeDataProvider.fetchAllCategories();
+        homeDataProvider.fetchTopSelling();
 
-        List<Object> datac = new ArrayList<>();
-        int fgi;
-
-        for (int i = 0; i <= 5; i++) {
-            fgi = i;
-
-            if (String.valueOf(fgi).equals("0")) {
-                //datac.clear();
-                HashMap<String, String> datacat = new HashMap<>();
-
-                datacat.put("imageuri", "https://www.thespruceeats.com/thmb/xveETWq0ADQy1vHvVsfEd8VJx6g=/2996x2000/filters:fill(auto,1)/butter-chicken-479366-hero-2-75d134ff86ee42bc85e34232dbb319bf.jpg");
-                datacat.put("name", "Main course");
-                datac.add(datacat);
-            }else if (i == 1) {
-                HashMap<String, String> datacat = new HashMap<>();
-
-                datacat.put("imageuri", "https://i2.wp.com/runningonrealfood.com/wp-content/uploads/2018/01/gluten-free-vegan-everyday-healthy-rainbow-salad-Running-on-Real-Food-6-of-10.jpg");
-                datacat.put("name", "Starters");
-                datac.add(datacat);
-            }
-
-            else if (i == 2) {
-                HashMap<String, String> datacat = new HashMap<>();
-                datacat.put("imageuri", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTopOh0jXO5zHnsfQ1nA3RhDEXLkdxNWKRJZg&usqp=CAU");
-                datacat.put("name", "Biryani");
-                datac.add(datacat);
-            }
-            else if (i == 3) {
-                HashMap<String, String> datacat = new HashMap<>();
-                datacat.put("imageuri", "https://bsmedia.business-standard.com/_media/bs/img/article/2019-09/12/full/1568274937-1296.jpg");
-                datacat.put("name", "Accomplishments");
-                datac.add(datacat);
-            }
-
-            else if (i == 4) {
-                HashMap<String, String> datacat = new HashMap<>();
-                datacat.put("imageuri", "https://www.englishclub.com/images/vocabulary/food/chinese/chinese-food.jpg");
-                datacat.put("name", "Chinese");
-                datac.add(datacat);
-            }else if (i == 5) {
-                HashMap<String, String> datacat = new HashMap<>();
-                datacat.put("imageuri", "https://i0.wp.com/www.binginretreat.com/wp-content/uploads/2019/07/what-to-do-09.jpg?fit=683%2C683");
-                datacat.put("name", "Extras");
-                datac.add(datacat);
-            }
-
-
-
-
-
-        }
-
-        CategoryAdapter categoryAdapter = new CategoryAdapter(datac, getContext());
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
-        categoryRecycler.setLayoutManager(gridLayoutManager);
-        categoryRecycler.setAdapter(categoryAdapter);
 
         ArrayList<String> listUrl = new ArrayList<>();
 
@@ -364,19 +355,19 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
 
         // set Slider Transition Animation
         // mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Default);
-        mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Accordion);
+        mDemoSlider.setPresetTransformer(SliderLayout.Transformer.ZoomOutSlide);
 
         mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         mDemoSlider.setCustomAnimation(new DescriptionAnimation());
         mDemoSlider.setDuration(4000);
         mDemoSlider.addOnPageChangeListener(this);
         mDemoSlider.stopCyclingWhenTouch(false);
-        dunny();
+
 
         return view;
     }
 
-    @Override
+/*    @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
@@ -392,87 +383,32 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
             return;
         }
         super.onActivityResult(requestCode, resultCode, data);
-    }
+    }*/
 
     private TextWatcher filterTextWatcher = new TextWatcher() {
         public void afterTextChanged(Editable s) {
             if (!s.toString().equals("")) {
                 mAutoCompleteAdapter.getFilter().filter(s.toString());
-                if (recyclerView.getVisibility() == View.GONE) {recyclerView.setVisibility(View.VISIBLE);}
+                if (recyclerView.getVisibility() == View.GONE) {
+                    recyclerView.setVisibility(View.VISIBLE);
+                }
             } else {
-                if (recyclerView.getVisibility() == View.VISIBLE) {recyclerView.setVisibility(View.GONE);}
+                if (recyclerView.getVisibility() == View.VISIBLE) {
+                    recyclerView.setVisibility(View.GONE);
+                }
             }
         }
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
-        public void onTextChanged(CharSequence s, int start, int before, int count) { }
+
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
     };
 
     @Override
     public void click(Place place) {
-        Toast.makeText(getContext(), place.getAddress()+", "+place.getLatLng().latitude+place.getLatLng().longitude, Toast.LENGTH_SHORT).show();
-    }
-
-    public void dunny(){
-        List<Object> datac = new ArrayList<>();
-        int fgi;
-
-        for (int i = 0; i <= 5; i++) {
-            fgi = i;
-
-            if (String.valueOf(fgi).equals("0")) {
-                //datac.clear();
-                HashMap<String, String> datacat = new HashMap<>();
-
-                datacat.put("imageuri", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTopOh0jXO5zHnsfQ1nA3RhDEXLkdxNWKRJZg&usqp=CAU");
-                datacat.put("name", "Dum Biriyani");
-                datac.add(datacat);
-            }else if (i == 1) {
-                HashMap<String, String> datacat = new HashMap<>();
-
-                datacat.put("imageuri", "https://previews.123rf.com/images/lblinova/lblinova1809/lblinova180900117/108167439-indian-food-rogan-josh-curry-sauce-pork-rogan-josh-with-rice-.jpg");
-                datacat.put("name", "Rogan josh");
-                datac.add(datacat);
-            }
-
-            else if (i == 2) {
-                HashMap<String, String> datacat = new HashMap<>();
-                datacat.put("imageuri", "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQbbyCCITkO0CtqqwmykxgkYUiQXoc8gk_arQ&usqp=CAU");
-                datacat.put("name", "Chole Bhature");
-                datac.add(datacat);
-            }
-            else if (i == 3) {
-                HashMap<String, String> datacat = new HashMap<>();
-                datacat.put("imageuri", "https://i.pinimg.com/originals/0d/41/c0/0d41c048fc3b1d3fd83330926feda7db.jpg");
-                datacat.put("name", "Chicken Roll");
-                datac.add(datacat);
-            }
-
-            else if (i == 4) {
-                HashMap<String, String> datacat = new HashMap<>();
-                datacat.put("imageuri", "https://www.cookwithmanali.com/wp-content/uploads/2016/01/Chilli-Paneer-Restaurant-Style.jpg");
-                datacat.put("name", "Paneer Chillli");
-                datac.add(datacat);
-            }else if (i == 5) {
-                HashMap<String, String> datacat = new HashMap<>();
-                datacat.put("imageuri", "https://thesimplemenu.com/wp-content/uploads/2020/06/IMG_6924-855x1024.jpg");
-                datacat.put("name", "Set Dosa");
-                datac.add(datacat);
-            }
-
-
-
-
-
-        }
-
-
-        TopsellingAdapter categoryAdapter = new TopsellingAdapter(getContext(),datac);
-        //LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(),RecyclerView.HORIZONTAL,false);
-
-        //GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
-        //topsellingholder.setLayoutManager(gridLayoutManager);
-        topsellingholder.setAdapter(categoryAdapter);
-
+        Toast.makeText(getContext(), place.getAddress() + ", " + place.getLatLng().latitude + place.getLatLng().longitude, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -543,7 +479,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
     public void onAddressLoaded(List<AddressData> addressData) {
         shimmerFrameLayout.stopShimmer();
         shimmerFrameLayout.setVisibility(View.GONE);
-        AllAddressHolderAdapter allAddressHolderAdapter = new AllAddressHolderAdapter(getActivity(),addressData);
+        AllAddressHolderAdapter allAddressHolderAdapter = new AllAddressHolderAdapter(getActivity(), addressData);
         recyclerView.setAdapter(allAddressHolderAdapter);
         recyclerView.setVisibility(View.VISIBLE);
         //Toast.makeText(getActivity(), ""+addressData.get(0).getADDRESS_LINE1(), Toast.LENGTH_SHORT).show();
@@ -552,7 +488,7 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
 
     @Override
     public void onAddressLoadFailure(Exception e) {
-        Toast.makeText(getActivity(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
 
@@ -563,7 +499,250 @@ public class HomeFragment extends Fragment implements BaseSliderView.OnSliderCli
                 bottomSheetDialog.cancel();
             }
         }
-        textcurrloc.setText(addressData.getADDRESS_NICKNAME()+": "+addressData.getADDRESS_LINE1());
+        textcurrloc.setText(addressData.getADDRESS_NICKNAME() + ": " + addressData.getADDRESS_LINE1());
+
+    }
+
+    protected void createLocationRequest() {
+        locationRequest = LocationRequest.create();
+        locationRequest.setInterval(10000);
+        locationRequest.setFastestInterval(5000);
+        locationRequest.setNumUpdates(1);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationSettingsRequest.Builder builder = new LocationSettingsRequest.Builder()
+                .addLocationRequest(locationRequest)
+                .setAlwaysShow(true);
+
+        SettingsClient client = LocationServices.getSettingsClient(getActivity());
+        Task<LocationSettingsResponse> task = client.checkLocationSettings(builder.build());
+
+
+        task.addOnSuccessListener(getActivity(), new OnSuccessListener<LocationSettingsResponse>() {
+            @SuppressLint("MissingPermission")
+            @Override
+            public void onSuccess(LocationSettingsResponse locationSettingsResponse) {
+                // All location settings are satisfied. The client can initialize
+                // location requests here.
+                // ...
+
+                try {
+                    LocationSettingsResponse response = task.getResult(ApiException.class);
+
+
+                    getFusedLocationProviderClient(getActivity())
+                            .requestLocationUpdates(locationRequest, new LocationCallback() {
+                                        @Override
+                                        public void onLocationResult(LocationResult locationResult) {
+                                            // do work here
+
+                                            boolean iSoutsidepolyline = PolyUtil.containsLocation(new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude()), latLngs, true);
+                                            if (!iSoutsidepolyline) {
+                                                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                                builder.setMessage("Sorry we don't deliver in your location,");
+                                                builder.setPositiveButton("OK", (dialogInterface, i) -> {
+
+                                                });
+                                                builder.setCancelable(false);
+                                                builder.show();
+                                            } else {
+                                                try {
+                                                    address = getLocationfromLat(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
+                                                    AddressData addressData = new AddressData(
+                                                            address.getAddressLine(0),
+                                                            "",
+                                                            "",
+                                                            "",
+                                                            0,
+                                                            locationResult.getLastLocation().getLatitude() + "," + locationResult.getLastLocation().getLongitude(),
+                                                            0);
+
+                                                    sharedPrefHelper.SaveDataToSharedPref(addressData);
+
+                                                    //addressline1.setText(address.getAddressLine(0));
+
+                                                } catch (IOException e) {
+                                                    e.printStackTrace();
+                                                }
+                                            }
+                                            //onLocationChanged(locationResult.getLastLocation());
+                                        }
+                                    },
+                                    Looper.myLooper());
+
+                    // All location settings are satisfied. The client can initialize location
+                    // requests here.
+                } catch (ApiException exception) {
+                    switch (exception.getStatusCode()) {
+                        case LocationSettingsStatusCodes.RESOLUTION_REQUIRED:
+                            // Location settings are not satisfied. But could be fixed by showing the
+                            // user a dialog.
+                            try {
+                                // Cast to a resolvable exception.
+                                ResolvableApiException resolvable = (ResolvableApiException) exception;
+                                // Show the dialog by calling startResolutionForResult(),
+                                // and check the result in onActivityResult().
+                                resolvable.startResolutionForResult(
+                                        getActivity(),
+                                        REQUEST_CHECK_SETTINGS);
+                            } catch (IntentSender.SendIntentException e) {
+                                // Ignore the error.
+                            } catch (ClassCastException e) {
+                                // Ignore, should be an impossible error.
+                            }
+                            break;
+                        case LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE:
+                            // Location settings are not satisfied. However, we have no way to fix the
+                            break;
+                    }
+                }
+
+                //Toast.makeText(getContext(), "e1", Toast.LENGTH_SHORT).show();
+
+            }
+        });
+
+        task.addOnFailureListener(getActivity(), new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+               // Toast.makeText(getContext(), "e", Toast.LENGTH_SHORT).show();
+                if (e instanceof ResolvableApiException) {
+                    // Location settings are not satisfied, but this can be fixed
+                    // by showing the user a dialog.
+                    try {
+                        // Show the dialog by calling startResolutionForResult(),
+                        // and check the result in onActivityResult().
+                        ResolvableApiException resolvable = (ResolvableApiException) e;
+                        resolvable.startResolutionForResult(getActivity(),
+                                1000);
+                    } catch (IntentSender.SendIntentException sendEx) {
+                        // Ignore the error.
+                    }
+                }
+            }
+        });
+
+
+    }
+
+    @SuppressLint("MissingPermission")
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1000) {
+            if (resultCode == Activity.RESULT_OK) {
+                String result = data.getStringExtra("result");
+                getFusedLocationProviderClient(getActivity())
+                        .requestLocationUpdates(locationRequest, new LocationCallback() {
+                                    @Override
+                                    public void onLocationResult(LocationResult locationResult) {
+                                        // do work here
+
+                                        boolean iSoutsidepolyline = PolyUtil.containsLocation(new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude()), latLngs, true);
+                                        if (!iSoutsidepolyline) {
+                                            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+                                            builder.setMessage("Sorry we don't deliver in your location, But you can still order for someone in our delivery location.");
+                                            builder.setPositiveButton("OK", (dialogInterface, i) -> {
+                                            });
+                                            builder.setCancelable(false);
+                                            builder.show();
+                                        } else {
+                                            try {
+                                                address = getLocationfromLat(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude());
+                                                AddressData addressData = new AddressData(
+                                                        address.getAddressLine(0),
+                                                        "",
+                                                        "",
+                                                        "",
+                                                        0,
+                                                        locationResult.getLastLocation().getLatitude() + "," + locationResult.getLastLocation().getLongitude(),
+                                                        0);
+
+                                                sharedPrefHelper.SaveDataToSharedPref(addressData);
+                                                //addressline1.setText(address.getAddressLine(0));
+
+                                            } catch (IOException e) {
+                                                e.printStackTrace();
+                                            }
+                                        }
+                                        //onLocationChanged(locationResult.getLastLocation());
+                                    }
+                                },
+                                Looper.myLooper());
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                //Write your code if there's no result
+                Toast.makeText(getContext(), "Location is required to get current location", Toast.LENGTH_SHORT).show();
+
+            }
+        }
+    }
+
+
+    @NonNull
+    private Address getLocationfromLat(double lat, double longi) throws IOException {
+
+        Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(getActivity(), Locale.getDefault());
+
+        addresses = geocoder.getFromLocation(lat, longi, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+        String address = addresses.get(0).getAddressLine(0);
+        String city = addresses.get(0).getLocality();
+        String state = addresses.get(0).getAdminArea();
+        String country = addresses.get(0).getCountryName();
+        String postalCode = addresses.get(0).getPostalCode();
+        String knownName = addresses.get(0).getFeatureName();
+
+        return addresses.get(0);
+    }
+
+
+    @Override
+    public void onCordinatesSuccess(LatLng... coOrdinates) {
+        latLngs = Arrays.asList(coOrdinates);
+        Toast.makeText(getActivity(), "jj", Toast.LENGTH_SHORT).show();
+        createLocationRequest();
+    }
+
+    @Override
+    public void onCordinatesFailure(Exception exception) {
+        Toast.makeText(getActivity(), exception.getMessage(), Toast.LENGTH_SHORT).show();
+
+    }
+
+    @Override
+    public void onCategoryFetchSuccess(List<Object> data) {
+        //Toast.makeText(getActivity(), "dddd", Toast.LENGTH_SHORT).show();
+        CategoryAdapter categoryAdapter = new CategoryAdapter(data, getContext());
+        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
+        categoryRecycler.setLayoutManager(gridLayoutManager);
+        categoryRecycler.setAdapter(categoryAdapter);
+        shimmerplace_cat.stopShimmer();
+        shimmerplace_cat.setVisibility(View.GONE);
+
+    }
+
+    @Override
+    public void onTopSellingfetchSuccess(List<Object> data) {
+
+        TopsellingAdapter categoryAdapter = new TopsellingAdapter(getContext(), data);
+        topsellingholder.setAdapter(categoryAdapter);
+        shimmerplace_topsell.stopShimmer();
+        shimmerplace_topsell.setVisibility(View.GONE);
+
+    }
+
+    @Override
+    public void onDataLoadFailure(Exception e) {
+        Toast.makeText(getActivity(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void OnHomeAlldataFetchSucess(List<HashMap<String, Object>> data) {
 
     }
 }

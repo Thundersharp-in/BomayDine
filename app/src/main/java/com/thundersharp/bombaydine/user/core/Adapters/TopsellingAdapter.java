@@ -38,8 +38,9 @@ public class TopsellingAdapter extends RecyclerView.Adapter<TopsellingAdapter.Vi
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         HashMap<String,String> hashMap = (HashMap<String, String>) listr.get(position);
 
-        holder.name.setText(hashMap.get("name"));
-        Glide.with(context).load(hashMap.get("imageuri")).into(holder.imageView);
+        holder.name.setText(hashMap.get("NAME"));
+        holder.amount.setText(hashMap.get("NOOFORDERS")+" Orders Past Month");
+        Glide.with(context).load(hashMap.get("IMAGES")).into(holder.imageView);
 
 
     }
@@ -52,10 +53,11 @@ public class TopsellingAdapter extends RecyclerView.Adapter<TopsellingAdapter.Vi
     class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imageView;
-        TextView name;
+        TextView name,amount;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageView = itemView.findViewById(R.id.imageview);
+            amount = itemView.findViewById(R.id.amount);
             name = itemView.findViewById(R.id.name);
         }
     }

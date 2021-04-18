@@ -33,7 +33,10 @@ import java.util.concurrent.TimeUnit;
 
 import static com.google.firebase.messaging.Constants.TAG;
 
-public class LoginHelper implements FirebaseLoginClient.loginContract ,FirebaseLoginClient.ActivityHandler,FirebaseLoginClient.registerContract{
+public class LoginHelper implements
+        FirebaseLoginClient.loginContract,
+        FirebaseLoginClient.ActivityHandler,
+        FirebaseLoginClient.registerContract{
 
     private Context context;
     private FirebaseLoginClient.loginFailureListner failureListner;

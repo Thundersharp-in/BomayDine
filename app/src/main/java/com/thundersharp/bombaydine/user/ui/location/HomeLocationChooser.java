@@ -156,8 +156,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
 
                     AddressData addressDataf = new AddressData(addressline1.getText().toString(), "null", nickname, "null", 0, lat_long, 0);
                     sharedPrefHelper.SaveDataToSharedPref(addressDataf);
-                    //TODO update data to shared prefrences here
-                    //addressHelper.dataUpdate(addressDataf);
+
                 }
 
 
@@ -167,32 +166,20 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
 
 
 
-
-
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        unregisterReceiver(mGpsSwitchStateReceiver);
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        registerReceiver(mGpsSwitchStateReceiver, new IntentFilter(PROVIDERS_CHANGED_ACTION));
+
     }
 
-    private BroadcastReceiver mGpsSwitchStateReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-
-            if (intent.getAction().matches(PROVIDERS_CHANGED_ACTION)) {
-                // Make an action or refresh an already managed state.
-                //Toast.makeText(HomeLocationChooser.this, ""+intent.getExtras().toString(), Toast.LENGTH_SHORT).show();
-            }else Toast.makeText(HomeLocationChooser.this, "closed", Toast.LENGTH_SHORT).show();
-        }
-    };
 
     @SuppressLint("MissingPermission")
     @Override
@@ -456,7 +443,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
                                             relativeLayout.setVisibility(View.VISIBLE);
                                             shimmerFrameLayout.setVisibility(View.GONE);
 
-                                            Toast.makeText(HomeLocationChooser.this, ""+locationResult.getLastLocation().getLatitude(), Toast.LENGTH_SHORT).show();
+                                            //Toast.makeText(HomeLocationChooser.this, ""+locationResult.getLastLocation().getLatitude(), Toast.LENGTH_SHORT).show();
 
                                             if (marker != null){
                                                 marker.remove();
@@ -520,7 +507,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
                     }
                 }
 
-                Toast.makeText(HomeLocationChooser.this,"e1",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(HomeLocationChooser.this,"e1",Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -528,7 +515,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
         task.addOnFailureListener(this, new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(HomeLocationChooser.this,"e",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(HomeLocationChooser.this,"e",Toast.LENGTH_SHORT).show();
                 if (e instanceof ResolvableApiException) {
                     // Location settings are not satisfied, but this can be fixed
                     // by showing the user a dialog.
@@ -564,7 +551,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
                                         relativeLayout.setVisibility(View.VISIBLE);
                                         shimmerFrameLayout.setVisibility(View.GONE);
 
-                                        Toast.makeText(HomeLocationChooser.this, ""+locationResult.getLastLocation().getLatitude(), Toast.LENGTH_SHORT).show();
+                                        //Toast.makeText(HomeLocationChooser.this, ""+locationResult.getLastLocation().getLatitude(), Toast.LENGTH_SHORT).show();
                                         if (marker != null){
                                             marker.remove();
                                             markerOptions.position(new LatLng(locationResult.getLastLocation().getLatitude(),locationResult.getLastLocation().getLongitude()));
