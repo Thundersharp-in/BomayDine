@@ -104,7 +104,7 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
                 }
 
                 if (address != null){
-                    coordinates.setText(""+latLng.latitude+latLng.longitude);
+                    coordinates.setText(""+latLng.latitude+","+latLng.longitude);
                     addresst.setText(address.getAddressLine(0));
                 }
 

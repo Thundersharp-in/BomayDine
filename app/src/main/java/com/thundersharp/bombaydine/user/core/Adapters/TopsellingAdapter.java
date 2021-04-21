@@ -1,6 +1,7 @@
 package com.thundersharp.bombaydine.user.core.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.thundersharp.bombaydine.R;
+import com.thundersharp.bombaydine.user.ui.menu.AllItemsActivity;
 
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +52,7 @@ public class TopsellingAdapter extends RecyclerView.Adapter<TopsellingAdapter.Vi
         if (listr != null) return listr.size(); else return 0;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         ImageView imageView;
         TextView name,amount;
@@ -59,6 +61,13 @@ public class TopsellingAdapter extends RecyclerView.Adapter<TopsellingAdapter.Vi
             imageView = itemView.findViewById(R.id.imageview);
             amount = itemView.findViewById(R.id.amount);
             name = itemView.findViewById(R.id.name);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            context.startActivity(new Intent(context, AllItemsActivity.class));
         }
     }
 }
