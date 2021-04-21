@@ -16,7 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BombayDine"
         tools:replace="android:theme">
-        <activity android:name=".user.ui.location.AddressEdit"></activity>
+        <activity android:name=".user.ui.menu.CategoryResults"></activity>
+        <activity android:name=".user.ui.location.HomeLocationChooser" />
+        <activity android:name=".user.ui.location.AddressEdit" />
 
         <meta-data
             android:name="com.google.android.geo.API_KEY"

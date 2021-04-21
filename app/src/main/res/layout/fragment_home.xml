@@ -21,23 +21,29 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
+                android:layout_toStartOf="@id/qrcode"
                 android:layout_centerVertical="true"
+                android:layout_marginTop="5dp"
                 android:layout_marginStart="15dp">
                 <TextView
+                    android:id="@+id/textcurrloc"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="#fff"
                     android:drawableStart="@drawable/ic_outline_pin_drop_24"
                     android:drawablePadding="10dp"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:layout_marginEnd="15dp"
-                    android:text="Soldevahanalli"
+                    android:text="Soldevahanalli iuojuiojijgeijgiogjijogter"
                     android:fontFamily="@font/calibri"
-                    android:textSize="24sp"/>
+                    android:textSize="20sp"/>
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="1.2dp"
                     android:layout_marginTop="5dp"
+                    android:layout_marginEnd="15dp"
                     android:background="#fff"/>
 
             </LinearLayout>
@@ -199,7 +205,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:layout_marginEnd="15dp"
-                    android:textColor="#9b9c9e"
+                    android:textColor="#ff975d"
                     android:text="View all"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="15dp"
@@ -327,8 +333,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:layout_marginTop="20dp"
-                android:layout_below="@id/slider">
+                android:layout_marginTop="20dp">
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
@@ -348,7 +353,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="15dp"
-                        android:textColor="#9b9c9e"
+                        android:textColor="#ff975d"
                         android:text="View all"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="15dp"
@@ -357,26 +362,52 @@
 
                 </RelativeLayout>
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/recentordcategoryholderer"
-                    android:layout_width="match_parent"
+                <RelativeLayout
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:nestedScrollingEnabled="false"
-                    android:orientation="vertical"
-                    android:scrollbars="none"
-                    app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
+                    android:background="@null">
+
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/shimmerplace_cat"
+                        android:background="@null"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:elevation="4dp"
+                            android:background="@null"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+                            <include layout="@layout/cat_placeholder"/>
+                        </LinearLayout>
+
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recentordcategoryholderer"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:nestedScrollingEnabled="false"
+                        android:orientation="vertical"
+                        android:scrollbars="none"
+                        app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
+
+                </RelativeLayout>
 
             </LinearLayout>
 
-            <LinearLayout
+            <RelativeLayout
                 android:id="@+id/topselling"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:layout_marginTop="20dp"
-                android:layout_below="@id/slider">
+                android:layout_marginTop="20dp">
                 <RelativeLayout
+                    android:id="@+id/head1"
+                    android:layout_alignParentTop="true"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
                     <TextView
@@ -395,7 +426,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="15dp"
-                        android:textColor="#9b9c9e"
+                        android:textColor="#ff975d"
                         android:text="View all"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="15dp"
@@ -404,17 +435,37 @@
 
                 </RelativeLayout>
 
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmerplace_topsell"
+                    android:layout_below="@id/head1"
+                    android:background="@null"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:elevation="4dp"
+                        android:background="@null"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+                        <include layout="@layout/cat_topselling"/>
+                    </LinearLayout>
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
                 <androidx.recyclerview.widget.RecyclerView
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:orientation="horizontal"
                     android:scrollbars="none"
+                    android:layout_below="@id/head1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:nestedScrollingEnabled="false"
                     android:id="@+id/topsellingholder"/>
 
-            </LinearLayout>
+            </RelativeLayout>
 
             <LinearLayout
                 android:id="@+id/full"
@@ -442,7 +493,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="15dp"
-                        android:textColor="#9b9c9e"
+                        android:textColor="#ff975d"
                         android:text="View all"
                         android:layout_centerVertical="true"
                         android:layout_marginStart="15dp"

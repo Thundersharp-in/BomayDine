@@ -6,19 +6,169 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".user.ui.location.Service_areas">
 
-    <fragment
-        android:id="@+id/map"
-        android:name="com.google.android.gms.maps.SupportMapFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
-    <androidx.recyclerview.widget.RecyclerView
+    <com.facebook.shimmer.ShimmerFrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:elevation="4dp"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="10dp"/>
+        android:layout_height="match_parent"
+        android:elevation="3dp"
+        android:id="@+id/shimmermap">
+        <include layout="@layout/mapsupdateplaceholder"/>
+    </com.facebook.shimmer.ShimmerFrameLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/mapholder">
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/hovercard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="10dp"
+            android:clipChildren="false"
+            android:minHeight="140dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="7dp"
+            app:cardBackgroundColor="#22242c"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="10dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="140dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="140dp">
+
+                    <LinearLayout
+                        android:id="@+id/imgh"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="10dp"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical">
+                        <ImageView
+                            android:layout_width="60dp"
+                            android:layout_height="60dp"
+                            android:src="@drawable/fooddelivery"
+                            android:rotationX="360"/>
+
+                        <TextView
+                            android:id="@+id/name"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#FFEB3B"
+                            android:fontFamily="sans-serif-smallcaps"
+                            android:layout_marginTop="10dp"
+                            android:textAlignment="center"
+                            android:textAllCaps="false"
+                            android:text="ETA : 23 MINS"
+                            android:textSize="14sp"/>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:minHeight="140dp"
+                        android:orientation="vertical"
+                        android:layout_toEndOf="@id/imgh"
+                        android:layout_marginStart="10dp">
+                        <TextView
+                            android:id="@+id/coord"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#CFCFCF"
+                            android:fontFamily="@font/calibri"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:textAlignment="viewStart"
+                            android:focusable="true"
+                            android:clickable="true"
+                            android:textAllCaps="false"
+                            android:text="13.0833209,77.4843393"
+                            android:textSize="14sp"/>
+
+
+                        <TextView
+                            android:id="@+id/address"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#CFCFCF"
+                            android:fontFamily="@font/calibri"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:textAlignment="viewStart"
+                            android:maxLines="3"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"
+                            android:text="Location selected : Acharya Doctor Sarvepalli Radhakrishnan Road, Bengaluru, Karnataka 560090, India"
+                            android:textSize="14sp"/>
+
+                        <TextView
+                            android:id="@+id/areaname"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#CFCFCF"
+                            android:fontFamily="@font/calibri"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginTop="10dp"
+                            android:textAlignment="viewStart"
+                            android:textAllCaps="false"
+                            android:text="Pin Area name"
+                            android:textSize="14sp"/>
+
+
+                        <TextView
+                            android:id="@+id/delevrable"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#CDDC39"
+                            android:fontFamily="@font/calibri"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="10dp"
+                            android:textAlignment="viewEnd"
+                            android:textAllCaps="false"
+                            android:text="Delivery available : yes"
+                            android:textSize="14sp"/>
+
+
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:visibility="gone"
+                    android:minHeight="140dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:orientation="vertical">
+                        <include layout="@layout/location_info_placeholder" />
+                    </LinearLayout>
+
+
+                </com.facebook.shimmer.ShimmerFrameLayout>
+
+
+            </RelativeLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+    </RelativeLayout>
+
 
 </RelativeLayout>
