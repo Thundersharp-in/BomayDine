@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#22242c"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        >
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="400dp"
+            >
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="50dp"
+                android:layout_marginEnd="50dp"
+                android:background="@drawable/bottom_curve"
+                android:layout_marginTop="-5dp"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textStyle="bold"
+                    android:text="Location Details"
+                    android:textColor="#fff"
+                    android:layout_marginTop="10dp"
+                    android:textSize="18sp"
+                    />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:textStyle="italic"
+                    android:text="Last Located position"
+                    android:textColor="#fff"
+                    android:layout_marginTop="10dp"
+                    />
+
+                <com.google.android.material.card.MaterialCardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginStart="15dp"
+                    android:layout_marginEnd="15dp"
+                    app:cardUseCompatPadding="true"
+                    app:cardElevation="5dp"
+                    app:cardCornerRadius="7dp"
+                    app:cardBackgroundColor="#25272E"
+                    android:minHeight="270dp"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Latest used location described here "
+                            android:textColor="#fff"
+                            android:gravity="center"
+                            android:layout_marginTop="7dp"
+                            />
+
+                        <androidx.cardview.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:cardCornerRadius="5dp"
+                            app:cardElevation="5dp"
+                            app:cardBackgroundColor="#22242c"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginHorizontal="10dp"
+                            >
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical"
+                                android:background="@drawable/end_round"
+                                android:padding="5dp"
+                                >
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:orientation="horizontal"
+                                    >
+                                    <ImageView
+                                        android:layout_width="30dp"
+                                        android:layout_height="30dp"
+                                        android:layout_gravity="center"
+                                        android:src="@drawable/ic_outline_home_24"
+                                        android:padding="3dp"
+                                        android:background="@drawable/ic_baseline_circle_24"
+                                        android:backgroundTint="#146AFF"
+                                        android:layout_margin="3dp"
+                                        app:tint="#C2E2FF"
+                                        />
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:minHeight="30dp"
+                                        android:orientation="vertical"
+                                        android:layout_marginStart="5dp"
+                                        android:layout_marginEnd="5dp"
+                                        >
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Home"
+                                            android:drawablePadding="10dp"
+                                            android:maxLines="1"
+                                            android:textSize="16sp"
+                                            android:fontFamily="@font/calibrib"
+                                            android:textColor="#F6F9FF"
+                                            android:gravity="center_vertical"
+                                            />
+                                        <TextView
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:text="Near some area at some place near a town "
+                                            android:drawablePadding="10dp"
+                                            android:fontFamily="sans-serif-condensed"
+                                            android:textColor="#F6F9FF"
+                                            android:layout_marginTop="2dp"
+                                            android:textSize="13sp"
+                                            android:gravity="center_vertical"
+                                            android:layout_marginBottom="5dp"
+                                            />
+                                        <View
+                                            android:layout_width="match_parent"
+                                            android:layout_height="1dp"
+                                            android:background="#f0f0f0"
+                                            android:layout_marginTop="3dp"
+                                            />
+
+
+                                    </LinearLayout>
+
+                                </LinearLayout>
+
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Near some area at some place near a town "
+                                    android:drawablePadding="10dp"
+                                    android:paddingStart="10dp"
+                                    android:fontFamily="sans-serif-condensed"
+                                    android:textColor="#FFB896"
+                                    android:layout_marginTop="5dp"
+                                    android:textSize="13sp"
+                                    android:gravity="center_vertical"
+                                    android:layout_marginBottom="5dp"
+                                    android:drawableStart="@drawable/ic_baseline_add_24"
+                                    android:drawableTint="#FFB896"
+                                    />
+
+                            </LinearLayout>
+
+                        </androidx.cardview.widget.CardView>
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Drop to choose address "
+                            android:textAllCaps="false"
+                            android:padding="5dp"
+                            android:textSize="16sp"
+                            android:layout_marginHorizontal="10dp"
+                            android:background="@drawable/edittext_curved"
+                            android:layout_marginTop="10dp"
+                            android:textColor="#fff"
+                            android:drawableStart="@drawable/ic_outline_pin_drop_24"
+                            android:backgroundTint="#1e2026"
+                            android:paddingStart="15dp"
+                            android:elevation="5dp"
+                            />
+
+                        <androidx.appcompat.widget.AppCompatButton
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Add details to the address "
+                            android:textAllCaps="false"
+                            android:padding="5dp"
+                            android:textSize="16sp"
+                            android:layout_marginHorizontal="10dp"
+                            android:background="@drawable/edittext_curved"
+                            android:layout_marginTop="5dp"
+                            android:textColor="#fff"
+                            android:backgroundTint="#1e2026"
+                            android:elevation="5dp"
+                            />
+
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="View Details"
+                    android:drawableEnd="@drawable/ccp_ic_arrow_drop_down"
+                    android:textColor="#FFB790"
+                    android:gravity="center"
+                    android:layout_marginTop="15sp"
+                    android:drawableTint="#FFB790"
+                    />
+
+
+            </LinearLayout>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            android:orientation="horizontal"
+            android:weightSum="5"
+            android:layout_marginEnd="10dp"
+            >
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="4"
+                android:layout_height="wrap_content"
+                android:text="Past Address Detail"
+                android:textColor="#0088FF"
+                android:fontFamily="@font/amita_bold"
+                android:textSize="18sp"
+                />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="Add More >"
+                android:textColor="#FFD129"
+                android:padding="3dp"
+                />
+
+        </LinearLayout>
+        <!--Todo Add Recycler View -->
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="5dp"
+            app:cardBackgroundColor="#22242c"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="-10dp"
+            android:layout_marginTop="10dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:background="@drawable/end_round"
+                android:layout_marginEnd="-10dp"
+                android:padding="10dp"
+                >
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_outline_home_24"
+                    android:padding="10dp"
+                    android:background="@drawable/ic_baseline_circle_24"
+                    android:backgroundTint="#146AFF"
+                    android:layout_margin="5dp"
+                    app:tint="#C2E2FF"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="40dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="15dp"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Home"
+                        android:drawablePadding="10dp"
+                        android:maxLines="1"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/calibrib"
+                        android:textColor="#F6F9FF"
+                        android:gravity="center_vertical"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Near some area at some place near a town "
+                        android:drawablePadding="10dp"
+                        android:fontFamily="sans-serif-condensed"
+                        android:textColor="#F6F9FF"
+                        android:layout_marginTop="2dp"
+                        android:textSize="13sp"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="5dp"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="5dp"
+            app:cardElevation="5dp"
+            app:cardBackgroundColor="#22242c"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="-10dp"
+            android:layout_marginTop="10dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:background="@drawable/end_round"
+                android:layout_marginEnd="-10dp"
+                android:padding="10dp"
+                >
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_outline_home_work_24"
+                    android:padding="10dp"
+                    android:background="@drawable/ic_baseline_circle_24"
+                    android:backgroundTint="#146AFF"
+                    android:layout_margin="5dp"
+                    app:tint="#C2E2FF"
+                    />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:minHeight="40dp"
+                    android:orientation="vertical"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="15dp"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Office"
+                        android:drawablePadding="10dp"
+                        android:maxLines="1"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/calibrib"
+                        android:textColor="#F6F9FF"
+                        android:gravity="center_vertical"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Near some area at some place near a town "
+                        android:drawablePadding="10dp"
+                        android:fontFamily="sans-serif-condensed"
+                        android:textColor="#F6F9FF"
+                        android:layout_marginTop="2dp"
+                        android:textSize="13sp"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="5dp"
+                        />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+
+    </LinearLayout>
+
+</androidx.core.widget.NestedScrollView>
