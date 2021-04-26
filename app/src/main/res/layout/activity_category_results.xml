@@ -9,6 +9,7 @@
     tools:context=".user.ui.menu.CategoryResults">
 
     <FrameLayout
+        android:id="@+id/imagehomee"
         android:layout_width="match_parent"
         android:layout_height="200dp">
         <ImageView
@@ -20,11 +21,32 @@
             android:adjustViewBounds="true" />
         <View
             android:layout_width="match_parent"
-            android:layout_height="70dp"
+            android:layout_height="120dp"
             android:layout_gravity="bottom"
             android:elevation="4dp"
             android:background="@drawable/custom_gradient_bottom"/>
     </FrameLayout>
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Accomplishment"
+        android:textStyle="bold"
+        android:fontFamily="@font/calibrib"
+        android:textColor="#fff"
+        android:textSize="25sp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_below="@id/imagehomee"
+        android:layout_marginTop="10dp"
+        android:id="@+id/txttop"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:id="@+id/recyclerviewcategory"
+        android:layout_marginTop="10dp"
+        android:layout_below="@id/txttop"/>
 
 </RelativeLayout>

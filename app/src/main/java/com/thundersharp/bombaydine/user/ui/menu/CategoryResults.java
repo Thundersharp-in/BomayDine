@@ -1,12 +1,17 @@
 package com.thundersharp.bombaydine.user.ui.menu;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.thundersharp.bombaydine.R;
+import com.thundersharp.bombaydine.user.core.Adapters.CategoryitemAdapter;
 import com.thundersharp.bombaydine.user.core.Data.CategoryDataContract;
 import com.thundersharp.bombaydine.user.core.Data.CategoryDataProvider;
 import com.thundersharp.bombaydine.user.core.Model.CategoryData;
@@ -17,7 +22,8 @@ public class CategoryResults extends AppCompatActivity implements CategoryDataCo
 
     private CategoryDataProvider categoryDataProvider;
     private ImageView imagehome;
-    CategoryData categoryData;
+    private CategoryData categoryData;
+    private TextView txttop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,14 +34,23 @@ public class CategoryResults extends AppCompatActivity implements CategoryDataCo
 
 
         imagehome = findViewById(R.id.imagehome);
+        txttop = findViewById(R.id.txttop);
+        txttop.setText(categoryData.getNAME());
+        Glide.with(CategoryResults.this).load(categoryData.getIMAGES()).into(imagehome);
+
 
         categoryDataProvider.fetchCategoryData(categoryData);
+
 
     }
 
     @Override
     public void OnCategoryDataSuccess(List<Object> data) {
-
+        RecyclerView recyclerView = findViewById(R.id.recyclerviewcategory);
+        CategoryitemAdapter categoryitemAdapter = new CategoryitemAdapter(this,data);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(categoryitemAdapter);
     }
 
     @Override

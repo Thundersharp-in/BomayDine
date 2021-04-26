@@ -16,15 +16,19 @@ import com.bumptech.glide.Glide;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.aligantnumber.ElegantNumberInteractor;
 import com.thundersharp.bombaydine.user.core.aligantnumber.ElegentNumberHelper;
+import com.thundersharp.bombaydine.user.core.cart.CartHandler;
+import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHolder>  implements ElegantNumberInteractor.setOnTextChangeListner {
+public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHolder>  implements
+        ElegantNumberInteractor.setOnTextChangeListner, CartHandler {
 
     List<Object> itemObjectlist;
     Context context;
     ElegentNumberHelper elegentNumberHelper;
+    int position;
 
     public AllItemAdapter(){}
 
@@ -53,6 +57,15 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
         Glide.with(context).load(hashMap.get("imageuri")).into(holder.imageView);
     }
 
+
+    public int getpos(){
+        return position;
+    }
+
+    public void setpos(int pos){
+        this.position = pos;
+    }
+
     @Override
     public int getItemCount() {
         if (itemObjectlist != null) return itemObjectlist.size();else return 0;
@@ -60,8 +73,15 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
 
     @Override
     public int OnTextChangeListner(int val) {
+
         Toast.makeText(context,""+val,Toast.LENGTH_SHORT).show();
+        AddItemToCart(itemObjectlist.get(getpos()));
         return 0;
+    }
+
+    @Override
+    public void AddItemToCart(Object data) {
+
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -72,7 +92,7 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
+            setpos(getAdapterPosition());
             imageView = itemView.findViewById(R.id.imageview);
             name = itemView.findViewById(R.id.name);
 

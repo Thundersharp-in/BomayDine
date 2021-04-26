@@ -89,6 +89,7 @@ public class ElegentNumberHelper implements ElegantNumberInteractor.ViewBinder,E
     }
 
     public void update(int counter){
+
         setOnTextChangeListner.OnTextChangeListner(counter);
     }
 
