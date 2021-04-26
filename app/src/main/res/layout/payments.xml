@@ -1,0 +1,591 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#1e2026">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Payment Methods"
+        android:textSize="18sp"
+        android:textColor="#109EFF"
+        android:textAllCaps="true"
+        android:fontFamily="@font/coiny"
+        android:gravity="center"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Saved Methods"
+        android:textColor="#0F77FA"
+        android:textSize="15sp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        >
+        <!--FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="250dp"
+            android:background="#000"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="-2dp"
+            android:layout_marginEnd="-2dp"
+            /-->
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="5dp"
+            app:cardCornerRadius="7dp"
+            app:cardBackgroundColor="#25272E"
+            android:minHeight="270dp"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Confidential banking credentials are not saved and payment is end to end protected"
+                    android:textColor="#D3D3D3"
+                    android:gravity="center"
+                    android:layout_marginTop="7dp"
+                    android:textSize="12sp"
+                    android:layout_marginHorizontal="10dp"
+                    />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:cardCornerRadius="5dp"
+                    app:cardElevation="5dp"
+                    app:cardBackgroundColor="#22242c"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginHorizontal="10dp"
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:background="@drawable/end_round"
+                        android:padding="5dp"
+                        >
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            >
+
+                            <ImageView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:layout_margin="3dp"
+                                android:background="@drawable/ic_baseline_circle_24"
+                                android:backgroundTint="#146AFF"
+                                android:padding="5dp"
+                                android:src="@drawable/ic_baseline_account_balance_wallet_24"
+                                app:tint="#C2E2FF" />
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:minHeight="30dp"
+                                android:orientation="vertical"
+                                android:layout_marginStart="5dp"
+                                android:layout_marginEnd="5dp"
+                                >
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="UPI"
+                                    android:drawablePadding="10dp"
+                                    android:maxLines="1"
+                                    android:textSize="16sp"
+                                    android:fontFamily="@font/calibrib"
+                                    android:textColor="#F6F9FF"
+                                    android:gravity="center_vertical"
+                                    />
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:text="Card of State Bank Of India is saved "
+                                    android:drawablePadding="10dp"
+                                    android:fontFamily="sans-serif-condensed"
+                                    android:textColor="#F6F9FF"
+                                    android:layout_marginTop="2dp"
+                                    android:textSize="13sp"
+                                    android:gravity="center_vertical"
+                                    android:layout_marginBottom="5dp"
+                                    />
+                                <View
+                                    android:layout_width="match_parent"
+                                    android:layout_height="1dp"
+                                    android:background="#f0f0f0"
+                                    android:layout_marginTop="3dp"
+                                    />
+
+
+                            </LinearLayout>
+
+                        </LinearLayout>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Add cvv and pay using this card"
+                            android:drawablePadding="10dp"
+                            android:paddingStart="10dp"
+                            android:fontFamily="sans-serif-condensed"
+                            android:textColor="#FFB896"
+                            android:layout_marginTop="5dp"
+                            android:textSize="13sp"
+                            android:gravity="center_vertical"
+                            android:layout_marginBottom="5dp"
+                            android:drawableStart="@drawable/ic_baseline_add_24"
+                            android:drawableTint="#FFB896"
+                            />
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="See More >"
+                    android:textAllCaps="false"
+                    android:padding="5dp"
+                    android:textSize="16sp"
+                    android:layout_marginHorizontal="10dp"
+                    android:background="@drawable/edittext_curved"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#FFBD59"
+                    android:backgroundTint="#1e2026"
+                    android:elevation="5dp"
+                    />
+
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:tint="#fff"
+            android:background="@drawable/circle"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/ic_baseline_add_24"
+            android:layout_marginBottom="10dp"
+            android:backgroundTint="#109EFF"
+            android:elevation="5dp"
+            />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1"
+            android:background="#454545"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="25dp"
+            android:layout_marginTop="10dp"
+            />
+        <View
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="1dp"
+            android:background="#454545"
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            />
+
+    </LinearLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Accepting methods"
+        android:textColor="#FFFB00"
+        android:textSize="15sp"
+        android:layout_marginTop="15dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:fontFamily="@font/acme"
+        android:textAllCaps="true"
+        android:gravity="center"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#454545"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        />
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="5dp"
+        app:cardBackgroundColor="#22242c"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:background="@drawable/end_round"
+            android:padding="5dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add Credit, Debit &amp; ATM Cards"
+                android:drawablePadding="10dp"
+                android:fontFamily="sans-serif"
+                android:textColor="#FFB896"
+                android:textSize="13sp"
+                android:gravity="center_vertical"
+                android:drawableStart="@drawable/ic_baseline_account_balance_wallet_24"
+                android:drawableTint="#FFB896"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="5dp"
+                android:drawableEnd="@drawable/ic_baseline_arrow_forward_ios_24"
+                />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="UPI"
+        android:textColor="#0F77FA"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/calibrib"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="80dp"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:background="#17191C"
+        android:layout_marginTop="8dp"
+        >
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="5dp"
+            app:cardCornerRadius="7dp"
+            app:cardBackgroundColor="#22242c"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/ic_baseline_account_balance_wallet_24"
+                    android:padding="10dp"
+                    android:background="@drawable/ic_baseline_circle_24"
+                    android:backgroundTint="#146AFF"
+                    android:layout_margin="5dp"
+                    app:tint="#C2E2FF"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Paytm UPI"
+                    android:textColor="#fff"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="center"
+                    />
+
+            </LinearLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="5dp"
+            app:cardCornerRadius="7dp"
+            app:cardBackgroundColor="#22242c"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+                <ImageView
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/google"
+                    android:padding="10dp"
+                    android:background="@drawable/ic_baseline_circle_24"
+                    android:layout_margin="5dp"
+                    android:backgroundTint="#146AFF"
+                    app:tint="#C2E2FF"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Google Pay"
+                    android:textColor="#fff"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="center"
+                    />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="match_parent"
+            app:cardUseCompatPadding="true"
+            app:cardElevation="5dp"
+            app:cardCornerRadius="7dp"
+            app:cardBackgroundColor="#22242c"
+            android:layout_marginEnd="5dp"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+
+                <ImageView
+                    android:layout_width="38dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
+                    android:layout_margin="5dp"
+                    android:background="@drawable/ic_baseline_circle_24"
+                    android:padding="10dp"
+                    android:src="@drawable/ic_baseline_call_24"
+                    android:backgroundTint="#146AFF"
+                    app:tint="#C2E2FF"
+                    />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="PhonePe"
+                    android:textColor="#fff"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="5dp"
+                    android:gravity="center"
+                    />
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+
+
+    </LinearLayout>
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Pay via UPI"
+        android:textAllCaps="false"
+        android:padding="5dp"
+        android:textSize="16sp"
+        android:layout_marginHorizontal="10dp"
+        android:background="@drawable/edittext_curved"
+        android:layout_marginTop="10dp"
+        android:textColor="#fff"
+        android:backgroundTint="#17191C"
+        android:elevation="5dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Net Banking"
+            android:textColor="#0F77FA"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/calibrib"
+            />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add"
+            android:gravity="end"
+            android:layout_marginEnd="10dp"
+            android:textColor="#FFCBA3"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/calibrib"
+            />
+
+    </LinearLayout>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="5dp"
+        app:cardBackgroundColor="#22242c"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="-10dp"
+        android:layout_marginTop="10dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:background="@drawable/end_round"
+            android:layout_marginEnd="-10dp"
+            android:padding="10dp"
+            >
+            <ImageView
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_account_balance_wallet_24"
+                android:padding="10dp"
+                android:background="@drawable/ic_baseline_circle_24"
+                android:backgroundTint="#146AFF"
+                android:layout_margin="5dp"
+                app:tint="#C2E2FF"
+                />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="40dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="15dp"
+                >
+                <ImageView
+                    android:id="@+id/iv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/ic_baseline_more_vert_24"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_toStartOf="@id/iv"
+                    android:layout_marginEnd="5dp"
+                    >
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="SBI"
+                        android:maxLines="1"
+                        android:textSize="16sp"
+                        android:fontFamily="@font/calibrib"
+                        android:textColor="#F6F9FF"
+                        android:gravity="center_vertical"
+                        />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Net Banking"
+                        android:drawablePadding="10dp"
+                        android:fontFamily="sans-serif-condensed"
+                        android:textColor="#F6F9FF"
+                        android:layout_marginTop="2dp"
+                        android:textSize="13sp"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="5dp"
+                        />
+
+                </LinearLayout>
+
+            </RelativeLayout>
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="5dp"
+        app:cardBackgroundColor="#22242c"
+        android:layout_marginTop="10dp"
+        android:layout_marginHorizontal="10dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:background="@drawable/end_round"
+            android:backgroundTint="#17191C"
+            android:padding="5dp"
+            >
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Add Net Banking Method"
+                android:drawablePadding="10dp"
+                android:fontFamily="sans-serif"
+                android:textColor="#FFB896"
+                android:textSize="13sp"
+                android:gravity="center_vertical"
+                android:drawableStart="@drawable/ic_baseline_account_balance_wallet_24"
+                android:drawableTint="#FFB896"
+                android:layout_marginVertical="10dp"
+                android:layout_marginHorizontal="5dp"
+                android:drawableEnd="@drawable/ic_baseline_arrow_forward_ios_24"
+                />
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+
+</LinearLayout>

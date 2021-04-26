@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:theme="@style/Theme.MaterialComponents"
+    android:background="#151515">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="50dp"
+        android:src="@drawable/papad"
+        android:layout_gravity="center"
+
+        />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Hey!"
+        android:textStyle="bold"
+        android:textSize="25sp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="20dp"
+        android:fontFamily="@font/coiny"
+        android:textColor="#F6743A"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome Amrita"
+        android:textStyle="bold"
+        android:fontFamily="@font/coiny"
+        android:textSize="25dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="5dp"
+        android:textColor="#F6D75A"
+        />
+
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="You can edit below mentioned credentials ! "
+            android:textSize="12sp"
+            android:textColor="#FA8C6B"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            android:gravity="center"
+            />
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            app:boxStrokeColor="#FFFFFF"
+            app:boxBackgroundColor="#2d2d39"
+            android:textColorHint="#BCBABA"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Name"
+                android:inputType="textPersonName"
+                android:drawablePadding="7dp"
+                android:text="Name "
+                android:paddingEnd="10dp"
+                android:textColor="#ffff"
+                android:textColorHint="#E8E8E8"
+                android:textAlignment="viewEnd"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            app:boxStrokeColor="#FFFFFF"
+            app:boxBackgroundColor="#2d2d39"
+            android:textColorHint="#BCBABA"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Phone No."
+                android:inputType="textPersonName"
+                android:drawablePadding="7dp"
+                android:text="+91 9876543210"
+                android:paddingEnd="10dp"
+                android:textColor="#ffff"
+                android:textColorHint="#E8E8E8"
+                android:textAlignment="viewEnd"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+            app:boxStrokeColor="#FFFFFF"
+            app:boxBackgroundColor="#2d2d39"
+            android:textColorHint="#BCBABA"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="15dp"
+            android:layout_marginEnd="15dp"
+            >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email Id"
+                android:inputType="textPersonName"
+                android:drawablePadding="7dp"
+                android:text="email@email.com"
+                android:paddingEnd="10dp"
+                android:textColor="#ffff"
+                android:textColorHint="#E8E8E8"
+                android:textAlignment="viewEnd"
+                />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Save Changes"
+            android:layout_marginTop="20dp"
+            android:layout_gravity="center"
+            android:layout_marginHorizontal="50dp"
+            android:background="@drawable/edittextcurved_dark"
+            android:textColor="#FDF660"
+            android:textStyle="bold"
+            />
+
+
+    </LinearLayout>
+
+
+    <!--com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:boxStrokeColor="#FFFFFF"
+        app:boxBackgroundColor="#2d2d39"
+        android:textColorHint="#BCBABA"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        >
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Name"
+            android:inputType="textPersonName"
+            android:drawablePadding="7dp"
+            android:text="Amrita Kumari"
+            android:paddingEnd="10dp"
+            android:textColor="#ffff"
+            android:textColorHint="#E8E8E8"
+            />
+
+    </com.google.android.material.textfield.TextInputLayout-->
+    <!--TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginEnd="15dp"
+        android:text="Do you really want to update name !"
+        android:textColor="#F81F1F"
+        /-->
