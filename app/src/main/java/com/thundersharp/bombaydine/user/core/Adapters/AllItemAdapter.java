@@ -49,6 +49,7 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         HashMap<String,String> hashMap = (HashMap<String,String>)itemObjectlist.get(position);
+        setpos(position);
 
         elegentNumberHelper.bindviewHolder(holder.initial,holder.finalview,R.id.minus,R.id.plus,R.id.displaytext,R.id.plusinit);
         elegentNumberHelper.getcurrentnumber();
@@ -73,9 +74,9 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
 
     @Override
     public int OnTextChangeListner(int val) {
-
-        Toast.makeText(context,""+val,Toast.LENGTH_SHORT).show();
-        AddItemToCart(itemObjectlist.get(getpos()));
+        if (val == 1) {
+            AddItemToCart(itemObjectlist.get(getpos()));
+        }
         return 0;
     }
 
@@ -92,7 +93,7 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            setpos(getAdapterPosition());
+
             imageView = itemView.findViewById(R.id.imageview);
             name = itemView.findViewById(R.id.name);
 

@@ -14,6 +14,11 @@ import android.widget.TextView;
 
 import com.thundersharp.bombaydine.R;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 public class Profile extends Fragment {
 
     TextView view_profile;
@@ -21,9 +26,9 @@ public class Profile extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view= inflater.inflate(R.layout.fragment_profile, container, false);
+        View view = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        view_profile=view.findViewById(R.id.view_profile);
+        view_profile = view.findViewById(R.id.view_profile);
 
         view_profile.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -31,7 +36,10 @@ public class Profile extends Fragment {
             }
         });
 
-        return  view;
+        return view;
 
     }
+
+
 }
+
