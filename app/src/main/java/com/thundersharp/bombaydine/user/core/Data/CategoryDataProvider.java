@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.thundersharp.bombaydine.user.core.Model.CategoryData;
 import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
@@ -23,11 +24,12 @@ public class CategoryDataProvider implements CategoryDataContract{
 
     @Override
     public void fetchCategoryData(CategoryData categoryData) {
-        FirebaseDatabase
+        Query query = FirebaseDatabase
                 .getInstance()
                 .getReference(CONSTANTS.DATABASE_NODE_CATEGORY_ITEMS)
                 .child(categoryData.getID())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .limitToFirst(6);
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){

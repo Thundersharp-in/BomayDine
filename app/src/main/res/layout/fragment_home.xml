@@ -18,7 +18,7 @@
 
             <LinearLayout
                 android:id="@+id/current_loc"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:layout_toStartOf="@id/qrcode"
@@ -35,7 +35,7 @@
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:layout_marginEnd="15dp"
-                    android:text="Soldevahanalli iuojuiojijgeijgiogjijogter"
+                    android:text="Soldevahanalli "
                     android:fontFamily="@font/calibri"
                     android:textSize="20sp"/>
 
@@ -466,6 +466,25 @@
                     android:id="@+id/topsellingholder"/>
 
             </RelativeLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                app:cardBackgroundColor="#1e2026"
+                android:layout_marginTop="20dp"
+                app:cardElevation="7dp"
+                android:layout_marginHorizontal="10dp"
+                app:cardCornerRadius="15dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/bbbbb"
+                    android:scaleType="centerCrop"
+                    android:adjustViewBounds="true"/>
+
+
+            </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout
                 android:id="@+id/full"

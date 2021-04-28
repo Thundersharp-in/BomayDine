@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -59,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="7dp"
                 android:layout_below="@id/name"
                 android:fontFamily="sans-serif-smallcaps"
                 android:text="Rs. 138.0"
@@ -68,7 +68,24 @@
                 android:textColor="#959698"
                 android:textSize="12sp" />
 
+            <TextView
+                android:id="@+id/description"
+                android:layout_below="@id/amount"
+                android:layout_toStartOf="@+id/eholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Breaking out of the norm doesn't get more louis ipson trufr esds lour "
+                android:layout_marginEnd="20dp"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/calibri"
+                android:layout_marginBottom="10dp"
+                android:maxLines="2"
+                android:textColor="#686868"
+                />
+
+
             <RelativeLayout
+                android:id="@+id/eholder"
                 android:layout_width="75dp"
                 android:layout_height="28dp"
                 android:layout_alignParentEnd="true"
