@@ -1,49 +1,44 @@
 package com.thundersharp.bombaydine.user.ui.menu;
 
-import androidx.annotation.NonNull;
+import android.os.Bundle;
+import android.widget.Toast;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.Bundle;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.FirebaseAuth;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapterMailAdapter;
+import com.thundersharp.bombaydine.user.core.Data.HomeDataContract;
+import com.thundersharp.bombaydine.user.core.Data.HomeDataProvider;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
-public class AllItemsActivity extends AppCompatActivity {
+public class AllItemsActivity extends AppCompatActivity implements HomeDataContract.AllItems,HomeDataContract.DataLoadFailure {
 
     private RecyclerView recyclermain;
-    private List<Object> objectList = new ArrayList<>();
     private AllItemAdapterMailAdapter allItemAdapterMailAdapter;
+    private HomeDataProvider homeDataProvider;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_items);
-
+        homeDataProvider = new HomeDataProvider(this,this,this);
 
         recyclermain = findViewById(R.id.recyclermain);
-        loadtempdata();
+        homeDataProvider.fetchAllitems();
 
     }
 
-    public void loadtempdata(){
-        objectList.clear();
 
-        for (int i=0; i<= 15; i++){
-            HashMap<String,Object> hashMap = new HashMap<>();
-            hashMap.put("image","url");
-            objectList.add(hashMap);
-        }
-        allItemAdapterMailAdapter = new AllItemAdapterMailAdapter(objectList,this);
+    @Override
+    public void onDataLoadFailure(Exception e) {
+        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void OnallItemsFetchSucess(List<Object> data) {
+        allItemAdapterMailAdapter = new AllItemAdapterMailAdapter(data,this);
         recyclermain.setHasFixedSize(true);
         recyclermain.setAdapter(allItemAdapterMailAdapter);
     }

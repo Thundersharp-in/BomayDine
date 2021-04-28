@@ -8,6 +8,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.thundersharp.bombaydine.user.core.Model.FoodItemAdapter;
 import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 
 import java.util.ArrayList;
@@ -22,6 +23,9 @@ public class HomeDataProvider implements HomeDataContract{
     private HomeDataContract.DataLoadFailure dataLoadFailure;
     private HomeDataContract.HomeAllItems homeAllItems;
     private HomeDataContract.AllItems allItems;
+
+
+    private List<Object> datalist = new ArrayList<>();
 
 
     public HomeDataProvider(Context context, HomeDataContract.topSellingFetch topSellingFetch, HomeDataContract.categoryFetch categoryFetch, DataLoadFailure dataLoadFailure, HomeDataContract.HomeAllItems homeAllItems, AllItems allItems) {
@@ -111,6 +115,28 @@ public class HomeDataProvider implements HomeDataContract{
 
     @Override
     public void fetchAllitems() {
+        FirebaseDatabase
+                .getInstance()
+                .getReference(CONSTANTS.DATABASE_NODE_ALL_ITEMS)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                                datalist.add(dataSnapshot.getValue(FoodItemAdapter.class));
+                            }
+                            allItems.OnallItemsFetchSucess(datalist);
+                        }else {
+                            Exception exception = new Exception("ERROR 404 : NO DATA FOUND");
+                            dataLoadFailure.onDataLoadFailure(exception);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
 
     }
 }

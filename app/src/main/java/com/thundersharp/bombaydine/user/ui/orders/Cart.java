@@ -12,26 +12,34 @@ import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.cart.CartHandler;
 import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 
+import java.util.List;
 
-public class Cart extends CartProvider implements CartHandler.cart {
 
+public class Cart extends Fragment implements  CartHandler.fetchCartData {
+
+    private CartProvider cartProvider;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+
+        cartProvider = CartProvider.initialize(getContext(),this);
         View view =  inflater.inflate(R.layout.fragment_cart, container, false);
+
+
+
 
         return view;
     }
 
+
     @Override
-    public void onItemAddSuccess(boolean isAdded, Object data) {
+    public void onFetchCartDataSuccess(List<Object> dataList) {
 
     }
 
     @Override
-    public void addFailure(Exception exception) {
+    public void onFetchDataFailure(Exception e) {
 
     }
 }

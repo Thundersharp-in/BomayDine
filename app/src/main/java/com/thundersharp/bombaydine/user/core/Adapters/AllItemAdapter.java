@@ -23,12 +23,13 @@ import java.util.HashMap;
 import java.util.List;
 
 public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHolder>  implements
-        ElegantNumberInteractor.setOnTextChangeListner, CartHandler {
+        ElegantNumberInteractor.setOnTextChangeListner, CartHandler.cart{
 
-    List<Object> itemObjectlist;
-    Context context;
-    ElegentNumberHelper elegentNumberHelper;
-    int position;
+    private List<Object> itemObjectlist;
+    private Context context;
+    private ElegentNumberHelper elegentNumberHelper;
+    private int position;
+    private CartProvider cartProvider;
 
     public AllItemAdapter(){}
 
@@ -42,7 +43,7 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view =  LayoutInflater.from(context).inflate(R.layout.uneversal_holder,parent,false);
         elegentNumberHelper = new ElegentNumberHelper(context,this,view);
-
+        cartProvider = CartProvider.initialize(context,this);
         return new  ViewHolder(view);
     }
 
@@ -75,14 +76,20 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
     @Override
     public int OnTextChangeListner(int val) {
         if (val == 1) {
-            AddItemToCart(itemObjectlist.get(getpos()));
+            cartProvider.AddItemToCart(itemObjectlist.get(getpos()));
         }
         return 0;
     }
 
-    @Override
-    public void AddItemToCart(Object data) {
 
+    @Override
+    public void onItemAddSuccess(boolean isAdded, Object data) {
+        Toast.makeText(context, "Added to server : "+isAdded, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void addFailure(Exception exception) {
+        Toast.makeText(context, exception.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
