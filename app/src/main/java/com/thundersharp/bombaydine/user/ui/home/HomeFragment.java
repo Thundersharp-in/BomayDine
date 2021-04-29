@@ -4,6 +4,8 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
@@ -163,11 +165,20 @@ public class HomeFragment extends Fragment implements
 
     private ShimmerFrameLayout shimmerplace_cat,shimmerplace_topsell;
 
+    private TextView version;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        version = view.findViewById(R.id.version);
+        try {
+            PackageInfo pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
+            version.setText("V "+ pInfo.versionName);
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
         sharedPrefHelper = new SharedPrefHelper(getContext(), this);
         mDemoSlider = view.findViewById(R.id.slider);
@@ -300,23 +311,11 @@ public class HomeFragment extends Fragment implements
         categoryRecycler = view.findViewById(R.id.recentordcategoryholderer);
         categoryRecycler.setHasFixedSize(true);
 
-        HashMap<String, String> dataq = new HashMap<>();
-
-        for (int i = 0; i <= 5; i++) {
-            dataq.clear();
-            dataq.put("imageuri", "https://media.istockphoto.com/photos/butter-chicken-spicy-curry-meat-food-in-kadai-dish-on-dark-background-picture-id1127522313?k=6&m=1127522313&s=612x612&w=0&h=gJ71z63zFrd_aGsNH_9WeW2blSyGAt4Ja3Ya5ay_kdg=");
-            dataq.put("name", "Butter Chicken");
-            data.add(dataq);
-        }
-
-        allItemAdapter = new AllItemAdapter(data, getContext());
-        //GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
-        //horizontalScrollView.setLayoutManager(gridLayoutManager);
-        horizontalScrollView.setAdapter(allItemAdapter);
 
 
         homeDataProvider.fetchAllCategories();
         homeDataProvider.fetchTopSelling();
+        homeDataProvider.fetchHomeallItem();
 
 
         ArrayList<String> listUrl = new ArrayList<>();
@@ -742,7 +741,10 @@ public class HomeFragment extends Fragment implements
     }
 
     @Override
-    public void OnHomeAlldataFetchSucess(List<HashMap<String, Object>> data) {
-
+    public void OnHomeAlldataFetchSucess(List<Object> data) {
+        allItemAdapter = new AllItemAdapter(data, getContext());
+        //GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
+        //horizontalScrollView.setLayoutManager(gridLayoutManager);
+        horizontalScrollView.setAdapter(allItemAdapter);
     }
 }

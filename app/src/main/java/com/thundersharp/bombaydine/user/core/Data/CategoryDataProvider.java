@@ -24,12 +24,11 @@ public class CategoryDataProvider implements CategoryDataContract{
 
     @Override
     public void fetchCategoryData(CategoryData categoryData) {
-        Query query = FirebaseDatabase
+        FirebaseDatabase
                 .getInstance()
                 .getReference(CONSTANTS.DATABASE_NODE_CATEGORY_ITEMS)
                 .child(categoryData.getID())
-                .limitToFirst(6);
-                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                .limitToFirst(6).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){

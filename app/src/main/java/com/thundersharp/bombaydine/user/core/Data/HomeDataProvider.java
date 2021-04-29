@@ -7,6 +7,7 @@ import androidx.annotation.NonNull;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.thundersharp.bombaydine.user.core.Model.FoodItemAdapter;
 import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
@@ -110,6 +111,29 @@ public class HomeDataProvider implements HomeDataContract{
 
     @Override
     public void fetchHomeallItem() {
+        Query query = FirebaseDatabase
+                .getInstance()
+                .getReference(CONSTANTS.DATABASE_NODE_ALL_ITEMS).limitToFirst(6);
+
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                                datalist.add(dataSnapshot.getValue(FoodItemAdapter.class));
+                            }
+                            homeAllItems.OnHomeAlldataFetchSucess(datalist);
+                        }else {
+                            Exception exception = new Exception("ERROR 28HR45 : NO HOME DATA FOUND");
+                            dataLoadFailure.onDataLoadFailure(exception);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
 
     }
 

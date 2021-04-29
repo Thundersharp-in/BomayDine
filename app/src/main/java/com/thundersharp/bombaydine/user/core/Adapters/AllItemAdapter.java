@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.thundersharp.bombaydine.R;
+import com.thundersharp.bombaydine.user.core.Model.FoodItemAdapter;
 import com.thundersharp.bombaydine.user.core.aligantnumber.ElegantNumberInteractor;
 import com.thundersharp.bombaydine.user.core.aligantnumber.ElegentNumberHelper;
 import com.thundersharp.bombaydine.user.core.cart.CartHandler;
@@ -49,14 +50,16 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        HashMap<String,String> hashMap = (HashMap<String,String>)itemObjectlist.get(position);
+        FoodItemAdapter foodItemModel = (FoodItemAdapter) itemObjectlist.get(position);
         setpos(position);
 
         elegentNumberHelper.bindviewHolder(holder.initial,holder.finalview,R.id.minus,R.id.plus,R.id.displaytext,R.id.plusinit);
         elegentNumberHelper.getcurrentnumber();
 
-        holder.name.setText(hashMap.get("name"));
-        Glide.with(context).load(hashMap.get("imageuri")).into(holder.imageView);
+        holder.name.setText(foodItemModel.getNAME());
+        holder.amount.setText("Rs. "+foodItemModel.getAMOUNT());
+        holder.description.setText(foodItemModel.getDESC());
+        Glide.with(context).load(foodItemModel.getICON_URL()).into(holder.imageView);
     }
 
 
@@ -70,7 +73,7 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        if (itemObjectlist != null) return itemObjectlist.size();else return 0;
+        if (itemObjectlist != null) return itemObjectlist.size(); else return 0;
     }
 
     @Override
@@ -95,7 +98,7 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
     class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imageView;
-        TextView name;
+        TextView name,description,amount;
         LinearLayout initial,finalview;
 
         public ViewHolder(@NonNull View itemView) {
@@ -103,6 +106,8 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
 
             imageView = itemView.findViewById(R.id.imageview);
             name = itemView.findViewById(R.id.name);
+            description =  itemView.findViewById(R.id.description);
+            amount = itemView.findViewById(R.id.amount);
 
             initial = itemView.findViewById(R.id.initial);
             finalview = itemView.findViewById(R.id.finl);

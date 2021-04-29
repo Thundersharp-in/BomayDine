@@ -28,7 +28,7 @@ public interface HomeDataContract {
     }
 
     interface HomeAllItems{
-        void OnHomeAlldataFetchSucess(List<HashMap<String,Object>> data);
+        void OnHomeAlldataFetchSucess(List<Object> data);
     }
 
     interface AllItems{
