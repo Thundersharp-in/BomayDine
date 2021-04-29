@@ -7,11 +7,17 @@ public interface HomeDataContract {
 
     void fetchTopSelling();
 
+    void fetchTopSellingAll();
+
     void fetchAllCategories();
 
     void fetchHomeallItem();
 
     void fetchAllitems();
+
+    interface topSellingAllFetch{
+        void onAllTopSellingfetchSuccess(List<Object> data);
+    }
 
     interface categoryFetch{
 

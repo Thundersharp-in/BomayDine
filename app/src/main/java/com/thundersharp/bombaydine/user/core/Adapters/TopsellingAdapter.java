@@ -22,6 +22,7 @@ public class TopsellingAdapter extends RecyclerView.Adapter<TopsellingAdapter.Vi
 
     Context context;
     List<Object> listr;
+    boolean type = false;
 
     public TopsellingAdapter(){}
 
@@ -30,10 +31,17 @@ public class TopsellingAdapter extends RecyclerView.Adapter<TopsellingAdapter.Vi
         this.listr = listr;
     }
 
+    public TopsellingAdapter(Context context, List<Object> listr, boolean type) {
+        this.context = context;
+        this.listr = listr;
+        this.type = type;
+    }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.topselling,parent,false));
+        if (type) return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.topsellingmain,parent,false));
+        else return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.topselling,parent,false));
     }
 
     @Override

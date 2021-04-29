@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BombayDine"
         tools:replace="android:theme">
-        <activity android:name=".user.ui.menu.AllCategoryActivity"></activity>
+        <activity android:name=".user.ui.menu.TopSellingAll"></activity>
+        <activity android:name=".user.ui.menu.AllCategoryActivity" />
         <activity android:name=".user.ui.menu.CategoryResults" />
         <activity android:name=".user.ui.location.HomeLocationChooser" />
         <activity android:name=".user.ui.location.AddressEdit" />

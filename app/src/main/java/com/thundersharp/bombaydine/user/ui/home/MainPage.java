@@ -5,6 +5,10 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.thundersharp.bombaydine.R;
@@ -25,6 +29,7 @@ public class MainPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
+        runFadeInAnimation();
         BottomNavigationView navView = findViewById(R.id.nav_view);
         checkForPermissions();
         // Passing each menu ID as a set of Ids because each
@@ -35,6 +40,22 @@ public class MainPage extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+    }
+
+    private void runFadeInAnimation() {
+        Animation a = AnimationUtils.loadAnimation(this, R.anim.fadeout);
+        a.reset();
+        RelativeLayout ll = (RelativeLayout) findViewById(R.id.container);
+        ll.clearAnimation();
+        ll.startAnimation(a);
+    }
+
+    private void runFadeoutAnimation() {
+        Animation a = AnimationUtils.loadAnimation(this, R.anim.fadein);
+        a.reset();
+        RelativeLayout ll = (RelativeLayout) findViewById(R.id.container);
+        ll.clearAnimation();
+        ll.startAnimation(a);
     }
 
 
@@ -88,4 +109,10 @@ public class MainPage extends AppCompatActivity {
         alertDialog.show();
     }
 
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        runFadeoutAnimation();
+    }
 }

@@ -91,6 +91,7 @@ import com.thundersharp.bombaydine.user.ui.location.HomeLocationChooser;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
 import com.thundersharp.bombaydine.user.ui.menu.AllCategoryActivity;
 import com.thundersharp.bombaydine.user.ui.menu.AllItemsActivity;
+import com.thundersharp.bombaydine.user.ui.menu.TopSellingAll;
 import com.thundersharp.bombaydine.user.ui.orders.RecentOrders;
 import com.thundersharp.bombaydine.user.ui.scanner.QrScanner;
 import com.thundersharp.bombaydine.user.ui.startup.MainActivity;
@@ -136,7 +137,7 @@ public class HomeFragment extends Fragment implements
     List<Object> data = new ArrayList<>();
     private CircleImageView profile;
     private ImageView qrcode;
-    private TextView recentorders, allitemsview,allcategory;
+    private TextView recentorders, allitemsview,allcategory,topsellingallv;
     public static TextView textcurrloc;
     private AllItemAdapter allItemAdapter;
     private RecyclerView horizontalScrollView, categoryRecycler, topsellingholder;
@@ -196,6 +197,7 @@ public class HomeFragment extends Fragment implements
         current_loc = view.findViewById(R.id.current_loc);
         textcurrloc = view.findViewById(R.id.textcurrloc);
         allcategory = view.findViewById(R.id.allcategory);
+        topsellingallv = view.findViewById(R.id.topsellingallv);
         homeDataProvider = new HomeDataProvider(getActivity(), this, this, this, this);
 
         mRequestQueue = Volley.newRequestQueue(getContext());
@@ -206,6 +208,12 @@ public class HomeFragment extends Fragment implements
 
         //recyclerView = (RecyclerView) view.findViewById(R.id.places_recycler_view);
 
+        topsellingallv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), TopSellingAll.class));
+            }
+        });
 
         allitemsview.setOnClickListener(new View.OnClickListener() {
 

@@ -24,6 +24,7 @@ public class HomeDataProvider implements HomeDataContract{
     private HomeDataContract.DataLoadFailure dataLoadFailure;
     private HomeDataContract.HomeAllItems homeAllItems;
     private HomeDataContract.AllItems allItems;
+    private HomeDataContract.topSellingAllFetch topSellingAllFetch;
 
 
     private List<Object> datalist = new ArrayList<>();
@@ -52,12 +53,18 @@ public class HomeDataProvider implements HomeDataContract{
         this.allItems = allItems;
     }
 
+    public HomeDataProvider(Context context, DataLoadFailure dataLoadFailure, HomeDataContract.topSellingAllFetch topSellingAllFetch) {
+        this.context = context;
+        this.dataLoadFailure = dataLoadFailure;
+        this.topSellingAllFetch = topSellingAllFetch;
+    }
+
     @Override
     public void fetchTopSelling() {
-        FirebaseDatabase
+        Query query = FirebaseDatabase
                 .getInstance()
-                .getReference(CONSTANTS.DATABASE_NODE_TOP_SELLING)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .getReference(CONSTANTS.DATABASE_NODE_TOP_SELLING).limitToFirst(6);
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
@@ -79,6 +86,34 @@ public class HomeDataProvider implements HomeDataContract{
                     }
                 });
 
+    }
+
+    @Override
+    public void fetchTopSellingAll() {
+        FirebaseDatabase
+                .getInstance()
+                .getReference(CONSTANTS.DATABASE_NODE_TOP_SELLING)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.exists()){
+                    List<Object> list = new ArrayList<>();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                        list.add((HashMap<String, Object>) dataSnapshot.getValue());
+                    }
+                    topSellingAllFetch.onAllTopSellingfetchSuccess(list);
+
+                }else {
+                    Exception exception = new Exception("NO DATA FOUND");
+                    dataLoadFailure.onDataLoadFailure(exception);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                dataLoadFailure.onDataLoadFailure(error.toException());
+            }
+        });
     }
 
     @Override
