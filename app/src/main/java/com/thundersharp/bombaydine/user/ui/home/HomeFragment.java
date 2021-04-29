@@ -89,6 +89,7 @@ import com.thundersharp.bombaydine.user.core.location.PinCodeContract;
 import com.thundersharp.bombaydine.user.core.location.PinCodeInteractor;
 import com.thundersharp.bombaydine.user.ui.location.HomeLocationChooser;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
+import com.thundersharp.bombaydine.user.ui.menu.AllCategoryActivity;
 import com.thundersharp.bombaydine.user.ui.menu.AllItemsActivity;
 import com.thundersharp.bombaydine.user.ui.orders.RecentOrders;
 import com.thundersharp.bombaydine.user.ui.scanner.QrScanner;
@@ -135,7 +136,7 @@ public class HomeFragment extends Fragment implements
     List<Object> data = new ArrayList<>();
     private CircleImageView profile;
     private ImageView qrcode;
-    private TextView recentorders, allitemsview;
+    private TextView recentorders, allitemsview,allcategory;
     public static TextView textcurrloc;
     private AllItemAdapter allItemAdapter;
     private RecyclerView horizontalScrollView, categoryRecycler, topsellingholder;
@@ -151,7 +152,7 @@ public class HomeFragment extends Fragment implements
     private LinearLayout current_loc;
     private LocationRequest locationRequest;
     //private PinCodeInteractor pinCodeInteractor;
-    private ShimmerFrameLayout shimmerFrameLayout;
+    private ShimmerFrameLayout shimmerFrameLayout,shimmerplace_allitem;
     private RecyclerView addressholder;
     private Address address;
 
@@ -183,6 +184,7 @@ public class HomeFragment extends Fragment implements
         sharedPrefHelper = new SharedPrefHelper(getContext(), this);
         mDemoSlider = view.findViewById(R.id.slider);
         shimmerplace_cat = view.findViewById(R.id.shimmerplace_cat);
+        shimmerplace_allitem = view.findViewById(R.id.shimmerplace_allitem);
         shimmerplace_topsell = view.findViewById(R.id.shimmerplace_topsell);
         horizontalScrollView = view.findViewById(R.id.allitems);
         topsellingholder = view.findViewById(R.id.topsellingholder);
@@ -193,6 +195,7 @@ public class HomeFragment extends Fragment implements
         profile = view.findViewById(R.id.profile);
         current_loc = view.findViewById(R.id.current_loc);
         textcurrloc = view.findViewById(R.id.textcurrloc);
+        allcategory = view.findViewById(R.id.allcategory);
         homeDataProvider = new HomeDataProvider(getActivity(), this, this, this, this);
 
         mRequestQueue = Volley.newRequestQueue(getContext());
@@ -205,9 +208,17 @@ public class HomeFragment extends Fragment implements
 
 
         allitemsview.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(getActivity(), AllItemsActivity.class));
+            }
+        });
+
+        allcategory.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), AllCategoryActivity.class));
             }
         });
 
@@ -746,5 +757,7 @@ public class HomeFragment extends Fragment implements
         //GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
         //horizontalScrollView.setLayoutManager(gridLayoutManager);
         horizontalScrollView.setAdapter(allItemAdapter);
+        shimmerplace_allitem.stopShimmer();
+        shimmerplace_allitem.setVisibility(View.GONE);
     }
 }
