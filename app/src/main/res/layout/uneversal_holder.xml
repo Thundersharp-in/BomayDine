@@ -80,6 +80,7 @@
                 android:fontFamily="@font/calibri"
                 android:layout_marginBottom="10dp"
                 android:maxLines="2"
+                android:ellipsize="end"
                 android:textColor="#686868"
                 />
 

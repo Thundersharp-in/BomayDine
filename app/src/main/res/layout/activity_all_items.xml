@@ -28,6 +28,7 @@
                 android:minHeight="180dp">
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/offerscroll"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
@@ -112,6 +113,25 @@
 
             </LinearLayout>
 
+            <com.facebook.shimmer.ShimmerFrameLayout
+                android:id="@+id/shl"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+                    <include layout="@layout/all_item_main_placeholder"/>
+                    <include layout="@layout/all_item_main_placeholder"/>
+                    <include layout="@layout/all_item_main_placeholder"/>
+                    <include layout="@layout/all_item_main_placeholder"/>
+                    <include layout="@layout/all_item_main_placeholder"/>
+                    <include layout="@layout/all_item_main_placeholder"/>
+                </LinearLayout>
+
+            </com.facebook.shimmer.ShimmerFrameLayout>
+
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclermain"
@@ -131,6 +151,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_marginTop="10dp"
+        android:visibility="gone"
         android:gravity="bottom">
 
         <RelativeLayout

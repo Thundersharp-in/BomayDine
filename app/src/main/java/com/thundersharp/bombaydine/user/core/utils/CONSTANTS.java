@@ -11,5 +11,6 @@ public class CONSTANTS {
     public static final String DATABASE_NODE_TOP_SELLING = "TOP_SELLING";
     public static final String DATABASE_NODE_CATEGORY_ITEMS = "CATEGORY_ITEMS";
     public static final String DATABASE_NODE_ALL_ITEMS = "ALL_ITEMS";
+    public static final String DATABASE_NODE_ALL_OFFERS = "ALL_OFFERS";
 
 }

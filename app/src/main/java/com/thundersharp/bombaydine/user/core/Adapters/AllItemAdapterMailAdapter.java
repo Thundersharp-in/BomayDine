@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.thundersharp.bombaydine.R;
+import com.thundersharp.bombaydine.user.core.Data.OfferListner;
+import com.thundersharp.bombaydine.user.core.Data.OffersProvider;
 import com.thundersharp.bombaydine.user.core.Model.FoodItemAdapter;
 import com.thundersharp.bombaydine.user.core.aligantnumber.ElegantNumberInteractor;
 import com.thundersharp.bombaydine.user.core.aligantnumber.ElegentNumberHelper;

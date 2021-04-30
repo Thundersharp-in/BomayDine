@@ -78,6 +78,8 @@ import com.thundersharp.bombaydine.user.core.Adapters.PlacesAutoCompleteAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.TopsellingAdapter;
 import com.thundersharp.bombaydine.user.core.Data.HomeDataContract;
 import com.thundersharp.bombaydine.user.core.Data.HomeDataProvider;
+import com.thundersharp.bombaydine.user.core.Data.OfferListner;
+import com.thundersharp.bombaydine.user.core.Data.OffersProvider;
 import com.thundersharp.bombaydine.user.core.Model.AddressData;
 import com.thundersharp.bombaydine.user.core.address.AddressHelper;
 import com.thundersharp.bombaydine.user.core.address.AddressLoader;
@@ -229,6 +231,7 @@ public class HomeFragment extends Fragment implements
                 startActivity(new Intent(getActivity(), AllCategoryActivity.class));
             }
         });
+
 
         current_loc.setOnClickListener(viewlocation -> {
             bottomSheetDialog = new BottomSheetDialog(getContext(), R.style.BottomSheetDialogTheme);

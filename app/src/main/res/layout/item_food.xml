@@ -234,7 +234,6 @@
             android:layout_marginTop="5dp"
             android:fontFamily="@font/calibri"
             android:layout_marginBottom="10dp"
-            android:maxLines="2"
             android:textColor="#686868"
             />
 
