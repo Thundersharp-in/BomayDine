@@ -20,17 +20,18 @@ public class HomeDataProvider implements HomeDataContract{
 
     private Context context;
     private HomeDataContract.topSellingFetch topSellingFetch;
-    private HomeDataContract.categoryFetch categoryFetch;
+    private HomeDataContract.HomeAllCategoriesFetch categoryFetch;
     private HomeDataContract.DataLoadFailure dataLoadFailure;
     private HomeDataContract.HomeAllItems homeAllItems;
     private HomeDataContract.AllItems allItems;
     private HomeDataContract.topSellingAllFetch topSellingAllFetch;
+    private HomeDataContract.categoryFetch categoryFetchall;
 
 
     private List<Object> datalist = new ArrayList<>();
 
 
-    public HomeDataProvider(Context context, HomeDataContract.topSellingFetch topSellingFetch, HomeDataContract.categoryFetch categoryFetch, DataLoadFailure dataLoadFailure, HomeDataContract.HomeAllItems homeAllItems, AllItems allItems) {
+    public HomeDataProvider(Context context, HomeDataContract.topSellingFetch topSellingFetch, HomeDataContract.HomeAllCategoriesFetch categoryFetch, DataLoadFailure dataLoadFailure, HomeDataContract.HomeAllItems homeAllItems, AllItems allItems) {
         this.context = context;
         this.topSellingFetch = topSellingFetch;
         this.categoryFetch = categoryFetch;
@@ -39,7 +40,7 @@ public class HomeDataProvider implements HomeDataContract{
         this.allItems = allItems;
     }
 
-    public HomeDataProvider(Context context, HomeDataContract.topSellingFetch topSellingFetch, HomeDataContract.categoryFetch categoryFetch, DataLoadFailure dataLoadFailure, HomeAllItems homeAllItems) {
+    public HomeDataProvider(Context context, HomeDataContract.topSellingFetch topSellingFetch, HomeDataContract.HomeAllCategoriesFetch categoryFetch, DataLoadFailure dataLoadFailure, HomeAllItems homeAllItems) {
         this.context = context;
         this.topSellingFetch = topSellingFetch;
         this.categoryFetch = categoryFetch;
@@ -57,6 +58,12 @@ public class HomeDataProvider implements HomeDataContract{
         this.context = context;
         this.dataLoadFailure = dataLoadFailure;
         this.topSellingAllFetch = topSellingAllFetch;
+    }
+
+    public HomeDataProvider(Context context, DataLoadFailure dataLoadFailure, HomeDataContract.categoryFetch categoryFetchall) {
+        this.context = context;
+        this.dataLoadFailure = dataLoadFailure;
+        this.categoryFetchall = categoryFetchall;
     }
 
     @Override
@@ -129,7 +136,7 @@ public class HomeDataProvider implements HomeDataContract{
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                                 list.add((HashMap<String, String>) dataSnapshot.getValue());
                             }
-                            categoryFetch.onCategoryFetchSuccess(list);
+                            categoryFetchall.onCategoryFetchSuccess(list);
 
                         }else {
                             Exception exception = new Exception("NO DATA FOUND");
@@ -145,10 +152,40 @@ public class HomeDataProvider implements HomeDataContract{
     }
 
     @Override
+    public void fetchhomeAllCategories() {
+        Query query = FirebaseDatabase
+                .getInstance()
+                .getReference(CONSTANTS.DATABASE_NODE_CATEGORY).limitToFirst(6);
+                query.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            List<Object> list = new ArrayList<>();
+                            for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                                list.add((HashMap<String, String>) dataSnapshot.getValue());
+                            }
+                            categoryFetch.onCategoryFetchSuccess(list);
+
+                        }else {
+                            Exception exception = new Exception("NO DATA FOUND");
+                            dataLoadFailure.onDataLoadFailure(exception);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        dataLoadFailure.onDataLoadFailure(error.toException());
+                    }
+                });
+
+    }
+
+    @Override
     public void fetchHomeallItem() {
         Query query = FirebaseDatabase
                 .getInstance()
-                .getReference(CONSTANTS.DATABASE_NODE_ALL_ITEMS).limitToFirst(6);
+                .getReference(CONSTANTS.DATABASE_NODE_ALL_ITEMS)
+                .limitToFirst(6);
 
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

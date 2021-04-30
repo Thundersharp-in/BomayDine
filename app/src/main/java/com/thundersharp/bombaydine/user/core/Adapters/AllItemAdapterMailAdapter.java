@@ -66,7 +66,7 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
         holder.name.setText(foodItemAdapter.getNAME());
         holder.amount.setText("Rs. "+foodItemAdapter.getAMOUNT());
         holder.description.setText(foodItemAdapter.getDESC());
-        holder.category.setText("In");
+        holder.category.setText("In "+getcatName(foodItemAdapter.getCAT_NAME_ID()));
 
     }
 
@@ -102,5 +102,17 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
             amount = itemView.findViewById(R.id.amount);
             category = itemView.findViewById(R.id.category);
         }
+    }
+
+    public String getcatName(String key){
+        if (key.contains("%&")){
+            return key.substring(0,key.indexOf("%&")).toLowerCase();
+        }else return null;
+    }
+
+    public String getCatID(String key){
+        if (key.contains("%&")){
+            return key.substring(key.indexOf("%&")+1);
+        }else return null;
     }
 }

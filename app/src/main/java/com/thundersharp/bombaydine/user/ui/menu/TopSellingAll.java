@@ -16,7 +16,9 @@ import com.thundersharp.bombaydine.user.core.Data.HomeDataProvider;
 
 import java.util.List;
 
-public class TopSellingAll extends AppCompatActivity implements HomeDataContract.topSellingAllFetch,HomeDataContract.DataLoadFailure {
+public class TopSellingAll extends AppCompatActivity implements
+        HomeDataContract.topSellingAllFetch,
+        HomeDataContract.DataLoadFailure {
 
     private HomeDataProvider homeDataProvider;
     private RecyclerView topsellingrecycler;

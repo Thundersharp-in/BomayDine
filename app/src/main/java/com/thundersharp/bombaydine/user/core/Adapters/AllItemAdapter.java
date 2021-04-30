@@ -113,4 +113,6 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
             finalview = itemView.findViewById(R.id.finl);
         }
     }
+
+
 }

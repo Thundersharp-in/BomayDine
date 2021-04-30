@@ -11,6 +11,8 @@ public interface HomeDataContract {
 
     void fetchAllCategories();
 
+    void fetchhomeAllCategories();
+
     void fetchHomeallItem();
 
     void fetchAllitems();
@@ -23,6 +25,10 @@ public interface HomeDataContract {
 
         void onCategoryFetchSuccess(List<Object> data);
 
+    }
+
+    interface HomeAllCategoriesFetch{
+        void onCategoryFetchSuccess(List<Object> data);
     }
 
     interface topSellingFetch{

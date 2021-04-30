@@ -126,7 +126,7 @@ public class HomeFragment extends Fragment implements
         Cordinateslistner.fetchSuccessListener,
         HomeDataContract.DataLoadFailure,
         HomeDataContract.topSellingFetch,
-        HomeDataContract.categoryFetch,
+        HomeDataContract.HomeAllCategoriesFetch,
         HomeDataContract.HomeAllItems {
 
     private static final int REQUEST_CHECK_SETTINGS = 140;
@@ -332,7 +332,7 @@ public class HomeFragment extends Fragment implements
 
 
 
-        homeDataProvider.fetchAllCategories();
+        homeDataProvider.fetchhomeAllCategories();
         homeDataProvider.fetchTopSelling();
         homeDataProvider.fetchHomeallItem();
 
