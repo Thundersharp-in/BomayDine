@@ -30,9 +30,13 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
 
     public AllItemAdapterMailAdapter(){}
 
-    List<Object> itemObjectlist;
-    Context context;
-    ElegentNumberHelper elegentNumberHelper;
+    private List<Object> itemObjectlist;
+    private Context context;
+    private ElegentNumberHelper elegentNumberHelper;
+
+    public static AllItemAdapterMailAdapter initializeAdapter(List<Object> objects, Context context){
+        return new AllItemAdapterMailAdapter(objects,context);
+    }
 
     public AllItemAdapterMailAdapter(List<Object> itemObjectlist, Context context) {
         this.itemObjectlist = itemObjectlist;
