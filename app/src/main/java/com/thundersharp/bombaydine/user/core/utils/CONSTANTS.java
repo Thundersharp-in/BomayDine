@@ -13,4 +13,9 @@ public class CONSTANTS {
     public static final String DATABASE_NODE_ALL_ITEMS = "ALL_ITEMS";
     public static final String DATABASE_NODE_ALL_OFFERS = "ALL_OFFERS";
 
+
+    public static final String DATABASE_NODE_BREAKFAST = "BREAKFAST";
+    public static final String DATABASE_NODE_LUNCH = "LUNCH";
+    public static final String DATABASE_NODE_DINNER = "DINNER";
+
 }

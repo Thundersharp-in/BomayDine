@@ -68,6 +68,7 @@ import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.maps.android.PolyUtil;
 import com.thundersharp.bombaydine.R;
@@ -89,6 +90,7 @@ import com.thundersharp.bombaydine.user.core.address.SharedPrefHelper;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
 import com.thundersharp.bombaydine.user.core.location.PinCodeContract;
 import com.thundersharp.bombaydine.user.core.location.PinCodeInteractor;
+import com.thundersharp.bombaydine.user.ui.dailyfood.DailyfoodActivity;
 import com.thundersharp.bombaydine.user.ui.location.HomeLocationChooser;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
 import com.thundersharp.bombaydine.user.ui.menu.AllCategoryActivity;
@@ -143,6 +145,7 @@ public class HomeFragment extends Fragment implements
     public static TextView textcurrloc;
     private AllItemAdapter allItemAdapter;
     private RecyclerView horizontalScrollView, categoryRecycler, topsellingholder;
+    private MaterialCardView breakfast,lunch,dinner;
 
     private PlacesAutoCompleteAdapter mAutoCompleteAdapter;
     private RecyclerView recyclerView;
@@ -200,6 +203,9 @@ public class HomeFragment extends Fragment implements
         textcurrloc = view.findViewById(R.id.textcurrloc);
         allcategory = view.findViewById(R.id.allcategory);
         topsellingallv = view.findViewById(R.id.topsellingallv);
+        breakfast = view.findViewById(R.id.breakfast);
+        lunch = view.findViewById(R.id.lunch);
+        dinner = view.findViewById(R.id.dinner);
         homeDataProvider = new HomeDataProvider(getActivity(), this, this, this, this);
 
         mRequestQueue = Volley.newRequestQueue(getContext());
@@ -210,27 +216,19 @@ public class HomeFragment extends Fragment implements
 
         //recyclerView = (RecyclerView) view.findViewById(R.id.places_recycler_view);
 
-        topsellingallv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), TopSellingAll.class));
-            }
+        breakfast.setOnClickListener(view1 -> {
+            DailyfoodActivity.getInstance(getActivity(),0);
         });
 
-        allitemsview.setOnClickListener(new View.OnClickListener() {
+        lunch.setOnClickListener(view1 -> DailyfoodActivity.getInstance(getActivity(),1));
 
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), AllItemsActivity.class));
-            }
-        });
+        dinner.setOnClickListener(view1r ->  DailyfoodActivity.getInstance(getActivity(),2));
 
-        allcategory.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), AllCategoryActivity.class));
-            }
-        });
+        topsellingallv.setOnClickListener(view12 -> startActivity(new Intent(getActivity(), TopSellingAll.class)));
+
+        allitemsview.setOnClickListener(view13 -> startActivity(new Intent(getActivity(), AllItemsActivity.class)));
+
+        allcategory.setOnClickListener(view14 -> startActivity(new Intent(getActivity(), AllCategoryActivity.class)));
 
 
         current_loc.setOnClickListener(viewlocation -> {
@@ -322,12 +320,7 @@ public class HomeFragment extends Fragment implements
             }
         });
 
-        qrcode.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(getActivity(), QrScanner.class));
-            }
-        });
+        qrcode.setOnClickListener(view15 -> startActivity(new Intent(getActivity(), QrScanner.class)));
 
 
         categoryRecycler = view.findViewById(R.id.recentordcategoryholderer);
@@ -725,7 +718,7 @@ public class HomeFragment extends Fragment implements
     @Override
     public void onCordinatesSuccess(LatLng... coOrdinates) {
         latLngs = Arrays.asList(coOrdinates);
-        Toast.makeText(getActivity(), "jj", Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), "jj", Toast.LENGTH_SHORT).show();
         createLocationRequest();
     }
 

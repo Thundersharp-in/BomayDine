@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BombayDine"
         tools:replace="android:theme">
-
+        <activity android:name=".user.ui.dailyfood.DailyfoodActivity"></activity>
         <activity android:name=".user.ui.menu.TopSellingAll" />
         <activity android:name=".user.ui.menu.AllCategoryActivity" />
         <activity android:name=".user.ui.menu.CategoryResults" />

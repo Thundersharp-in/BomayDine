@@ -35,12 +35,14 @@ public class AllItemsActivity extends AppCompatActivity implements HomeDataContr
         recyclermain = findViewById(R.id.recyclermain);
         offerscroll = findViewById(R.id.offerscroll);
         shl = findViewById(R.id.shl);
+        shl.setVisibility(View.VISIBLE);
         recyclermain.setVisibility(View.GONE);
         shl.startShimmer();
 
         homeDataProvider.fetchAllitems();
 
         OffersProvider.initializeOffersProvider(new OfferListner.getOfferListner() {
+
             @Override
             public void OnGetOfferSuccess(List<Object> data) {
                 AllOfferAdapters allOfferAdapters = AllOfferAdapters.getInstance(AllItemsActivity.this,data);
@@ -51,6 +53,7 @@ public class AllItemsActivity extends AppCompatActivity implements HomeDataContr
             public void OnOfferFetchFailure(Exception e) {
                 Toast.makeText(AllItemsActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
             }
+
         }).fetchAllOffers();
 
 
