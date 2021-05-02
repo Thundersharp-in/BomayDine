@@ -6,10 +6,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapterMailAdapter;
 import com.thundersharp.bombaydine.user.core.DailyFoodListner.DailyFood;
@@ -22,6 +24,7 @@ public class DailyfoodActivity extends AppCompatActivity implements DailyFood.da
     private RecyclerView recyclerviewbrh;
     private ImageView imagedaily;
     private TextView texttop;
+    private ShimmerFrameLayout shimmerbr;
 
     public static void getInstance(Context context,int foodType){
         context.startActivity(new Intent(context,DailyfoodActivity.class).putExtra("foodType",foodType));
@@ -34,6 +37,8 @@ public class DailyfoodActivity extends AppCompatActivity implements DailyFood.da
 
         int foodType = getIntent().getIntExtra("foodType",0);
 
+        shimmerbr = findViewById(R.id.shimmerbr);
+        shimmerbr.startShimmer();
         recyclerviewbrh = findViewById(R.id.recyclerviewbrh);
         imagedaily = findViewById(R.id.imagedaily);
         texttop = findViewById(R.id.txttop);
@@ -65,10 +70,15 @@ public class DailyfoodActivity extends AppCompatActivity implements DailyFood.da
     @Override
     public void OnFoodFetchSuccess(List<Object> objects) {
         recyclerviewbrh.setAdapter(AllItemAdapterMailAdapter.initializeAdapter(objects,this));
+        shimmerbr.stopShimmer();
+        shimmerbr.setVisibility(View.GONE);
     }
 
     @Override
     public void OnFoodFetchFailure(Exception e) {
         Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        shimmerbr.stopShimmer();
+        shimmerbr.setVisibility(View.GONE);
+
     }
 }

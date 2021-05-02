@@ -216,9 +216,7 @@ public class HomeFragment extends Fragment implements
 
         //recyclerView = (RecyclerView) view.findViewById(R.id.places_recycler_view);
 
-        breakfast.setOnClickListener(view1 -> {
-            DailyfoodActivity.getInstance(getActivity(),0);
-        });
+        breakfast.setOnClickListener(view123 ->  DailyfoodActivity.getInstance(getActivity(),0));
 
         lunch.setOnClickListener(view1 -> DailyfoodActivity.getInstance(getActivity(),1));
 

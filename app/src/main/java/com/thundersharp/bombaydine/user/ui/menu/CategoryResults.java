@@ -5,11 +5,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.CategoryitemAdapter;
 import com.thundersharp.bombaydine.user.core.Data.CategoryDataContract;
@@ -24,6 +26,7 @@ public class CategoryResults extends AppCompatActivity implements CategoryDataCo
     private ImageView imagehome;
     private CategoryData categoryData;
     private TextView txttop;
+    private ShimmerFrameLayout shimmerac;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,6 +38,8 @@ public class CategoryResults extends AppCompatActivity implements CategoryDataCo
 
         imagehome = findViewById(R.id.imagehome);
         txttop = findViewById(R.id.txttop);
+        shimmerac = findViewById(R.id.shimmerac);
+        shimmerac.startShimmer();
         txttop.setText(categoryData.getNAME());
         Glide.with(CategoryResults.this).load(categoryData.getIMAGES()).into(imagehome);
 
@@ -51,10 +56,15 @@ public class CategoryResults extends AppCompatActivity implements CategoryDataCo
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(categoryitemAdapter);
+
+        shimmerac.stopShimmer();
+        shimmerac.setVisibility(View.GONE);
     }
 
     @Override
     public void OnCategoryDataFetchFailure(Exception exception) {
         Toast.makeText(this,exception.getMessage(),Toast.LENGTH_SHORT).show();
+        shimmerac.stopShimmer();
+        shimmerac.setVisibility(View.GONE);
     }
 }
