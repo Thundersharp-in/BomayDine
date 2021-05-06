@@ -1,7 +1,10 @@
 package com.thundersharp.bombaydine.user.ui.home;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -9,9 +12,13 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.thundersharp.bombaydine.R;
+import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
+import com.thundersharp.bombaydine.user.core.cart.CartHandler;
+import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,6 +27,8 @@ import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
+
+import java.util.List;
 
 public class MainPage extends AppCompatActivity {
 
@@ -40,7 +49,30 @@ public class MainPage extends AppCompatActivity {
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+
+        CartProvider cartProvider = CartProvider.initialize(this, new CartHandler.cart() {
+
+            @Override
+            public void onItemAddSuccess(boolean isAdded, List<CartItemModel> data) {
+                Toast.makeText(MainPage.this, ""+data.size(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void addFailure(Exception exception) {
+
+            }
+        });
+
+        BroadcastReceiver broadcastReceiver =new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                cartProvider.syncData();
+            }
+        };
+
+        registerReceiver(broadcastReceiver,new IntentFilter("updated"));
     }
+
 
     private void runFadeInAnimation() {
         Animation a = AnimationUtils.loadAnimation(this, R.anim.fadeout);
@@ -113,6 +145,6 @@ public class MainPage extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        runFadeoutAnimation();
+        //runFadeoutAnimation();
     }
 }

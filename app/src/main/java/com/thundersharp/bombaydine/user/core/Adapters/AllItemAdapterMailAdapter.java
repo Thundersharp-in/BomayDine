@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -18,21 +19,26 @@ import com.bumptech.glide.Glide;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Data.OfferListner;
 import com.thundersharp.bombaydine.user.core.Data.OffersProvider;
+import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
 import com.thundersharp.bombaydine.user.core.Model.FoodItemAdapter;
 import com.thundersharp.bombaydine.user.core.aligantnumber.ElegantNumberInteractor;
 import com.thundersharp.bombaydine.user.core.aligantnumber.ElegentNumberHelper;
+import com.thundersharp.bombaydine.user.core.cart.CartHandler;
+import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 
 import java.util.List;
 
 import static android.graphics.Color.*;
 
-public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapterMailAdapter.ViewHolder> implements ElegantNumberInteractor.setOnTextChangeListner {
+public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapterMailAdapter.ViewHolder>{
 
     public AllItemAdapterMailAdapter(){}
 
     private List<Object> itemObjectlist;
     private Context context;
     private ElegentNumberHelper elegentNumberHelper;
+    private CartProvider cartProvider;
+    private int position;
 
     public static AllItemAdapterMailAdapter initializeAdapter(List<Object> objects, Context context){
         return new AllItemAdapterMailAdapter(objects,context);
@@ -47,8 +53,8 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view =  LayoutInflater.from(context).inflate(R.layout.item_food,parent,false);
-        elegentNumberHelper = new ElegentNumberHelper(context,this,view);
 
+        cartProvider = CartProvider.initialize(context);
         return new AllItemAdapterMailAdapter.ViewHolder(view);
     }
 
@@ -83,13 +89,17 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
 
 
 
-    @Override
-    public int OnTextChangeListner(int val) {
-        return 0;
+    public int getpos(){
+        return position;
+    }
+
+    public void setpos(int pos){
+        this.position = pos;
     }
 
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements
+            ElegantNumberInteractor.setOnTextChangeListner{
 
         ImageView icon_main,veg_nonveg;
         TextView name,description,amount,category;
@@ -107,6 +117,14 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
             description = itemView.findViewById(R.id.description);
             amount = itemView.findViewById(R.id.amount);
             category = itemView.findViewById(R.id.category);
+            elegentNumberHelper = new ElegentNumberHelper(context,this,itemView);
+        }
+
+        @Override
+        public int OnTextChangeListner(int val) {
+            FoodItemAdapter foodItemAdapter = (FoodItemAdapter) itemObjectlist.get(getAdapterPosition());
+            cartProvider.AddItemToCart(CartItemModel.initializeValues(foodItemAdapter.getAMOUNT(),foodItemAdapter.getDESC(),foodItemAdapter.getFOOD_TYPE(),foodItemAdapter.getICON_URL(),foodItemAdapter.getNAME(),foodItemAdapter.getID(),val),val);
+            return 0;
         }
     }
 

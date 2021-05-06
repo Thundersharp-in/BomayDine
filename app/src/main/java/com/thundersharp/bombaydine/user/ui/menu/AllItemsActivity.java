@@ -15,10 +15,15 @@ import com.thundersharp.bombaydine.user.core.Data.HomeDataContract;
 import com.thundersharp.bombaydine.user.core.Data.HomeDataProvider;
 import com.thundersharp.bombaydine.user.core.Data.OfferListner;
 import com.thundersharp.bombaydine.user.core.Data.OffersProvider;
+import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
+import com.thundersharp.bombaydine.user.core.cart.CartHandler;
+import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 
 import java.util.List;
 
-public class AllItemsActivity extends AppCompatActivity implements HomeDataContract.AllItems,HomeDataContract.DataLoadFailure {
+public class AllItemsActivity extends AppCompatActivity implements
+        HomeDataContract.AllItems,
+        HomeDataContract.DataLoadFailure, CartHandler.cart {
 
     private RecyclerView recyclermain;
     private AllItemAdapterMailAdapter allItemAdapterMailAdapter;
@@ -41,6 +46,7 @@ public class AllItemsActivity extends AppCompatActivity implements HomeDataContr
 
         homeDataProvider.fetchAllitems();
 
+
         OffersProvider.initializeOffersProvider(new OfferListner.getOfferListner() {
 
             @Override
@@ -59,7 +65,6 @@ public class AllItemsActivity extends AppCompatActivity implements HomeDataContr
 
     }
 
-
     @Override
     public void onDataLoadFailure(Exception e) {
         Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
@@ -74,5 +79,15 @@ public class AllItemsActivity extends AppCompatActivity implements HomeDataContr
         recyclermain.setVisibility(View.VISIBLE);
         shl.stopShimmer();
         shl.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onItemAddSuccess(boolean isAdded, List<CartItemModel> data) {
+        Toast.makeText(this,""+data.size(),Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void addFailure(Exception exception) {
+
     }
 }

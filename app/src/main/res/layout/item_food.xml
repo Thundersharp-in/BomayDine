@@ -223,7 +223,7 @@
             android:text="Rs. 312"
             android:textColor="#B8BABD"
             android:layout_marginTop="5dp"
-            android:textSize="15sp"
+            android:textSize="14sp"
             />
         <TextView
             android:id="@+id/description"
@@ -234,7 +234,7 @@
             android:layout_marginTop="5dp"
             android:fontFamily="@font/calibri"
             android:layout_marginBottom="10dp"
-            android:textColor="#686868"
+            android:textColor="#8F8F8F"
             />
 
     </LinearLayout>

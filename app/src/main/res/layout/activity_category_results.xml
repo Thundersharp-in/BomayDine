@@ -5,13 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1e2026"
     tools:context=".user.ui.menu.CategoryResults">
 
     <FrameLayout
         android:id="@+id/imagehomee"
         android:layout_width="match_parent"
-        android:layout_height="200dp">
+        android:layout_height="220dp">
         <ImageView
              android:id="@+id/imagehome"
             android:layout_width="match_parent"
@@ -19,54 +18,57 @@
             android:scaleType="centerCrop"
             android:src="@drawable/homestatic"
             android:adjustViewBounds="true" />
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_gravity="bottom"
-            android:elevation="4dp"
-            android:background="@drawable/custom_gradient_bottom"/>
+
     </FrameLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Accomplishment"
-        android:textStyle="bold"
-        android:fontFamily="@font/calibrib"
-        android:textColor="#fff"
-        android:textSize="25sp"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"
-        android:layout_below="@id/imagehomee"
-        android:layout_marginTop="10dp"
-        android:id="@+id/txttop"/>
-
-    <com.facebook.shimmer.ShimmerFrameLayout
-        android:id="@+id/shimmerac"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/txttop"
-        android:layout_marginTop="10dp">
-        <LinearLayout
+        android:layout_marginTop="180dp"
+        android:background="@drawable/top_curved"
+        android:elevation="10dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Accomplishment"
+            android:textStyle="bold"
+            android:fontFamily="@font/calibrib"
+            android:textColor="#fff"
+            android:textSize="25sp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginTop="20dp"
+            android:id="@+id/txttop"/>
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerac"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical">
-            <include layout="@layout/all_item_main_placeholder"/>
-            <include layout="@layout/all_item_main_placeholder"/>
-            <include layout="@layout/all_item_main_placeholder"/>
+            android:layout_below="@id/txttop"
+            android:layout_marginTop="10dp">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+                <include layout="@layout/all_item_main_placeholder"/>
+                <include layout="@layout/all_item_main_placeholder"/>
+                <include layout="@layout/all_item_main_placeholder"/>
 
 
-        </LinearLayout>
+            </LinearLayout>
 
-    </com.facebook.shimmer.ShimmerFrameLayout>
+        </com.facebook.shimmer.ShimmerFrameLayout>
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-        android:id="@+id/recyclerviewcategory"
-        android:layout_marginTop="10dp"
-        android:layout_below="@id/txttop"/>
+        <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:id="@+id/recyclerviewcategory"
+            android:layout_marginTop="15dp"
+            android:layout_below="@id/txttop"/>
+    </RelativeLayout>
+
 
 </RelativeLayout>

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.thundersharp.bombaydine.R;
+import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
 import com.thundersharp.bombaydine.user.core.Model.FoodItemAdapter;
 import com.thundersharp.bombaydine.user.core.aligantnumber.ElegantNumberInteractor;
 import com.thundersharp.bombaydine.user.core.aligantnumber.ElegentNumberHelper;
@@ -23,8 +24,7 @@ import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 import java.util.HashMap;
 import java.util.List;
 
-public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHolder>  implements
-        ElegantNumberInteractor.setOnTextChangeListner, CartHandler.cart{
+public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHolder> {
 
     private List<Object> itemObjectlist;
     private Context context;
@@ -43,15 +43,13 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view =  LayoutInflater.from(context).inflate(R.layout.uneversal_holder,parent,false);
-        elegentNumberHelper = new ElegentNumberHelper(context,this,view);
-        cartProvider = CartProvider.initialize(context,this);
+
         return new  ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         FoodItemAdapter foodItemModel = (FoodItemAdapter) itemObjectlist.get(position);
-        setpos(position);
 
         elegentNumberHelper.bindviewHolder(holder.initial,holder.finalview,R.id.minus,R.id.plus,R.id.displaytext,R.id.plusinit);
         elegentNumberHelper.getcurrentnumber();
@@ -76,26 +74,9 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
         if (itemObjectlist != null) return itemObjectlist.size(); else return 0;
     }
 
-    @Override
-    public int OnTextChangeListner(int val) {
-        if (val == 1) {
-            cartProvider.AddItemToCart(itemObjectlist.get(getpos()));
-        }
-        return 0;
-    }
 
 
-    @Override
-    public void onItemAddSuccess(boolean isAdded, Object data) {
-        Toast.makeText(context, "Added to server : "+isAdded, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void addFailure(Exception exception) {
-        Toast.makeText(context, exception.getMessage(), Toast.LENGTH_SHORT).show();
-    }
-
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements ElegantNumberInteractor.setOnTextChangeListner{
 
         ImageView imageView;
         TextView name,description,amount;
@@ -111,6 +92,15 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
 
             initial = itemView.findViewById(R.id.initial);
             finalview = itemView.findViewById(R.id.finl);
+            cartProvider = CartProvider.initialize(context);
+            elegentNumberHelper = new ElegentNumberHelper(context,this,itemView);
+        }
+
+        @Override
+        public int OnTextChangeListner(int val) {
+            FoodItemAdapter foodItemAdapter = (FoodItemAdapter) itemObjectlist.get(getAdapterPosition());
+            cartProvider.AddItemToCart(CartItemModel.initializeValues(foodItemAdapter.getAMOUNT(),foodItemAdapter.getDESC(),foodItemAdapter.getFOOD_TYPE(),foodItemAdapter.getICON_URL(),foodItemAdapter.getNAME(),foodItemAdapter.getID(),val),val);
+            return 0;
         }
     }
 

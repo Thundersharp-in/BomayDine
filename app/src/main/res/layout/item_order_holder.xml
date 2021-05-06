@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="180dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="6dp"
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="10dp"
+    app:cardBackgroundColor="#22242c">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="180dp">
+
+        <LinearLayout
+            android:id="@+id/l_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                app:cardCornerRadius="7dp"
+                app:cardElevation="4dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp">
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/lunch"/>
+            </com.google.android.material.card.MaterialCardView>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#B8BABD"
+                    android:fontFamily="sans-serif-medium"
+                    android:textSize="15sp"
+                    android:text="Online Order"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:fontFamily="sans-serif-light"
+                    android:textSize="13sp"
+                    android:textColor="#AAAAAA"
+                    android:text="Ordered From : A 17 Adarsh co-operative bokaro steel city"
+                    android:ellipsize="end"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view_top"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="5dp"
+            android:background="#B5B5B5"
+            android:layout_below="@id/l_top"
+            android:layout_marginHorizontal="10dp"/>
+
+        <LinearLayout
+            android:id="@+id/view_ed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="10dp"
+            android:layout_below="@id/view_top"
+            android:layout_marginTop="15dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:fontFamily="sans-serif-smallcaps"
+                android:textSize="13sp"
+                android:textColor="#C6C6C6"
+                android:text="ITEMS"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:fontFamily="sans-serif-light"
+                android:textSize="13sp"
+                android:textColor="#AAAAAA"
+                android:text="1 X Chicken Kebab, 1 X Chicken Roll, 1 X Malabar Dum Biriyani."
+                android:ellipsize="end"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:fontFamily="sans-serif-smallcaps"
+                android:textSize="13sp"
+                android:textColor="#C6C6C6"
+                android:text="ORDERED ON"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:fontFamily="sans-serif-light"
+                android:textSize="13sp"
+                android:textColor="#AAAAAA"
+                android:text="07 Mar at 6:45 pm"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:fontFamily="sans-serif-smallcaps"
+                android:textSize="13sp"
+                android:textColor="#C6C6C6"
+                android:text="TOTAL AMOUNT"
+                android:layout_marginTop="10dp"
+                android:ellipsize="end"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="3"
+                android:fontFamily="sans-serif-light"
+                android:textSize="13sp"
+                android:textColor="#AAAAAA"
+                android:text="Rs. 1762.50"
+                android:ellipsize="end"/>
+
+            <View
+                android:id="@+id/view_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
+                android:background="#B5B5B5"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:fontFamily="sans-serif-medium"
+            android:layout_below="@id/view_ed"
+            android:textSize="13sp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="12dp"
+            android:textColor="#EFEBC7"
+            android:text="DELIVERY STATUS : Delivered"
+            android:ellipsize="end"/>
+
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>

@@ -193,6 +193,7 @@ public class HomeDataProvider implements HomeDataContract{
                         if (snapshot.exists()){
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                                 datalist.add(dataSnapshot.getValue(FoodItemAdapter.class));
+
                             }
                             homeAllItems.OnHomeAlldataFetchSucess(datalist);
                         }else {
@@ -214,10 +215,12 @@ public class HomeDataProvider implements HomeDataContract{
         FirebaseDatabase
                 .getInstance()
                 .getReference(CONSTANTS.DATABASE_NODE_ALL_ITEMS)
+                .orderByChild("CAT_NAME_ID")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
+
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                                 datalist.add(dataSnapshot.getValue(FoodItemAdapter.class));
                             }

@@ -1,26 +1,25 @@
 package com.thundersharp.bombaydine.user.core.cart;
 
+import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
+
 import java.util.List;
 
 public interface CartHandler {
 
-    void AddItemToCart(Object data);
+    void AddItemToCart(CartItemModel data, int qty);
 
-    void writetolocalStorage(Object data);
+    void writetolocalStorage(String data, CartItemModel changedData);
 
     void fetchItemfromServer();
 
-    void fetchitemfromStorage();
+    String fetchitemfromStorage();
 
     void syncData();
 
-    interface fetchCartData {
-        void onFetchCartDataSuccess(List<Object> dataList);
-        void onFetchDataFailure(Exception e);
-    }
+
 
     interface cart{
-        void onItemAddSuccess(boolean isAdded, Object data);
+        void onItemAddSuccess(boolean isAdded, List<CartItemModel> data);
         void addFailure(Exception exception);
     }
 }

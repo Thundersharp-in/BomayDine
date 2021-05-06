@@ -15,15 +15,13 @@ import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 import java.util.List;
 
 
-public class Cart extends Fragment implements  CartHandler.fetchCartData {
+public class Cart extends Fragment {
 
     private CartProvider cartProvider;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
-        cartProvider = CartProvider.initialize(getContext(),this);
         View view =  inflater.inflate(R.layout.fragment_cart, container, false);
 
 
@@ -33,13 +31,4 @@ public class Cart extends Fragment implements  CartHandler.fetchCartData {
     }
 
 
-    @Override
-    public void onFetchCartDataSuccess(List<Object> dataList) {
-
-    }
-
-    @Override
-    public void onFetchDataFailure(Exception e) {
-
-    }
 }

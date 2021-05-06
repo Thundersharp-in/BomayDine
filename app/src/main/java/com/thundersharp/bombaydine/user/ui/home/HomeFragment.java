@@ -438,7 +438,7 @@ public class HomeFragment extends Fragment implements
 
     @Override
     public void onSliderClick(BaseSliderView slider) {
-
+        //Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
     }
 
     @Override
