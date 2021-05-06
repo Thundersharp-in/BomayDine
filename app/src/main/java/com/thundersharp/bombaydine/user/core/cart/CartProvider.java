@@ -84,34 +84,40 @@ public class CartProvider implements CartHandler {
 
             if (fetchitemfromStorage() != null) {
 
-                boolean isOperated = false;
-
                 List<CartItemModel> dataexisting = returnDataFromString(fetchitemfromStorage());
 
-                Log.d("VVVV",fetchitemfromStorage());
-                for (int i=0;i<dataexisting.size();i++){
+                if (dataexisting.isEmpty()){
+                    List<CartItemModel> cartItem = new ArrayList<>();
+                    Toast.makeText(context, "N", Toast.LENGTH_SHORT).show();
+                    cartItem.add(data);
+                    writetolocalStorage(convertToString(cartItem),data);
+                }else {
 
-                    CartItemModel cartItemModel = dataexisting.get(i);
+                    //Log.d("VVVV", fetchitemfromStorage());
+                    for (int i = 0; i < dataexisting.size(); i++) {
 
-                    if (cartItemModel.getID().equalsIgnoreCase(data.getID())){
+                        CartItemModel cartItemModel = dataexisting.get(i);
 
-                        if (qty == 0){
-                            Toast.makeText(context, "R", Toast.LENGTH_SHORT).show();
-                            dataexisting.remove(i);
-                            writetolocalStorage(convertToString(dataexisting),null);
-                        }else {
-                            Toast.makeText(context, "RN", Toast.LENGTH_SHORT).show();
-                            dataexisting.set(i,data);
-                            writetolocalStorage(convertToString(dataexisting),data);
+                        if (cartItemModel.getID().equalsIgnoreCase(data.getID())) {
+
+                            if (qty == 0) {
+                                Toast.makeText(context, "R", Toast.LENGTH_SHORT).show();
+                                dataexisting.remove(i);
+                                writetolocalStorage(convertToString(dataexisting), null);
+                            } else {
+                                Toast.makeText(context, "RN", Toast.LENGTH_SHORT).show();
+                                dataexisting.set(i, data);
+                                writetolocalStorage(convertToString(dataexisting), data);
+                            }
+                            break;
+
+
+                        } else if (i == (dataexisting.size() - 1)) {
+                            Toast.makeText(context, "RNA", Toast.LENGTH_SHORT).show();
+                            dataexisting.add(data);
+                            writetolocalStorage(convertToString(dataexisting), data);
+                            break;
                         }
-                        break;
-
-
-                    }else if (i == (dataexisting.size()-1)){
-                        Toast.makeText(context, "RNA", Toast.LENGTH_SHORT).show();
-                        dataexisting.add(data);
-                        writetolocalStorage(convertToString(dataexisting),data);
-                        break;
                     }
                 }
 

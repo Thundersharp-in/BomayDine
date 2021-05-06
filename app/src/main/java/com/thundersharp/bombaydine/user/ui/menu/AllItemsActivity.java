@@ -83,7 +83,7 @@ public class AllItemsActivity extends AppCompatActivity implements
 
     @Override
     public void onItemAddSuccess(boolean isAdded, List<CartItemModel> data) {
-        Toast.makeText(this,""+data.size(),Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this,""+data.size(),Toast.LENGTH_SHORT).show();
     }
 
     @Override

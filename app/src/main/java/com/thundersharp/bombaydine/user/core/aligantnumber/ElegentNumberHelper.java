@@ -12,6 +12,9 @@ public class ElegentNumberHelper implements ElegantNumberInteractor.ViewBinder,E
     private ElegantNumberInteractor.setOnTextChangeListner setOnTextChangeListner;
     private View view;
     int counter = 0;
+    private TextView textView;
+    private LinearLayout initialView;
+    private LinearLayout finalview;
 
     /**
      * This method needs to be called initially before calling<>@bindviewHolder(LinearLayout initialView, LinearLayout finalview, int plusbuttonId, int minusbuttonId, int textviewid)</>
@@ -36,10 +39,12 @@ public class ElegentNumberHelper implements ElegantNumberInteractor.ViewBinder,E
 
     @Override
     public void bindviewHolder(LinearLayout initialView, LinearLayout finalview, int plusbuttonId, int minusbuttonId, int textviewid, int plusinitial) {
+        this.initialView = initialView;
+        this.finalview = finalview;
         ImageButton plus = view.findViewById(plusbuttonId);
         ImageButton minus = view.findViewById(minusbuttonId);
         ImageButton plusinit = view.findViewById(plusinitial);
-        TextView textView = view.findViewById(textviewid);
+        textView = view.findViewById(textviewid);
 
         if (counter == 0){
             initialView.setVisibility(View.VISIBLE);
@@ -86,6 +91,19 @@ public class ElegentNumberHelper implements ElegantNumberInteractor.ViewBinder,E
     @Override
     public int getcurrentnumber() {
         return counter;
+    }
+
+    public void updateNo(int number){
+        if (number == 0){
+            counter =0;
+            initialView.setVisibility(View.VISIBLE);
+            finalview.setVisibility(View.GONE);
+        }else {
+            initialView.setVisibility(View.GONE);
+            finalview.setVisibility(View.VISIBLE);
+            counter = number;
+            textView.setText(""+counter);
+        }
     }
 
     public void update(int counter){

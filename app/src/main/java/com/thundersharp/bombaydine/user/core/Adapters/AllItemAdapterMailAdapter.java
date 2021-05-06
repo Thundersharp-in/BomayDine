@@ -2,6 +2,7 @@ package com.thundersharp.bombaydine.user.core.Adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +17,8 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Data.OfferListner;
 import com.thundersharp.bombaydine.user.core.Data.OffersProvider;
@@ -25,7 +28,9 @@ import com.thundersharp.bombaydine.user.core.aligantnumber.ElegantNumberInteract
 import com.thundersharp.bombaydine.user.core.aligantnumber.ElegentNumberHelper;
 import com.thundersharp.bombaydine.user.core.cart.CartHandler;
 import com.thundersharp.bombaydine.user.core.cart.CartProvider;
+import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 
+import java.lang.reflect.Type;
 import java.util.List;
 
 import static android.graphics.Color.*;
@@ -80,6 +85,17 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
         holder.description.setText(foodItemAdapter.getDESC());
         holder.category.setText("In "+getcatName(foodItemAdapter.getCAT_NAME_ID()));
 
+
+        if (doSharedPrefExists()){
+            List<CartItemModel> cartItemModels = returnDataFromString(fetchitemfromStorage());
+            for (int i = 0;i<cartItemModels.size();i++){
+                if (cartItemModels.get(i).getID().equalsIgnoreCase(foodItemAdapter.getID())){
+                    elegentNumberHelper.updateNo(cartItemModels.get(i).getQUANTITY());
+                    break;
+                }
+            }
+        }
+
     }
 
     @Override
@@ -87,15 +103,6 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
         if (itemObjectlist != null)return itemObjectlist.size();else return 0;
     }
 
-
-
-    public int getpos(){
-        return position;
-    }
-
-    public void setpos(int pos){
-        this.position = pos;
-    }
 
 
     class ViewHolder extends RecyclerView.ViewHolder implements
@@ -138,5 +145,22 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
         if (key.contains("%&")){
             return key.substring(key.indexOf("%&")+1);
         }else return null;
+    }
+
+
+    private List<CartItemModel> returnDataFromString(String data){
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<CartItemModel>>(){}.getType();
+        return gson.fromJson(data,type);
+    }
+
+    private boolean doSharedPrefExists(){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.CART_SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(CONSTANTS.CART_SHARED_PREFERENCES_EXISTS,false);
+    }
+
+    private String fetchitemfromStorage() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.CART_SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        return sharedPreferences.getString(CONSTANTS.CART_SHARED_PREFERENCES_DATA,null);
     }
 }

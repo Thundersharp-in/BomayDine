@@ -1,6 +1,7 @@
 package com.thundersharp.bombaydine.user.core.Adapters;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
 import com.thundersharp.bombaydine.user.core.Model.FoodItemAdapter;
@@ -20,7 +23,9 @@ import com.thundersharp.bombaydine.user.core.aligantnumber.ElegantNumberInteract
 import com.thundersharp.bombaydine.user.core.aligantnumber.ElegentNumberHelper;
 import com.thundersharp.bombaydine.user.core.cart.CartHandler;
 import com.thundersharp.bombaydine.user.core.cart.CartProvider;
+import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 
+import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 
@@ -58,6 +63,17 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
         holder.amount.setText("Rs. "+foodItemModel.getAMOUNT());
         holder.description.setText(foodItemModel.getDESC());
         Glide.with(context).load(foodItemModel.getICON_URL()).into(holder.imageView);
+
+        //TODO UPDATE IS NOT HAPPENING LIVE Adapter.notifyDataSetChanged();
+        if (doSharedPrefExists()){
+            List<CartItemModel> cartItemModels = returnDataFromString(fetchitemfromStorage());
+            for (int i = 0;i<cartItemModels.size();i++){
+                if (cartItemModels.get(i).getID().equalsIgnoreCase(foodItemModel.getID())){
+                    elegentNumberHelper.updateNo(cartItemModels.get(i).getQUANTITY());
+                    break;
+                }
+            }
+        }
     }
 
 
@@ -104,5 +120,20 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
         }
     }
 
+    private List<CartItemModel> returnDataFromString(String data){
+        Gson gson = new Gson();
+        Type type = new TypeToken<List<CartItemModel>>(){}.getType();
+        return gson.fromJson(data,type);
+    }
+
+    private boolean doSharedPrefExists(){
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.CART_SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(CONSTANTS.CART_SHARED_PREFERENCES_EXISTS,false);
+    }
+
+    private String fetchitemfromStorage() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.CART_SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        return sharedPreferences.getString(CONSTANTS.CART_SHARED_PREFERENCES_DATA,null);
+    }
 
 }
