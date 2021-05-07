@@ -68,7 +68,7 @@ public class CartProvider implements CartHandler {
      * @param data
      */
     @Override
-    public void AddItemToCart(CartItemModel data,int qty) {
+    public void AddItemToCart(CartItemModel data,int qty,int adapterPos) {
 
         //Toast.makeText(context, data.getID()+"\n"+data.getNAME()+doSharedPrefExists(), Toast.LENGTH_SHORT).show();
         //clearSharedPref();
@@ -78,7 +78,7 @@ public class CartProvider implements CartHandler {
             List<CartItemModel> cartItem = new ArrayList<>();
             Toast.makeText(context, "N", Toast.LENGTH_SHORT).show();
             cartItem.add(data);
-            writetolocalStorage(convertToString(cartItem),data);
+            writetolocalStorage(convertToString(cartItem),data,adapterPos);
 
         }else {
 
@@ -90,7 +90,7 @@ public class CartProvider implements CartHandler {
                     List<CartItemModel> cartItem = new ArrayList<>();
                     Toast.makeText(context, "N", Toast.LENGTH_SHORT).show();
                     cartItem.add(data);
-                    writetolocalStorage(convertToString(cartItem),data);
+                    writetolocalStorage(convertToString(cartItem),data,adapterPos);
                 }else {
 
                     //Log.d("VVVV", fetchitemfromStorage());
@@ -103,11 +103,11 @@ public class CartProvider implements CartHandler {
                             if (qty == 0) {
                                 Toast.makeText(context, "R", Toast.LENGTH_SHORT).show();
                                 dataexisting.remove(i);
-                                writetolocalStorage(convertToString(dataexisting), null);
+                                writetolocalStorage(convertToString(dataexisting), null,adapterPos);
                             } else {
                                 Toast.makeText(context, "RN", Toast.LENGTH_SHORT).show();
                                 dataexisting.set(i, data);
-                                writetolocalStorage(convertToString(dataexisting), data);
+                                writetolocalStorage(convertToString(dataexisting), data,adapterPos);
                             }
                             break;
 
@@ -115,7 +115,7 @@ public class CartProvider implements CartHandler {
                         } else if (i == (dataexisting.size() - 1)) {
                             Toast.makeText(context, "RNA", Toast.LENGTH_SHORT).show();
                             dataexisting.add(data);
-                            writetolocalStorage(convertToString(dataexisting), data);
+                            writetolocalStorage(convertToString(dataexisting), data,adapterPos);
                             break;
                         }
                     }
@@ -141,7 +141,7 @@ public class CartProvider implements CartHandler {
      * @param data
      */
     @Override
-    public void writetolocalStorage(String data, CartItemModel changedData) {
+    public void writetolocalStorage(String data, CartItemModel changedData,int adapterPos) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.CART_SHARED_PREFERENCES,Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(CONSTANTS.CART_SHARED_PREFERENCES_DATA,data);
@@ -149,7 +149,7 @@ public class CartProvider implements CartHandler {
         editor.apply();
         if (cartlistners != null)
         cartlistners.onItemAddSuccess(true,returnDataFromString(data));
-        context.sendBroadcast(new Intent("updated"));
+        context.sendBroadcast(new Intent("updated").putExtra("adapterPos",adapterPos));
     }
 
     /**

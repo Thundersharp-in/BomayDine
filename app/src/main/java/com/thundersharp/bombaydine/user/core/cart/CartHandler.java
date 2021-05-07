@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface CartHandler {
 
-    void AddItemToCart(CartItemModel data, int qty);
+    void AddItemToCart(CartItemModel data, int qty, int adapterPos);
 
-    void writetolocalStorage(String data, CartItemModel changedData);
+    void writetolocalStorage(String data, CartItemModel changedData,int adapterPos);
 
     void fetchItemfromServer();
 

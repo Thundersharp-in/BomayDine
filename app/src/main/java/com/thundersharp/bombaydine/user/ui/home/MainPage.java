@@ -50,27 +50,7 @@ public class MainPage extends AppCompatActivity {
         //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        CartProvider cartProvider = CartProvider.initialize(this, new CartHandler.cart() {
 
-            @Override
-            public void onItemAddSuccess(boolean isAdded, List<CartItemModel> data) {
-                Toast.makeText(MainPage.this, ""+data.size(), Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void addFailure(Exception exception) {
-
-            }
-        });
-
-        BroadcastReceiver broadcastReceiver =new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                cartProvider.syncData();
-            }
-        };
-
-        registerReceiver(broadcastReceiver,new IntentFilter("updated"));
     }
 
 

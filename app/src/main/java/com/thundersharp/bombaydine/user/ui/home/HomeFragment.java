@@ -2,7 +2,10 @@ package com.thundersharp.bombaydine.user.ui.home;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -26,9 +29,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -82,12 +87,16 @@ import com.thundersharp.bombaydine.user.core.Data.HomeDataProvider;
 import com.thundersharp.bombaydine.user.core.Data.OfferListner;
 import com.thundersharp.bombaydine.user.core.Data.OffersProvider;
 import com.thundersharp.bombaydine.user.core.Model.AddressData;
+import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
+import com.thundersharp.bombaydine.user.core.OfflineDataSync.OfflineDataProvider;
 import com.thundersharp.bombaydine.user.core.address.AddressHelper;
 import com.thundersharp.bombaydine.user.core.address.AddressLoader;
 import com.thundersharp.bombaydine.user.core.address.CordinatesInteractor;
 import com.thundersharp.bombaydine.user.core.address.Cordinateslistner;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefHelper;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
+import com.thundersharp.bombaydine.user.core.cart.CartHandler;
+import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 import com.thundersharp.bombaydine.user.core.location.PinCodeContract;
 import com.thundersharp.bombaydine.user.core.location.PinCodeInteractor;
 import com.thundersharp.bombaydine.user.ui.dailyfood.DailyfoodActivity;
@@ -146,6 +155,8 @@ public class HomeFragment extends Fragment implements
     private AllItemAdapter allItemAdapter;
     private RecyclerView horizontalScrollView, categoryRecycler, topsellingholder;
     private MaterialCardView breakfast,lunch,dinner;
+    private RelativeLayout bottomnoti;
+
 
     private PlacesAutoCompleteAdapter mAutoCompleteAdapter;
     private RecyclerView recyclerView;
@@ -165,6 +176,7 @@ public class HomeFragment extends Fragment implements
     /**
      * Address Listeners and helpers
      */
+
     private AddressHelper addressHelper;
     private SharedPrefHelper sharedPrefHelper;
     private List<LatLng> latLngs;
@@ -173,6 +185,13 @@ public class HomeFragment extends Fragment implements
     private ShimmerFrameLayout shimmerplace_cat,shimmerplace_topsell;
 
     private TextView version;
+    private boolean isVisible;
+    private ImageView clearcompleate;
+    private LinearLayout bottom_clickable_linear;
+    private TextView view_action;
+
+
+    OfflineDataProvider offlineDataProvider ;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -187,6 +206,7 @@ public class HomeFragment extends Fragment implements
             e.printStackTrace();
         }
 
+        offlineDataProvider = OfflineDataProvider.getInstance(getContext());
         sharedPrefHelper = new SharedPrefHelper(getContext(), this);
         mDemoSlider = view.findViewById(R.id.slider);
         shimmerplace_cat = view.findViewById(R.id.shimmerplace_cat);
@@ -206,7 +226,14 @@ public class HomeFragment extends Fragment implements
         breakfast = view.findViewById(R.id.breakfast);
         lunch = view.findViewById(R.id.lunch);
         dinner = view.findViewById(R.id.dinner);
+        bottomnoti = view.findViewById(R.id.bottomnoti);
+        clearcompleate = view.findViewById(R.id.clearcompleate);
+        bottom_clickable_linear = view.findViewById(R.id.bottom_clickable_linear);
+        view_action = view.findViewById(R.id.view_action);
         homeDataProvider = new HomeDataProvider(getActivity(), this, this, this, this);
+
+        bottomnoti.setVisibility(View.INVISIBLE);
+        isVisible = false;
 
         mRequestQueue = Volley.newRequestQueue(getContext());
 
@@ -215,6 +242,26 @@ public class HomeFragment extends Fragment implements
         addressHelper = new AddressHelper(getActivity(), this);
 
         //recyclerView = (RecyclerView) view.findViewById(R.id.places_recycler_view);
+
+
+        if (offlineDataProvider.doSharedPrefExists()){
+            if (!offlineDataProvider.fetchitemfromStorage().equalsIgnoreCase("[]")){
+
+                slideUp(bottomnoti);
+
+            }else {
+                offlineDataProvider.clearSharedPref();
+            }
+        }
+
+        clearcompleate.setOnClickListener(view1 -> {
+            offlineDataProvider.clearSharedPref();
+            slideDown(bottomnoti);
+        });
+
+        bottom_clickable_linear.setOnClickListener(view1 -> navController.navigate(R.id.cart));
+
+        view_action.setOnClickListener(view1 -> navController.navigate(R.id.cart));
 
         breakfast.setOnClickListener(view123 -> DailyfoodActivity.getInstance(getActivity(),0));
 
@@ -375,6 +422,38 @@ public class HomeFragment extends Fragment implements
         mDemoSlider.addOnPageChangeListener(this);
         mDemoSlider.stopCyclingWhenTouch(false);
 
+
+        CartProvider cartProvider = CartProvider.initialize(getActivity(), new CartHandler.cart() {
+
+            @Override
+            public void onItemAddSuccess(boolean isAdded, List<CartItemModel> data) {
+                //Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
+                if (data == null || data.isEmpty()){
+                    slideDown(bottomnoti);
+                }else {
+                    if (bottomnoti.getVisibility() == View.GONE || bottomnoti.getVisibility() ==View.INVISIBLE){
+                        slideUp(bottomnoti);
+                    }
+                }
+            }
+
+            @Override
+            public void addFailure(Exception exception) {
+
+            }
+        });
+
+        BroadcastReceiver broadcastReceiver =new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                cartProvider.syncData();
+               /* if (intent!=null){
+                        allItemAdapter.notifyItemChanged(intent.getIntExtra("adapterPos",0));
+                }*/
+            }
+        };
+
+        getActivity().registerReceiver(broadcastReceiver,new IntentFilter("updated"));
 
         return view;
     }
@@ -762,4 +841,32 @@ public class HomeFragment extends Fragment implements
         shimmerplace_allitem.stopShimmer();
         shimmerplace_allitem.setVisibility(View.GONE);
     }
+
+    // slide the view from below itself to the current position
+    public void slideUp(View view){
+
+        TranslateAnimation animate = new TranslateAnimation(
+                0,                 // fromXDelta
+                0,                 // toXDelta
+                view.getHeight(),  // fromYDelta
+                0);                // toYDelta
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+        view.setVisibility(View.VISIBLE);
+    }
+
+    // slide the view from its current position to below itself
+    public void slideDown(View view){
+        TranslateAnimation animate = new TranslateAnimation(
+                0,                 // fromXDelta
+                0,                 // toXDelta
+                0,                 // fromYDelta
+                view.getHeight()); // toYDelta
+        animate.setDuration(500);
+        animate.setFillAfter(true);
+        view.startAnimation(animate);
+        view.setVisibility(View.INVISIBLE);
+    }
+
 }
