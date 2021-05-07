@@ -8,7 +8,7 @@ public interface CartHandler {
 
     void AddItemToCart(CartItemModel data, int qty, int adapterPos);
 
-    void writetolocalStorage(String data, CartItemModel changedData,int adapterPos);
+    void writetolocalStorage(String data,int adapterPos);
 
     void fetchItemfromServer();
 

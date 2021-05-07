@@ -428,8 +428,11 @@ public class HomeFragment extends Fragment implements
             @Override
             public void onItemAddSuccess(boolean isAdded, List<CartItemModel> data) {
                 //Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
+
                 if (data == null || data.isEmpty()){
                     slideDown(bottomnoti);
+
+
                 }else {
                     if (bottomnoti.getVisibility() == View.GONE || bottomnoti.getVisibility() ==View.INVISIBLE){
                         slideUp(bottomnoti);
@@ -439,7 +442,7 @@ public class HomeFragment extends Fragment implements
 
             @Override
             public void addFailure(Exception exception) {
-
+                Toast.makeText(getActivity(), ""+exception.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -1,6 +1,9 @@
 package com.thundersharp.bombaydine.user.core.Adapters;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -74,6 +77,7 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
                 }
             }
         }
+
     }
 
 
