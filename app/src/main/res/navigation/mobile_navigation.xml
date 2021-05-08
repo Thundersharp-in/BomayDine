@@ -25,11 +25,6 @@
         tools:layout="@layout/fragment_discover">
     </fragment>
 
-    <fragment android:name="com.thundersharp.bombaydine.user.ui.orders.Cart"
-        android:id="@+id/cart"
-        android:label="Cart"
-        tools:layout="@layout/fragment_cart">
-    </fragment>
 
 
     <fragment android:name="com.thundersharp.bombaydine.user.ui.account.Profile"

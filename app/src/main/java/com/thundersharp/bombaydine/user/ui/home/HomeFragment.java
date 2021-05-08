@@ -88,6 +88,7 @@ import com.thundersharp.bombaydine.user.core.Data.OfferListner;
 import com.thundersharp.bombaydine.user.core.Data.OffersProvider;
 import com.thundersharp.bombaydine.user.core.Model.AddressData;
 import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
+import com.thundersharp.bombaydine.user.core.Model.FoodItemAdapter;
 import com.thundersharp.bombaydine.user.core.OfflineDataSync.OfflineDataProvider;
 import com.thundersharp.bombaydine.user.core.address.AddressHelper;
 import com.thundersharp.bombaydine.user.core.address.AddressLoader;
@@ -191,6 +192,8 @@ public class HomeFragment extends Fragment implements
     private TextView view_action;
 
 
+    private static List<Object> foodItemAdapterListStatic = new ArrayList<>();
+
     OfflineDataProvider offlineDataProvider ;
 
     @Override
@@ -257,11 +260,12 @@ public class HomeFragment extends Fragment implements
         clearcompleate.setOnClickListener(view1 -> {
             offlineDataProvider.clearSharedPref();
             slideDown(bottomnoti);
+            refreshAdapter();
         });
 
-        bottom_clickable_linear.setOnClickListener(view1 -> navController.navigate(R.id.cart));
+        bottom_clickable_linear.setOnClickListener(view1 -> showcart());
 
-        view_action.setOnClickListener(view1 -> navController.navigate(R.id.cart));
+        view_action.setOnClickListener(view1 -> showcart());
 
         breakfast.setOnClickListener(view123 -> DailyfoodActivity.getInstance(getActivity(),0));
 
@@ -428,7 +432,7 @@ public class HomeFragment extends Fragment implements
             @Override
             public void onItemAddSuccess(boolean isAdded, List<CartItemModel> data) {
                 //Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
-
+                refreshAdapter();
                 if (data == null || data.isEmpty()){
                     slideDown(bottomnoti);
 
@@ -454,11 +458,16 @@ public class HomeFragment extends Fragment implements
                         allItemAdapter.notifyItemChanged(intent.getIntExtra("adapterPos",0));
                 }*/
             }
+
         };
 
         getActivity().registerReceiver(broadcastReceiver,new IntentFilter("updated"));
 
         return view;
+    }
+
+    private void showcart() {
+        startActivity(new Intent(getActivity(),AllItemsActivity.class));
     }
 
 /*    @Override
@@ -837,9 +846,17 @@ public class HomeFragment extends Fragment implements
 
     @Override
     public void OnHomeAlldataFetchSucess(List<Object> data) {
+        foodItemAdapterListStatic = data;
         allItemAdapter = new AllItemAdapter(data, getContext());
         //GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
         //horizontalScrollView.setLayoutManager(gridLayoutManager);
+        horizontalScrollView.setAdapter(allItemAdapter);
+        shimmerplace_allitem.stopShimmer();
+        shimmerplace_allitem.setVisibility(View.GONE);
+    }
+
+    private void refreshAdapter(){
+        allItemAdapter = new AllItemAdapter(foodItemAdapterListStatic, getContext());
         horizontalScrollView.setAdapter(allItemAdapter);
         shimmerplace_allitem.stopShimmer();
         shimmerplace_allitem.setVisibility(View.GONE);

@@ -34,33 +34,37 @@ public class AddressHelper implements AddressLoader,AddressUpdater.onAddressData
 
     @Override
     public void loaduseraddress() {
-        FirebaseDatabase
-                .getInstance()
-                .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
-                .child(FirebaseAuth.getInstance().getUid())
-                .child(CONSTANTS.DATABASE_NODE_ADDRESS)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()){
-                            List<AddressData> addressData=new ArrayList<>();
-                            for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-                                addressData.add(dataSnapshot.getValue(AddressData.class));
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            FirebaseDatabase
+                    .getInstance()
+                    .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
+                    .child(FirebaseAuth.getInstance().getUid())
+                    .child(CONSTANTS.DATABASE_NODE_ADDRESS)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                List<AddressData> addressData = new ArrayList<>();
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    addressData.add(dataSnapshot.getValue(AddressData.class));
+                                }
+
+                                onAddresLoadListner.onAddressLoaded(addressData);
+
+                            } else {
+                                Exception exception = new Exception("No Data found on our servers : ERROR 404");
+                                onAddresLoadListner.onAddressLoadFailure(exception);
                             }
-
-                            onAddresLoadListner.onAddressLoaded(addressData);
-
-                        }else {
-                            Exception exception = new Exception("No Data found on our servers : ERROR 404");
-                            onAddresLoadListner.onAddressLoadFailure(exception);
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        onAddresLoadListner.onAddressLoadFailure(error.toException());
-                    }
-                });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            onAddresLoadListner.onAddressLoadFailure(error.toException());
+                        }
+                    });
+        }else {
+            onAddresLoadListner.onAddressLoadFailure(new Exception("Cant fetch address !! not logged in"));
+        }
     }
 
     @Override
