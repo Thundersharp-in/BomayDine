@@ -96,6 +96,7 @@ import com.thundersharp.bombaydine.user.core.address.CordinatesInteractor;
 import com.thundersharp.bombaydine.user.core.address.Cordinateslistner;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefHelper;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
+import com.thundersharp.bombaydine.user.core.animation.Animator;
 import com.thundersharp.bombaydine.user.core.cart.CartHandler;
 import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 import com.thundersharp.bombaydine.user.core.location.PinCodeContract;
@@ -826,6 +827,7 @@ public class HomeFragment extends Fragment implements
         categoryRecycler.setAdapter(categoryAdapter);
         shimmerplace_cat.stopShimmer();
         shimmerplace_cat.setVisibility(View.GONE);
+        Animator.initializeAnimator().runRecyclerFallDownAnimation(categoryRecycler);
 
     }
 

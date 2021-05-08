@@ -4,9 +4,13 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapterMailAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.AllOfferAdapters;
@@ -24,6 +29,7 @@ import com.thundersharp.bombaydine.user.core.Data.OfferListner;
 import com.thundersharp.bombaydine.user.core.Data.OffersProvider;
 import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
 import com.thundersharp.bombaydine.user.core.OfflineDataSync.OfflineDataProvider;
+import com.thundersharp.bombaydine.user.core.animation.Animator;
 import com.thundersharp.bombaydine.user.core.cart.CartHandler;
 import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 
@@ -42,6 +48,10 @@ public class AllItemsActivity extends AppCompatActivity implements
     private OfflineDataProvider offlineDataProvider;
     private CartProvider cartProvider;
     private TextView noofItems,totalamt;
+    private ImageView filter;
+    boolean isfilerOpen = false;
+    private LinearLayout radiogroup;
+    private BottomSheetDialog bottomSheetDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,13 +70,33 @@ public class AllItemsActivity extends AppCompatActivity implements
         bottomholder = findViewById(R.id.bottomholder);
         noofItems = findViewById(R.id.text2);
         totalamt = findViewById(R.id.totalamt);
+        filter = findViewById(R.id.filter);
+        radiogroup = findViewById(R.id.chkbox);
+        radiogroup.setVisibility(View.GONE);
         bottomholder.setVisibility(View.INVISIBLE);
 
         bottomholder.setOnClickListener(view -> {
+            bottomSheetDialog = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
+            View bottomview = LayoutInflater.from(this).inflate(R.layout.botomsheet_cart, view.findViewById(R.id.botomcontainer));
 
+            bottomSheetDialog.setContentView(bottomview);
+            bottomSheetDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+            bottomSheetDialog.show();
         });
 
         homeDataProvider.fetchAllitems();
+
+        filter.setOnClickListener(view -> {
+            if (isfilerOpen){
+                isfilerOpen = false;
+                radiogroup.setVisibility(View.GONE);
+
+            }else {
+                isfilerOpen = true;
+                radiogroup.setVisibility(View.VISIBLE);
+
+            }
+        });
 
         if (offlineDataProvider.doSharedPrefExists()){
             String dataraw = offlineDataProvider.fetchitemfromStorage();
@@ -84,7 +114,7 @@ public class AllItemsActivity extends AppCompatActivity implements
 
                 noofItems.setText(data.size()+" ITEMS");
 
-                slideUp(bottomholder);
+                Animator.initializeAnimator().slideUp(bottomholder);
 
             }else {
                 offlineDataProvider.clearSharedPref();
@@ -116,7 +146,7 @@ public class AllItemsActivity extends AppCompatActivity implements
                 double totalamount = 0.0;
 
                 if (data == null || data.isEmpty()){
-                    slideDown(bottomholder);
+                    Animator.initializeAnimator().slideDown(bottomholder);
 
                 }else {
 
@@ -129,7 +159,7 @@ public class AllItemsActivity extends AppCompatActivity implements
 
                     noofItems.setText(data.size()+" ITEMS");
                     if (bottomholder.getVisibility() == View.GONE || bottomholder.getVisibility() ==View.INVISIBLE){
-                        slideUp(bottomholder);
+                        Animator.initializeAnimator().slideUp(bottomholder);
                     }
                 }
             }
@@ -167,37 +197,15 @@ public class AllItemsActivity extends AppCompatActivity implements
         recyclermain.setAdapter(allItemAdapterMailAdapter);
 
         recyclermain.setVisibility(View.VISIBLE);
+        Animator
+                .initializeAnimator()
+                .runRecyclerSlideRightAnimation(recyclermain);
         shl.stopShimmer();
         shl.setVisibility(View.GONE);
     }
 
 
-    // slide the view from below itself to the current position
-    public void slideUp(View view){
 
-        TranslateAnimation animate = new TranslateAnimation(
-                0,                 // fromXDelta
-                0,                 // toXDelta
-                view.getHeight(),  // fromYDelta
-                0);                // toYDelta
-        animate.setDuration(500);
-        animate.setFillAfter(true);
-        view.startAnimation(animate);
-        view.setVisibility(View.VISIBLE);
-    }
-
-    // slide the view from its current position to below itself
-    public void slideDown(View view){
-        TranslateAnimation animate = new TranslateAnimation(
-                0,                 // fromXDelta
-                0,                 // toXDelta
-                0,                 // fromYDelta
-                view.getHeight()); // toYDelta
-        animate.setDuration(500);
-        animate.setFillAfter(true);
-        view.startAnimation(animate);
-        view.setVisibility(View.INVISIBLE);
-    }
 
     @Override
     protected void onDestroy() {

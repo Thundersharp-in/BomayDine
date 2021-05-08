@@ -3,19 +3,14 @@ package com.thundersharp.bombaydine.user.core.cart;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
-import com.thundersharp.bombaydine.user.core.Model.FoodItemAdapter;
 import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 
-import java.lang.reflect.Array;
 import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 
@@ -65,35 +60,29 @@ public class CartProvider implements CartHandler {
 
     /**
      * This method adds the given item object to server and stores it locally to avoid loading screens in the cart.
+     *
      * @param data
      */
     @Override
     public void AddItemToCart(CartItemModel data, int qty, int adapterPos) {
-
-        //Toast.makeText(context, data.getID()+"\n"+data.getNAME()+doSharedPrefExists(), Toast.LENGTH_SHORT).show();
-        //clearSharedPref();
-
-        if (!doSharedPrefExists()){
+        if (!doSharedPrefExists()) {
 
             List<CartItemModel> cartItem = new ArrayList<>();
-            //Toast.makeText(context, "N", Toast.LENGTH_SHORT).show();
             cartItem.add(data);
-            writetolocalStorage(convertToString(cartItem),adapterPos);
+            writetolocalStorage(convertToString(cartItem), adapterPos);
 
-        }else {
+        } else {
 
             if (fetchitemfromStorage() != null) {
 
                 List<CartItemModel> dataexisting = returnDataFromString(fetchitemfromStorage());
 
-                if (dataexisting.isEmpty()){
+                if (dataexisting.isEmpty()) {
                     List<CartItemModel> cartItem = new ArrayList<>();
-                    //Toast.makeText(context, "N", Toast.LENGTH_SHORT).show();
                     cartItem.add(data);
-                    writetolocalStorage(convertToString(cartItem),adapterPos);
-                }else {
+                    writetolocalStorage(convertToString(cartItem), adapterPos);
+                } else {
 
-                    //Log.d("VVVV", fetchitemfromStorage());
                     for (int i = 0; i < dataexisting.size(); i++) {
 
                         CartItemModel cartItemModel = dataexisting.get(i);
@@ -101,27 +90,24 @@ public class CartProvider implements CartHandler {
                         if (cartItemModel.getID().equalsIgnoreCase(data.getID())) {
 
                             if (qty == 0) {
-                                //Toast.makeText(context, "R", Toast.LENGTH_SHORT).show();
                                 dataexisting.remove(i);
-                                writetolocalStorage(convertToString(dataexisting),adapterPos);
+                                writetolocalStorage(convertToString(dataexisting), adapterPos);
                             } else {
-                                //Toast.makeText(context, "RN", Toast.LENGTH_SHORT).show();
                                 dataexisting.set(i, data);
-                                writetolocalStorage(convertToString(dataexisting),adapterPos);
+                                writetolocalStorage(convertToString(dataexisting), adapterPos);
                             }
                             break;
 
 
                         } else if (i == (dataexisting.size() - 1)) {
-                            //Toast.makeText(context, "RNA", Toast.LENGTH_SHORT).show();
                             dataexisting.add(data);
-                            writetolocalStorage(convertToString(dataexisting),adapterPos);
+                            writetolocalStorage(convertToString(dataexisting), adapterPos);
                             break;
                         }
                     }
                 }
 
-            }else {
+            } else {
                 //Toast.makeText(context, "RC", Toast.LENGTH_SHORT).show();
                 clearSharedPref();
             }
@@ -130,7 +116,7 @@ public class CartProvider implements CartHandler {
     }
 
     private void clearSharedPref() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.CART_SHARED_PREFERENCES,Context.MODE_PRIVATE);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.CART_SHARED_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
         editor.apply();
@@ -138,19 +124,20 @@ public class CartProvider implements CartHandler {
 
     /**
      * This is a internal method which writes the data stored to database in persistence.
+     *
      * @param data
      */
     @Override
-    public void writetolocalStorage(String data,int adapterPos) {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.CART_SHARED_PREFERENCES,Context.MODE_PRIVATE);
+    public void writetolocalStorage(String data, int adapterPos) {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.CART_SHARED_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(CONSTANTS.CART_SHARED_PREFERENCES_DATA,data);
-        editor.putBoolean(CONSTANTS.CART_SHARED_PREFERENCES_EXISTS,true);
+        editor.putString(CONSTANTS.CART_SHARED_PREFERENCES_DATA, data);
+        editor.putBoolean(CONSTANTS.CART_SHARED_PREFERENCES_EXISTS, true);
         editor.apply();
 
         if (cartlistners != null)
-        cartlistners.onItemAddSuccess(true,returnDataFromString(data));
-        context.sendBroadcast(new Intent("updated").putExtra("adapterPos",adapterPos));
+            cartlistners.onItemAddSuccess(true, returnDataFromString(data));
+        context.sendBroadcast(new Intent("updated").putExtra("adapterPos", adapterPos));
     }
 
     /**
@@ -158,9 +145,9 @@ public class CartProvider implements CartHandler {
      */
     @Override
     public void fetchItemfromServer() {
-        if (fetchitemfromStorage().isEmpty() || fetchitemfromStorage() ==null){
+        if (fetchitemfromStorage().isEmpty() || fetchitemfromStorage() == null) {
             cartlistners.addFailure(new Exception("Error data corrupted"));
-        }else cartlistners.onItemAddSuccess(false,returnDataFromString(fetchitemfromStorage()));
+        } else cartlistners.onItemAddSuccess(false, returnDataFromString(fetchitemfromStorage()));
     }
 
 
@@ -170,8 +157,8 @@ public class CartProvider implements CartHandler {
 
     @Override
     public String fetchitemfromStorage() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.CART_SHARED_PREFERENCES,Context.MODE_PRIVATE);
-        return sharedPreferences.getString(CONSTANTS.CART_SHARED_PREFERENCES_DATA,null);
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.CART_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        return sharedPreferences.getString(CONSTANTS.CART_SHARED_PREFERENCES_DATA, null);
     }
 
     /**
@@ -187,15 +174,16 @@ public class CartProvider implements CartHandler {
         return gson.toJson(data);
     }
 
-    private List<CartItemModel> returnDataFromString(String data){
+    private List<CartItemModel> returnDataFromString(String data) {
         Gson gson = new Gson();
-        Type type = new TypeToken<List<CartItemModel>>(){}.getType();
-        return gson.fromJson(data,type);
+        Type type = new TypeToken<List<CartItemModel>>() {
+        }.getType();
+        return gson.fromJson(data, type);
     }
 
-    private boolean doSharedPrefExists(){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.CART_SHARED_PREFERENCES,Context.MODE_PRIVATE);
-        return sharedPreferences.getBoolean(CONSTANTS.CART_SHARED_PREFERENCES_EXISTS,false);
+    private boolean doSharedPrefExists() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.CART_SHARED_PREFERENCES, Context.MODE_PRIVATE);
+        return sharedPreferences.getBoolean(CONSTANTS.CART_SHARED_PREFERENCES_EXISTS, false);
     }
 
 
