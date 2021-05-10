@@ -827,7 +827,7 @@ public class HomeFragment extends Fragment implements
         categoryRecycler.setAdapter(categoryAdapter);
         shimmerplace_cat.stopShimmer();
         shimmerplace_cat.setVisibility(View.GONE);
-        Animator.initializeAnimator().runRecyclerFallDownAnimation(categoryRecycler);
+        Animator.initializeAnimator().runRecyclerSlideRightAnimation(categoryRecycler);
 
     }
 
