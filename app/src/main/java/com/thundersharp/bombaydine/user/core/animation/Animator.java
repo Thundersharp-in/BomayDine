@@ -2,6 +2,7 @@ package com.thundersharp.bombaydine.user.core.animation;
 
 import android.content.Context;
 import android.view.View;
+import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
@@ -64,9 +65,16 @@ public final class Animator implements AnimatorListner{
         view.setVisibility(View.INVISIBLE);
 
     }
+
+    @Override
+    public void customAnimation(int animationID, View view){
+        Animation animation = AnimationUtils.loadAnimation(view.getContext(),animationID);
+        view.startAnimation(animation);
+    }
 }
 
 interface AnimatorListner{
+    void customAnimation(int animationID, View view);
     void slideUp(View view);
     void slideDown(View view);
     void runRecyclerSlideRightAnimation(RecyclerView recyclerView);

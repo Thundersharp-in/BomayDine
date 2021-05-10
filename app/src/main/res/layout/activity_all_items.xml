@@ -57,6 +57,7 @@
                 android:drawableTint="#C5C3C3"
                 android:hint="Search for dish by name, category, description"
                 android:maxLines="1"
+                android:ellipsize="end"
                 android:paddingHorizontal="10dp"
                 android:textColor="#fff"
                 android:textColorHint="#C5C3C3"

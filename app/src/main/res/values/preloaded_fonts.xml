@@ -2,9 +2,11 @@
 <resources>
     <array name="preloaded_fonts" translatable="false">
         <item>@font/acme</item>
+        <item>@font/allerta</item>
         <item>@font/amaranth_bold_italic</item>
         <item>@font/amita_bold</item>
         <item>@font/arizonia</item>
         <item>@font/coiny</item>
+        <item>@font/roboto_medium</item>
     </array>
 </resources>

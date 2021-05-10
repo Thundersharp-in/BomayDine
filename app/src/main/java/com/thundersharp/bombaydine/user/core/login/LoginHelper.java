@@ -310,6 +310,8 @@ public class LoginHelper implements
                             data.put("CREATEDON",System.currentTimeMillis());
                             data.put("UID",FirebaseAuth.getInstance().getUid());
 
+
+
                             FirebaseDatabase
                                     .getInstance()
                                     .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
