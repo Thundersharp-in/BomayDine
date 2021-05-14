@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/containermain"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1e2026">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:fitsSystemWindows="true">
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="@color/black"
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:elevation="4dp"
+                app:layout_collapseMode="pin" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:elevation="4dp">
+
+                    <include
+                        android:layout_alignParentBottom="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        layout="@layout/placeholder_top_all_item"/>
+
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/image1" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="130dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/custom_gradient_bottom"
+                        android:elevation="4dp" />
+
+                </FrameLayout>
+            </RelativeLayout>
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@null"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#00000000">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+
+                    <com.facebook.shimmer.ShimmerFrameLayout
+                        android:id="@+id/shl"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:visibility="gone">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+
+                            <include layout="@layout/all_item_main_placeholder" />
+
+                            <include layout="@layout/all_item_main_placeholder" />
+
+                            <include layout="@layout/all_item_main_placeholder" />
+
+                            <include layout="@layout/all_item_main_placeholder" />
+
+                            <include layout="@layout/all_item_main_placeholder" />
+
+                            <include layout="@layout/all_item_main_placeholder" />
+
+                        </LinearLayout>
+
+                    </com.facebook.shimmer.ShimmerFrameLayout>
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recomended"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:orientation="horizontal"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclermain"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
+
+
+                </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/bottomholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginTop="10dp"
+                android:elevation="7dp"
+                android:gravity="bottom"
+                android:visibility="visible">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:layout_marginHorizontal="10dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/buttonred">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:id="@+id/text2"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:fontFamily="sans-serif-smallcaps"
+                            android:text="3 items"
+                            android:textColor="#ffe8e8"
+                            android:textStyle="bold" />
+
+                        <TextView
+                            android:id="@+id/totalamt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="5dp"
+                            android:fontFamily="@font/calibri"
+                            android:text="Rs. 14564 plus taxes"
+                            android:textColor="#ffe8e8" />
+
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_centerVertical="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="5dp"
+                        android:layout_marginEnd="10dp"
+                        android:drawableEnd="@drawable/ic_baseline_play_arrow_24"
+                        android:drawablePadding="10dp"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center_vertical"
+                        android:text="View cart"
+                        android:textColor="#fff4f3"
+                        android:textSize="15sp" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

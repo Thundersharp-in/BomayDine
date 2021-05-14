@@ -50,6 +50,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
@@ -69,6 +70,7 @@ import com.thundersharp.bombaydine.user.core.address.CordinatesInteractor;
 import com.thundersharp.bombaydine.user.core.address.Cordinateslistner;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefHelper;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
+import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -190,20 +192,27 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
         mMap = googleMap;
         mMap.setMapStyle(style);
 
+
+        MarkerOptions markerOptions1 = new MarkerOptions();
+        markerOptions1.title("Bombay dine restaurant");
+        markerOptions1.position(ResturantCoordinates.resturantLatLong);
+        markerOptions1.icon(BitmapDescriptorFactory.fromResource(R.drawable.restaurant));
+
         //mMap.setMaxZoomPreference(10f);
         markerOptions.title("Your Marked Address");
         //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
         //Toast.makeText(this, ""+getlatlang(addressData.getLAT_LONG()).latitude+","+getlatlang(addressData.getLAT_LONG()).longitude, Toast.LENGTH_SHORT).show();
         //TODO UPDATE DEVICE CURRENT LOCATION HERE
-        markerOptions.position(getlatlang("13.083754127044125,77.48171612620354"));
+        markerOptions.position(ResturantCoordinates.resturantLatLong);
         markerOptions.draggable(true);
 
-        mMap.setMinZoomPreference(10f);
+        mMap.setMinZoomPreference(5f);
         mMap.setBuildingsEnabled(true);
         checkForPermissions();
         mMap.setMyLocationEnabled(true);
 
         marker = mMap.addMarker(markerOptions);
+        mMap.addMarker(markerOptions1);
 
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
@@ -232,6 +241,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
                     AlertDialog.Builder builder = new AlertDialog.Builder(HomeLocationChooser.this);
                     builder.setMessage("Sorry we don't deliver in your location, We will be to your location soon.");
                     builder.setPositiveButton("OK",(dialogInterface, i) -> {
+                        dialogInterface.dismiss();
                         //HomeLocationChooser.this.marker.remove();
                         //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(getlatlang("13.083754127044125,77.48171612620354"), 18));
                     });
@@ -260,9 +270,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
                     try {
                         address = getLocationfromLat(marker.getPosition().latitude, marker.getPosition().longitude);
                         addressline1.setText(address.getAddressLine(0));
-                        /*addressline2.setText(address.getAddressLine(1));
-                        city.setText(address.getLocality());
-                        zip.setText(address.getPostalCode());*/
+
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -272,7 +280,6 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
                     builder.setMessage("Sorry we don't deliver in your location, We will be to your location soon.");
                     builder.setPositiveButton("OK",(dialogInterface, i) -> {
                         HomeLocationChooser.this.marker.remove();
-                        //mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(getlatlang("13.083754127044125,77.48171612620354"), 18));
                     });
                     builder.setCancelable(false);
                     builder.show();
@@ -292,7 +299,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
 */
 
         cordinatesInteractor.fetchAllCoordinates();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(getlatlang("13.083754127044125,77.48171612620354"), 18));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ResturantCoordinates.resturantLatLong, 18));
 
 
 
@@ -316,13 +323,6 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
 
         return addresses.get(0);
     }
-
-    private LatLng getlatlang(String lat_long) {
-        double lat = Double.parseDouble(lat_long.substring(0,lat_long.indexOf(",") ));
-        double longitude = Double.parseDouble(lat_long.substring(lat_long.indexOf(",")+1));
-        return new LatLng(lat,longitude);
-    }
-
 
     private void checkForPermissions() {
         if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -460,7 +460,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
                                                 AlertDialog.Builder builder = new AlertDialog.Builder(HomeLocationChooser.this);
                                                 builder.setMessage("Sorry we don't deliver in your location, But you can still order for someone in our delivery location.");
                                                 builder.setPositiveButton("OK",(dialogInterface, i) -> {
-                                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(getlatlang("13.083754127044125,77.48171612620354"), 18));
+                                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ResturantCoordinates.resturantLatLong, 18));
                                                 });
                                                 builder.setCancelable(false);
                                                 builder.show();
@@ -468,9 +468,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
                                                 try {
                                                     address = getLocationfromLat(marker.getPosition().latitude, marker.getPosition().longitude);
                                                     addressline1.setText(address.getAddressLine(0));
-                        /*addressline2.setText(address.getAddressLine(1));
-                        city.setText(address.getLocality());
-                        zip.setText(address.getPostalCode());*/
+
                                                 } catch (IOException e) {
                                                     e.printStackTrace();
                                                 }
@@ -565,7 +563,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
                                             AlertDialog.Builder builder = new AlertDialog.Builder(HomeLocationChooser.this);
                                             builder.setMessage("Sorry we don't deliver in your location, But you can still order for someone in our delivery location.");
                                             builder.setPositiveButton("OK",(dialogInterface, i) -> {
-                                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(getlatlang("13.083754127044125,77.48171612620354"), 18));
+                                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ResturantCoordinates.resturantLatLong, 18));
                                             });
                                             builder.setCancelable(false);
                                             builder.show();
@@ -573,9 +571,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
                                             try {
                                                 address = getLocationfromLat(marker.getPosition().latitude, marker.getPosition().longitude);
                                                 addressline1.setText(address.getAddressLine(0));
-                        /*addressline2.setText(address.getAddressLine(1));
-                        city.setText(address.getLocality());
-                        zip.setText(address.getPostalCode());*/
+
                                             } catch (IOException e) {
                                                 e.printStackTrace();
                                             }

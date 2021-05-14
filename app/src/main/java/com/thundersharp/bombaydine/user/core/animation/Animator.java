@@ -1,11 +1,13 @@
 package com.thundersharp.bombaydine.user.core.animation;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.TranslateAnimation;
+import android.widget.RelativeLayout;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -36,6 +38,7 @@ public final class Animator implements AnimatorListner{
         recyclerView.setLayoutAnimation(controller);
         //recyclerView.getAdapter().notifyDataSetChanged();
         recyclerView.scheduleLayoutAnimation();
+
     }
 
     @Override
@@ -53,6 +56,15 @@ public final class Animator implements AnimatorListner{
     }
 
     @Override
+    public void recyclerTooPos(RecyclerView recyclerView, int pos) {
+        if (recyclerView != null){
+            recyclerView.smoothScrollToPosition(pos);
+        }else {
+            Log.e("E:/recyclerTooPos","Recycler view is null");
+        }
+    }
+
+    @Override
     public void slideDown(View view){
         TranslateAnimation animate = new TranslateAnimation(
                 0,
@@ -64,19 +76,44 @@ public final class Animator implements AnimatorListner{
         view.startAnimation(animate);
         view.setVisibility(View.INVISIBLE);
 
+
+
+    }
+
+
+    @Override
+    public void runFadeInAnimation(View view) {
+        Animation a = AnimationUtils.loadAnimation(view.getContext(), R.anim.fadeout);
+        a.reset();
+        RelativeLayout ll = view.findViewById(R.id.container);
+        ll.clearAnimation();
+        ll.startAnimation(a);
     }
 
     @Override
-    public void customAnimation(int animationID, View view){
+    public void runFadeoutAnimation(View view) {
+        Animation a = AnimationUtils.loadAnimation(view.getContext(), R.anim.fadein);
+        a.reset();
+        RelativeLayout ll = view.findViewById(R.id.container);
+        ll.clearAnimation();
+        ll.startAnimation(a);
+    }
+
+    @Override
+    public Animation customAnimation(int animationID, View view){
         Animation animation = AnimationUtils.loadAnimation(view.getContext(),animationID);
         view.startAnimation(animation);
+        return animation;
     }
 }
 
 interface AnimatorListner{
-    void customAnimation(int animationID, View view);
+    Animation customAnimation(int animationID, View view);
+    void runFadeoutAnimation(View view);
+    void runFadeInAnimation(View view);
     void slideUp(View view);
     void slideDown(View view);
     void runRecyclerSlideRightAnimation(RecyclerView recyclerView);
     void runRecyclerFallDownAnimation(RecyclerView recyclerView);
+    void recyclerTooPos(RecyclerView recyclerView , int pos);
 }

@@ -39,34 +39,65 @@ public class OrderHistoryProvider implements OrderContract{
     public void fetchRecentOrders() {
         List<Object> objects = new ArrayList<>();
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            FirebaseDatabase
-                    .getInstance()
-                    .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
-                    .child(FirebaseAuth.getInstance().getUid())
-                    .child(CONSTANTS.DATABASE_NODE_ORDERS)
-                    .child(CONSTANTS.DATABASE_NODE_OVERVIEW)
-                    .limitToFirst(renderNoq)
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            if (snapshot.exists()){
+            if (renderNoq == 0){
+                FirebaseDatabase
+                        .getInstance()
+                        .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
+                        .child(FirebaseAuth.getInstance().getUid())
+                        .child(CONSTANTS.DATABASE_NODE_ORDERS)
+                        .child(CONSTANTS.DATABASE_NODE_OVERVIEW)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
 
-                                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-                                    objects.add(dataSnapshot);
+                                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                        objects.add(dataSnapshot);
+                                    }
+                                    onOrderFetch.onOrderFetchSuccess(objects);
+
+                                } else {
+                                    Exception exception = new Exception("ERROR 404 : NO DATA FOUND");
+                                    onOrderFetch.onDataFetchFailure(exception);
                                 }
-                                onOrderFetch.onOrderFetchSuccess(objects);
-
-                            }else {
-                                Exception exception = new Exception("ERROR 404 : NO DATA FOUND");
-                                onOrderFetch.onDataFetchFailure(exception);
                             }
-                        }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-                            onOrderFetch.onDataFetchFailure(error.toException());
-                        }
-                    });
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                onOrderFetch.onDataFetchFailure(error.toException());
+                            }
+                        });
+
+            }else {
+                FirebaseDatabase
+                        .getInstance()
+                        .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
+                        .child(FirebaseAuth.getInstance().getUid())
+                        .child(CONSTANTS.DATABASE_NODE_ORDERS)
+                        .child(CONSTANTS.DATABASE_NODE_OVERVIEW)
+                        .limitToFirst(renderNoq)
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()) {
+
+                                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                        objects.add(dataSnapshot);
+                                    }
+                                    onOrderFetch.onOrderFetchSuccess(objects);
+
+                                } else {
+                                    Exception exception = new Exception("ERROR 404 : NO DATA FOUND");
+                                    onOrderFetch.onDataFetchFailure(exception);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                onOrderFetch.onDataFetchFailure(error.toException());
+                            }
+                        });
+            }
         }else {
             Exception exception = new Exception("User not Logged in.");
             onOrderFetch.onDataFetchFailure(exception);

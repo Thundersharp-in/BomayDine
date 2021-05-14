@@ -8,6 +8,8 @@ public interface SharedPrefUpdater {
 
     void updatehomelocationData();
 
+    AddressData getSavedHomeLocationData();
+
     interface OnSharedprefUpdated{
 
         void onSharedPrefUpdate(AddressData addressData);

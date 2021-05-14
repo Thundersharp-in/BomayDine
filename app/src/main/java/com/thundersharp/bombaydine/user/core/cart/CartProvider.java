@@ -64,12 +64,12 @@ public class CartProvider implements CartHandler {
      * @param data
      */
     @Override
-    public void AddItemToCart(CartItemModel data, int qty, int adapterPos) {
+    public void AddItemToCart(CartItemModel data, int qty) {
         if (!doSharedPrefExists()) {
 
             List<CartItemModel> cartItem = new ArrayList<>();
             cartItem.add(data);
-            writetolocalStorage(convertToString(cartItem), adapterPos);
+            writetolocalStorage(convertToString(cartItem));
 
         } else {
 
@@ -80,7 +80,7 @@ public class CartProvider implements CartHandler {
                 if (dataexisting.isEmpty()) {
                     List<CartItemModel> cartItem = new ArrayList<>();
                     cartItem.add(data);
-                    writetolocalStorage(convertToString(cartItem), adapterPos);
+                    writetolocalStorage(convertToString(cartItem));
                 } else {
 
                     for (int i = 0; i < dataexisting.size(); i++) {
@@ -91,17 +91,17 @@ public class CartProvider implements CartHandler {
 
                             if (qty == 0) {
                                 dataexisting.remove(i);
-                                writetolocalStorage(convertToString(dataexisting), adapterPos);
+                                writetolocalStorage(convertToString(dataexisting));
                             } else {
                                 dataexisting.set(i, data);
-                                writetolocalStorage(convertToString(dataexisting), adapterPos);
+                                writetolocalStorage(convertToString(dataexisting));
                             }
                             break;
 
 
                         } else if (i == (dataexisting.size() - 1)) {
                             dataexisting.add(data);
-                            writetolocalStorage(convertToString(dataexisting), adapterPos);
+                            writetolocalStorage(convertToString(dataexisting));
                             break;
                         }
                     }
@@ -128,7 +128,7 @@ public class CartProvider implements CartHandler {
      * @param data
      */
     @Override
-    public void writetolocalStorage(String data, int adapterPos) {
+    public void writetolocalStorage(String data) {
         SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.CART_SHARED_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(CONSTANTS.CART_SHARED_PREFERENCES_DATA, data);
@@ -137,7 +137,7 @@ public class CartProvider implements CartHandler {
 
         if (cartlistners != null)
             cartlistners.onItemAddSuccess(true, returnDataFromString(data));
-        context.sendBroadcast(new Intent("updated").putExtra("adapterPos", adapterPos));
+        context.sendBroadcast(new Intent("updated"));
     }
 
     /**

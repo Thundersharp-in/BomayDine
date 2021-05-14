@@ -65,18 +65,12 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
     private ChipGroup worktype;
 
 
-/*    private LatLng TamWorth = new LatLng(13.083925, 77.479119);
-    private LatLng NewCastle = new LatLng(13.093330, 77.489017);
-    private LatLng Brisbane = new LatLng(13.075816, 77.480262);
-    private LatLng point5 = new LatLng(13.068875, 77.507298);
-    private LatLng point6 = new LatLng(13.070047, 77.465500);*/
-
     List<LatLng> latLngs = new ArrayList<>();
     private LinearLayout bottomholder,data2;
 
     /**
-     * Calling this activity requires searlized data
-     * @param savedInstanceState
+     * Calling this activity requires searilized data
+     * @param savedInstanceState saved state to be restored
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {

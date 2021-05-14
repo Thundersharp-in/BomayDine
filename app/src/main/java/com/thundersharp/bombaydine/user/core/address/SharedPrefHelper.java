@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.thundersharp.bombaydine.user.core.Model.AddressData;
+import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
 
 public class SharedPrefHelper implements SharedPrefUpdater{
 
@@ -24,7 +25,9 @@ public class SharedPrefHelper implements SharedPrefUpdater{
 
     @Override
     public void SaveDataToSharedPref(AddressData addressData) {
-
+        if (addressData.getADDRESS_NICKNAME().isEmpty()){
+            addressData.setADDRESS_NICKNAME("Home");
+        }
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("Address",addressData.getADDRESS_LINE1());
         editor.putString("Nickname",addressData.getADDRESS_NICKNAME());
@@ -49,5 +52,14 @@ public class SharedPrefHelper implements SharedPrefUpdater{
             addressData.setLAT_LONG(sharedPreferences.getString("lat_long","13.0833209,77.4843393"));
             onSharedprefUpdated.onSharedPrefUpdate(addressData);
         }
+    }
+
+    @Override
+    public AddressData getSavedHomeLocationData() {
+        AddressData addressData = new AddressData();
+        addressData.setADDRESS_LINE1(sharedPreferences.getString("Address","Soldevahanalli"));
+        addressData.setADDRESS_NICKNAME(sharedPreferences.getString("Nickname","Home"));
+        addressData.setLAT_LONG(sharedPreferences.getString("lat_long", ResturantCoordinates.resturantLatLong.latitude+","+ResturantCoordinates.resturantLatLong.longitude));
+        return addressData;
     }
 }

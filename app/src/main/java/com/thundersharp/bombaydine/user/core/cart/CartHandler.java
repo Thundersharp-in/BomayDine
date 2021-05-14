@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface CartHandler {
 
-    void AddItemToCart(CartItemModel data, int qty, int adapterPos);
+    void AddItemToCart(CartItemModel data, int qty);
 
-    void writetolocalStorage(String data,int adapterPos);
+    void writetolocalStorage(String data);
 
     void fetchItemfromServer();
 
@@ -21,5 +21,9 @@ public interface CartHandler {
     interface cart{
         void onItemAddSuccess(boolean isAdded, List<CartItemModel> data);
         void addFailure(Exception exception);
+    }
+
+    interface OnCartEmpty{
+        void OnCartEmptyListener();
     }
 }

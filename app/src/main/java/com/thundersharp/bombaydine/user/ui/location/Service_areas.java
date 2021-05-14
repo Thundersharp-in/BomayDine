@@ -35,7 +35,9 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.address.CordinatesInteractor;
 import com.thundersharp.bombaydine.user.core.address.Cordinateslistner;
+import com.thundersharp.bombaydine.user.core.animation.Animator;
 import com.thundersharp.bombaydine.user.core.location.DirectionsJSONParser;
+import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
 
 import org.json.JSONObject;
 
@@ -56,7 +58,6 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
     private GoogleMap mMap;
     private ShimmerFrameLayout shimmerFrameLayout;
     private RelativeLayout relativeLayout;
-    private LatLng bombaydine = new LatLng(13.083519,77.4822703);
 
     private Marker restmark,markedmarker;
     private RecyclerView recyclerView;
@@ -73,6 +74,10 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
         SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        Animator
+                .initializeAnimator()
+                .customAnimation(R.anim.slide_from_right_fast,view.findViewById(R.id.containermain));
+
 
 
         shimmerFrameLayout = view.findViewById(R.id.shimmermap);
@@ -96,7 +101,7 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
         mMap.setMapStyle(style);
         //mMap.setMaxZoomPreference(10f);
         markerOptions.title("Bombay dine restaurant");
-        markerOptions.position(bombaydine);
+        markerOptions.position(ResturantCoordinates.resturantLatLong);
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.restaurant));
         mMap.setMinZoomPreference(10f);
         mMap.setBuildingsEnabled(true);
@@ -117,7 +122,7 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
                 markedmarker = mMap.addMarker(destmarker);
 
                 // Getting URL to the Google Directions API
-                String url = getDirectionsUrl(bombaydine, latLng);
+                String url = getDirectionsUrl(ResturantCoordinates.resturantLatLong, latLng);
                 //Log.d("URL",url);
                 //DownloadTask downloadTask = new DownloadTask();
 
@@ -164,7 +169,7 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
                 .color(Color.RED)
                 .geodesic(true));
         // on below line we will be starting the drawing of polyline.
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(bombaydine, 13));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ResturantCoordinates.resturantLatLong, 13));
 
         shimmerFrameLayout.stopShimmer();
         shimmerFrameLayout.hideShimmer();

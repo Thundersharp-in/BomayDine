@@ -34,9 +34,7 @@ public class RecentOrders extends AppCompatActivity {
                 .setOnOrderFetchListener(new OrderContract.onOrderFetch() {
             @Override
             public void onOrderFetchSuccess(List<Object> data) {
-                //DataSnapshot dataSnapshot = (DataSnapshot)data.get(0);
                 recyclerView.setAdapter(RecentAdapter.initialize(RecentOrders.this,data));
-                //Toast.makeText(RecentOrders.this,dataSnapshot.getKey(),Toast.LENGTH_SHORT).show();
             }
 
             @Override

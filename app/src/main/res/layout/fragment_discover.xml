@@ -1,14 +1,260 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    android:id="@+id/containermain"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".user.ui.discover.Discover">
+    android:background="#1e2026">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="220dp"
+        android:fitsSystemWindows="true">
+
+
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true"
+            app:contentScrim="@color/white"
+            app:titleEnabled="true"
+            app:collapsedTitleTextAppearance="@style/collapsingToolbarLayoutTitleColor"
+            app:expandedTitleTextAppearance="@style/collapsingToolbarLayoutTitleColore"
+            app:title="Your orders"
+            app:expandedTitleGravity="center_horizontal|bottom"
+            app:layout_scrollFlags="scroll|snap|exitUntilCollapsed">
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="?actionBarSize"
+                android:elevation="4dp"
+                app:titleTextColor="#fff"
+                app:title="Your orders"
+                app:collapseIcon="@drawable/ic_outline_fastfood_24"
+                app:layout_collapseMode="pin" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:elevation="4dp">
+
+                    <TextView
+                        android:id="@+id/texttop"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="10dp"
+                        android:drawableStart="@drawable/ic_outline_info_24"
+                        android:drawablePadding="10dp"
+                        android:fontFamily="@font/calibri"
+                        android:gravity="center_vertical"
+                        android:text="All orders and its details can be found in this section, Orders now can also be filtered."
+                        android:textColor="#F4E880"
+                        app:drawableTint="#F4E880" />
+
+
+
+                    <LinearLayout
+                        android:id="@+id/cards"
+                        android:layout_below="@id/texttop"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="15dp"
+                        android:gravity="center_vertical"
+                        android:minHeight="80dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/breakfast"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:minHeight="80dp"
+                            app:cardBackgroundColor="#17191E"
+                            app:cardCornerRadius="7dp"
+                            app:cardElevation="5dp"
+                            app:cardUseCompatPadding="true">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="10dp"
+                                    android:src="@drawable/ic_baseline_star_border_24"
+                                    app:tint="#FFEB3B"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginHorizontal="5dp"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:ellipsize="end"
+                                    android:maxLines="1"
+                                    android:text="Recent ratings"
+                                    android:textColor="#BDBDBD"
+                                    android:textSize="13sp" />
+
+                            </LinearLayout>
+
+                        </com.google.android.material.card.MaterialCardView>
+
+
+                        <com.google.android.material.card.MaterialCardView
+                            android:id="@+id/dinner"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:minHeight="80dp"
+                            app:cardBackgroundColor="#17191E"
+                            app:cardCornerRadius="7dp"
+                            app:cardElevation="5dp"
+                            app:cardUseCompatPadding="true">
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center"
+                                android:orientation="vertical">
+
+                                <ImageView
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_gravity="center"
+                                    android:layout_marginTop="10dp"
+                                    android:src="@drawable/ic_outline_contact_support_24"
+                                    app:tint="#FFEB3B"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="3dp"
+                                    android:layout_marginBottom="10dp"
+                                    android:text="Raise Querry"
+                                    android:textColor="#BDBDBD"
+                                    android:textSize="13sp" />
+
+                            </LinearLayout>
+
+
+                        </com.google.android.material.card.MaterialCardView>
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/s3" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="80dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/custom_gradient_bottom"
+                        android:elevation="4dp" />
+
+                </FrameLayout>
+            </RelativeLayout>
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:background="@null"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
 
-</FrameLayout>
+
+            <RelativeLayout
+                android:id="@+id/bottomHolderprofile"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/top_curved"
+                android:elevation="0dp">
+
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="10dp"
+                    android:layout_alignParentTop="true"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+
+                <RelativeLayout
+                    android:layout_below="@id/recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="15dp"
+                    android:layout_marginBottom="60dp">
+
+                    <TextView
+                        android:id="@+id/tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_marginStart="20dp"
+                        android:fontFamily="@font/amaranth_bold_italic"
+                        android:text="@string/app_name"
+                        android:textColor="#9C9C9C"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_below="@id/tag"
+                        android:layout_toEndOf="@id/tag"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="-10dp"
+                        android:fontFamily="@font/arizonia"
+                        android:text="Great food above !"
+                        android:textColor="#A6A7A8"
+                        android:textSize="15sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/version"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="15dp"
+                        android:fontFamily="sans-serif-light"
+                        android:text="V 2.1.89"
+                        android:textSize="12sp"
+                        android:textColor="#969697"
+                        android:textStyle="bold" />
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+
+    </androidx.core.widget.NestedScrollView>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

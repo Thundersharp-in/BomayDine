@@ -9,40 +9,31 @@ import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.os.Looper;
-import android.provider.Settings;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.Request;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.AppCompatButton;
+import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.bumptech.glide.request.RequestOptions;
 import com.facebook.shimmer.ShimmerFrameLayout;
@@ -53,7 +44,6 @@ import com.glide.slider.library.slidertypes.DefaultSliderView;
 import com.glide.slider.library.tricks.ViewPagerEx;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
@@ -62,16 +52,12 @@ import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.widget.Autocomplete;
-import com.google.android.libraries.places.widget.AutocompleteActivity;
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -79,16 +65,14 @@ import com.google.maps.android.PolyUtil;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllAddressHolderAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapter;
+import com.thundersharp.bombaydine.user.core.Adapters.CartItemAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.CategoryAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.PlacesAutoCompleteAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.TopsellingAdapter;
 import com.thundersharp.bombaydine.user.core.Data.HomeDataContract;
 import com.thundersharp.bombaydine.user.core.Data.HomeDataProvider;
-import com.thundersharp.bombaydine.user.core.Data.OfferListner;
-import com.thundersharp.bombaydine.user.core.Data.OffersProvider;
 import com.thundersharp.bombaydine.user.core.Model.AddressData;
 import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
-import com.thundersharp.bombaydine.user.core.Model.FoodItemAdapter;
 import com.thundersharp.bombaydine.user.core.OfflineDataSync.OfflineDataProvider;
 import com.thundersharp.bombaydine.user.core.address.AddressHelper;
 import com.thundersharp.bombaydine.user.core.address.AddressLoader;
@@ -99,34 +83,27 @@ import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
 import com.thundersharp.bombaydine.user.core.animation.Animator;
 import com.thundersharp.bombaydine.user.core.cart.CartHandler;
 import com.thundersharp.bombaydine.user.core.cart.CartProvider;
-import com.thundersharp.bombaydine.user.core.location.PinCodeContract;
-import com.thundersharp.bombaydine.user.core.location.PinCodeInteractor;
+import com.thundersharp.bombaydine.user.core.location.DistanceFromCoordinates;
+import com.thundersharp.bombaydine.user.core.utils.LatLongConverter;
+import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
 import com.thundersharp.bombaydine.user.ui.dailyfood.DailyfoodActivity;
 import com.thundersharp.bombaydine.user.ui.location.HomeLocationChooser;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
 import com.thundersharp.bombaydine.user.ui.menu.AllCategoryActivity;
 import com.thundersharp.bombaydine.user.ui.menu.AllItemsActivity;
 import com.thundersharp.bombaydine.user.ui.menu.TopSellingAll;
+import com.thundersharp.bombaydine.user.ui.offers.AllOffersActivity;
 import com.thundersharp.bombaydine.user.ui.orders.RecentOrders;
 import com.thundersharp.bombaydine.user.ui.scanner.QrScanner;
-import com.thundersharp.bombaydine.user.ui.startup.MainActivity;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-import static android.app.Activity.RESULT_CANCELED;
-import static android.app.Activity.RESULT_OK;
-import static android.content.ContentValues.TAG;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 import static com.thundersharp.bombaydine.user.ui.home.MainPage.navController;
 
@@ -163,6 +140,7 @@ public class HomeFragment extends Fragment implements
     private PlacesAutoCompleteAdapter mAutoCompleteAdapter;
     private RecyclerView recyclerView;
     public static BottomSheetDialog bottomSheetDialog;
+    BottomSheetDialog bottomSheetDialogloc;
     /**
      * Pin code details from API
      */
@@ -174,6 +152,7 @@ public class HomeFragment extends Fragment implements
     private ShimmerFrameLayout shimmerFrameLayout,shimmerplace_allitem;
     private RecyclerView addressholder;
     private Address address;
+    private TextView itemtotal,grandtot,promoamt,delehevry;
 
     /**
      * Address Listeners and helpers
@@ -191,17 +170,21 @@ public class HomeFragment extends Fragment implements
     private ImageView clearcompleate;
     private LinearLayout bottom_clickable_linear;
     private TextView view_action;
+    private AppCompatButton pay;
+
+    private RelativeLayout containermain;
 
 
     private static List<Object> foodItemAdapterListStatic = new ArrayList<>();
 
-    OfflineDataProvider offlineDataProvider ;
+    OfflineDataProvider offlineDataProvider;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
+        containermain = view.findViewById(R.id.containermain);
         version = view.findViewById(R.id.version);
         try {
             PackageInfo pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
@@ -209,6 +192,11 @@ public class HomeFragment extends Fragment implements
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+        bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.BottomSheetDialogTheme);
+
+        Animator
+                .initializeAnimator()
+                .customAnimation(R.anim.slide_from_right_fast, containermain);
 
         offlineDataProvider = OfflineDataProvider.getInstance(getContext());
         sharedPrefHelper = new SharedPrefHelper(getContext(), this);
@@ -248,10 +236,11 @@ public class HomeFragment extends Fragment implements
         //recyclerView = (RecyclerView) view.findViewById(R.id.places_recycler_view);
 
 
+
         if (offlineDataProvider.doSharedPrefExists()){
             if (!offlineDataProvider.fetchitemfromStorage().equalsIgnoreCase("[]")){
 
-                slideUp(bottomnoti);
+                Animator.initializeAnimator().slideUp(bottomnoti);
 
             }else {
                 offlineDataProvider.clearSharedPref();
@@ -260,13 +249,19 @@ public class HomeFragment extends Fragment implements
 
         clearcompleate.setOnClickListener(view1 -> {
             offlineDataProvider.clearSharedPref();
-            slideDown(bottomnoti);
+            Animator.initializeAnimator().slideDown(bottomnoti);
             refreshAdapter();
         });
 
-        bottom_clickable_linear.setOnClickListener(view1 -> showcart());
+        bottom_clickable_linear.setOnClickListener(view1 -> {
+            if (bottomnoti.getVisibility() == View.VISIBLE)
+                showcart(view);
+        });
 
-        view_action.setOnClickListener(view1 -> showcart());
+        view_action.setOnClickListener(view1 -> {
+            if (bottomnoti.getVisibility() == View.VISIBLE)
+                showcart(view);
+        });
 
         breakfast.setOnClickListener(view123 -> DailyfoodActivity.getInstance(getActivity(),0));
 
@@ -282,7 +277,8 @@ public class HomeFragment extends Fragment implements
 
 
         current_loc.setOnClickListener(viewlocation -> {
-            bottomSheetDialog = new BottomSheetDialog(getContext(), R.style.BottomSheetDialogTheme);
+
+            bottomSheetDialogloc = new BottomSheetDialog(getContext(), R.style.BottomSheetDialogTheme);
             View bottomview = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout, view.findViewById(R.id.botomcontainer));
             addressHelper.loaduseraddress();
             //recyclerView = bottomview.findViewById(R.id.places_recycler_view);
@@ -350,8 +346,8 @@ public class HomeFragment extends Fragment implements
             recyclerView.setAdapter(mAutoCompleteAdapter);
             mAutoCompleteAdapter.notifyDataSetChanged();*/
 
-            bottomSheetDialog.setContentView(bottomview);
-            bottomSheetDialog.show();
+            bottomSheetDialogloc.setContentView(bottomview);
+            bottomSheetDialogloc.show();
         });
 
         profile.setOnClickListener(viewclick -> {
@@ -433,14 +429,15 @@ public class HomeFragment extends Fragment implements
             @Override
             public void onItemAddSuccess(boolean isAdded, List<CartItemModel> data) {
                 //Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
+                if (bottomSheetDialog.isShowing()) updateCartData();
                 refreshAdapter();
                 if (data == null || data.isEmpty()){
-                    slideDown(bottomnoti);
+                    Animator.initializeAnimator().slideDown(bottomnoti);
 
 
                 }else {
                     if (bottomnoti.getVisibility() == View.GONE || bottomnoti.getVisibility() ==View.INVISIBLE){
-                        slideUp(bottomnoti);
+                        Animator.initializeAnimator().slideUp(bottomnoti);
                     }
                 }
             }
@@ -450,6 +447,8 @@ public class HomeFragment extends Fragment implements
                 Toast.makeText(getActivity(), ""+exception.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+
+
 
         BroadcastReceiver broadcastReceiver =new BroadcastReceiver() {
             @Override
@@ -467,8 +466,76 @@ public class HomeFragment extends Fragment implements
         return view;
     }
 
-    private void showcart() {
-        startActivity(new Intent(getActivity(),AllItemsActivity.class));
+    private void showcart(View view) {
+
+        View bottomview = LayoutInflater.from(getActivity()).inflate(R.layout.botomsheet_cart,view.findViewById(R.id.botomcontainer));
+
+        bottomSheetDialog.setContentView(bottomview);
+        bottomSheetDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        RecyclerView rec1 = bottomview.findViewById(R.id.rec1);
+        TextView shoe_offers = bottomview.findViewById(R.id.shoe_offers);
+        TextView delevering_to_address = bottomview.findViewById(R.id.delevering_to_address);
+        TextView est_time = bottomview.findViewById(R.id.est_time);
+        itemtotal = bottomview.findViewById(R.id.item_tot);
+        delehevry = bottomview.findViewById(R.id.del_charges);
+        promoamt = bottomview.findViewById(R.id.promotot);
+        grandtot = bottomview.findViewById(R.id.grand_tot);
+        pay = bottomview.findViewById(R.id.paybtn);
+        delevering_to_address.setText("Delivering to :"+sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1());
+
+        long distance = Math.round(DistanceFromCoordinates.getInstance().convertLatLongToDistance(ResturantCoordinates.resturantLatLong,LatLongConverter.initialize().getlatlang(sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG())));
+        int time = (int) ((distance/ResturantCoordinates.averageSpaeed)*60)+ResturantCoordinates.averagePreperationTime;
+
+
+        est_time.setText("Estimated delivery : "+time+" minutes");
+
+        rec1.setAdapter(CartItemAdapter.initializeAdapter(offlineDataProvider.returnDataFromString(offlineDataProvider.fetchitemfromStorage()),getActivity(),1));
+        updateCartData();
+
+        shoe_offers.setOnClickListener(viewk -> startActivityForResult(new Intent(getActivity(), AllOffersActivity.class),001));
+        bottomSheetDialog.show();
+
+
+    }
+
+
+    private void updateCartData(){
+        List<CartItemModel> data = offlineDataProvider.returnDataFromString(offlineDataProvider.fetchitemfromStorage());
+
+        if (data != null) {
+
+            if (!data.isEmpty()) {
+                double sum = 0.0;
+                for (int i = 0; i < data.size(); i++) {
+                    sum = sum + (data.get(i).getQUANTITY() * data.get(i).getAMOUNT());
+                }
+
+                double deleveryCharges = 0.0;
+                deleveryCharges = (DistanceFromCoordinates
+                        .getInstance()
+                        .convertLatLongToDistance(
+                                ResturantCoordinates.resturantLatLong,
+                                LatLongConverter.initialize().getlatlang(sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG()))) * ResturantCoordinates.deliveryChargesPerKilometer;
+                if (deleveryCharges > ResturantCoordinates.maxDeliveryCharges) {
+                    deleveryCharges = ResturantCoordinates.maxDeliveryCharges;
+                }
+
+
+                itemtotal.setText("\u20B9 " + sum);
+                delehevry.setText("\u20B9 " + Math.round(deleveryCharges));
+
+                grandtot.setText("" + (sum + Math.round(deleveryCharges))); //TODO SUBTRACT DISCOUNT LATER
+                pay.setText("PAY \u20B9"+(sum+Math.round(deleveryCharges)));
+
+            } else {
+                itemtotal.setText("\u20B9 0");
+                delehevry.setText("\u20B9 0");
+                promoamt.setText("\u20B9 0");
+                grandtot.setText("\u20B9 0");
+                pay.setText("PAY \u20B9 0");
+            }
+        }
     }
 
 /*    @Override
@@ -526,6 +593,12 @@ public class HomeFragment extends Fragment implements
         super.onStop();
         mDemoSlider.stopAutoCycle();
         super.onStop();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     @Override
@@ -663,13 +736,10 @@ public class HomeFragment extends Fragment implements
 
                                                     sharedPrefHelper.SaveDataToSharedPref(addressData);
 
-                                                    //addressline1.setText(address.getAddressLine(0));
-
                                                 } catch (IOException e) {
                                                     e.printStackTrace();
                                                 }
                                             }
-                                            //onLocationChanged(locationResult.getLastLocation());
                                         }
                                     },
                                     Looper.myLooper());
@@ -701,7 +771,6 @@ public class HomeFragment extends Fragment implements
                     }
                 }
 
-                //Toast.makeText(getContext(), "e1", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -808,7 +877,6 @@ public class HomeFragment extends Fragment implements
     @Override
     public void onCordinatesSuccess(LatLng... coOrdinates) {
         latLngs = Arrays.asList(coOrdinates);
-        //Toast.makeText(getActivity(), "jj", Toast.LENGTH_SHORT).show();
         createLocationRequest();
     }
 
@@ -820,14 +888,15 @@ public class HomeFragment extends Fragment implements
 
     @Override
     public void onCategoryFetchSuccess(List<Object> data) {
-        //Toast.makeText(getActivity(), "dddd", Toast.LENGTH_SHORT).show();
         CategoryAdapter categoryAdapter = new CategoryAdapter(data, getContext());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         categoryRecycler.setLayoutManager(gridLayoutManager);
         categoryRecycler.setAdapter(categoryAdapter);
         shimmerplace_cat.stopShimmer();
         shimmerplace_cat.setVisibility(View.GONE);
-        Animator.initializeAnimator().runRecyclerSlideRightAnimation(categoryRecycler);
+        Animator
+                .initializeAnimator()
+                .runRecyclerSlideRightAnimation(categoryRecycler);
 
     }
 
@@ -850,8 +919,7 @@ public class HomeFragment extends Fragment implements
     public void OnHomeAlldataFetchSucess(List<Object> data) {
         foodItemAdapterListStatic = data;
         allItemAdapter = new AllItemAdapter(data, getContext());
-        //GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(),3);
-        //horizontalScrollView.setLayoutManager(gridLayoutManager);
+
         horizontalScrollView.setAdapter(allItemAdapter);
         shimmerplace_allitem.stopShimmer();
         shimmerplace_allitem.setVisibility(View.GONE);
@@ -864,31 +932,8 @@ public class HomeFragment extends Fragment implements
         shimmerplace_allitem.setVisibility(View.GONE);
     }
 
-    // slide the view from below itself to the current position
-    public void slideUp(View view){
-
-        TranslateAnimation animate = new TranslateAnimation(
-                0,                 // fromXDelta
-                0,                 // toXDelta
-                view.getHeight(),  // fromYDelta
-                0);                // toYDelta
-        animate.setDuration(500);
-        animate.setFillAfter(true);
-        view.startAnimation(animate);
-        view.setVisibility(View.VISIBLE);
+    @Override
+    public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
     }
-
-    // slide the view from its current position to below itself
-    public void slideDown(View view){
-        TranslateAnimation animate = new TranslateAnimation(
-                0,                 // fromXDelta
-                0,                 // toXDelta
-                0,                 // fromYDelta
-                view.getHeight()); // toYDelta
-        animate.setDuration(500);
-        animate.setFillAfter(true);
-        view.startAnimation(animate);
-        view.setVisibility(View.INVISIBLE);
-    }
-
 }

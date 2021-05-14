@@ -16,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BombayDine"
         tools:replace="android:theme">
-        <activity android:name=".user.ui.dailyfood.DailyfoodActivity"></activity>
+        <activity android:name=".user.ui.offers.AllOffersActivity"/>
+        <activity android:name=".user.ui.dailyfood.DailyfoodActivity" />
         <activity android:name=".user.ui.menu.TopSellingAll" />
         <activity android:name=".user.ui.menu.AllCategoryActivity" />
         <activity android:name=".user.ui.menu.CategoryResults" />
@@ -28,9 +29,13 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".user.ui.scanner.QrScanner" />
-        <activity android:name=".user.ui.menu.AllItemsActivity" />
+        <activity
+            android:name=".user.ui.menu.AllItemsActivity"
+            android:configChanges="orientation|screenSize|keyboard" />
         <activity android:name=".user.ui.orders.RecentOrders" />
-        <activity android:name=".user.ui.home.MainPage" />
+        <activity
+            android:name=".user.ui.home.MainPage"
+            android:configChanges="orientation|screenSize|keyboard" />
         <activity android:name=".user.ui.login.EmailAccountCreate" />
         <activity android:name=".user.ui.login.EmailLoginActivity" />
         <activity android:name=".user.ui.login.OtpVerificationActivity" />

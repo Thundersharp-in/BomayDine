@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.LinearLayout;
@@ -20,6 +21,7 @@ import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
 import com.thundersharp.bombaydine.user.core.cart.CartHandler;
 import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -38,14 +40,21 @@ public class MainPage extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_page);
-        runFadeInAnimation();
+
         BottomNavigationView navView = findViewById(R.id.nav_view);
+        navView.setDuplicateParentStateEnabled(false);
         checkForPermissions();
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         /*AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
                 R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
                 .build();*/
+        navView.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
+            @Override
+            public void onNavigationItemReselected(@NonNull MenuItem item) {
+
+            }
+        });
         navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
@@ -54,21 +63,6 @@ public class MainPage extends AppCompatActivity {
     }
 
 
-    private void runFadeInAnimation() {
-        Animation a = AnimationUtils.loadAnimation(this, R.anim.fadeout);
-        a.reset();
-        RelativeLayout ll = (RelativeLayout) findViewById(R.id.container);
-        ll.clearAnimation();
-        ll.startAnimation(a);
-    }
-
-    private void runFadeoutAnimation() {
-        Animation a = AnimationUtils.loadAnimation(this, R.anim.fadein);
-        a.reset();
-        RelativeLayout ll = (RelativeLayout) findViewById(R.id.container);
-        ll.clearAnimation();
-        ll.startAnimation(a);
-    }
 
 
     private void checkForPermissions() {

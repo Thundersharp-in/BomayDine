@@ -5,39 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    android:background="#1e2026">
-
-    <LinearLayout
-        android:id="@+id/cathol"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:background="#15171B"
-        android:elevation="6dp">
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ccp_ic_arrow_drop_down"
-            android:layout_marginStart="10dp"
-            android:scaleType="centerCrop"
-            app:tint="#FFEB3B"
-            android:layout_gravity="center_vertical"/>
-
-        <TextView
-            android:id="@+id/cat_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="BREAKFAST"
-            android:layout_marginStart="15sp"
-            android:layout_gravity="center_vertical"
-            android:textColor="#FFEB3B"
-            android:layout_marginEnd="10dp"
-            android:minLines="1"
-            android:textAllCaps="true"
-            android:fontFamily="sans-serif-smallcaps"
-            android:textSize="14sp"
-            />
-
-    </LinearLayout>
+    android:background="#15171B">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -51,8 +19,8 @@
             android:layout_margin="5dp"
             >
             <RelativeLayout
-                android:layout_width="70dp"
-                android:layout_height="70dp"
+                android:layout_width="60dp"
+                android:layout_height="60dp"
                 >
                 <ImageView
                     android:id="@+id/icon_main"
@@ -84,7 +52,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginBottom="5dp"
             android:layout_marginStart="5dp"
             >
             <RelativeLayout
@@ -92,6 +59,7 @@
                 android:layout_height="wrap_content"
                 >
                 <LinearLayout
+                    android:id="@+id/cw"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -108,18 +76,8 @@
                         android:textColor="#B8BABD"
                         android:layout_marginEnd="10dp"
                         android:minLines="1"
-                        android:fontFamily="@font/calibrib"
-                        android:textSize="15sp"
-                        />
-
-                    <TextView
-                        android:id="@+id/category"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="In Rice Bowl"
-                        android:fontFamily="@font/calibri"
-                        android:layout_marginTop="2dp"
-                        android:textColor="#959698"
+                        android:fontFamily="sans-serif-smallcaps"
+                        android:textSize="14sp"
                         />
 
                 </LinearLayout>
@@ -225,54 +183,35 @@
 
 
                 </LinearLayout>
-            </RelativeLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="3dp"
-                >
-                <RatingBar
+
+                <TextView
+                    android:id="@+id/amount"
+                    android:layout_below="@id/cw"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:numStars="5"
-                    android:stepSize=".5"
-                    style="@style/Widget.AppCompat.RatingBar.Small"
-                    android:progressTint="#FFCE1F"
-                    android:rating="3.5"
+                    android:text="Rs. 312"
+                    android:layout_marginTop="5dp"
+                    android:textColor="#B8BABD"
+                    android:textSize="14sp"
                     />
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:id="@+id/description"
+                    android:layout_below="@id/amount"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="18 Votes"
-                    android:textSize="12sp"
-                    android:layout_marginStart="2dp"
-                    android:textColor="#959698"
+                    android:text="Breaking out of the norm doesn't get more louis ipson trufr esds lour "
+                    android:layout_marginEnd="20dp"
+                    android:layout_marginTop="5dp"
+                    android:maxLines="2"
+                    android:textSize="13sp"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/calibri"
+                    android:layout_marginBottom="10dp"
+                    android:textColor="#7E7E7E"
                     />
 
+            </RelativeLayout>
 
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/amount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Rs. 312"
-                android:textColor="#B8BABD"
-                android:layout_marginTop="5dp"
-                android:textSize="14sp"
-                />
-            <TextView
-                android:id="@+id/description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Breaking out of the norm doesn't get more louis ipson trufr esds lour "
-                android:layout_marginEnd="20dp"
-                android:layout_marginTop="5dp"
-                android:fontFamily="@font/calibri"
-                android:layout_marginBottom="10dp"
-                android:textColor="#8F8F8F"
-                />
 
         </LinearLayout>
     </LinearLayout>

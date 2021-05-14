@@ -16,41 +16,83 @@ import java.util.List;
 
 public class OffersProvider implements OfferListner{
 
-    public static OffersProvider initializeOffersProvider(OfferListner.getOfferListner getOfferListner){
-        return new OffersProvider(getOfferListner);
+    int offerCount = 0;
+    static OffersProvider  offersProvider;
+    private OfferListner.getOfferListner getOfferListner;
+
+    public static OffersProvider initializeOffersProvider(){
+        offersProvider = new OffersProvider();
+        return offersProvider;
     }
 
-    private OfferListner.getOfferListner getOfferListner;
+    public OffersProvider setGetOfferListner(OfferListner.getOfferListner getOfferListner){
+        this.getOfferListner = getOfferListner;
+        return offersProvider;
+    }
 
     public OffersProvider(OfferListner.getOfferListner getOfferListner) {
         this.getOfferListner = getOfferListner;
     }
 
+    public OffersProvider setOfferCount(int count){
+        this.offerCount = count;
+        return offersProvider;
+    }
+
+    public OffersProvider(){}
+
     @Override
     public void fetchAllOffers() {
         List<Object> objects = new ArrayList<>();
-        FirebaseDatabase
-                .getInstance()
-                .getReference(CONSTANTS.DATABASE_NODE_ALL_OFFERS)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()){
-                            for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-                                objects.add(dataSnapshot.getValue(OfferModel.class));
+        if (offerCount != 0) {
+            FirebaseDatabase
+                    .getInstance()
+                    .getReference(CONSTANTS.DATABASE_NODE_ALL_OFFERS)
+                    .limitToFirst(offerCount)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    objects.add(dataSnapshot.getValue(OfferModel.class));
+                                }
+                                getOfferListner.OnGetOfferSuccess(objects);
+                            } else {
+                                Exception exception = new Exception("ERROR CODE : 14HJ7Y895");
+                                getOfferListner.OnOfferFetchFailure(exception);
                             }
-                            getOfferListner.OnGetOfferSuccess(objects);
-                        }else {
-                            Exception exception = new Exception("ERROR CODE : 14HJ7Y895");
-                            getOfferListner.OnOfferFetchFailure(exception);
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        getOfferListner.OnOfferFetchFailure(error.toException());
-                    }
-                });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            getOfferListner.OnOfferFetchFailure(error.toException());
+                        }
+                    });
+        }else {
+            FirebaseDatabase
+                    .getInstance()
+                    .getReference(CONSTANTS.DATABASE_NODE_ALL_OFFERS)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()) {
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    objects.add(dataSnapshot.getValue(OfferModel.class));
+                                }
+                                getOfferListner.OnGetOfferSuccess(objects);
+                            } else {
+                                Exception exception = new Exception("ERROR CODE : 14HJ7Y895");
+                                getOfferListner.OnOfferFetchFailure(exception);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            getOfferListner.OnOfferFetchFailure(error.toException());
+                        }
+                    });
+
+        }
 
     }
 }

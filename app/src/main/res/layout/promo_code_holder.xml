@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#121010">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:ellipsize="end"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="10dp"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif-smallcaps"
+        android:maxLines="1"
+        android:text="WELCOME 50"
+        android:textColor="#E8E7E7" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:ellipsize="end"
+        android:fontFamily="@font/calibri"
+        android:maxLines="2"
+        android:text="Select a promo code"
+        android:textColor="#C3C2C2" />
+
+</LinearLayout>
