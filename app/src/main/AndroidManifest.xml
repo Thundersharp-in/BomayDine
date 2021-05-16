@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.BombayDine"
-        tools:replace="android:theme">
+        tools:replace="android:theme,android:allowBackup">
         <activity android:name=".user.ui.offers.AllOffersActivity"/>
         <activity android:name=".user.ui.dailyfood.DailyfoodActivity" />
         <activity android:name=".user.ui.menu.TopSellingAll" />
@@ -29,6 +29,7 @@
             android:value="@string/google_maps_key" />
 
         <activity android:name=".user.ui.scanner.QrScanner" />
+        
         <activity
             android:name=".user.ui.menu.AllItemsActivity"
             android:configChanges="orientation|screenSize|keyboard" />

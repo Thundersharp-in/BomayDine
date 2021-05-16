@@ -15,6 +15,7 @@ public class CONSTANTS {
     public static final String DATABASE_NODE_ORDERS = "ORDERS";
     public static final String DATABASE_NODE_DETAILS = "DETAILS";
     public static final String DATABASE_NODE_OVERVIEW = "OVERVIEW";
+    public static final String DATABASE_NODE_EMP_CODES = "EMP_CODES";
 
 
     public static final String DATABASE_NODE_BREAKFAST = "BREAKFAST";

@@ -37,9 +37,11 @@ import com.thundersharp.bombaydine.user.core.cart.CartEmptyUpdater;
 import com.thundersharp.bombaydine.user.core.cart.CartHandler;
 import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 import com.thundersharp.bombaydine.user.core.location.DistanceFromCoordinates;
+
 import com.thundersharp.bombaydine.user.core.utils.LatLongConverter;
 import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
 import com.thundersharp.bombaydine.user.ui.offers.AllOffersActivity;
+import com.thundersharp.payments.payments.PaymentCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -225,9 +227,7 @@ public class AllItemsActivity extends AppCompatActivity implements
 
         delevering_to_address.setText("Delivering to :"+sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1());
         shoe_offers.setOnClickListener(viewk -> startActivityForResult(new Intent(this, AllOffersActivity.class),001));
-        pay.setOnClickListener(view -> {
-
-        });
+        pay.setOnClickListener(view -> PaymentCallback.startCallback("prateekhrishikesh@gmail.com","7488367607","4444","","",this));
 
         bottomSheetDialog.show();
     }

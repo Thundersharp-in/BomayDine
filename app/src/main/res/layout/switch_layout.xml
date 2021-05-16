@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="#191313">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="15dp"
+        android:drawableStart="@drawable/ic_outline_info_24"
+        android:drawablePadding="10dp"
+        android:fontFamily="@font/calibri"
+        android:gravity="center_vertical"
+        android:text="This area is only for staff members to switch to there profile to manage the platform. If you are a employee then enter your employee id below to go to your dashboard."
+        android:textColor="#E4DC98"
+        app:drawableTint="#E4DC98" />
+
+
+    <LinearLayout
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:background="@drawable/curved_dark"
+        android:elevation="7dp"
+        android:layout_marginVertical="15dp"
+        android:minHeight="52dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="15dp"
+            app:tint="#ff995e"
+            android:src="@drawable/ic_outline_admin_panel_settings_24"/>
+
+
+        <EditText
+            android:id="@+id/search_home"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10dp"
+            android:background="@null"
+            android:hint="Enter employee code "
+            android:layout_marginStart="10dp"
+            android:inputType="textCapCharacters"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColor="#d3d3d3"
+            android:textColorHint="#b7b7b7" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:weightSum="2"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="5dp"
+        android:orientation="horizontal">
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/cancel"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:elevation="5dp"
+            android:background="@drawable/button_red_round"
+            android:layout_marginHorizontal="@dimen/dimen_10dp"
+            android:textColor="#fff"
+            android:text="CANCEL"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/suv"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dimen_10dp"
+            android:elevation="5dp"
+            android:background="@drawable/button_curved_round"
+            android:textColor="#fff"
+            android:text="SUBMIT"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>
