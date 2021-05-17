@@ -10,18 +10,17 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
+import com.mukesh.OnOtpCompletionListener;
+import com.mukesh.OtpView;
 import com.thundersharp.bombaydine.R;
-
-import in.aabhasjindal.otptextview.OTPListener;
-import in.aabhasjindal.otptextview.OtpTextView;
 
 public class OtpVerificationActivity extends AppCompatActivity {
 
-    OtpTextView otp_view;
+    OtpView otp_view;
     AppCompatButton submit,cancel;
     boolean isSubmitEnabled = false;
     private String otp;
-    RelativeLayout main;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +30,6 @@ public class OtpVerificationActivity extends AppCompatActivity {
         otp_view = findViewById(R.id.otp_view);
         submit = findViewById(R.id.vieify);
         cancel = findViewById(R.id.cancel);
-        main = findViewById(R.id.main);
 
         submit.setOnClickListener(view -> {
             if (isSubmitEnabled){
@@ -40,21 +38,15 @@ public class OtpVerificationActivity extends AppCompatActivity {
                 setResult(10001,i);
                 finish();
             }else {
-                Snackbar.make(main,"Enter complete otp first",Snackbar.LENGTH_SHORT).show();
+                //Snackbar.make(main,"Enter complete otp first",Snackbar.LENGTH_SHORT).show();
             }
         });
 
-        otp_view.setOtpListener(new OTPListener() {
+        otp_view.setOtpCompletionListener(new OnOtpCompletionListener() {
             @Override
-            public void onInteractionListener() {
-
-            }
-
-            @Override
-            public void onOTPComplete(String otpr) {
+            public void onOtpCompleted(String otpr) {
                 otp = otpr;
                 isSubmitEnabled = true;
-                //Toast.makeText(OtpVerificationActivity.this,otp,Toast.LENGTH_SHORT).show();
             }
         });
 

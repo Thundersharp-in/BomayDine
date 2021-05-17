@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:background="#22242c"
     android:layout_height="match_parent"
-    android:id="@+id/main"
     tools:context=".user.ui.login.OtpVerificationActivity">
 
     <ImageView
@@ -33,33 +32,23 @@
         android:textSize="13sp"/>
 
 
-    <in.aabhasjindal.otptextview.OtpTextView
-        android:id="@+id/otp_view"
+    <com.mukesh.OtpView
         android:layout_below="@id/vvv"
+        android:id="@+id/otp_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:inputType="number"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="25dp"
-        android:textColor="#fff"
-        app:height="40dp"
-        app:width="40dp"
-        app:bar_enabled="true"
-        app:bar_height="2dp"
-        app:length="6"
-        app:otp_text_size="24dp"/>
+        android:itemBackground="#000"
+        android:textColor="@android:color/white"
+        app:itemCount="6"
+        app:hideLineWhenFilled="true"
+        app:lineColor="#fff"
+        app:viewType="line"
+        />
 
-    <!--<TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
-        android:textColor="#CDDC39"
-        android:text="Resend"
-        android:layout_marginStart="15dp"
-        android:layout_below="@id/ssss"
-        android:id="@+id/resend"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp"
-        android:textSize="13sp"/>-->
+
 
 
     <LinearLayout
@@ -80,7 +69,6 @@
             android:background="@drawable/btn_tr_green"/>
 
         <androidx.appcompat.widget.AppCompatButton
-
             android:id="@+id/cancel"
             android:layout_width="0dp"
             android:layout_height="45dp"

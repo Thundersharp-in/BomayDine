@@ -42,7 +42,6 @@ public final class EmployeeObserver implements AccountSwitcher
 
     @Override
     public void switchToEmployeeAccount(String uid) {
-
         FirebaseDatabase
                 .getInstance()
                 .getReference(CONSTANTS.DATABASE_NODE_EMP_CODES)
@@ -55,6 +54,7 @@ public final class EmployeeObserver implements AccountSwitcher
                             HashMap hashMap = new HashMap();
                             hashMap.put("EMPLOYEECODE",snapshot.child("EMPLOYEECODE").getValue().toString());
                             hashMap.put("NAME",snapshot.child("NAME").getValue().toString());
+                            hashMap.put("TYPE",snapshot.child("TYPE").getValue().toString());
 
                             onAccountSwitchInternal.OnAccountsSwitched(hashMap);
 
@@ -83,8 +83,9 @@ public final class EmployeeObserver implements AccountSwitcher
             editor.putString("EMPLOYEECODE",data.get("EMPLOYEECODE"));
             editor.putString("NAME",data.get("NAME"));
             editor.putString("UID",uid);
+            editor.putString("TYPE",data.get("TYPE"));
             editor.apply();
-            accountSwitchListner.onSaveSuccess(data.get("EMPLOYEECODE"),data.get("NAME"));
+            accountSwitchListner.onSaveSuccess(data.get("EMPLOYEECODE"),data.get("NAME"),data.get("TYPE"));
         }
 
         else accountSwitchListner.onSaveFailure(new Exception("ERROR"));

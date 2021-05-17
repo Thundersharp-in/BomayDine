@@ -27,6 +27,7 @@ import com.thundersharp.bombaydine.user.core.login.AccountSwitcher;
 import com.thundersharp.bombaydine.user.core.login.Logout;
 import com.thundersharp.bombaydine.user.ui.home.MainPage;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
+import com.thundersharp.bombaydine.user.ui.startup.MainActivity;
 
 import java.util.HashMap;
 
@@ -99,9 +100,38 @@ public class Profile extends Fragment {
                             .setUid(FirebaseAuth.getInstance().getUid())
                             .setListner(new SharedPrefUpdater.AccountSwitch.lisetner() {
                                 @Override
-                                public void onSaveSuccess(String employeeCode, String name) {
+                                public void onSaveSuccess(String employeeCode, String name,String type) {
+
                                     if (employeeCode.equals(code.getText().toString())) {
-                                        Toast.makeText(getContext(), "done " + employeeCode, Toast.LENGTH_SHORT).show();
+                                        String des = null;
+                                        if (type.equalsIgnoreCase("1")){
+                                            des = "Kitchen staff";
+                                        }else if (type.equalsIgnoreCase("2")){
+                                            des = "Delivery Partner";
+                                        }else if (type.equalsIgnoreCase("0")){
+                                            des = "Admin";
+                                        }
+                                        new AlertDialog
+                                                .Builder(getActivity())
+                                                .setMessage("Welcome "+name+" Switch to your account as "+des)
+                                                .setCancelable(false)
+                                                .setPositiveButton("SWITCH", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        startActivity(new Intent(getActivity(), MainActivity.class));
+                                                        getActivity().finish();
+                                                    }
+                                                })
+                                                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                                    @Override
+                                                    public void onClick(DialogInterface dialogInterface, int i) {
+                                                        AccountHelper
+                                                                .getInstance(getActivity())
+                                                                .clearAllData();
+                                                        dialogInterface.dismiss();
+                                                    }
+                                                })
+                                                .show();
                                     } else
                                         Toast.makeText(getContext(), "Entered code is incorrect.", Toast.LENGTH_SHORT).show();
 

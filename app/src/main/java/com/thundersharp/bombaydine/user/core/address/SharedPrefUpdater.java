@@ -22,7 +22,7 @@ public interface SharedPrefUpdater {
         void saveSwitchedUser(HashMap<String , String> data);
 
         interface lisetner{
-            void onSaveSuccess(String employeeCode,String name);
+            void onSaveSuccess(String employeeCode,String name,String type);
             void onSaveFailure(Exception e);
         }
 
