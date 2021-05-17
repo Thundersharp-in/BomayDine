@@ -1,5 +1,6 @@
 package com.thundersharp.bombaydine.user.ui.account;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
@@ -22,6 +24,7 @@ import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
 import com.thundersharp.bombaydine.user.core.animation.Animator;
 import com.thundersharp.bombaydine.user.core.login.AccountHelper;
 import com.thundersharp.bombaydine.user.core.login.AccountSwitcher;
+import com.thundersharp.bombaydine.user.core.login.Logout;
 import com.thundersharp.bombaydine.user.ui.home.MainPage;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
 
@@ -32,7 +35,7 @@ public class Profile extends Fragment {
     private RelativeLayout bottomHolderprofile;
     private MaterialCardView your_orders;
     private CoordinatorLayout containermain;
-    private TextView switchbtn;
+    private TextView switchbtn,logout;
     private BottomSheetDialog bottomSheetDialogloc;
 
     @Override
@@ -44,6 +47,7 @@ public class Profile extends Fragment {
         your_orders = view.findViewById(R.id.your_orders);
         containermain = view.findViewById(R.id.containermain);
         switchbtn = view.findViewById(R.id.switchbtn);
+        logout = view.findViewById(R.id.logoutn);
 
         Animator
                 .initializeAnimator()
@@ -52,6 +56,25 @@ public class Profile extends Fragment {
         your_orders.setOnClickListener(view1 -> {
 
             MainPage.navController.navigate(R.id.discover);
+        });
+
+        logout.setOnClickListener(view1 -> {
+            new AlertDialog
+                    .Builder(getActivity())
+                    .setMessage("Are you sure you want to logout from this device ?")
+                    .setPositiveButton("YES", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int i) {
+                            Logout.logout();
+                            startActivity(new Intent(getActivity(),LoginActivity.class));
+                            getActivity().finish();
+                        }
+                    }).setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    dialogInterface.dismiss();
+                }
+            }).show();
         });
 
         switchbtn.setOnClickListener(view1 -> {

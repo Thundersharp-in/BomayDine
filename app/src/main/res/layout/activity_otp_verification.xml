@@ -40,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="25dp"
-        android:textColor="#ffffff"
+        android:textColor="#fff"
         app:height="40dp"
         app:width="40dp"
         app:bar_enabled="true"
@@ -80,6 +80,7 @@
             android:background="@drawable/btn_tr_green"/>
 
         <androidx.appcompat.widget.AppCompatButton
+
             android:id="@+id/cancel"
             android:layout_width="0dp"
             android:layout_height="45dp"

@@ -21,6 +21,7 @@ public class QrScanner extends Activity implements ZXingScannerView.ResultHandle
         mScannerView = new ZXingScannerView(this);   // Programmatically initialize the scanner view
         setContentView(mScannerView);
         mScannerView.startCamera();
+
         // Set the scanner view as the content view
     }
 

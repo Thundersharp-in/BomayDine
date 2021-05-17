@@ -7,7 +7,7 @@ import java.util.HashMap;
 public class AccountHelper implements AccountSwitcher.OnAccountSwitchInternal{
 
     public static AccountHelper accountHelper;
-    public EmployeeObserver employeeObserver;
+    private EmployeeObserver employeeObserver;
     private String uid;
     static Context contexts;
 
