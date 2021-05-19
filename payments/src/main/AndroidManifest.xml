@@ -3,6 +3,8 @@
     package="com.thundersharp.payments">
 
     <application>
-        <activity android:name=".payments.PaymentCallback"/>
+
+        <meta-data android:name="razorPayKey"
+            android:value="rzp_test_DZNbcClq06ahsT"/>
     </application>
 </manifest>

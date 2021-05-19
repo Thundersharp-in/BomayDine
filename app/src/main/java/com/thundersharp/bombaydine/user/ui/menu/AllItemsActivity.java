@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -21,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.razorpay.PaymentData;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapterMailAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.AllOfferAdapters;
@@ -37,11 +37,11 @@ import com.thundersharp.bombaydine.user.core.cart.CartEmptyUpdater;
 import com.thundersharp.bombaydine.user.core.cart.CartHandler;
 import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 import com.thundersharp.bombaydine.user.core.location.DistanceFromCoordinates;
-
 import com.thundersharp.bombaydine.user.core.utils.LatLongConverter;
 import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
 import com.thundersharp.bombaydine.user.ui.offers.AllOffersActivity;
-import com.thundersharp.payments.payments.PaymentCallback;
+import com.thundersharp.payments.payments.PaymentObserver;
+import com.thundersharp.payments.payments.Payments;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -227,7 +227,21 @@ public class AllItemsActivity extends AppCompatActivity implements
 
         delevering_to_address.setText("Delivering to :"+sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1());
         shoe_offers.setOnClickListener(viewk -> startActivityForResult(new Intent(this, AllOffersActivity.class),001));
-        pay.setOnClickListener(view -> PaymentCallback.startCallback("prateekhrishikesh@gmail.com","7488367607","4444","","",this));
+        pay.setOnClickListener(view -> {
+            Payments.initialize(this)
+                    .startPayment("Test1",""+System.currentTimeMillis(),500,"support@thundersharp.in","7301694135")
+                    .attachObserver(new PaymentObserver() {
+                @Override
+                public void OnPaymentSuccess(String s, PaymentData paymentData) {
+
+                }
+
+                @Override
+                public void OnPaymentFailed(int i, String s, PaymentData paymentData) {
+                    Toast.makeText(AllItemsActivity.this, ""+s, Toast.LENGTH_SHORT).show();
+                }
+            });
+        });
 
         bottomSheetDialog.show();
     }
