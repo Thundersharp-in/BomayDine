@@ -16,7 +16,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BombayDine"
         tools:replace="android:theme,android:allowBackup">
-        <activity android:name=".user.core.orders.OrderDetails"></activity>
+        <activity android:name=".user.ui.orders.OrderStatus"></activity>
 
         <service
             android:name=".user.core.OrderStatusUpdater"

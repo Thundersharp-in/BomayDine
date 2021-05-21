@@ -1,6 +1,8 @@
 package com.thundersharp.bombaydine.user.core.Model;
 
-public class OrederBasicDetails {
+import java.io.Serializable;
+
+public class OrederBasicDetails implements Serializable {
 
     public OrederBasicDetails(){}
 

@@ -16,6 +16,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
 import com.thundersharp.bombaydine.user.core.utils.TimeUtils;
+import com.thundersharp.bombaydine.user.ui.orders.OrderStatus;
 
 import java.util.List;
 
@@ -129,8 +130,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewBinder
 
         @Override
         public void onClick(View view) {
-
-
+            OrderStatus.showOrderStatus(context,((DataSnapshot)data.get(getAdapterPosition())).getValue(OrederBasicDetails.class));
         }
     }
 }

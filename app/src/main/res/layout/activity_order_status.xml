@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1e2026"
+    tools:context=".user.ui.orders.OrderStatus">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        app:menu="@menu/order_det_menu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:navigationIcon="@drawable/quantum_ic_arrow_back_grey600_24"
+        app:titleTextColor="#CACACA"/>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/toolbar">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/dummy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:text="Order Summary"
+                android:textColor="#DFDFDF"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:layout_marginStart="@dimen/dimen_25dp"/>
+
+            <TextView
+                android:id="@+id/textupdate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/dummy"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:drawableStart="@drawable/ic_outline_info_24"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/calibri"
+                android:gravity="center_vertical"
+                android:text="Current status is Payment pending"
+                android:textColor="#F4E880"
+                app:drawableTint="#F4E880" />
+
+            <com.github.vipulasri.timelineview.TimelineView
+                android:id="@+id/timeline"
+                android:layout_below="@id/textupdate"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:markerSize="20dp"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_marginTop="15dp"
+                app:marker="@drawable/ic_outline_fastfood_24"
+                app:lineStyleDashGap="5dp"
+                app:lineOrientation="vertical"
+                app:lineStyle="dash"
+                app:lineWidth="5dp"
+                app:startLineColor="#ffff"
+                app:endLineColor="#C1C1C1" />
+
+
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>
