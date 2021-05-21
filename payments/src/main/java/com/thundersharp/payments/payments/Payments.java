@@ -12,7 +12,7 @@ import com.thundersharp.payments.R;
 
 import org.json.JSONObject;
 
-public class Payments implements PaymentResultListener {
+public class Payments {
 
     private static Activity context;
     private Checkout checkout;
@@ -30,16 +30,16 @@ public class Payments implements PaymentResultListener {
          return payments;
     }
 
-    public Payments startPayment(String description,String orderid, long amount,String customerEmail,String customerPhone){
-        pay(description, orderid, amount, customerEmail, customerPhone);
+    public Payments startPayment(String description, double amount,String customerEmail,String customerPhone){
+        pay(description, amount, customerEmail, customerPhone);
         return payments;
     }
 
-    public void attachObserver(PaymentObserver paymentObserver){
-        this.paymentObserver = paymentObserver;
+    public void attachObserver(PaymentResultListener paymentObserver){
+
     }
 
-    private void pay(String description,String orderid, long amount,String customerEmail,String customerPhone) {
+    private void pay(String description, double amount,String customerEmail,String customerPhone) {
 
         Checkout checkout = new Checkout();
         checkout.setKeyID("rzp_test_DZNbcClq06ahsT");
@@ -59,6 +59,9 @@ public class Payments implements PaymentResultListener {
         final Activity activity = context;
 
         /**
+
+
+
          * Pass your payment options to the Razorpay Checkout as a JSONObject
          */
         try {
@@ -67,7 +70,7 @@ public class Payments implements PaymentResultListener {
             options.put("name","Bombay Dine Restaurant");
             options.put("description", description);
             options.put("image", "https://s3.amazonaws.com/rzp-mobile/images/rzp.png");
-            options.put("order_id", orderid);//from response of step 3.
+           // options.put("order_id", orderid);//from response of step 3.
             options.put("theme.color", "#3399cc");
             options.put("currency", "INR");
             options.put("amount", String.valueOf((amount * 100)));//pass amount in currency subunits
@@ -89,7 +92,7 @@ public class Payments implements PaymentResultListener {
     }
 
 
-    @Override
+/*    @Override
     public void onPaymentSuccess(String s) {
         if (paymentObserver != null){
             paymentObserver.OnPaymentSuccess(s, null);
@@ -101,6 +104,6 @@ public class Payments implements PaymentResultListener {
         if (paymentObserver != null){
             paymentObserver.OnPaymentFailed(i, s, null);
         }
-    }
+    }*/
 }
 
