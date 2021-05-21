@@ -42,6 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/dummy"
                 android:layout_marginHorizontal="10dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
                 android:drawableStart="@drawable/ic_outline_info_24"
                 android:drawablePadding="10dp"
@@ -51,21 +52,14 @@
                 android:textColor="#F4E880"
                 app:drawableTint="#F4E880" />
 
-            <com.github.vipulasri.timelineview.TimelineView
-                android:id="@+id/timeline"
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_below="@id/textupdate"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                app:markerSize="20dp"
-                android:layout_marginStart="@dimen/dimen_10dp"
-                android:layout_marginTop="15dp"
-                app:marker="@drawable/ic_outline_fastfood_24"
-                app:lineStyleDashGap="5dp"
-                app:lineOrientation="vertical"
-                app:lineStyle="dash"
-                app:lineWidth="5dp"
-                app:startLineColor="#ffff"
-                app:endLineColor="#C1C1C1" />
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:layout_marginTop="10dp"
+                android:id="@+id/recycler"/>
 
 
 
