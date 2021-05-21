@@ -49,7 +49,7 @@ public class SharedPrefHelper implements SharedPrefUpdater{
             AddressData addressData = new AddressData();
             addressData.setADDRESS_LINE1(sharedPreferences.getString("Address","Soldevahanalli"));
             addressData.setADDRESS_NICKNAME(sharedPreferences.getString("Nickname","Home"));
-            addressData.setLAT_LONG(sharedPreferences.getString("lat_long","13.0833209,77.4843393"));
+            addressData.setLAT_LONG(sharedPreferences.getString("lat_long",ResturantCoordinates.resturantLatLong.latitude+","+ResturantCoordinates.resturantLatLong.longitude));
             onSharedprefUpdated.onSharedPrefUpdate(addressData);
         }
     }

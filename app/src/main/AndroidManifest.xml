@@ -16,7 +16,14 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BombayDine"
         tools:replace="android:theme,android:allowBackup">
-        <activity android:name=".Delevery.HomeDelevery"></activity>
+        <activity android:name=".user.core.orders.OrderDetails"></activity>
+
+        <service
+            android:name=".user.core.OrderStatusUpdater"
+            android:enabled="true"
+            android:exported="true" />
+
+        <activity android:name=".Delevery.HomeDelevery" />
         <activity android:name=".kitchen.HomeKitchen" />
         <activity android:name=".user.ui.offers.AllOffersActivity" />
         <activity android:name=".user.ui.dailyfood.DailyfoodActivity" />

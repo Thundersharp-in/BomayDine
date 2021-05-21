@@ -20,7 +20,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.firebase.auth.FirebaseAuth;
+import com.payumoney.core.response.PaymentResponse;
 import com.razorpay.PaymentData;
+import com.razorpay.PaymentResultListener;
+import com.razorpay.PaymentResultWithDataListener;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapterMailAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.AllOfferAdapters;
@@ -30,6 +34,7 @@ import com.thundersharp.bombaydine.user.core.Data.HomeDataProvider;
 import com.thundersharp.bombaydine.user.core.Data.OfferListner;
 import com.thundersharp.bombaydine.user.core.Data.OffersProvider;
 import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
+import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
 import com.thundersharp.bombaydine.user.core.OfflineDataSync.OfflineDataProvider;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefHelper;
 import com.thundersharp.bombaydine.user.core.animation.Animator;
@@ -37,8 +42,11 @@ import com.thundersharp.bombaydine.user.core.cart.CartEmptyUpdater;
 import com.thundersharp.bombaydine.user.core.cart.CartHandler;
 import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 import com.thundersharp.bombaydine.user.core.location.DistanceFromCoordinates;
+import com.thundersharp.bombaydine.user.core.payments.PrePayment;
+import com.thundersharp.bombaydine.user.core.payments.parePayListener;
 import com.thundersharp.bombaydine.user.core.utils.LatLongConverter;
 import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
+import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
 import com.thundersharp.bombaydine.user.ui.offers.AllOffersActivity;
 import com.thundersharp.payments.payments.PaymentObserver;
 import com.thundersharp.payments.payments.Payments;
@@ -48,7 +56,7 @@ import java.util.List;
 
 public class AllItemsActivity extends AppCompatActivity implements
         HomeDataContract.AllItems,
-        HomeDataContract.DataLoadFailure{
+        HomeDataContract.DataLoadFailure, PaymentResultWithDataListener {
 
     private  SharedPrefHelper sharedPrefHelper;
     private RecyclerView recyclermain;
@@ -223,31 +231,73 @@ public class AllItemsActivity extends AppCompatActivity implements
         promoamt = bottomview.findViewById(R.id.promotot);
         grandtot = bottomview.findViewById(R.id.grand_tot);
         pay = bottomview.findViewById(R.id.paybtn);
-        updateCartData();
+
+        List<CartItemModel> data = updateCartData();
 
         delevering_to_address.setText("Delivering to :"+sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1());
+
         shoe_offers.setOnClickListener(viewk -> startActivityForResult(new Intent(this, AllOffersActivity.class),001));
-        pay.setOnClickListener(view -> {
-            Payments.initialize(this)
-                    .startPayment("Test1",""+System.currentTimeMillis(),500,"support@thundersharp.in","7301694135")
-                    .attachObserver(new PaymentObserver() {
-                @Override
-                public void OnPaymentSuccess(String s, PaymentData paymentData) {
 
+        pay.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                    StringBuilder stringBuilder = new StringBuilder();
+                    for (int q = 0; q < data.size(); q++) {
+                        if (q == data.size() -1){
+                            stringBuilder
+                                    .append(data.get(q).getQUANTITY())
+                                    .append(" X ")
+                                    .append(data.get(q).getNAME());
+
+                        }else {
+                            stringBuilder
+                                    .append(data.get(q).getQUANTITY())
+                                    .append(" X ")
+                                    .append(data.get(q).getNAME())
+                                    .append(", ");
+                        }
+                    }
+                    OrederBasicDetails orederBasicDetails = new OrederBasicDetails(
+                            sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1(),
+                            sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG(),
+                            "",
+                            stringBuilder.toString(),
+                            delehevry.getText().toString().replace("\u20B9", ""),
+                            grandtot.getText().toString().replace("\u20B9", ""),
+                            "",
+                            String.valueOf(System.currentTimeMillis()));
+
+                    PrePayment
+                            .getInstance()
+                            .setDadaistListener(new parePayListener() {
+                                @Override
+                                public void addSuccess() {
+                                    Payments
+                                            .initialize(AllItemsActivity.this)
+                                            .startPayment("ORDER #" + orederBasicDetails.getOrderID(), Double.parseDouble(orederBasicDetails.getTotalamt()), "support@thundersharp.in", "7301694135");
+
+                                }
+
+                                @Override
+                                public void addFailure(Exception exception) {
+                                    Toast.makeText(AllItemsActivity.this, "Payment cannot be initialized cause :" + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            }).setOrderToDatabase(data, orederBasicDetails);
+                }else {
+                    Toast.makeText(AllItemsActivity.this, "Log in first", Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(AllItemsActivity.this, LoginActivity.class));
                 }
 
-                @Override
-                public void OnPaymentFailed(int i, String s, PaymentData paymentData) {
-                    Toast.makeText(AllItemsActivity.this, ""+s, Toast.LENGTH_SHORT).show();
-                }
-            });
+            }
         });
+
 
         bottomSheetDialog.show();
     }
 
 
-    private void updateCartData(){
+    private List<CartItemModel> updateCartData(){
         List<CartItemModel> data = offlineDataProvider.returnDataFromString(offlineDataProvider.fetchitemfromStorage());
 
         if (data != null) {
@@ -286,6 +336,8 @@ public class AllItemsActivity extends AppCompatActivity implements
                 pay.setText("PAY \u20B9 0");
             }
         }
+
+        return data;
     }
 
     private void refreshAdapter() {
@@ -329,7 +381,6 @@ public class AllItemsActivity extends AppCompatActivity implements
 
 
 
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -338,4 +389,14 @@ public class AllItemsActivity extends AppCompatActivity implements
 
 
 
+    @Override
+    public void onPaymentSuccess(String s, PaymentData paymentData) {
+
+        Toast.makeText(this, ""+paymentData.getData().toString(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPaymentError(int i, String s, PaymentData paymentData) {
+        Toast.makeText(this, ""+s, Toast.LENGTH_SHORT).show();
+    }
 }
