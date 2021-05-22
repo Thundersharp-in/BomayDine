@@ -42,9 +42,10 @@ public class OrderStatus extends AppCompatActivity {
             finish();
         }
 
-        fav=findViewById(R.id.fav);
+        //fav=findViewById(R.id.fav);
         unfav=findViewById(R.id.unfav);
 
+/*
         fav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,6 +53,7 @@ public class OrderStatus extends AppCompatActivity {
                 unfav.setVisibility(View.VISIBLE);
             }
         });
+*/
         unfav.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

@@ -19,6 +19,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@id/lllb"
         android:layout_below="@id/toolbar">
 
         <RelativeLayout
@@ -74,22 +75,6 @@
                 android:textColor="#DFDFDF"
                 />
 
-            <TextView
-                android:id="@+id/fav"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="MARK AS FAVOURITE"
-                android:layout_alignParentEnd="true"
-                android:layout_below="@+id/recycler"
-                android:layout_marginTop="@dimen/dimen_15dp"
-                android:layout_marginEnd="@dimen/dimen_10dp"
-                android:textColor="#E91E63"
-                android:textSize="@dimen/dimen_14sp"
-                android:paddingHorizontal="@dimen/dimen_10dp"
-                android:paddingVertical="3dp"
-                android:background="@drawable/btn_tr_red"
-                android:visibility="visible"
-                />
             <TextView
                 android:id="@+id/unfav"
                 android:layout_width="wrap_content"
@@ -434,9 +419,10 @@
     </androidx.core.widget.NestedScrollView>
 
     <LinearLayout
+        android:id="@+id/lllb"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="60dp"
+        android:minHeight="50dp"
         android:orientation="vertical"
         android:layout_marginBottom="15dp"
         android:layout_marginTop="@dimen/dimen_5dp"
@@ -457,8 +443,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="VIEW CART ON NEXT STEP"
-            android:textSize="14sp"
+            android:text="View cart in next step"
             android:textColor="#E6E6E6"
             />
 
