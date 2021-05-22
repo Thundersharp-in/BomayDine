@@ -47,7 +47,6 @@ public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderL
     List<OrderModel> model;
 
     OrderDetailHelper helper;
-    OrderDetail.OrderListner listner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,7 +93,7 @@ public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderL
     private void setData() {
         delever_address.setText(orederBasicDetails.getDelivery_address());
         grand_total.setText("Rs. "+orederBasicDetails.getTotalamt());
-        order_no.setText(orederBasicDetails.getOrderID());
+        order_no.setText("#"+orederBasicDetails.getOrderID());
         order_date.setText(TimeUtils.getTimeFromTimeStamp(orederBasicDetails.getOrderID()));
         delevery_charge.setText(orederBasicDetails.getDelivery_charge());
         promo_code.setText(orederBasicDetails.getPromocodeNameNdiscount());

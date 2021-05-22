@@ -21,12 +21,11 @@
             >
             <ImageView
                 android:id="@+id/v_nv"
-                android:layout_width="15dp"
+                android:layout_width="10dp"
                 android:layout_height="match_parent"
                 android:src="@drawable/veg"
                 android:layout_marginEnd="5dp"
                 android:layout_gravity="center"
-                android:elevation="4dp"
                 />
 
             <TextView
@@ -34,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Vanilla Cake [500 Grams]"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:textColor="#E3E3E3"
                 android:layout_marginStart="@dimen/dimen_10dp"
                 />
@@ -43,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="@dimen/dimen_10dp"
+            android:layout_marginTop="@dimen/dimen_5dp"
             android:gravity="center"
             >
             <TextView
@@ -52,7 +51,7 @@
                 android:layout_height="wrap_content"
                 android:text="10"
                 android:background="@drawable/green_curve"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:textColor="#B3B3B3"
                 android:gravity="center"
                 android:padding="5dp"
@@ -61,7 +60,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="X"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:textColor="#B3B3B3"
                 android:layout_marginStart="@dimen/dimen_10dp"
                 />
@@ -71,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rs. 200"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:textColor="#B3B3B3"
                 android:layout_marginStart="@dimen/dimen_10dp"
                 />
@@ -81,7 +80,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Rs. 2000"
-                android:textSize="15sp"
+                android:textSize="13sp"
                 android:textColor="#B3B3B3"
                 android:gravity="end"
                 android:layout_marginStart="@dimen/dimen_10dp"
