@@ -99,6 +99,7 @@
                     android:background="@null"
                     android:hint="Phone Number"
                     android:inputType="phone"
+                    android:textColor="#100E0E"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textColorHint="#b7b7b7" />
