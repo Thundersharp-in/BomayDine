@@ -146,6 +146,7 @@
                         android:textColor="#BFBFBF"
                         />
                     <TextView
+                        android:id="@+id/item_total"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
@@ -165,6 +166,7 @@
                     android:layout_marginTop="@dimen/dimen_10dp"
                     >
                     <TextView
+                        android:id="@+id/promo_code"
                         android:layout_weight="1"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
@@ -174,6 +176,7 @@
                         android:textSize="13sp"
                         />
                     <TextView
+                        android:id="@+id/promo_amount"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
@@ -201,6 +204,7 @@
                         android:textColor="#818181"
                         />
                     <TextView
+                        android:id="@+id/delevery_charge"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
@@ -237,6 +241,7 @@
                         android:fontFamily="@font/calibri"
                         />
                     <TextView
+                        android:id="@+id/grand_total"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
@@ -252,7 +257,6 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="0.5dp"
-                    android:layout_below="@+id/recycler_dishes"
                     android:layout_marginTop="@dimen/dimen_15dp"
                     android:background="#6E6E6E"
                     />
@@ -276,6 +280,7 @@
                         android:textColor="#0066FF"
                         />
                     <TextView
+                        android:id="@+id/total_saving"
                         android:layout_width="0dp"
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
@@ -315,6 +320,7 @@
                     android:layout_marginTop="@dimen/dimen_15dp"
                     />
                 <TextView
+                    android:id="@+id/order_no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="207392446231"
@@ -334,6 +340,7 @@
                     android:layout_marginTop="@dimen/dimen_15dp"
                     />
                 <TextView
+                    android:id="@+id/payment_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Cash on Delivery"
@@ -352,6 +359,7 @@
                     android:layout_marginTop="@dimen/dimen_15dp"
                     />
                 <TextView
+                    android:id="@+id/order_date"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="March 15, 2022 at 05:06 AM"
@@ -370,6 +378,7 @@
                     android:layout_marginTop="@dimen/dimen_15dp"
                     />
                 <TextView
+                    android:id="@+id/order_phone_no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="979868XXX"
@@ -388,6 +397,7 @@
                     android:layout_marginTop="@dimen/dimen_15dp"
                     />
                 <TextView
+                    android:id="@+id/delever_address"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Priya girls Hostel , 1st floor , Hindpiri"
@@ -404,6 +414,7 @@
                     />
 
                 <TextView
+                    android:id="@+id/order_caller_no"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Call Shop (+91 9876543210)"
