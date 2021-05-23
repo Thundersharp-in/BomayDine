@@ -10,6 +10,8 @@ import com.google.firebase.database.ValueEventListener;
 import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class OrderHistoryProvider implements OrderContract{
@@ -38,6 +40,7 @@ public class OrderHistoryProvider implements OrderContract{
     @Override
     public void fetchRecentOrders() {
         List<Object> objects = new ArrayList<>();
+        int counter = 0;
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             if (renderNoq == 0){
                 FirebaseDatabase
@@ -54,6 +57,7 @@ public class OrderHistoryProvider implements OrderContract{
                                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                                         objects.add(dataSnapshot);
                                     }
+
                                     onOrderFetch.onOrderFetchSuccess(objects);
 
                                 } else {

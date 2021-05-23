@@ -33,9 +33,9 @@ public class OrderItem extends RecyclerView.Adapter<OrderItem.ViewHolder>{
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         OrderModel model=modelList.get(position);
         holder.food_name.setText(model.getName());
-        holder.item_amount.setText(String.valueOf(model.getAmount()));
+        holder.item_amount.setText("\u20B9"+String.valueOf(model.getAmount()));
         holder.qty.setText(String.valueOf(model.getQuantity()));
-        holder.t_amount.setText(String.valueOf(model.getQuantity()*model.getAmount()));
+        holder.t_amount.setText("\u20B9"+String.valueOf(model.getQuantity()*model.getAmount()));
     }
 
     @Override

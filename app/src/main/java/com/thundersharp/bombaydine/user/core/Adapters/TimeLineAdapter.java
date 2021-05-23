@@ -75,6 +75,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 if (position == 1) {
                     holder.mTimelineView.setStartLineColor(mContext.getResources().getColor(R.color.blue), getItemViewType(position));
                     holder.mTimelineView.setMarker(mContext.getDrawable(R.drawable.drawable_blue));
+                    holder.status.setText("We have accepted your order your food is being prepared, for any special instructions you can call us.");
                 }
                 break;
 
@@ -89,12 +90,13 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                     holder.mTimelineView.setStartLineColor(mContext.getResources().getColor(R.color.blue), getItemViewType(position));
                     holder.mTimelineView.setEndLineColor(mContext.getResources().getColor(R.color.blue), getItemViewType(position));
                     holder.mTimelineView.setMarker(mContext.getDrawable(R.drawable.drawable_blue));
+                    holder.status.setText("We have accepted your order your food is being prepared.");
                 }
 
                 if (position ==2) {
                     holder.mTimelineView.setMarker(mContext.getDrawable(R.drawable.circle_blue_out_for_delivery));
                     holder.mTimelineView.setStartLineColor(mContext.getResources().getColor(R.color.blue), getItemViewType(position));
-
+                    holder.status.setText("Your order is picked up by our delivery executive you can contact him on : 987543210");
                 }
                 break;
 
@@ -109,6 +111,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                     holder.mTimelineView.setMarker(mContext.getDrawable(R.drawable.drawable_blue));
                     holder.mTimelineView.setStartLineColor(mContext.getResources().getColor(R.color.blue), getItemViewType(position));
                     holder.mTimelineView.setEndLineColor(mContext.getResources().getColor(R.color.blue), getItemViewType(position));
+                    holder.status.setText("We have accepted your order your food is being prepared.");
 
                 }
 
@@ -116,13 +119,13 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                     holder.mTimelineView.setMarker(mContext.getDrawable(R.drawable.circle_blue_out_for_delivery));
                     holder.mTimelineView.setStartLineColor(mContext.getResources().getColor(R.color.blue), getItemViewType(position));
                     holder.mTimelineView.setEndLineColor(mContext.getResources().getColor(R.color.blue), getItemViewType(position));
-
+                    holder.status.setText("Your order is picked up by our delivery executive.");
                 }
 
                 if (position ==3) {
                     holder.mTimelineView.setMarker(mContext.getDrawable(R.drawable.circle_blue_deliverd));
                     holder.mTimelineView.setStartLineColor(mContext.getResources().getColor(R.color.blue), getItemViewType(position));
-
+                    holder.status.setText("Your order was successfully delivered");
                 }
                 break;
             case 4:
@@ -144,7 +147,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
 
     class TimeLineViewHolder extends RecyclerView.ViewHolder{
         public  TimelineView mTimelineView;
-        TextView tittle;
+        TextView tittle,status;
 
         public TimeLineViewHolder(View itemView, int viewType) {
             super(itemView);
@@ -152,6 +155,7 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
             mTimelineView.initLine(viewType);
 
             tittle = itemView.findViewById(R.id.dummy);
+            status = itemView.findViewById(R.id.statusdes);
         }
     }
 

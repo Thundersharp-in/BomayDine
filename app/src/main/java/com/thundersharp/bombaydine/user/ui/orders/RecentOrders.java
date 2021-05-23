@@ -13,6 +13,7 @@ import com.thundersharp.bombaydine.user.core.Adapters.RecentAdapter;
 import com.thundersharp.bombaydine.user.core.orders.OrderContract;
 import com.thundersharp.bombaydine.user.core.orders.OrderHistoryProvider;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecentOrders extends AppCompatActivity {
@@ -34,7 +35,10 @@ public class RecentOrders extends AppCompatActivity {
                 .setOnOrderFetchListener(new OrderContract.onOrderFetch() {
             @Override
             public void onOrderFetchSuccess(List<Object> data) {
+                List<Object> objectList = new ArrayList<>();
                 recyclerView.setAdapter(RecentAdapter.initialize(RecentOrders.this,data));
+
+
             }
 
             @Override

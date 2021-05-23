@@ -12,4 +12,5 @@ public final class ResturantCoordinates {
 
     public static final double averageSpaeed = 30.0;
     public static final int averagePreperationTime = 30;
+    public static final String resturantcontact = "+91 7301694135";
 }

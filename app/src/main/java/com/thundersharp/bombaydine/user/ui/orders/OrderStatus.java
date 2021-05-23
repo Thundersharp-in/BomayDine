@@ -25,6 +25,7 @@ import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
 import com.thundersharp.bombaydine.user.core.Model.OrderModel;
 import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
 import com.thundersharp.bombaydine.user.core.animation.Animator;
+import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
 import com.thundersharp.bombaydine.user.core.utils.TimeUtils;
 
 import java.util.ArrayList;
@@ -63,15 +64,6 @@ public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderL
 
         initializeViews();
 
-        /*
-        fav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                fav.setVisibility(View.GONE);
-                unfav.setVisibility(View.VISIBLE);
-            }
-        });
-*/
 
         unfav.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,42 +84,13 @@ public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderL
 
     private void setData() {
         delever_address.setText(orederBasicDetails.getDelivery_address());
-        grand_total.setText("Rs. "+orederBasicDetails.getTotalamt());
+        grand_total.setText("\u20B9 "+orederBasicDetails.getTotalamt());
         order_no.setText("#"+orederBasicDetails.getOrderID());
         order_date.setText(TimeUtils.getTimeFromTimeStamp(orederBasicDetails.getOrderID()));
-        delevery_charge.setText(orederBasicDetails.getDelivery_charge());
+        delevery_charge.setText("\u20B9"+orederBasicDetails.getDelivery_charge());
         promo_code.setText(orederBasicDetails.getPromocodeNameNdiscount());
-        order_caller_no.setText("No Owner Yet!!");
+        order_caller_no.setText("Call Resturant on : "+ResturantCoordinates.resturantcontact);
         helper.FetchOrder(orederBasicDetails.getOrderID());
-        /*
-        model=new ArrayList<>();
-        FirebaseDatabase
-                .getInstance()
-                .getReference("USERS")
-                .child(FirebaseAuth.getInstance().getUid())
-                .child("ORDERS")
-                .child("DETAILS")
-                .child(orederBasicDetails.getOrderID())
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()){
-                            for (DataSnapshot snapshot1:snapshot.getChildren()){
-                                model.add(snapshot1.getValue(OrderModel.class));
-                            }
-                            OrderItem adapter=new OrderItem(OrderStatus.this,model);
-                            recycler_dishes.setAdapter(adapter);
-                        }else {
-
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-         */
     }
 
     private void initializeViews() {
@@ -170,9 +133,9 @@ public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderL
         for (int i=0;i<model.size();i++){
             total=total+model.get(i).getAmount();
         }
-        item_total.setText("Rs. "+String.valueOf(total));
+        item_total.setText("\u20B9 "+String.valueOf(total));
 
-        total_saving.setText(String.valueOf(Double.parseDouble(orederBasicDetails.getTotalamt())-(total+Double.parseDouble(orederBasicDetails.getDelivery_charge()))));
+        total_saving.setText("\u20B9"+String.valueOf(Double.parseDouble(orederBasicDetails.getTotalamt())-(total+Double.parseDouble(orederBasicDetails.getDelivery_charge()))));
     }
 
     @Override
