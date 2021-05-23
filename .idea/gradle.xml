@@ -12,6 +12,8 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/billgenerator" />
+            <option value="$PROJECT_DIR$/conversation" />
             <option value="$PROJECT_DIR$/payments" />
           </set>
         </option>

@@ -1,3 +1,5 @@
+include ':conversation'
+include ':billgenerator'
 include ':payments'
 include ':app'
 rootProject.name = "Bombay Dine"
