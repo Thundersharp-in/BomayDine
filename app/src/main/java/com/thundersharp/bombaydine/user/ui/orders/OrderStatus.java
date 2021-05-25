@@ -91,7 +91,7 @@ public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderL
             try {
                 Billing
                         .initializeBiller(OrderStatus.this)
-                        .setInfoData(InfoData.setData(R.drawable.axis_logo,"Prateek","7301694135","Nahi pata hai address",orederBasicDetails.getOrderID(),"","","Welcome",100))
+                        .setInfoData(InfoData.setData(R.drawable.ic_launcher,"Prateek","7301694135",orederBasicDetails.getDelivery_address(),orederBasicDetails.getOrderID(),"","","Welcome",100))
                         .attachObserver(this)
                         .createPdf(holderArrayList);
             } catch (Exception e) {

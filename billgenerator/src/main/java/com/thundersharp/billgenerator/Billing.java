@@ -2,7 +2,6 @@ package com.thundersharp.billgenerator;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
@@ -21,13 +20,14 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.Image;
-import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.itextpdf.text.pdf.draw.DottedLineSeparator;
+import com.itextpdf.text.pdf.draw.LineSeparator;
 
 
 import java.io.ByteArrayOutputStream;
@@ -39,7 +39,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, Integer> {
 
@@ -50,23 +49,23 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
     private InvoiceGenerateObserver invoiceGenerateObserver;
     private InfoData infoData;
 
-    public static Billing initializeBiller(Context activityContext){
+    public static Billing initializeBiller(Context activityContext) {
         billing = new Billing();
         context = activityContext;
         return billing;
     }
 
-    public Billing setInfoData(InfoData infoData){
+    public Billing setInfoData(InfoData infoData) {
         this.infoData = infoData;
         return billing;
     }
 
-    public Billing attachObserver(InvoiceGenerateObserver invoiceGenerateObserver){
+    public Billing attachObserver(InvoiceGenerateObserver invoiceGenerateObserver) {
         this.invoiceGenerateObserver = invoiceGenerateObserver;
         return billing;
     }
 
-    public void createPdf(ArrayList<InvoiceTableHolder> data) throws Exception{
+    public void createPdf(ArrayList<InvoiceTableHolder> data) throws Exception {
         if (billing == null) throw new Exception("initializeBiller() failed.");
         else if (invoiceGenerateObserver == null) throw new Exception("Observer not attached.");
         else if (infoData == null) throw new Exception("setInfoData() not called.");
@@ -75,10 +74,10 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
     private static BaseColor printPrimary = new BaseColor(0, 133, 119);//A = 1
     private static BaseColor printPrimary1 = new BaseColor(60, 92, 195);//A = 1
-    private static BaseColor printAccent = new BaseColor(216, 27, 96);
-    private static BaseColor cutomborder = new BaseColor(221, 221, 221);
+    private static BaseColor textColorp = new BaseColor(43, 43, 43);
+    private static BaseColor cutomborder = new BaseColor(57, 57, 57);
 
-    private static String FOLDER_PDF= Environment.getExternalStorageDirectory() + File.separator+"Thundersharp/Quotations";
+    private static String FOLDER_PDF = Environment.getExternalStorageDirectory() + File.separator + "Thundersharp/Quotations";
 
 
     String path = FOLDER_PDF + "/" + "BILL_NO" + ".pdf";
@@ -104,22 +103,23 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
 
         Font regularHead = new Font(baseFont, 11, Font.BOLD, BaseColor.WHITE);
-        Font regularReport = new Font(baseFont, 23, Font.BOLD, BaseColor.BLACK);
-        Font regularHeadquote = new Font(baseFont, 20, Font.BOLD, printAccent);
-        Font regularName = new Font(baseFont, 12, Font.BOLD, BaseColor.BLACK);
-        Font regularAddress = new Font(baseFont, 10, Font.NORMAL, BaseColor.BLACK);
+        Font regularReport = new Font(baseFont, 11, Font.BOLD, BaseColor.BLACK);
+        Font regularHeadquote = new Font(baseFont, 7, Font.NORMAL, textColorp);
+        Font regularHeadquotel = new Font(baseFont, 7, Font.BOLD, BaseColor.BLACK);
+        Font boldHeadSmall = new Font(baseFont, 7, Font.BOLD, BaseColor.BLACK);
+        Font itemFont = new Font(baseFont, 7, Font.NORMAL, BaseColor.BLACK);
         Font regularSub = new Font(baseFont, 10);
         Font regularSubbold = new Font(baseFont, 10, Font.BOLD);
         Font smallfooter = new Font(baseFont, 9);
         Font regularTotal = new Font(baseFont, 11, Font.NORMAL, BaseColor.BLACK);
         Font regularTotalBold = new Font(baseFont, 13, Font.BOLD, BaseColor.BLACK);
-        Font footerN = new Font(baseFont, 10, Font.BOLD, printAccent);
+        Font footerN = new Font(baseFont, 10, Font.BOLD, textColorp);
         Font footerE = new Font(baseFont, 10, Font.NORMAL, BaseColor.BLACK);
 
 
-        Rectangle rectangle = new Rectangle(250,1440);
+        Rectangle rectangle = new Rectangle(227, 1440);
         //A7 = 74mm in size
-        Document document = new Document(rectangle, 7, 7, 20, 92);
+        Document document = new Document(rectangle, 7, 7, 25, 92);
         document.addCreationDate();
         document.addAuthor("Thundersharp");
         document.addCreator("thundersharp.in");
@@ -139,56 +139,6 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
         tableFooter.setTotalWidth(523);
 
-        //PdfPCell footerName = new PdfPCell(new Phrase("Thundersharp",footerN)
-
-        PdfPCell footerEmail = new PdfPCell(new Phrase("support@thundersharp.in\n+91 7004963142 / +91 9798105830", regularSub));
-        PdfPCell footerblank = new PdfPCell(new Phrase("", smallfooter));
-        PdfPCell footeraddress = new PdfPCell(new Phrase("#315D Bari Co-operative Bokaro Steel City PIN:827012", regularSub));
-        PdfPCell footerreg = new PdfPCell(new Phrase("support@thundersharp.in", smallfooter));
-
-
-        //PdfPCell footerEmpty = new PdfPCell(new Phrase(""));
-
-        //footerName.setBorder(Rectangle.NO_BORDER);
-        //footerEmpty.setBorder(Rectangle.NO_BORDER);
-        footerEmail.setBorder(Rectangle.NO_BORDER);
-        footeraddress.setBorder(Rectangle.NO_BORDER);
-        footeraddress.setVerticalAlignment(Element.ALIGN_TOP);
-        footerreg.setBorder(Rectangle.NO_BORDER);
-        footerblank.setBorder(Rectangle.NO_BORDER);
-
-        footerEmail.setHorizontalAlignment(Element.ALIGN_RIGHT);
-        footerEmail.setVerticalAlignment(Element.ALIGN_TOP);
-
-
-        PdfPCell preBorderBlue = new PdfPCell(new Phrase("Thundersharp"));
-        preBorderBlue.setMinimumHeight(5f);
-        preBorderBlue.setUseVariableBorders(true);
-        preBorderBlue.setBorder(Rectangle.TOP);
-        preBorderBlue.setBorderColorTop(printPrimary);
-        preBorderBlue.setBorderWidthTop(3);
-
-
-        PdfPCell preBorderBlue1 = new PdfPCell(new Phrase("Regn : SEA1935500125217"));
-
-        preBorderBlue1.setMinimumHeight(5f);
-        preBorderBlue1.setUseVariableBorders(true);
-        preBorderBlue1.setBorder(Rectangle.TOP);
-        preBorderBlue1.setBorderColorTop(printPrimary);
-        preBorderBlue1.setHorizontalAlignment(Element.ALIGN_RIGHT);
-        preBorderBlue1.setBorderWidthTop(3);
-
-
-        tableFooter.addCell(preBorderBlue);
-        tableFooter.addCell(preBorderBlue1);
-        //tableFooter.addCell(footerName);
-
-
-        tableFooter.addCell(footeraddress);
-        tableFooter.addCell(footerEmail);
-
-
-        tableFooter.addCell(footerreg);
 
         try {
             tableFooter.setWidths(new float[]{1.4f, 2});
@@ -197,6 +147,7 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         }
 
 
+        //TODO REMOVE THIS
         HeaderFooter event = new HeaderFooter(tableFooter);
 
         writer.setPageEvent(event);
@@ -208,124 +159,153 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
         //5
 
-        PdfPTable pdfPTable = new PdfPTable(1);
 
-        pdfPTable.setSplitRows(false);
-        pdfPTable.setComplete(false);
+        CustomDashedLineSeperator customDashedLineSeperator = new CustomDashedLineSeperator();
+        customDashedLineSeperator.setDash(10);
+        customDashedLineSeperator.setGap(7);
+        customDashedLineSeperator.setLineWidth(3);
 
 
-        PdfPCell preReport = new PdfPCell(new Phrase("Thundersharp", regularReport));
+        PdfPCell line = new PdfPCell();
+        line.setPaddingTop(5);
+        line.setMinimumHeight(5);
+        line.setBorder(Rectangle.BOTTOM);
+        line.setBorderColorBottom(cutomborder);
+        line.setBorderWidthBottom(0.5f);
 
-        preReport.setHorizontalAlignment(Element.ALIGN_RIGHT);
-        preReport.setVerticalAlignment(Element.ALIGN_TOP);
+
+        PdfPCell preReport = new PdfPCell(new Phrase("Bombay dine resturant", regularReport));
+
+        preReport.setPaddingTop(5);
+        preReport.setHorizontalAlignment(Element.ALIGN_CENTER);
         preReport.setBorder(Rectangle.NO_BORDER);
 
 
-        PdfPCell tagline = new PdfPCell(new Phrase("Target Future", smallfooter));
+        PdfPCell masci = new PdfPCell(new Phrase("helpdesk@bombaydine.in", regularHeadquote));
 
-
-        tagline.setHorizontalAlignment(Element.ALIGN_RIGHT);
-        tagline.setVerticalAlignment(Element.ALIGN_TOP);
-        tagline.setBorder(Rectangle.NO_BORDER);
-
-
-        PdfPCell masci = new PdfPCell(new Phrase("thundersharp.in\n#GSTN: 20AAQFT3191F1Z7", footerE));
-
-        masci.setPaddingTop(10);
-        masci.setHorizontalAlignment(Element.ALIGN_RIGHT);
-        masci.setVerticalAlignment(Element.ALIGN_TOP);
+        masci.setPaddingTop(5);
+        masci.setHorizontalAlignment(Element.ALIGN_CENTER);
         masci.setBorder(Rectangle.NO_BORDER);
 
 
-        PdfPCell quotationhead = new PdfPCell(new Phrase("Invoice", regularHeadquote));
+        PdfPCell mascig = new PdfPCell(new Phrase("GSTN: 20AAQFT3191F1Z7", regularHeadquote));
+
+        mascig.setPaddingTop(2);
+        mascig.setHorizontalAlignment(Element.ALIGN_CENTER);
+        mascig.setBorder(Rectangle.NO_BORDER);
 
 
-        quotationhead.setPaddingTop(10);
-        quotationhead.setHorizontalAlignment(Element.ALIGN_RIGHT);
-        quotationhead.setVerticalAlignment(Element.ALIGN_TOP);
+        PdfPCell quotationhead = new PdfPCell(new Phrase("Invoice", regularReport));
+
+
+        quotationhead.setPaddingTop(3);
+        quotationhead.setHorizontalAlignment(Element.ALIGN_CENTER);
         quotationhead.setBorder(Rectangle.NO_BORDER);
 
 
-        pdfPTable.addCell(preReport);
-        pdfPTable.addCell(tagline);
-        pdfPTable.addCell(masci);
-        pdfPTable.addCell(quotationhead);
+        PdfPCell footeraddress = new PdfPCell(new Phrase(Resturant.resturantAddress, regularHeadquote));
+        PdfPCell footerEmail = new PdfPCell(new Phrase("Phone :" + Resturant.resturantcontact, regularHeadquote));
 
-        pdfPTable.setComplete(true);
 
-        PdfPCell pdfPCell = new PdfPCell(pdfPTable);
-        pdfPCell.setBorder(Rectangle.NO_BORDER);
+        footeraddress.setHorizontalAlignment(Rectangle.ALIGN_CENTER);
+        footeraddress.setPaddingTop(5);
+        footeraddress.setBorder(Rectangle.NO_BORDER);
 
-        PdfPTable tableHeader = new PdfPTable(2);
 
-        try {
-            tableHeader.setWidths(new float[]{1, 3});
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        }
+        footerEmail.setBorder(Rectangle.NO_BORDER);
+        footerEmail.setHorizontalAlignment(Element.ALIGN_CENTER);
+        footerEmail.setPaddingTop(2);
+
+
+        PdfPTable tableHeader = new PdfPTable(1);
+
+
+//        try {
+//            tableHeader.setWidths(new float[]{1, 3});
+//        } catch (DocumentException e) {
+//            e.printStackTrace();
+//        }
 
         try {
             Drawable d = context.getDrawable(infoData.getLogo());
             BitmapDrawable bitDw = ((BitmapDrawable) d);
             Bitmap bmp = bitDw.getBitmap();
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
-            bmp.compress(Bitmap.CompressFormat.PNG, 100, stream);
+            bmp.compress(Bitmap.CompressFormat.PNG, 60, stream);
             Image image = Image.getInstance(stream.toByteArray());
-            image.scaleToFit(120, 120);
+            image.scaleToFit(40, 40);
             PdfPCell preImage = new PdfPCell(image, false);
             //preImage.setVerticalAlignment(Element.ALIGN_TOP);
-            //preImage.setHorizontalAlignment(Element.ALIGN_LEFT);
+            preImage.setHorizontalAlignment(Element.ALIGN_CENTER);
             preImage.setBorder(Rectangle.NO_BORDER);
 
+            //TODO UPDATE DIRECTLY LAYOUT
             tableHeader.addCell(preImage);
-            tableHeader.addCell(pdfPCell);
+            tableHeader.addCell(preReport);
+
+            tableHeader.addCell(line);
+
+            tableHeader.addCell(masci);
+            tableHeader.addCell(mascig);
+
+            tableHeader.addCell(line);
+
+            tableHeader.addCell(footeraddress);
+            tableHeader.addCell(footerEmail);
+
+            tableHeader.addCell(line);
+
+            tableHeader.addCell(quotationhead);
+            //tableHeader.addCell(pdfPCell);
 
             document.add(tableHeader);
 
-        } catch (BadElementException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (DocumentException e) {
+        } catch (DocumentException | IOException e) {
             e.printStackTrace();
         }
 
 
         PdfPTable tableHeading = new PdfPTable(2);
-        tableHeading.setSpacingBefore(15);
-
-        Date c = Calendar.getInstance().getTime();
-        System.out.println("Current time => " + c);
-        SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
-        String formattedDate = df.format(c);
+        tableHeading.setSpacingBefore(0);
 
 
+        PdfPCell preAddress = new PdfPCell(new Phrase("Delivered to :" + infoData.getClientAddress(), regularHeadquotel));
+        PdfPCell prePhone = new PdfPCell(new Phrase("Phone: " + infoData.getClientPhone(), regularHeadquotel));
 
-        PdfPCell preName = new PdfPCell(new Phrase(infoData.getClientName(), regularName));
-        PdfPCell preAddress = new PdfPCell(new Phrase(infoData.getClientAddress() + "\n\nPhone no: " + infoData.getClientPhone(), regularAddress));
-        PdfPCell prePhone = new PdfPCell(new Phrase("Phone: " + infoData.getClientPhone(), regularAddress));
+        PdfPCell preBill = new PdfPCell(new Phrase("Bill no. #" + infoData.getOrderId(), regularHeadquotel));
 
-        PdfPCell preBill = new PdfPCell(new Phrase("Bill no. #" + infoData.getOrderId(), regularAddress));
+        PdfPCell preDate = new PdfPCell(new Phrase("Bill Date\n" + TimeUtilities.getTimeFromTimeStamp(infoData.getOrderId()), regularHeadquotel));
 
-        PdfPCell preDate = new PdfPCell(new Phrase("Bill Date: "  + "\nDue Date: " , regularTotal));
+        PdfPCell lines = new PdfPCell();
+        lines.setColspan(2);
+        lines.setPaddingTop(5);
+        lines.setMinimumHeight(5);
+        lines.setBorder(Rectangle.BOTTOM);
+        lines.setBorderColorBottom(cutomborder);
+        lines.setBorderWidthBottom(0.5f);
 
-        preBill.setVerticalAlignment(Element.ALIGN_BOTTOM);
-        preBill.setHorizontalAlignment(Element.ALIGN_RIGHT);
 
-        preDate.setVerticalAlignment(Element.ALIGN_BOTTOM);
+        preBill.setHorizontalAlignment(Element.ALIGN_LEFT);
         preDate.setHorizontalAlignment(Element.ALIGN_RIGHT);
-        preName.setBorder(Rectangle.NO_BORDER);
+
         preAddress.setBorder(Rectangle.NO_BORDER);
+        preAddress.setPaddingTop(3);
+        prePhone.setPaddingTop(3);
+        preAddress.setColspan(2);
+        prePhone.setColspan(2);
         prePhone.setBorder(Rectangle.NO_BORDER);
         preDate.setBorder(Rectangle.NO_BORDER);
         preBill.setBorder(Rectangle.NO_BORDER);
 
         try {
-            tableHeading.addCell(preName);
             tableHeading.addCell(preBill);
-            tableHeading.addCell(preAddress);
             tableHeading.addCell(preDate);
-            //tableHeading.addCell(prePhone);
+
+            tableHeading.addCell(preAddress);
+
+            tableHeading.addCell(prePhone);
+
+            tableHeading.addCell(lines);
 
             document.add(tableHeading);
         } catch (DocumentException e) {
@@ -333,10 +313,10 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         }
 
 
-        PdfPTable table = new PdfPTable(6);
-        table.setSpacingBefore(20);
+        PdfPTable table = new PdfPTable(5);
+        table.setSpacingBefore(4);
         try {
-            table.setWidths(new float[]{0.9f, 3.2f, 0.7f, 1.6f, 1.0f, 1.7f});
+            table.setWidths(new float[]{0.7f, 3.2f, 0.8f, 1.6f, 1.6f});
         } catch (DocumentException e) {
             e.printStackTrace();
         }
@@ -346,66 +326,75 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         table.setComplete(false);
 
 
-        PdfPCell headDate = new PdfPCell(new Phrase("NO", regularHead));
-        PdfPCell headName = new PdfPCell(new Phrase("ITEM", regularHead));
-        PdfPCell headDis = new PdfPCell(new Phrase("QTY", regularHead));
-        PdfPCell headCr = new PdfPCell(new Phrase("TOTAL", regularHead));
-        PdfPCell headDe = new PdfPCell(new Phrase("PER UNIT", regularHead));
-        PdfPCell headtax = new PdfPCell(new Phrase("TAX", regularHead));
+        PdfPCell headDate = new PdfPCell(new Phrase("No", boldHeadSmall));
+        PdfPCell headName = new PdfPCell(new Phrase("Particulars", boldHeadSmall));
+        PdfPCell headDis = new PdfPCell(new Phrase("Qty", boldHeadSmall));
+        PdfPCell headCr = new PdfPCell(new Phrase("Value", boldHeadSmall));
+        PdfPCell headDe = new PdfPCell(new Phrase("Rate", boldHeadSmall));
 
-        headtax.setPaddingLeft(15);
-        headtax.setPaddingTop(10);
-        headtax.setPaddingBottom(10);
-        headtax.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
-        headDate.setPaddingLeft(15);
-        headDate.setPaddingTop(10);
-        headDate.setPaddingBottom(10);
-        headDate.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
-        headName.setPaddingTop(10);
+        /*headDate.setPaddingLeft(5);
+        headDate.setPaddingTop(5);
+        headDate.setPaddingBottom(5);*/
+        headDate.setPaddingBottom(5);
+        headDate.setVerticalAlignment(Element.ALIGN_LEFT);
+
+        /*headName.setPaddingTop(10);
         headName.setPaddingBottom(10);
+        headName.setPaddingLeft(15);*/
+        headName.setPaddingBottom(7);
         headName.setVerticalAlignment(Element.ALIGN_CENTER);
-        headName.setPaddingLeft(15);
-        headName.setHorizontalAlignment(Element.ALIGN_LEFT);
 
-        headDis.setPaddingTop(10);
+
+        /*headDis.setPaddingTop(10);
         headDis.setPaddingBottom(10);
-        headDis.setPaddingLeft(10);
-        headDis.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        headDis.setPaddingLeft(10);*/
+        headDis.setPaddingBottom(7);
+        headDis.setVerticalAlignment(Element.ALIGN_CENTER);
 
-        headCr.setPaddingTop(10);
+      /*  headCr.setPaddingTop(10);
         headCr.setPaddingBottom(10);
-        headCr.setPaddingLeft(10);
-        headCr.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        headCr.setPaddingLeft(10);*/
+        headCr.setPaddingBottom(7);
+        headCr.setHorizontalAlignment(Element.ALIGN_CENTER);
+        headCr.setVerticalAlignment(Element.ALIGN_CENTER);
 
-        headDe.setPaddingTop(10);
+        /*headDe.setPaddingTop(10);
         headDe.setPaddingLeft(10);
-        headDe.setPaddingBottom(10);
-        headDe.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        headDe.setPaddingBottom(10);*/
+        headDe.setPaddingBottom(7);
+        headDe.setHorizontalAlignment(Element.ALIGN_CENTER);
+        headDe.setVerticalAlignment(Element.ALIGN_CENTER);
 
 
-        headDate.setBackgroundColor(printPrimary1);
-        headtax.setBackgroundColor(printPrimary1);
+        /*headDate.setBackgroundColor(printPrimary1);
+
         headName.setBackgroundColor(printPrimary1);
         headDis.setBackgroundColor(printPrimary1);
         headCr.setBackgroundColor(printPrimary1);
-        headDe.setBackgroundColor(printPrimary1);
+        headDe.setBackgroundColor(printPrimary1);*/
 
 
         headDate.setBorder(Rectangle.NO_BORDER);
-        headtax.setBorder(Rectangle.NO_BORDER);
+
         headName.setBorder(Rectangle.NO_BORDER);
         headDis.setBorder(Rectangle.NO_BORDER);
         headCr.setBorder(Rectangle.NO_BORDER);
         headDe.setBorder(Rectangle.NO_BORDER);
 
 
+/*        headName.setBorderColorBottom(BaseColor.BLACK);
+        headDis.setBorderColorBottom(BaseColor.BLACK);
+        headCr.setBorderColorBottom(BaseColor.BLACK);
+        headDe.setBorderColorBottom(BaseColor.BLACK);
+        headDate.setBorderColorBottom(BaseColor.BLACK);*/
+
+
         table.addCell(headDate);
         table.addCell(headName);
         table.addCell(headDis);
         table.addCell(headDe);
-        table.addCell(headtax);
         table.addCell(headCr);
 
 
@@ -417,79 +406,73 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
             onProgressUpdate(String.valueOf(aw) + " items processing...");
 
-            PdfPCell cellNo = new PdfPCell(new Phrase(String.valueOf(aw + 1), regularSub));
-            PdfPCell cellName = new PdfPCell(new Phrase(listItem.getName(), regularSub));
-            PdfPCell cellCompany = new PdfPCell(new Phrase(String.valueOf(listItem.getQty()), regularSub));
-            PdfPCell celldebit = new PdfPCell(new Phrase("Rs. " + listItem.getUnitprice(), regularSub));
-            PdfPCell celltax = new PdfPCell(new Phrase(0+"%", regularSub));
-            PdfPCell cellAmount = new PdfPCell(new Phrase("Rs. " + (listItem.getQty() * listItem.getUnitprice()), regularSub));
+            PdfPCell cellNo = new PdfPCell(new Phrase(String.valueOf(aw + 1), boldHeadSmall));
+            PdfPCell cellName = new PdfPCell(new Phrase(listItem.getName().toLowerCase(), boldHeadSmall));
+            PdfPCell cellCompany = new PdfPCell(new Phrase(String.valueOf(listItem.getQty()), boldHeadSmall));
+            PdfPCell celldebit = new PdfPCell(new Phrase(String.valueOf(listItem.getUnitprice()), boldHeadSmall));
+            PdfPCell cellAmount = new PdfPCell(new Phrase("" + (listItem.getQty() * listItem.getUnitprice()), boldHeadSmall));
 
             amountFull += (listItem.getQty() * listItem.getUnitprice());
 
-            cellNo.setPaddingLeft(15);
-            cellNo.setPaddingBottom(8);
-            cellNo.setPaddingTop(5);
-            cellNo.setBorderColor(cutomborder);
-            cellNo.setVerticalAlignment(Element.ALIGN_MIDDLE);
 
-            celltax.setPaddingLeft(15);
-            celltax.setPaddingBottom(8);
-            celltax.setPaddingTop(5);
-            celltax.setBorderColor(cutomborder);
-            celltax.setVerticalAlignment(Element.ALIGN_MIDDLE);
-
-            cellName.setPaddingBottom(8);
-            cellName.setPaddingTop(5);
-            cellName.setPaddingLeft(10);
-            cellName.setBorderColor(cutomborder);
-            cellName.setVerticalAlignment(Element.ALIGN_MIDDLE);
-
-            celldebit.setPaddingBottom(8);
-            celldebit.setPaddingTop(5);
-            celldebit.setPaddingLeft(10);
-            celldebit.setBorderColor(cutomborder);
-            celldebit.setVerticalAlignment(Element.ALIGN_MIDDLE);
-
-            cellCompany.setPaddingBottom(8);
-            cellCompany.setPaddingTop(5);
-            cellCompany.setPaddingLeft(10);
-            cellCompany.setBorderColor(cutomborder);
-            cellCompany.setVerticalAlignment(Element.ALIGN_MIDDLE);
+            if (aw == 0) {
+                cellNo.setBorder(Rectangle.TOP);
+                cellName.setBorder(Rectangle.TOP);
+                celldebit.setBorder(Rectangle.TOP);
+                cellCompany.setBorder(Rectangle.TOP);
+                cellAmount.setBorder(Rectangle.TOP);
 
 
-            cellAmount.setPaddingBottom(8);
-            cellAmount.setPaddingTop(5);
-            cellAmount.setPaddingLeft(10);
-            cellAmount.setBorderColor(cutomborder);
-            cellAmount.setVerticalAlignment(Element.ALIGN_MIDDLE);
-/*
+
+                cellNo.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cellNo.setVerticalAlignment(Element.ALIGN_CENTER);
+
+
+                cellName.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+
+                celldebit.setHorizontalAlignment(Element.ALIGN_CENTER);
+                celldebit.setVerticalAlignment(Element.ALIGN_CENTER);
+
+                cellCompany.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cellCompany.setVerticalAlignment(Element.ALIGN_CENTER);
+
+
+
+                cellAmount.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cellAmount.setVerticalAlignment(Element.ALIGN_CENTER);
+            } else {
+
+                cellNo.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cellNo.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+
+                cellName.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+
+                celldebit.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+                cellCompany.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cellCompany.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+
+
+                cellAmount.setHorizontalAlignment(Element.ALIGN_CENTER);
+                cellAmount.setVerticalAlignment(Element.ALIGN_MIDDLE);
+
+
                 cellNo.setBorder(Rectangle.NO_BORDER);
                 cellName.setBorder(Rectangle.NO_BORDER);
                 celldebit.setBorder(Rectangle.NO_BORDER);
                 cellCompany.setBorder(Rectangle.NO_BORDER);
-                cellAmount.setBorder(Rectangle.NO_BORDER);*/
+                cellAmount.setBorder(Rectangle.NO_BORDER);
 
-            if (aw % 2 == 0) {
-                cellNo.setBackgroundColor(BaseColor.WHITE);
-                celltax.setBackgroundColor(BaseColor.WHITE);
-                cellName.setBackgroundColor(BaseColor.WHITE);
-                celldebit.setBackgroundColor(BaseColor.WHITE);
-                cellCompany.setBackgroundColor(BaseColor.WHITE);
-                cellAmount.setBackgroundColor(BaseColor.WHITE);
-            } else {
-                cellNo.setBackgroundColor(BaseColor.WHITE);
-                celltax.setBackgroundColor(BaseColor.WHITE);
-                cellName.setBackgroundColor(BaseColor.WHITE);
-                celldebit.setBackgroundColor(BaseColor.WHITE);
-                cellCompany.setBackgroundColor(BaseColor.WHITE);
-                cellAmount.setBackgroundColor(BaseColor.WHITE);
             }
 
             table.addCell(cellNo);
             table.addCell(cellName);
             table.addCell(cellCompany);
             table.addCell(celldebit);
-            table.addCell(celltax);
             table.addCell(cellAmount);
         }
 
@@ -554,7 +537,7 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
         //TODO UPDATE HERE
         PdfPCell tax = new PdfPCell(new Phrase("GST ", regularSub));
-        PdfPCell taxamtandrate = new PdfPCell(new Phrase( "18%", regularSub));
+        PdfPCell taxamtandrate = new PdfPCell(new Phrase("18%", regularSub));
             /*if (GST_CHK) {
                 taxamtandrate = new PdfPCell(new Phrase("Rs. " + taxrate.getEditText().getText().toString(), regularSub));
             } else taxamtandrate = new PdfPCell(new Phrase("n/a", regularSub));*/
@@ -656,12 +639,12 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         //Drawable d = getResources().getDrawable();
         //BitmapDrawable bitDw = ((BitmapDrawable) d);
         Bitmap bmp;
-        if (infoData.getSignPicUri().equals("")){
+        if (infoData.getSignPicUri().equals("")) {
             Drawable d = context.getDrawable(infoData.getLogo());
             BitmapDrawable bitDw = ((BitmapDrawable) d);
             bmp = bitDw.getBitmap();
-        }else {
-             bmp = BitmapFactory.decodeFile(infoData.getSignPicUri());
+        } else {
+            bmp = BitmapFactory.decodeFile(infoData.getSignPicUri());
         }
 
 
