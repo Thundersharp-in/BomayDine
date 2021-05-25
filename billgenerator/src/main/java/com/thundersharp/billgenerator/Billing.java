@@ -117,8 +117,9 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         Font footerE = new Font(baseFont, 10, Font.NORMAL, BaseColor.BLACK);
 
 
-        //   Document document = new Document(PageSize.A4);
-        Document document = new Document(PageSize.A4, 13, 13, 26, 92);
+        Rectangle rectangle = new Rectangle(250,1440);
+        //A7 = 74mm in size
+        Document document = new Document(rectangle, 7, 7, 20, 92);
         document.addCreationDate();
         document.addAuthor("Thundersharp");
         document.addCreator("thundersharp.in");

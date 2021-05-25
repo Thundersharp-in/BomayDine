@@ -82,7 +82,7 @@ public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderL
 
 
         ((LinearLayout)findViewById(R.id.lllb)).setOnClickListener(view -> {
-            Toast.makeText(this, "yyy", Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, "yyy", Toast.LENGTH_SHORT).show();
             ArrayList<InvoiceTableHolder> holderArrayList = new ArrayList<>();
 
             for (int u = 0; u< modeldatas.size();u++){
@@ -91,7 +91,7 @@ public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderL
             try {
                 Billing
                         .initializeBiller(OrderStatus.this)
-                        .setInfoData(InfoData.setData(R.mipmap.ic_launcher,"Prateek","7301694135","Nahi pata hai address",orederBasicDetails.getOrderID(),"","","Welcome",100))
+                        .setInfoData(InfoData.setData(R.drawable.axis_logo,"Prateek","7301694135","Nahi pata hai address",orederBasicDetails.getOrderID(),"","","Welcome",100))
                         .attachObserver(this)
                         .createPdf(holderArrayList);
             } catch (Exception e) {
@@ -165,7 +165,7 @@ public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderL
 
     @Override
     public void pdfCreatedSuccess(Uri pdfLink) {
-        Toast.makeText(this, ""+pdfLink.toString(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
     }
 }
 
