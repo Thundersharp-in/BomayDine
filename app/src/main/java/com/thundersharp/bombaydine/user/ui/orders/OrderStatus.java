@@ -1,37 +1,36 @@
 package com.thundersharp.bombaydine.user.ui.orders;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.github.vipulasri.timelineview.TimelineView;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import com.thundersharp.billgenerator.Billing;
+import com.thundersharp.billgenerator.InfoData;
+import com.thundersharp.billgenerator.InvoiceGenerateObserver;
+import com.thundersharp.billgenerator.InvoiceTableHolder;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.OrderItem;
 import com.thundersharp.bombaydine.user.core.Adapters.TimeLineAdapter;
-import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
 import com.thundersharp.bombaydine.user.core.Model.OrderModel;
 import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
-import com.thundersharp.bombaydine.user.core.animation.Animator;
 import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
 import com.thundersharp.bombaydine.user.core.utils.TimeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderListner{
+public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderListner, InvoiceGenerateObserver {
+
+    private List<OrderModel> modeldatas;
 
     public static void showOrderStatus(Context context, OrederBasicDetails orederBasicDetails){
         context.startActivity(new Intent(context,OrderStatus.class).putExtra("data",orederBasicDetails));
@@ -48,6 +47,7 @@ public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderL
     List<OrderModel> model;
 
     OrderDetailHelper helper;
+    private LinearLayout button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +79,25 @@ public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderL
         
         helper=new OrderDetailHelper(OrderStatus.this);
         setData();
+
+
+        ((LinearLayout)findViewById(R.id.lllb)).setOnClickListener(view -> {
+            Toast.makeText(this, "yyy", Toast.LENGTH_SHORT).show();
+            ArrayList<InvoiceTableHolder> holderArrayList = new ArrayList<>();
+
+            for (int u = 0; u< modeldatas.size();u++){
+                holderArrayList.add(new InvoiceTableHolder(modeldatas.get(u).getQuantity(),modeldatas.get(u).getAmount(),modeldatas.get(u).getName()));
+            }
+            try {
+                Billing
+                        .initializeBiller(OrderStatus.this)
+                        .setInfoData(InfoData.setData(R.mipmap.ic_launcher,"Prateek","7301694135","Nahi pata hai address",orederBasicDetails.getOrderID(),"","","Welcome",100))
+                        .attachObserver(this)
+                        .createPdf(holderArrayList);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
 
     }
 
@@ -127,6 +146,7 @@ public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderL
 
     @Override
     public void onSuccess(List<OrderModel> model) {
+        modeldatas = model;
         OrderItem adapter=new OrderItem(OrderStatus.this,model);
         recycler_dishes.setAdapter(adapter);
         double total=0.0;
@@ -141,6 +161,11 @@ public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderL
     @Override
     public void onFailure(Exception e) {
         Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void pdfCreatedSuccess(Uri pdfLink) {
+        Toast.makeText(this, ""+pdfLink.toString(), Toast.LENGTH_SHORT).show();
     }
 }
 

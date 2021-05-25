@@ -1,6 +1,11 @@
 package com.thundersharp.billgenerator;
 
 public class InfoData {
+
+    public static InfoData setData(int logo, String clientName, String clientPhone, String clientAddress, String orderId, String terms, String signPicUri, String promoName, double discAmt){
+        return new InfoData(logo,clientName,clientPhone,clientAddress,orderId,terms,signPicUri,promoName,discAmt);
+    }
+
     public InfoData(){}
 
     private int logo;

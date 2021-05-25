@@ -28,7 +28,7 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.thundersharp.bombaydine.BuildConfig;
+
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -126,6 +126,7 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
 // Location to save
         try {
+
             writer = PdfWriter.getInstance(document, new FileOutputStream(path));
         } catch (DocumentException | FileNotFoundException e) {
             e.printStackTrace();
@@ -653,7 +654,15 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
         //Drawable d = getResources().getDrawable();
         //BitmapDrawable bitDw = ((BitmapDrawable) d);
-        Bitmap bmp = BitmapFactory.decodeFile(infoData.getSignPicUri());
+        Bitmap bmp;
+        if (infoData.getSignPicUri().equals("")){
+            Drawable d = context.getDrawable(infoData.getLogo());
+            BitmapDrawable bitDw = ((BitmapDrawable) d);
+            bmp = bitDw.getBitmap();
+        }else {
+             bmp = BitmapFactory.decodeFile(infoData.getSignPicUri());
+        }
+
 
       /*      Drawable d = getResources().getDrawable(R.drawable.logo);
             BitmapDrawable bitDw = ((BitmapDrawable) d);*/
@@ -777,7 +786,7 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         super.onPostExecute(integer);
 
         File file = new File(path);
-        Uri pdfURI = FileProvider.getUriForFile(context, BuildConfig.APPLICATION_ID + ".provider", file);
+        Uri pdfURI = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
         invoiceGenerateObserver.pdfCreatedSuccess(pdfURI);
         // path1 = pdfURI;
         //uploadtofirebase(QUOTATION_NUMBER, CLIENT_NAME, CLIENT_ADDRESS, VALID_FROM, VALID_TILL, itemholder);
