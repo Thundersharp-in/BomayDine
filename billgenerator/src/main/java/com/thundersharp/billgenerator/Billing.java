@@ -10,6 +10,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
@@ -76,6 +77,9 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
     private static BaseColor printPrimary1 = new BaseColor(60, 92, 195);//A = 1
     private static BaseColor textColorp = new BaseColor(43, 43, 43);
     private static BaseColor cutomborder = new BaseColor(57, 57, 57);
+
+    private int itemCounter = 0;
+    private double totalprice;
 
     private static String FOLDER_PDF = Environment.getExternalStorageDirectory() + File.separator + "Thundersharp/Quotations";
 
@@ -406,6 +410,8 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
             onProgressUpdate(String.valueOf(aw) + " items processing...");
 
+            itemCounter += listItem.getQty();
+
             PdfPCell cellNo = new PdfPCell(new Phrase(String.valueOf(aw + 1), boldHeadSmall));
             PdfPCell cellName = new PdfPCell(new Phrase(listItem.getName().toLowerCase(), boldHeadSmall));
             PdfPCell cellCompany = new PdfPCell(new Phrase(String.valueOf(listItem.getQty()), boldHeadSmall));
@@ -413,6 +419,7 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
             PdfPCell cellAmount = new PdfPCell(new Phrase("" + (listItem.getQty() * listItem.getUnitprice()), boldHeadSmall));
 
             amountFull += (listItem.getQty() * listItem.getUnitprice());
+            totalprice += amountFull;
 
 
             if (aw == 0) {
@@ -476,6 +483,44 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
             table.addCell(cellAmount);
         }
 
+        PdfPTable bottomRow = new PdfPTable(3);
+
+        try {
+            bottomRow.setWidths(new float[]{3,3,1.9f});
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
+
+        bottomRow.setSplitRows(false);
+        bottomRow.setComplete(false);
+
+        PdfPCell items = new PdfPCell(new Phrase("Items "+arrayLists[0].size(), boldHeadSmall));
+        PdfPCell Qty = new PdfPCell(new Phrase("Qty "+itemCounter, boldHeadSmall));
+        PdfPCell total = new PdfPCell(new Phrase("Rs "+totalprice, boldHeadSmall));
+
+
+        items.setBorder(Rectangle.TOP);
+        Qty.setBorder(Rectangle.TOP);
+        total.setBorder(Rectangle.TOP);
+
+
+        items.setPaddingTop(5);
+        Qty.setPaddingTop(5);
+        total.setPaddingTop(5);
+
+        items.setPaddingBottom(5);
+        Qty.setPaddingBottom(5);
+        total.setPaddingBottom(5);
+
+        total.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+            bottomRow.addCell(items);
+            bottomRow.addCell(Qty);
+            bottomRow.addCell(total);
+            bottomRow.setComplete(true);
+
+
+
 
             /*
               Created a new table here
@@ -487,92 +532,39 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         } catch (DocumentException e) {
             e.printStackTrace();
         }
-        table.setSplitRows(false);
-        table.setComplete(false);
+        table1.setSplitRows(false);
+        table1.setComplete(false);
 
 
-        PdfPCell preBorderGray = new PdfPCell(new Phrase(""));
-        preBorderGray.setPaddingTop(5);
-        preBorderGray.setMinimumHeight(10f);
-        preBorderGray.setUseVariableBorders(true);
-        preBorderGray.setBorder(Rectangle.BOTTOM);
-        preBorderGray.setBorderColorBottom(BaseColor.GRAY);
-        preBorderGray.setBorderWidthBottom(3);
-        preBorderGray.setColspan(5);
 
-        table.addCell(preBorderGray);
+        PdfPCell subTotal = new PdfPCell(new Phrase(infoData.getPromoName(), boldHeadSmall));
+        PdfPCell subtotalamt = new PdfPCell(new Phrase("- Rs "+infoData.getDiscAmt(), boldHeadSmall));
 
-        //TODO CHK1
-        float gsttotal = 10.2f;
-        gsttotal = (float) (0.18 * amountFull);
-
-        String totalamountdisplay = "Rs. " + amountFull;
-        //Toast.makeText(MainActivity.this, totalamountdisplay, Toast.LENGTH_SHORT).show();
-        PdfPCell subTotal = new PdfPCell(new Phrase("SUBTOTAL", regularSub));
-        PdfPCell subtotalamt = new PdfPCell(new Phrase(totalamountdisplay, regularSub));
-
-        subTotal.setPaddingTop(5);
-        subtotalamt.setPaddingTop(5);
-        subTotal.setBorderColor(cutomborder);
-        subtotalamt.setBorderColor(cutomborder);
-        subtotalamt.setPaddingLeft(10);
+        subTotal.setPaddingTop(2);
+        subtotalamt.setPaddingTop(2);
+        subTotal.setBorder(Rectangle.TOP);
+        subtotalamt.setBorder(Rectangle.TOP);
+        subtotalamt.setHorizontalAlignment(Element.ALIGN_RIGHT);
         subTotal.setHorizontalAlignment(Element.ALIGN_RIGHT);
         subTotal.setVerticalAlignment(Element.ALIGN_CENTER);
-        subTotal.setPaddingRight(15);
-        subTotal.setColspan(4);
+        subTotal.setPaddingRight(10);
+        subTotal.setColspan(3);
+        subtotalamt.setColspan(2);
 
 
-        PdfPCell discount = new PdfPCell(new Phrase("DISCOUNT", regularSub));
-        PdfPCell discountamt = new PdfPCell(new Phrase("Rs. 5", regularSub));
 
-        discount.setPaddingTop(5);
-        discountamt.setPaddingTop(5);
-        discount.setBorderColor(cutomborder);
-        discountamt.setBorderColor(cutomborder);
-        discountamt.setPaddingLeft(10);
-        discount.setHorizontalAlignment(Element.ALIGN_RIGHT);
-        discount.setVerticalAlignment(Element.ALIGN_CENTER);
-        discount.setPaddingRight(15);
-        discount.setColspan(4);
+        PdfPCell preTotal = new PdfPCell(new Phrase("TOTAL", boldHeadSmall));
+        PdfPCell preTotalAmount = new PdfPCell(new Phrase("Rs "+(amountFull-infoData.getDiscAmt()), boldHeadSmall));
 
-        //TODO UPDATE HERE
-        PdfPCell tax = new PdfPCell(new Phrase("GST ", regularSub));
-        PdfPCell taxamtandrate = new PdfPCell(new Phrase("18%", regularSub));
-            /*if (GST_CHK) {
-                taxamtandrate = new PdfPCell(new Phrase("Rs. " + taxrate.getEditText().getText().toString(), regularSub));
-            } else taxamtandrate = new PdfPCell(new Phrase("n/a", regularSub));*/
-
-        //tax.setPaddingTop(5);
-        //taxamtandrate.setPaddingTop(5);
-        taxamtandrate.setVerticalAlignment(Element.ALIGN_CENTER);
-        taxamtandrate.setBorderColor(cutomborder);
-        tax.setBorderColor(cutomborder);
-        taxamtandrate.setPaddingLeft(10);
-        tax.setHorizontalAlignment(Element.ALIGN_RIGHT);
-        tax.setVerticalAlignment(Element.ALIGN_CENTER);
-        tax.setPaddingRight(15);
-        tax.setColspan(4);
-
-
-        PdfPCell preTotal = new PdfPCell(new Phrase("TOTAL", regularSub));
-        PdfPCell preTotalAmount = new PdfPCell(new Phrase("0099", regularSub));
-            /*if (GST_CHK) {
-                float total = 12.2f;
-                total = (float) (amountFull + gsttotal);
-                preTotalAmount = new PdfPCell(new Phrase("Rs. " + String.valueOf(total), regularSub));
-            } else {
-                preTotalAmount = new PdfPCell(new Phrase("Rs. " + String.valueOf(amountFull), regularSub));
-            }*/
-
-        //preTotal.setPaddingTop(5);
-        //preTotalAmount.setPaddingTop(5);
         preTotalAmount.setPaddingLeft(10);
-        preTotalAmount.setBorderColor(cutomborder);
-        preTotalAmount.setVerticalAlignment(Element.ALIGN_CENTER);
-        preTotal.setBorderColor(cutomborder);
+        preTotalAmount.setBorder(Rectangle.TOP);
+        preTotalAmount.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        preTotal.setBorder(Rectangle.TOP);
         preTotal.setVerticalAlignment(Element.ALIGN_CENTER);
         preTotal.setHorizontalAlignment(Element.ALIGN_RIGHT);
         preTotal.setPaddingRight(15);
+        preTotal.setColspan(3);
+        preTotalAmount.setColspan(2);
 
 
         PdfPTable duetable = new PdfPTable(3);
@@ -581,58 +573,19 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         duetable.setComplete(false);
 
 
-        PdfPCell paid = new PdfPCell(new Phrase("PAID", footerN));
-        PdfPCell paidamt = new PdfPCell(new Phrase("Rs. " + "43321", footerN));
-
-        //preTotal.setPaddingTop(5);
-        //preTotalAmount.setPaddingTop(5);
-
-        paidamt.setPaddingLeft(10);
-        paidamt.setBorderColor(cutomborder);
-        paidamt.setVerticalAlignment(Element.ALIGN_CENTER);
-        paid.setBorderColor(cutomborder);
-        paid.setVerticalAlignment(Element.ALIGN_CENTER);
-        paid.setHorizontalAlignment(Element.ALIGN_RIGHT);
-        paid.setPaddingRight(15);
-        paid.setColspan(4);
-
         //TODO update data here.
-        PdfPCell duetotal = new PdfPCell(new Phrase("BALANCE", footerN));
-        PdfPCell dueTotalAmount = new PdfPCell(new Phrase("Rs. " + "43321", footerN));
 
-        //preTotal.setPaddingTop(5);
-        //preTotalAmount.setPaddingTop(5);
 
-        dueTotalAmount.setPaddingLeft(10);
-        dueTotalAmount.setBorderColor(cutomborder);
-        dueTotalAmount.setVerticalAlignment(Element.ALIGN_CENTER);
-        duetotal.setBorderColor(cutomborder);
-        duetotal.setVerticalAlignment(Element.ALIGN_CENTER);
-        duetotal.setHorizontalAlignment(Element.ALIGN_RIGHT);
-        duetotal.setPaddingRight(15);
-        duetotal.setColspan(4);
-
-        PdfPCell quotedesc = new PdfPCell(new Phrase(infoData.getTerms(), regularSub));
+        /*PdfPCell quotedesc = new PdfPCell(new Phrase(infoData.getTerms(), regularSub));
         quotedesc.setHorizontalAlignment(Element.ALIGN_LEFT);
         quotedesc.setBorder(Rectangle.NO_BORDER);
         quotedesc.setPaddingRight(10);
         quotedesc.setPaddingTop(20);
-        quotedesc.setColspan(5);
+        quotedesc.setColspan(5);*/
 
 
-        PdfPCell customeracceptance = new PdfPCell(new Phrase("Customer acceptance.", regularSubbold));
-        PdfPCell forth = new PdfPCell(new Phrase("For Thundersharp", regularSubbold));
 
-        customeracceptance.setPaddingTop(20);
-        forth.setPaddingTop(20);
-        forth.setHorizontalAlignment(Element.ALIGN_RIGHT);
-        forth.setBorder(Rectangle.NO_BORDER);
-        customeracceptance.setBorder(Rectangle.NO_BORDER);
-        customeracceptance.setHorizontalAlignment(Element.ALIGN_LEFT);
-        customeracceptance.setPaddingRight(15);
-        customeracceptance.setColspan(2);
-        forth.setColspan(3);
-
+/*
 
         PdfPCell blankspace = null, sign = null;
 
@@ -648,9 +601,6 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         }
 
 
-      /*      Drawable d = getResources().getDrawable(R.drawable.logo);
-            BitmapDrawable bitDw = ((BitmapDrawable) d);*/
-        //Bitmap bmp = bitDw.getBitmap();
 
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
         bmp.compress(Bitmap.CompressFormat.PNG, 10, stream);
@@ -677,57 +627,40 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
             e.printStackTrace();
         }
 
+*/
 
-        PdfPCell customeracceptancebottom = new PdfPCell(new Phrase("Sign above to Accept.", regularSubbold));
-        PdfPCell forthbottom = new PdfPCell(new Phrase("Authorized Signatory", regularSubbold));
 
-        customeracceptancebottom.setPaddingTop(5);
-        forthbottom.setPaddingTop(5);
-        forthbottom.setHorizontalAlignment(Element.ALIGN_RIGHT);
-        forthbottom.setBorder(Rectangle.NO_BORDER);
-        customeracceptancebottom.setBorder(Rectangle.NO_BORDER);
-        customeracceptancebottom.setHorizontalAlignment(Element.ALIGN_LEFT);
-        customeracceptancebottom.setPaddingRight(15);
-        customeracceptancebottom.setColspan(2);
-        forthbottom.setColspan(3);
 
 
         //TODO 1
         //preTotal.setBorder(Rectangle.NO_BORDER);
         //preTotalAmount.setBorder(Rectangle.NO_BORDER);
 
-        preTotal.setColspan(4);
+
         table.setComplete(true);
 
         table1.addCell(subTotal);
         table1.addCell(subtotalamt);
 
-        table1.addCell(tax);
-        table1.addCell(taxamtandrate);
-
-        table1.addCell(discount);
-        table1.addCell(discountamt);
 
         table1.addCell(preTotal);
         table1.addCell(preTotalAmount);
 
-        table1.addCell(duetotal);
-        table1.addCell(dueTotalAmount);
 
 
-        table1.addCell(quotedesc);
+        //table1.addCell(quotedesc);
 
-        table1.addCell(customeracceptance);
-        table1.addCell(forth);
-        table1.addCell(blankspace);
-        table1.addCell(sign);
-        table1.addCell(customeracceptancebottom);
-        table1.addCell(forthbottom);
+
+        //table1.addCell(blankspace);
+        //table1.addCell(sign);
+
         table1.setComplete(true);
 
 
         try {
             document.add(table);
+
+            document.add(bottomRow);
             document.add(table1);
         } catch (DocumentException e) {
             e.printStackTrace();
