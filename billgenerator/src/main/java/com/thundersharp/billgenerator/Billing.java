@@ -3,18 +3,15 @@ package com.thundersharp.billgenerator;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.core.content.FileProvider;
 
-import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -27,19 +24,13 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.draw.DottedLineSeparator;
-import com.itextpdf.text.pdf.draw.LineSeparator;
-
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 
 public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, Integer> {
 
@@ -116,9 +107,6 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         Font regularSubbold = new Font(baseFont, 10, Font.BOLD);
         Font smallfooter = new Font(baseFont, 9);
         Font regularTotal = new Font(baseFont, 11, Font.NORMAL, BaseColor.BLACK);
-        Font regularTotalBold = new Font(baseFont, 13, Font.BOLD, BaseColor.BLACK);
-        Font footerN = new Font(baseFont, 10, Font.BOLD, textColorp);
-        Font footerE = new Font(baseFont, 10, Font.NORMAL, BaseColor.BLACK);
 
 
         Rectangle rectangle = new Rectangle(227, 1440);
