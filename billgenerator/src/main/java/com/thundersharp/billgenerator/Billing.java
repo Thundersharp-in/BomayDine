@@ -12,6 +12,7 @@ import android.util.Log;
 
 import androidx.core.content.FileProvider;
 
+import com.itextpdf.text.BadElementException;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -126,23 +127,6 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
             Log.d("msg", e.getCause().getMessage());
         }
 
-
-        PdfPTable tableFooter = new PdfPTable(2);
-
-        tableFooter.setTotalWidth(523);
-
-
-        try {
-            tableFooter.setWidths(new float[]{1.4f, 2});
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        }
-
-
-        //TODO REMOVE THIS
-        HeaderFooter event = new HeaderFooter(tableFooter);
-
-        writer.setPageEvent(event);
 
         document.open();
 
@@ -551,12 +535,48 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         preTotal.setPaddingBottom(7);
         preTotalAmount.setPaddingBottom(7);
 
-        PdfPCell terms=new PdfPCell(new Phrase("* Terms : "+infoData.getTerms(),regularHeadquote));
+        PdfPCell terms=new PdfPCell(new Phrase("* Terms : "+infoData.getTerms()+"\nAll prices in the bill are inclusive of all taxes.",regularHeadquote));
         terms.setPadding(5);
+        terms.setColspan(2);
         terms.setBorder(Rectangle.TOP);
 
-        PdfPTable bottomTerms =new PdfPTable(1);
+        PdfPCell barCode = new PdfPCell(BarCode.getBarCodeFromData(infoData.getOrderId(),writer));
+        barCode.setBorder(Rectangle.NO_BORDER);
+        barCode.setPaddingTop(20);
+        barCode.setColspan(2);
+        barCode.setHorizontalAlignment(Element.ALIGN_CENTER);
+
+        PdfPCell qrCode = null;
+        try {
+            qrCode = new PdfPCell(BarCode.geQrCodeFromData("Download from : https://play.google.com/store/apps/details?id="+context.getPackageName()));
+        } catch (BadElementException e) {
+            e.printStackTrace();
+        }
+        qrCode.setBorder(Rectangle.NO_BORDER);
+        qrCode.setPaddingTop(20);
+        qrCode.setPaddingRight(10);
+        qrCode.setHorizontalAlignment(Element.ALIGN_RIGHT);
+
+
+        PdfPCell qrdesc = new PdfPCell(new Phrase("Scan the Qr code to get the application now from the android store",regularHeadquote));
+        qrdesc.setBorder(Rectangle.NO_BORDER);
+        qrdesc.setPaddingTop(20);
+        qrdesc.setVerticalAlignment(Rectangle.ALIGN_CENTER);
+        qrdesc.setHorizontalAlignment(Rectangle.LEFT);
+
+        PdfPTable bottomTerms =new PdfPTable(2);
+        try {
+            bottomTerms.setWidths(new float[]{1,1});
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        }
         bottomTerms.addCell(terms);
+        bottomTerms.addCell(barCode);
+        if (qrCode != null) {
+            bottomTerms.addCell(qrCode);
+            bottomTerms.addCell(qrdesc);
+        }
+
 
         /*
          PdfPTable duetable = new PdfPTable(3);
@@ -654,15 +674,17 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
         table1.setComplete(true);
 
+
+
         try {
             document.add(table);
             document.add(bottomRow);
             document.add(table1);
             document.add(bottomTerms);
+
         } catch (DocumentException e) {
             e.printStackTrace();
         }
-
 
         onProgressUpdate("Finishing up...");
         document.close();
