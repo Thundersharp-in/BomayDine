@@ -326,46 +326,27 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
 
 
-        /*headDate.setPaddingLeft(5);
-        headDate.setPaddingTop(5);
-        headDate.setPaddingBottom(5);*/
         headDate.setPaddingBottom(5);
         headDate.setVerticalAlignment(Element.ALIGN_LEFT);
 
-        /*headName.setPaddingTop(10);
-        headName.setPaddingBottom(10);
-        headName.setPaddingLeft(15);*/
+
         headName.setPaddingBottom(7);
         headName.setVerticalAlignment(Element.ALIGN_CENTER);
 
 
-        /*headDis.setPaddingTop(10);
-        headDis.setPaddingBottom(10);
-        headDis.setPaddingLeft(10);*/
         headDis.setPaddingBottom(7);
         headDis.setVerticalAlignment(Element.ALIGN_CENTER);
 
-      /*  headCr.setPaddingTop(10);
-        headCr.setPaddingBottom(10);
-        headCr.setPaddingLeft(10);*/
         headCr.setPaddingBottom(7);
         headCr.setHorizontalAlignment(Element.ALIGN_CENTER);
         headCr.setVerticalAlignment(Element.ALIGN_CENTER);
 
-        /*headDe.setPaddingTop(10);
-        headDe.setPaddingLeft(10);
-        headDe.setPaddingBottom(10);*/
+
         headDe.setPaddingBottom(7);
         headDe.setHorizontalAlignment(Element.ALIGN_CENTER);
         headDe.setVerticalAlignment(Element.ALIGN_CENTER);
 
 
-        /*headDate.setBackgroundColor(printPrimary1);
-
-        headName.setBackgroundColor(printPrimary1);
-        headDis.setBackgroundColor(printPrimary1);
-        headCr.setBackgroundColor(printPrimary1);
-        headDe.setBackgroundColor(printPrimary1);*/
 
 
         headDate.setBorder(Rectangle.NO_BORDER);
@@ -375,12 +356,6 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         headCr.setBorder(Rectangle.NO_BORDER);
         headDe.setBorder(Rectangle.NO_BORDER);
 
-
-/*        headName.setBorderColorBottom(BaseColor.BLACK);
-        headDis.setBorderColorBottom(BaseColor.BLACK);
-        headCr.setBorderColorBottom(BaseColor.BLACK);
-        headDe.setBorderColorBottom(BaseColor.BLACK);
-        headDate.setBorderColorBottom(BaseColor.BLACK);*/
 
 
         table.addCell(headDate);
@@ -406,7 +381,7 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
             PdfPCell celldebit = new PdfPCell(new Phrase(String.valueOf(listItem.getUnitprice()), boldHeadSmall));
             PdfPCell cellAmount = new PdfPCell(new Phrase("" + (listItem.getQty() * listItem.getUnitprice()), boldHeadSmall));
 
-            amountFull += (listItem.getQty() * listItem.getUnitprice());
+            amountFull = (listItem.getQty() * listItem.getUnitprice());
             totalprice += amountFull;
 
 
@@ -524,6 +499,21 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         table1.setComplete(false);
 
 
+        PdfPCell delivery=new PdfPCell(new Phrase("Delivery charges",boldHeadSmall));
+        PdfPCell deliverycharge=new PdfPCell(new Phrase("FREE",boldHeadSmall));
+
+        delivery.setPaddingTop(2);
+        deliverycharge.setPaddingTop(2);
+        delivery.setPaddingBottom(2);
+        deliverycharge.setPaddingBottom(2);
+
+        delivery.setBorder(Rectangle.TOP);
+        deliverycharge.setBorder(Rectangle.TOP);
+        delivery.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        deliverycharge.setHorizontalAlignment(Element.ALIGN_RIGHT);
+        delivery.setColspan(3);
+        deliverycharge.setColspan(2);
+        delivery.setPaddingRight(10);
 
         PdfPCell subTotal = new PdfPCell(new Phrase(infoData.getPromoName(), boldHeadSmall));
         PdfPCell subtotalamt = new PdfPCell(new Phrase("- Rs "+infoData.getDiscAmt(), boldHeadSmall));
@@ -539,6 +529,8 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         subTotal.setColspan(3);
         subtotalamt.setColspan(2);
 
+        subTotal.setPaddingBottom(2);
+        subtotalamt.setPaddingBottom(2);
 
 
         PdfPCell preTotal = new PdfPCell(new Phrase("TOTAL", boldHeadSmall));
@@ -554,14 +546,29 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         preTotal.setColspan(3);
         preTotalAmount.setColspan(2);
 
+        preTotal.setPaddingTop(2);
+        preTotalAmount.setPaddingTop(2);
+        preTotal.setPaddingBottom(7);
+        preTotalAmount.setPaddingBottom(7);
 
-        PdfPTable duetable = new PdfPTable(3);
+        PdfPCell terms=new PdfPCell(new Phrase("* Terms : "+infoData.getTerms(),regularHeadquote));
+        terms.setPadding(5);
+        terms.setBorder(Rectangle.TOP);
+
+        PdfPTable bottomTerms =new PdfPTable(1);
+        bottomTerms.addCell(terms);
+
+        /*
+         PdfPTable duetable = new PdfPTable(3);
 
         duetable.setSplitRows(false);
         duetable.setComplete(false);
 
+         */
+
 
         //TODO update data here.
+
 
 
         /*PdfPCell quotedesc = new PdfPCell(new Phrase(infoData.getTerms(), regularSub));
@@ -627,6 +634,9 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
         table.setComplete(true);
 
+        table1.addCell(delivery);
+        table1.addCell(deliverycharge);
+
         table1.addCell(subTotal);
         table1.addCell(subtotalamt);
 
@@ -644,12 +654,11 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
         table1.setComplete(true);
 
-
         try {
             document.add(table);
-
             document.add(bottomRow);
             document.add(table1);
+            document.add(bottomTerms);
         } catch (DocumentException e) {
             e.printStackTrace();
         }
