@@ -13,7 +13,7 @@
         android:layout_width="43dp"
         android:layout_height="43dp"
         android:layout_alignParentEnd="true"
-        android:src="@drawable/me" />
+        />
 
     <TextView
         android:id="@+id/name"
@@ -22,7 +22,7 @@
         android:layout_alignTop="@+id/avatar"
         android:layout_marginEnd="15dp"
         android:layout_toStartOf="@+id/avatar"
-        android:textColor="?attr/iconTint"
+        android:textColor="#000"
         android:paddingBottom="4dp"
         android:textSize="13sp"
         android:text="Your name" />
@@ -34,7 +34,7 @@
         android:layout_below="@+id/name"
         android:layout_alignEnd="@+id/name"
         android:background="@drawable/chat_my_bg"
-        android:textColor="?attr/iconTint"
+        android:textColor="#fff"
         android:elevation="7dp"
         android:paddingHorizontal="16dp"
         android:paddingVertical="12dp"

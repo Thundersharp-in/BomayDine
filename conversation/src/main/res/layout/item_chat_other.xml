@@ -13,12 +13,11 @@
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_alignParentStart="true"
-        android:src="@mipmap/ic_launcher_round"
         android:text="A"
         android:textStyle="bold"
         android:gravity="center"
         android:textSize="27sp"
-        android:textColor="?attr/iconTint"
+        android:textColor="#fff"
         android:background="@drawable/circle"/>
 
     <TextView
@@ -28,7 +27,7 @@
         android:layout_alignTop="@+id/text_view_user_alphabet"
         android:layout_marginStart="15dp"
         android:layout_toEndOf="@+id/text_view_user_alphabet"
-        android:textColor="?attr/iconTint"
+        android:textColor="#000"
         android:paddingBottom="4dp"
         android:textSize="13sp"
         android:text="Rose" />
@@ -40,7 +39,7 @@
         android:layout_below="@+id/name"
         android:layout_alignLeft="@+id/name"
         android:background="@drawable/chat_other_bg"
-        android:textColor="#fff"
+        android:textColor="#000"
         android:elevation="7dp"
         android:paddingHorizontal="16dp"
         android:paddingVertical="12dp"
