@@ -104,21 +104,16 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         Font regularHeadquotel = new Font(baseFont, 7, Font.BOLD, BaseColor.BLACK);
         Font boldHeadSmall = new Font(baseFont, 7, Font.BOLD, BaseColor.BLACK);
         Font itemFont = new Font(baseFont, 7, Font.NORMAL, BaseColor.BLACK);
-        Font regularSub = new Font(baseFont, 10);
-        Font regularSubbold = new Font(baseFont, 10, Font.BOLD);
-        Font smallfooter = new Font(baseFont, 9);
-        Font regularTotal = new Font(baseFont, 11, Font.NORMAL, BaseColor.BLACK);
+
 
 
         Rectangle rectangle = new Rectangle(227, 1440);
         //A7 = 74mm in size
-        Document document = new Document(rectangle, 7, 7, 25, 92);
+        Document document = new Document(rectangle, 3, 3, 15, 15);
         document.addCreationDate();
         document.addAuthor("Thundersharp");
         document.addCreator("thundersharp.in");
-        //document.setMargins(0,0,0,0);
 
-// Location to save
         try {
 
             writer = PdfWriter.getInstance(document, new FileOutputStream(path));
@@ -578,78 +573,6 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         }
 
 
-        /*
-         PdfPTable duetable = new PdfPTable(3);
-
-        duetable.setSplitRows(false);
-        duetable.setComplete(false);
-
-         */
-
-
-        //TODO update data here.
-
-
-
-        /*PdfPCell quotedesc = new PdfPCell(new Phrase(infoData.getTerms(), regularSub));
-        quotedesc.setHorizontalAlignment(Element.ALIGN_LEFT);
-        quotedesc.setBorder(Rectangle.NO_BORDER);
-        quotedesc.setPaddingRight(10);
-        quotedesc.setPaddingTop(20);
-        quotedesc.setColspan(5);*/
-
-
-
-/*
-
-        PdfPCell blankspace = null, sign = null;
-
-        //Drawable d = getResources().getDrawable();
-        //BitmapDrawable bitDw = ((BitmapDrawable) d);
-        Bitmap bmp;
-        if (infoData.getSignPicUri().equals("")) {
-            Drawable d = context.getDrawable(infoData.getLogo());
-            BitmapDrawable bitDw = ((BitmapDrawable) d);
-            bmp = bitDw.getBitmap();
-        } else {
-            bmp = BitmapFactory.decodeFile(infoData.getSignPicUri());
-        }
-
-
-
-        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        bmp.compress(Bitmap.CompressFormat.PNG, 10, stream);
-        try {
-            Image image = Image.getInstance(stream.toByteArray());
-            image.scaleToFit(100, 100);
-            blankspace = new PdfPCell(new Phrase("", regularSubbold));
-            sign = new PdfPCell(image, false);
-
-            blankspace.setPaddingTop(0);
-            sign.setPaddingTop(-15);
-            sign.setHorizontalAlignment(Element.ALIGN_RIGHT);
-            sign.setBorder(Rectangle.NO_BORDER);
-            blankspace.setBorder(Rectangle.NO_BORDER);
-            blankspace.setHorizontalAlignment(Element.ALIGN_LEFT);
-            blankspace.setPaddingRight(15);
-            blankspace.setColspan(2);
-            sign.setColspan(3);
-
-
-        } catch (BadElementException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-*/
-
-
-
-
-        //TODO 1
-        //preTotal.setBorder(Rectangle.NO_BORDER);
-        //preTotalAmount.setBorder(Rectangle.NO_BORDER);
 
 
         table.setComplete(true);

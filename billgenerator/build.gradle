@@ -35,6 +35,8 @@ dependencies {
     implementation 'com.itextpdf:itextg:5.5.10'
     implementation files('libs/OnBarcode.AndroidBarcode.jar')
     testImplementation 'junit:junit:4.+'
+    implementation 'com.google.zxing:core:3.2.1'
+    implementation 'com.journeyapps:zxing-android-embedded:3.2.0@aar'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 }
