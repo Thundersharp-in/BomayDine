@@ -10,7 +10,7 @@ public class FirebaseChatMainApp extends Application {
     }
 
     public static void setChatActivityOpen(boolean isChatActivityOpen) {
-        com.thundersharp.gsclasses.core.chats.FirebaseChatMainApp.sIsChatActivityOpen = isChatActivityOpen;
+        FirebaseChatMainApp.sIsChatActivityOpen = isChatActivityOpen;
     }
 
     @Override
