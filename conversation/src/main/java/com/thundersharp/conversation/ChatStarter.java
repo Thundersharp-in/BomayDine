@@ -1,112 +1,138 @@
 package com.thundersharp.conversation;
 
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.FrameLayout;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
 
-import com.thundersharp.conversation.utils.Constants;
+import com.thundersharp.conversation.utils.Resturant;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+
+import static java.lang.annotation.RetentionPolicy.SOURCE;
+
+public class ChatStarter {
+
+    private Context context;
+    static ChatStarter chatStarter;
+    private Integer chatMode;
+    private String senderUid;
+    private String senderName;
+    private String customerUiid;
 
 
-public class ChatStarter extends AppCompatActivity {
-
-    FrameLayout frameLayout;
-
-    public static void startActivity(Context context,
-                                     String receiver,
-                                     String receiverUid,
-                                     String videoid,
-                                     String name) {
-
-        Intent intent = new Intent(context, ChatStarter.class);
-        intent.putExtra(Constants.ARG_RECEIVER, receiver);
-        intent.putExtra(Constants.ARG_RECEIVER_UID, receiverUid);
-        intent.putExtra(Constants.ARG_VIDEO_TOKEN, videoid);
-        intent.putExtra(Constants.ARG_NAME,name);
-        context.startActivity(intent);
+    public ChatStarter(Context context){
+        this.context = context;
     }
 
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_chat_starter);
-
-        frameLayout = findViewById(R.id.chatcontainer);
-        init();
+    public static ChatStarter initializeChat(Context context){
+        chatStarter = new ChatStarter(context);
+        return chatStarter;
     }
 
-    private void init() {
-        // set the toolbar
+    @Retention(SOURCE)
+    @IntDef({MODE_CHAT_FROM_ORDERS,
+            MODE_CHAT_FROM_ORDERS_PRE_DELIVERY,
+            MODE_CHAT_FROM_SPECIFIC_ORDER,
+            MODE_CHAT_FROM_SPECIFIC_ORDER_PRE_DELIVERY,
+            MODE_CHAT_FROM_PROFILE_HELP_N_FEEDBACK,
+            MODE_CHAT_FROM_PROFILE_REPORT,
+            MODE_CHAT_ADMIN})
 
-        // set the register screen fragment
-        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+    public @interface ChatMode {}
+    public static final int MODE_CHAT_FROM_ORDERS = 0;
+    public static final int MODE_CHAT_FROM_ORDERS_PRE_DELIVERY = 1;
+    public static final int MODE_CHAT_FROM_SPECIFIC_ORDER = 2;
+    public static final int MODE_CHAT_FROM_SPECIFIC_ORDER_PRE_DELIVERY  = 3;
+    public static final int MODE_CHAT_FROM_PROFILE_HELP_N_FEEDBACK = 4;
+    public static final int MODE_CHAT_FROM_PROFILE_REPORT = 5;
 
-        fragmentTransaction.replace(R.id.chatcontainer,
-                ChatFragmentInternal.newInstance(getIntent().getExtras().getString(Constants.ARG_RECEIVER),
-                        getIntent().getExtras().getString(Constants.ARG_RECEIVER_UID),
-                        getIntent().getExtras().getString(Constants.ARG_VIDEO_TOKEN)),
-                ChatFragmentInternal.class.getSimpleName());
-        fragmentTransaction.commit();
+    public static final int MODE_CHAT_ADMIN = 6;
+
+    public void setChatType(@ChatMode Integer chatMode){
+        this.chatMode = chatMode;
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-
+    @ChatMode
+    public Integer getChatMode(){
+        return chatMode;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        FirebaseChatMainApp.setChatActivityOpen(true);
+    public void setSenderUid(String senderUid){
+        this.senderUid = senderUid;
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        FirebaseChatMainApp.setChatActivityOpen(false);
+    public String getSenderUid(){
+        return senderUid;
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        //Intent intent = new Intent();
-        //intent.setAction("restartservice");
-        //intent.setClass(this, Restarter.class);
-        //this.sendBroadcast(intent);
-        //stopService(new Intent(this, TimeCounterService.class));
+    @NonNull
+    public void setSenderName(@NonNull String senderName){
+        this.senderName = senderName;
     }
 
-    @Override
-    protected void onStart() {
-        super.onStart();
-
+    public String getSenderName(){
+        return senderName;
     }
 
-    @Override
-    public void onBackPressed() {
-        AlertDialog.Builder builder;
-        builder = new AlertDialog.Builder(this);
-        builder.setMessage("Do you really want to exit the Chat ??").setNegativeButton("NO", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                dialogInterface.dismiss();
+    @NonNull
+    public void setCustomerId(@NonNull String uid){
+        this.customerUiid = uid;
+    }
+
+    public String getCostumerUid(){
+        return customerUiid;
+    }
+
+    public void startChat() throws ParametersMissingException{
+
+        if (getChatMode() == null || getSenderUid() == null || getSenderName() == null){
+
+            StringBuilder stringBuilder = new StringBuilder();
+            stringBuilder.append("Failed to start chat\n");
+            stringBuilder.append("Possible cause : Have you called all the functions serially ? ie.\n");
+            stringBuilder.append("1. setChatType(@ChatMode Integer chatMode)\n");
+            stringBuilder.append("2. setSenderUid(String senderUid)\n");
+            stringBuilder.append("3. setSenderName(@NonNull String senderName)\n");
+            stringBuilder.append("\n\n");
+            stringBuilder.append("Current values =======================================================");
+            stringBuilder.append("Chat mode : ").append(getChatMode()).append("\n");
+            stringBuilder.append("Chat Sender Uid : ").append(getSenderUid()).append("\n");
+            stringBuilder.append("Chat Sender Name : ").append(getSenderName()).append("\n");
+            throw new ParametersMissingException(stringBuilder.toString());
+
+        }else {
+            switch (getChatMode()){
+                case ChatStarter.MODE_CHAT_FROM_ORDERS:
+                    ChatActivity.startActivity(context, Resturant.RESTURANT_SUPPORT_NAME,"SUPPORT56065",getSenderName(),getSenderUid(),getChatMode());
+                    break;
+
+                case ChatStarter.MODE_CHAT_FROM_ORDERS_PRE_DELIVERY:
+
+                case ChatStarter.MODE_CHAT_FROM_PROFILE_HELP_N_FEEDBACK:
+
+                    ChatActivity.startActivity(context, Resturant.RESTURANT_SUPPORT_NAME,"SUPPORT56065",getSenderName(),getSenderUid(),getChatMode());
+                    break;
+
+                case ChatStarter.MODE_CHAT_FROM_PROFILE_REPORT:
+
+                case ChatStarter.MODE_CHAT_FROM_SPECIFIC_ORDER:
+
+                case ChatStarter.MODE_CHAT_FROM_SPECIFIC_ORDER_PRE_DELIVERY:
+
+                case ChatStarter.MODE_CHAT_ADMIN:
+                    if (getCostumerUid() == null){
+                        throw new ParametersMissingException("Costumer id not defined. Have you called setCostumerId() ?");
+                    }else ChatActivity.startActivity(context, Resturant.RESTURANT_SUPPORT_NAME, getCostumerUid() ,getSenderName(),getSenderUid(),getChatMode());
+                    break;
+
+                default:
+                    throw new ParametersMissingException("Chat type not defined. Have you called setChatType() ?");
             }
-        }).setPositiveButton("LEAVE", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
 
+        }
 
-                finish();
-            }
-        });
-        builder.show();
     }
+
 }

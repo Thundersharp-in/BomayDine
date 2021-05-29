@@ -8,6 +8,6 @@ public class Constants {
     public static final String ARG_CHAT_ROOMS = "chat_rooms";
     public static final String ARG_VIDEO_TOKEN = "firebaseToken";
     public static final String ARG_FRIENDS = "friends";
-    public static final String ARG_UID = "uid";
+    public static final String ARG_SENDER_UID = "uid";
     public static final String ARG_NAME = "name";
 }

@@ -36,7 +36,6 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View{
 
     private RecyclerView mRecyclerViewChat;
     private EditText mETxtMessage;
-    static String videokey;
     private ProgressDialog mProgressDialog;
     SharedPreferences data;
     public RecyclerView recyclerView;
@@ -48,15 +47,18 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View{
     ImageButton send_sms;
 
     public static ChatFragmentInternal newInstance(String receiver,
-                                           String receiverUid,
-                                           String firebaseToken) {
+                                                   String receiverUid,
+                                                   String senderName,
+                                                   String simpleName,
+                                                   int chat_type, String name) {
 
-        videokey=receiverUid;
 
         Bundle args = new Bundle();
         args.putString(Constants.ARG_RECEIVER, receiver);
         args.putString(Constants.ARG_RECEIVER_UID, receiverUid);
-        args.putString(Constants.ARG_VIDEO_TOKEN, firebaseToken);
+        args.putString(Constants.ARG_NAME, senderName);
+        args.putString(Constants.ARG_SENDER_UID, simpleName);
+        args.putInt("CHAT_TYPE", chat_type);
         ChatFragmentInternal fragment = new ChatFragmentInternal();
         fragment.setArguments(args);
         return fragment;
@@ -131,7 +133,7 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View{
         mProgressDialog.setIndeterminate(true);
 
         mChatPresenter = new ChatPresenter(this);
-        mChatPresenter.getMessage(FirebaseAuth.getInstance().getCurrentUser().getUid(),
+        mChatPresenter.getMessage(getArguments().getString(Constants.ARG_SENDER_UID),
                 getArguments().getString(Constants.ARG_RECEIVER_UID));
     }
 
@@ -140,10 +142,10 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View{
 
         String message = mETxtMessage.getText().toString();
         String receiver = getArguments().getString(Constants.ARG_RECEIVER);
-        String receiverUid = getArguments().getString(Constants.ARG_VIDEO_TOKEN);
-        String sender = FirebaseAuth.getInstance().getCurrentUser().getEmail();
-        String senderUid = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        String receiverFirebaseToken = getArguments().getString(Constants.ARG_VIDEO_TOKEN);
+        String receiverUid = getArguments().getString(Constants.ARG_RECEIVER_UID);
+        String sender = getArguments().getString(Constants.ARG_NAME);
+        String senderUid = getArguments().getString(Constants.ARG_SENDER_UID);
+
 
         Chat chat = new Chat(sender,
                 receiver,
@@ -151,9 +153,10 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View{
                 receiverUid,
                 message,
                 System.currentTimeMillis());
+
         mChatPresenter.sendMessage(getActivity().getApplicationContext(),
                 chat,
-                receiverFirebaseToken);
+                "");
     }
 
     @Override
@@ -170,7 +173,7 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View{
     @Override
     public void onGetMessagesSuccess(Chat chat) {
         if (mChatRecyclerAdapter == null) {
-            mChatRecyclerAdapter = new ChatRecyclerAdapter(new ArrayList<Chat>());
+            mChatRecyclerAdapter = new ChatRecyclerAdapter(new ArrayList<Chat>(),getArguments().getInt("CHAT_TYPE"));
             mRecyclerViewChat.setAdapter(mChatRecyclerAdapter);
         }
         mChatRecyclerAdapter.add(chat);

@@ -28,13 +28,16 @@ import com.thundersharp.bombaydine.user.core.login.Logout;
 import com.thundersharp.bombaydine.user.ui.home.MainPage;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
 import com.thundersharp.bombaydine.user.ui.startup.MainActivity;
+import com.thundersharp.conversation.ChatStarter;
+import com.thundersharp.conversation.ParametersMissingException;
 
 import java.util.HashMap;
+
 
 public class Profile extends Fragment {
 
     private RelativeLayout bottomHolderprofile;
-    private MaterialCardView your_orders;
+    private MaterialCardView your_orders,helpNfeedback;
     private CoordinatorLayout containermain;
     private TextView switchbtn,logout;
     private BottomSheetDialog bottomSheetDialogloc;
@@ -49,6 +52,7 @@ public class Profile extends Fragment {
         containermain = view.findViewById(R.id.containermain);
         switchbtn = view.findViewById(R.id.switchbtn);
         logout = view.findViewById(R.id.logoutn);
+        helpNfeedback = view.findViewById(R.id.help);
 
         Animator
                 .initializeAnimator()
@@ -57,6 +61,19 @@ public class Profile extends Fragment {
         your_orders.setOnClickListener(view1 -> {
 
             MainPage.navController.navigate(R.id.discover);
+        });
+
+        helpNfeedback.setOnClickListener(view1 -> {
+            ChatStarter chatStarter = ChatStarter.initializeChat(getActivity());
+            chatStarter.setSenderName("Hrishikesh Prateek");
+            chatStarter.setChatType(ChatStarter.MODE_CHAT_FROM_PROFILE_HELP_N_FEEDBACK);
+            chatStarter.setSenderUid(FirebaseAuth.getInstance().getUid());
+
+            try {
+                chatStarter.startChat();
+            } catch (ParametersMissingException e) {
+                e.printStackTrace();
+            }
         });
 
         logout.setOnClickListener(view1 -> {
@@ -147,7 +164,6 @@ public class Profile extends Fragment {
             });
 
             bottomSheetDialogloc.setContentView(bottomview);
-
 
             bottomSheetDialogloc.show();
         });

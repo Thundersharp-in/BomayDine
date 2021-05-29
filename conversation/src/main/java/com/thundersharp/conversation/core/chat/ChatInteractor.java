@@ -10,7 +10,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.thundersharp.conversation.fcm.FcmNotificationBuilder;
 import com.thundersharp.conversation.model.Chat;
 import com.thundersharp.conversation.utils.Constants;
 import com.thundersharp.conversation.utils.SharedPrefUtil;
@@ -40,8 +39,9 @@ public class ChatInteractor implements ChatContract.Interactor {
     @Override
     public void sendMessageToFirebaseUser(final Context context, final Chat chat, final String receiverFirebaseToken) {
 
-        final String room_type_1 = chat.receiverUid;
-        final String room_type_2 = chat.receiverUid;
+        final String room_type_1 = chat.senderUid +"_"+chat.receiverUid;
+        final String room_type_2 = chat.receiverUid+"_"+chat.senderUid;
+
 
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
@@ -83,6 +83,7 @@ public class ChatInteractor implements ChatContract.Interactor {
                                                 String uid,
                                                 String firebaseToken,
                                                 String receiverFirebaseToken) {
+/*
         FcmNotificationBuilder.initialize()
                 .title(username)
                 .message(message)
@@ -91,17 +92,22 @@ public class ChatInteractor implements ChatContract.Interactor {
                 .firebaseToken(firebaseToken)
                 .receiverFirebaseToken(receiverFirebaseToken)
                 .send();
+*/
     }
 
     @Override
     public void getMessageFromFirebaseUser(String senderUid, String receiverUid) {
 
-        final String room_type_1 = receiverUid;
-        final String room_type_2 = receiverUid;
+        final String room_type_1 = senderUid+"_"+receiverUid;
+        final String room_type_2 = receiverUid+"_"+senderUid;
+
+        Log.e("TAG", "room: " + senderUid+"_"+receiverUid);
 
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        databaseReference.child(Constants.ARG_CHAT_ROOMS).getRef().addListenerForSingleValueEvent(new ValueEventListener() {
+        databaseReference.child(Constants.ARG_CHAT_ROOMS).getRef()
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild(room_type_1)) {
@@ -140,6 +146,7 @@ public class ChatInteractor implements ChatContract.Interactor {
                             mOnGetMessagesListener.onGetMessagesFailure("Unable to get message: " + databaseError.getMessage());
                         }
                     });
+
                 } else if (dataSnapshot.hasChild(room_type_2)) {
                     Log.e(TAG, "getMessageFromFirebaseUser: " + room_type_2 + " exists");
                     FirebaseDatabase.getInstance()

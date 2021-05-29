@@ -10,6 +10,7 @@ import android.widget.Toast;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.thundersharp.conversation.ChatStarter;
 import com.thundersharp.conversation.R;
 import com.thundersharp.conversation.model.Chat;
 
@@ -21,9 +22,11 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private static final int VIEW_TYPE_OTHER = 2;
 
     private List<Chat> mChats;
+    private int chatType;
 
-    public ChatRecyclerAdapter(List<Chat> chats) {
+    public ChatRecyclerAdapter(List<Chat> chats,int ChatType) {
         mChats = chats;
+        this.chatType = ChatType;
     }
 
     public void add(Chat chat) {
@@ -51,11 +54,23 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-        if (TextUtils.equals(mChats.get(position).senderUid,
-                FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-            configureMyChatViewHolder((MyChatViewHolder) holder, position);
-        } else {
-            configureOtherChatViewHolder((OtherChatViewHolder) holder, position);
+        if (chatType == ChatStarter.MODE_CHAT_ADMIN){
+            if (TextUtils.equals(mChats.get(position).senderUid, "SUPPORT56065")) {
+
+                configureMyChatViewHolder((MyChatViewHolder) holder, position);
+
+            } else {
+                configureOtherChatViewHolder((OtherChatViewHolder) holder, position);
+
+            }
+        }else {
+            if (TextUtils.equals(mChats.get(position).senderUid, FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+
+                configureMyChatViewHolder((MyChatViewHolder) holder, position);
+
+            } else {
+                configureOtherChatViewHolder((OtherChatViewHolder) holder, position);
+            }
         }
     }
 
@@ -90,11 +105,19 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public int getItemViewType(int position) {
-        if (TextUtils.equals(mChats.get(position).senderUid,
-                FirebaseAuth.getInstance().getCurrentUser().getUid())) {
-            return VIEW_TYPE_ME;
-        } else {
-            return VIEW_TYPE_OTHER;
+        if (chatType == ChatStarter.MODE_CHAT_ADMIN){
+            if (TextUtils.equals(mChats.get(position).senderUid, "SUPPORT56065")) {
+                return VIEW_TYPE_ME;
+            } else {
+                return VIEW_TYPE_OTHER;
+            }
+        }else {
+            if (TextUtils.equals(mChats.get(position).senderUid,
+                    FirebaseAuth.getInstance().getCurrentUser().getUid())) {
+                return VIEW_TYPE_ME;
+            } else {
+                return VIEW_TYPE_OTHER;
+            }
         }
     }
 
