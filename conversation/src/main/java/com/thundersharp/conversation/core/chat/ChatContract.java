@@ -13,7 +13,7 @@ public interface ChatContract {
 
         void onSendMessageFailure(String message);
 
-        void onGetMessagesSuccess(Chat chat);
+        void onGetMessagesSuccess(Chat chat,long initialMessageCount);
 
         void onGetMessagesFailure(String message);
     }
@@ -37,7 +37,7 @@ public interface ChatContract {
     }
 
     interface OnGetMessagesListener {
-        void onGetMessagesSuccess(Chat chat);
+        void onGetMessagesSuccess(Chat chat,long initialMessageCount);
 
         void onGetMessagesFailure(String message);
     }

@@ -5,44 +5,51 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:clipToPadding="false"
     android:paddingVertical="4dp"
-    android:paddingStart="15dp"
+    android:paddingStart="10dp"
     android:paddingEnd="60dp">
-
-    <TextView
-        android:id="@+id/text_view_user_alphabet"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
-        android:layout_alignParentStart="true"
-        android:text="A"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:textSize="27sp"
-        android:textColor="#fff"
-        android:background="@drawable/circle"/>
 
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/text_view_user_alphabet"
+        android:layout_alignParentStart="true"
         android:layout_marginStart="15dp"
-        android:layout_toEndOf="@+id/text_view_user_alphabet"
-        android:textColor="#000"
+        android:textColor="#C3C3C3"
         android:paddingBottom="4dp"
         android:textSize="13sp"
         android:text="Rose" />
 
-    <TextView
-        android:id="@+id/text_view_chat_message"
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/name"
-        android:layout_alignLeft="@+id/name"
-        android:background="@drawable/chat_other_bg"
-        android:textColor="#000"
-        android:elevation="7dp"
-        android:paddingHorizontal="16dp"
-        android:paddingVertical="12dp"
-        android:text="How are you doing? This is a long message that should probably wrap."
-        android:textSize="14sp" />
+        android:layout_alignStart="@+id/name"
+        android:background="@drawable/chat_other_bg">
+        <TextView
+            android:id="@+id/text_view_chat_message"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#FFFFFF"
+            android:elevation="7dp"
+            android:linksClickable="true"
+            android:textIsSelectable="true"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="12dp"
+            android:text="How are you doing? This is a long message that should probably wrap."
+            android:textSize="14sp" />
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_chat_other"
+            android:paddingHorizontal="15dp"
+            android:paddingVertical="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            android:layout_below="@id/text_view_chat_message"
+            android:elevation="2dp"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+    </RelativeLayout>
+
+
+
 </RelativeLayout>

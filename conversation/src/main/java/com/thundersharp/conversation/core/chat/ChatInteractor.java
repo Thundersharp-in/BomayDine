@@ -107,10 +107,9 @@ public class ChatInteractor implements ChatContract.Interactor {
 
         databaseReference.child(Constants.ARG_CHAT_ROOMS).getRef()
                 .addListenerForSingleValueEvent(new ValueEventListener() {
-
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild(room_type_1)) {
+            public void onDataChange(DataSnapshot dataSnapshotm) {
+                if (dataSnapshotm.hasChild(room_type_1)) {
                     Log.e(TAG, "getMessageFromFirebaseUser: " + room_type_1 + " exists");
                     FirebaseDatabase.getInstance()
                             .getReference()
@@ -120,7 +119,7 @@ public class ChatInteractor implements ChatContract.Interactor {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                             Chat chat = dataSnapshot.getValue(Chat.class);
-                            mOnGetMessagesListener.onGetMessagesSuccess(chat);
+                            mOnGetMessagesListener.onGetMessagesSuccess(chat,dataSnapshotm.getChildrenCount());
                             //TODO
                             //ChatFragment.shimmer_view_container1.stopShimmer();
                             //ChatFragment.shimmer_view_container1.setVisibility(View.GONE);
@@ -147,7 +146,7 @@ public class ChatInteractor implements ChatContract.Interactor {
                         }
                     });
 
-                } else if (dataSnapshot.hasChild(room_type_2)) {
+                } else if (dataSnapshotm.hasChild(room_type_2)) {
                     Log.e(TAG, "getMessageFromFirebaseUser: " + room_type_2 + " exists");
                     FirebaseDatabase.getInstance()
                             .getReference()
@@ -156,7 +155,7 @@ public class ChatInteractor implements ChatContract.Interactor {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                             Chat chat = dataSnapshot.getValue(Chat.class);
-                            mOnGetMessagesListener.onGetMessagesSuccess(chat);
+                            mOnGetMessagesListener.onGetMessagesSuccess(chat,dataSnapshotm.getChildrenCount());
                             //ChatFragment.shimmer_view_container1.stopShimmer();
                             //ChatFragment.shimmer_view_container1.setVisibility(View.GONE);
                             //TODO
@@ -183,6 +182,7 @@ public class ChatInteractor implements ChatContract.Interactor {
                         }
                     });
                 } else {
+                    mOnGetMessagesListener.onGetMessagesFailure("NoData");
                     Log.e(TAG, "getMessageFromFirebaseUser: no such room available");
                 }
             }

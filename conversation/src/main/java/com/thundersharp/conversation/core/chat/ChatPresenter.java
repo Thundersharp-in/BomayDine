@@ -37,8 +37,8 @@ public class ChatPresenter implements ChatContract.Presenter, ChatContract.OnSen
     }
 
     @Override
-    public void onGetMessagesSuccess(Chat chat) {
-        mView.onGetMessagesSuccess(chat);
+    public void onGetMessagesSuccess(Chat chat,long messageInitialCount) {
+        mView.onGetMessagesSuccess(chat,messageInitialCount);
     }
 
     @Override

@@ -36,16 +36,16 @@
         android:layout_below="@id/vvv"
         android:id="@+id/otp_view"
         android:layout_width="wrap_content"
+        android:enabled="true"
         android:layout_height="wrap_content"
         android:layout_marginTop="15dp"
-        android:inputType="number"
         android:layout_centerHorizontal="true"
         android:itemBackground="#000"
         android:textColor="@android:color/white"
         app:itemCount="6"
         app:hideLineWhenFilled="true"
         app:lineColor="#fff"
-        app:viewType="line"
+        app:viewType="rectangle"
         />
 
 

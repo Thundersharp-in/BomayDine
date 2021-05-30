@@ -45,12 +45,15 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View{
     private ChatPresenter mChatPresenter;
 
     ImageButton send_sms;
+    int currentSessionMessageCounter=0;
 
     public static ChatFragmentInternal newInstance(String receiver,
                                                    String receiverUid,
                                                    String senderName,
                                                    String simpleName,
-                                                   int chat_type, String name) {
+                                                   int chat_type,
+                                                   String orderId,
+                                                   String name) {
 
 
         Bundle args = new Bundle();
@@ -59,6 +62,7 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View{
         args.putString(Constants.ARG_NAME, senderName);
         args.putString(Constants.ARG_SENDER_UID, simpleName);
         args.putInt("CHAT_TYPE", chat_type);
+        args.putString("ORDER_ID",orderId);
         ChatFragmentInternal fragment = new ChatFragmentInternal();
         fragment.setArguments(args);
         return fragment;
@@ -81,6 +85,8 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.fragment_chat, container, false);
         bindViews(fragmentView);
+        
+        
 
         return fragmentView;
     }
@@ -159,6 +165,29 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View{
                 "");
     }
 
+
+    private void sendMessage(String message) {
+
+        String receiver = getArguments().getString(Constants.ARG_RECEIVER);
+        String receiverUid = getArguments().getString(Constants.ARG_RECEIVER_UID);
+        String sender = getArguments().getString(Constants.ARG_NAME);
+        String senderUid = getArguments().getString(Constants.ARG_SENDER_UID);
+
+
+        Chat chat = new Chat(sender,
+                receiver,
+                senderUid,
+                receiverUid,
+                message,
+                System.currentTimeMillis());
+
+        mChatPresenter.sendMessage(getActivity().getApplicationContext(),
+                chat,
+                "");
+    }
+
+
+
     @Override
     public void onSendMessageSuccess() {
         mETxtMessage.setText("");
@@ -171,17 +200,21 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View{
     }
 
     @Override
-    public void onGetMessagesSuccess(Chat chat) {
+    public void onGetMessagesSuccess(Chat chat,long initialMessageCount) {
         if (mChatRecyclerAdapter == null) {
-            mChatRecyclerAdapter = new ChatRecyclerAdapter(new ArrayList<Chat>(),getArguments().getInt("CHAT_TYPE"));
+            mChatRecyclerAdapter = new ChatRecyclerAdapter(getActivity(),new ArrayList<Chat>(),getArguments().getInt("CHAT_TYPE"),initialMessageCount);
             mRecyclerViewChat.setAdapter(mChatRecyclerAdapter);
         }
         mChatRecyclerAdapter.add(chat);
         mRecyclerViewChat.smoothScrollToPosition(mChatRecyclerAdapter.getItemCount() - 1);
+        Toast.makeText(getContext(), "l", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onGetMessagesFailure(String message) {
+        if (message.equalsIgnoreCase("NoData")){
+            sendMessage("Hello on which order you need help today ?");
+        }
         Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 

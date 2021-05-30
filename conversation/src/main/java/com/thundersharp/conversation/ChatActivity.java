@@ -5,6 +5,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.widget.FrameLayout;
+import android.widget.Toolbar;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,6 +17,7 @@ import com.thundersharp.conversation.utils.Constants;
 public class ChatActivity extends AppCompatActivity {
 
     FrameLayout frameLayout;
+    static String orderId;
 
     public static void startActivity(Context context,
                                      String receiver,
@@ -33,6 +35,23 @@ public class ChatActivity extends AppCompatActivity {
         context.startActivity(intent);
     }
 
+    public static void startActivity(Context context,
+                                     String receiver,
+                                     String receiverUid,
+                                     String name,
+                                     String senderUid,
+                                     int chatType,
+                                     String orderid) {
+        orderId = orderid;
+        Intent intent = new Intent(context, ChatActivity.class);
+        intent.putExtra(Constants.ARG_RECEIVER, receiver);
+        intent.putExtra(Constants.ARG_RECEIVER_UID, receiverUid);
+        intent.putExtra(Constants.ARG_NAME,name);
+        intent.putExtra(Constants.ARG_SENDER_UID,senderUid);
+        intent.putExtra("CHAT_TYPE",chatType);
+        context.startActivity(intent);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +59,7 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_chat_starter);
 
         frameLayout = findViewById(R.id.chatcontainer);
+        ((Toolbar)findViewById(R.id.toolbar)).setNavigationOnClickListener(view -> finish());
         init();
     }
 
@@ -56,6 +76,7 @@ public class ChatActivity extends AppCompatActivity {
                         getIntent().getExtras().getString(Constants.ARG_NAME),
                         getIntent().getExtras().getString(Constants.ARG_SENDER_UID),
                         getIntent().getExtras().getInt("CHAT_TYPE"),
+                        orderId,
                         ChatFragmentInternal.class.getSimpleName()));
         fragmentTransaction.commit();
     }

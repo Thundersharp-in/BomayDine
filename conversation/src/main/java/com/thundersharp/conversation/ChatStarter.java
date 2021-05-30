@@ -20,6 +20,7 @@ public class ChatStarter {
     private String senderUid;
     private String senderName;
     private String customerUiid;
+    private String orderId;
 
 
     public ChatStarter(Context context){
@@ -39,7 +40,6 @@ public class ChatStarter {
             MODE_CHAT_FROM_PROFILE_HELP_N_FEEDBACK,
             MODE_CHAT_FROM_PROFILE_REPORT,
             MODE_CHAT_ADMIN})
-
     public @interface ChatMode {}
     public static final int MODE_CHAT_FROM_ORDERS = 0;
     public static final int MODE_CHAT_FROM_ORDERS_PRE_DELIVERY = 1;
@@ -85,6 +85,14 @@ public class ChatStarter {
         return customerUiid;
     }
 
+    public void setOrderId(@NonNull String orderId){
+        this.orderId = orderId;
+    }
+
+    public String getOrderId(){
+        return orderId;
+    }
+
     public void startChat() throws ParametersMissingException{
 
         if (getChatMode() == null || getSenderUid() == null || getSenderName() == null){
@@ -105,25 +113,71 @@ public class ChatStarter {
         }else {
             switch (getChatMode()){
                 case ChatStarter.MODE_CHAT_FROM_ORDERS:
-                    ChatActivity.startActivity(context, Resturant.RESTURANT_SUPPORT_NAME,"SUPPORT56065",getSenderName(),getSenderUid(),getChatMode());
+                    ChatActivity
+                            .startActivity(context,
+                                    Resturant.RESTURANT_SUPPORT_NAME,
+                                    Resturant.RESTURANT_SUPPORT_ID,
+                                    getSenderName(),
+                                    getSenderUid(),
+                                    getChatMode());
                     break;
 
                 case ChatStarter.MODE_CHAT_FROM_ORDERS_PRE_DELIVERY:
+                    break;
 
                 case ChatStarter.MODE_CHAT_FROM_PROFILE_HELP_N_FEEDBACK:
-
-                    ChatActivity.startActivity(context, Resturant.RESTURANT_SUPPORT_NAME,"SUPPORT56065",getSenderName(),getSenderUid(),getChatMode());
+                    if (getSenderName() != null)
+                    ChatActivity
+                            .startActivity(context,
+                                    Resturant.RESTURANT_SUPPORT_NAME,
+                                    Resturant.RESTURANT_SUPPORT_ID,
+                                    getSenderName(),
+                                    getSenderUid(),
+                                    getChatMode());
                     break;
 
                 case ChatStarter.MODE_CHAT_FROM_PROFILE_REPORT:
+                    if (getOrderId() == null){}
+                    ChatActivity
+                            .startActivity(context,
+                                    Resturant.RESTURANT_SUPPORT_NAME,
+                                    Resturant.RESTURANT_SUPPORT_ID,
+                                    getSenderName(),
+                                    getSenderUid(),
+                                    getChatMode());
+
+                    break;
 
                 case ChatStarter.MODE_CHAT_FROM_SPECIFIC_ORDER:
+                    if (getOrderId() == null){
+                        throw new ParametersMissingException("Costumer id not defined. Have you called setOrderId() ?");
+
+                    }else ChatActivity
+                            .startActivity(context,
+                                    Resturant.RESTURANT_SUPPORT_NAME,
+                                    Resturant.RESTURANT_SUPPORT_ID,
+                                    getSenderName(),
+                                    getSenderUid(),
+                                    getChatMode(),
+                                    getOrderId());
+                    break;
 
                 case ChatStarter.MODE_CHAT_FROM_SPECIFIC_ORDER_PRE_DELIVERY:
+                    ChatActivity
+                            .startActivity(context,
+                                    Resturant.RESTURANT_SUPPORT_NAME,
+                                    Resturant.RESTURANT_SUPPORT_ID,
+                                    getSenderName(),
+                                    getSenderUid(),
+                                    getChatMode(),
+                                    getOrderId());
+                    break;
 
                 case ChatStarter.MODE_CHAT_ADMIN:
                     if (getCostumerUid() == null){
+
                         throw new ParametersMissingException("Costumer id not defined. Have you called setCostumerId() ?");
+
                     }else ChatActivity.startActivity(context, Resturant.RESTURANT_SUPPORT_NAME, getCostumerUid() ,getSenderName(),getSenderUid(),getChatMode());
                     break;
 
