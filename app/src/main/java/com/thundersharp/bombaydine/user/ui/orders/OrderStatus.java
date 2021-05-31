@@ -187,7 +187,7 @@ public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderL
         ChatStarter chatStarter = ChatStarter.initializeChat(this);
 
         chatStarter.setSenderUid(FirebaseAuth.getInstance().getUid());
-        chatStarter.setSenderName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        chatStarter.setCostomerName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
         chatStarter.setOrderId(orederBasicDetails.getOrderID());
 
         if (orederBasicDetails.getStatus().equalsIgnoreCase("3")) {

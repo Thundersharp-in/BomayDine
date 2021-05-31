@@ -91,18 +91,19 @@ public class ChatActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        FirebaseChatMainApp.setChatActivityOpen(true);
+        //FirebaseChatMainApp.setChatActivityOpen(true);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        FirebaseChatMainApp.setChatActivityOpen(false);
+
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        //FirebaseChatMainApp.setChatActivityOpen(false);
         //Intent intent = new Intent();
         //intent.setAction("restartservice");
         //intent.setClass(this, Restarter.class);

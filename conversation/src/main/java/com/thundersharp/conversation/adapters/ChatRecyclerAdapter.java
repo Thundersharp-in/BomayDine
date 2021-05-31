@@ -10,14 +10,23 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.thundersharp.conversation.ChatStarter;
+import com.thundersharp.conversation.FirebaseChatMainApp;
 import com.thundersharp.conversation.R;
 import com.thundersharp.conversation.model.Chat;
+import com.thundersharp.conversation.model.OrederBasicDetails;
+import com.thundersharp.conversation.utils.DbConstants;
 import com.thundersharp.conversation.utils.Resturant;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -84,22 +93,17 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                 configureOtherChatViewHolder((OtherChatViewHolder) holder, position);
             }
 
-            if (position == initalMessageCount){
 
-                if (mChats.get(position).message.equals("/end")){
+        }
 
-                    context.sendBroadcast(new Intent("initialMessage"));
 
-                }else if (mChats.get(position).message.equalsIgnoreCase("Hello on which order you need help today ?")){
+        if (position == (initalMessageCount-1)){
 
-                    Chat chat = new Chat(Resturant.RESTURANT_SUPPORT_NAME,"You",Resturant.RESTURANT_SUPPORT_ID,FirebaseAuth.getInstance().getUid(),"::Chatchooser",System.currentTimeMillis());
-                    add(chat);
+            if (mChats.get(position).message.equals("/end")) {
 
-                }
-
+                context.sendBroadcast(new Intent("initialMessage"));
 
             }
-
         }
     }
 
@@ -112,21 +116,76 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         myChatViewHolder.txtChatMessage.setText(chat.message);
         myChatViewHolder.name.setText("Me");
         myChatViewHolder.txtChatMessage.setMovementMethod(LinkMovementMethod.getInstance());
+        if (position != 0) {
+            if (getItemViewType(position) == getItemViewType(position - 1)) {
+                myChatViewHolder.name.setVisibility(View.GONE);
+            } else myChatViewHolder.name.setVisibility(View.VISIBLE);
+        }else {
+            myChatViewHolder.name.setText("Me");
+            myChatViewHolder.name.setVisibility(View.VISIBLE);
+        }
         //myChatViewHolder.txtUserAlphabet.setText(alphabet);
     }
 
     private void configureOtherChatViewHolder(OtherChatViewHolder otherChatViewHolder, int position) {
         Chat chat = mChats.get(position);
 
-        if (mChats.get(position).message.equals("::Chatchooser")){
+        if (position != 0) {
 
-            //TODO CHAT STARTER CHOOSER
+            if (getItemViewType(position) == getItemViewType(position - 1)) {
+                otherChatViewHolder.name.setVisibility(View.GONE);
+
+            } else otherChatViewHolder.name.setVisibility(View.VISIBLE);
 
         }else {
 
+            otherChatViewHolder.name.setText(chat.sender);
+            otherChatViewHolder.name.setVisibility(View.VISIBLE);
+
+        }
+
+        if (mChats.get(position).message.equals("::Chatchooser")){
+
+            otherChatViewHolder.txtChatMessage.setText("Select an order on which you need assistance on, If you need other assistance or on more past orders then click 'Others' option");
+            otherChatViewHolder.otherRecycler.setVisibility(View.VISIBLE);
+
+            FirebaseDatabase
+                    .getInstance()
+                    .getReference(DbConstants.DATABASE_NODE_ALL_USERS)
+                    .child(FirebaseAuth.getInstance().getUid())
+                    .child(DbConstants.DATABASE_NODE_ORDERS)
+                    .child(DbConstants.DATABASE_NODE_OVERVIEW)
+                    .limitToLast(3)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()){
+                                List<OrederBasicDetails> details = new ArrayList<>();
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()){
+                                    details.add(dataSnapshot.getValue(OrederBasicDetails.class));
+                                }
+
+
+                                otherChatViewHolder.otherRecycler.setAdapter(new OrderSelecterAdapter(details));
+                                //TODO UPDATE AFTER SELECTION
+
+                            }else Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+
+
+        }else {
+
+            otherChatViewHolder.otherRecycler.setVisibility(View.GONE);
             otherChatViewHolder.txtChatMessage.setText(chat.message);
             otherChatViewHolder.txtChatMessage.setMovementMethod(LinkMovementMethod.getInstance());
-            otherChatViewHolder.name.setText(chat.receiver);
+
+            otherChatViewHolder.name.setText(chat.sender);
         }
 
 
@@ -182,12 +241,13 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     private static class OtherChatViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
         private TextView txtChatMessage,name;
+        private RecyclerView otherRecycler;
 
         public OtherChatViewHolder(View itemView) {
             super(itemView);
             txtChatMessage = (TextView) itemView.findViewById(R.id.text_view_chat_message);
             name=itemView.findViewById(R.id.name);
-
+            otherRecycler = itemView.findViewById(R.id.recycler_chat_other);
             txtChatMessage.setOnClickListener(this);
 
         }

@@ -2,7 +2,10 @@ package com.thundersharp.conversation;
 
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -23,6 +26,7 @@ import com.thundersharp.conversation.core.chat.ChatPresenter;
 import com.thundersharp.conversation.event.PushNotificationEvent;
 import com.thundersharp.conversation.model.Chat;
 import com.thundersharp.conversation.utils.Constants;
+import com.thundersharp.conversation.utils.Resturant;
 
 import org.greenrobot.eventbus.EventBus;
 import org.greenrobot.eventbus.Subscribe;
@@ -32,7 +36,7 @@ import java.util.ArrayList;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ChatFragmentInternal extends Fragment implements ChatContract.View{
+public class ChatFragmentInternal extends Fragment implements ChatContract.View {
 
     private RecyclerView mRecyclerViewChat;
     private EditText mETxtMessage;
@@ -44,8 +48,9 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View{
     private ChatRecyclerAdapter mChatRecyclerAdapter;
     private ChatPresenter mChatPresenter;
 
+    long initialMessageCount =0;
     ImageButton send_sms;
-    int currentSessionMessageCounter=0;
+    int currentSessionMessageCounter = 0;
 
     public static ChatFragmentInternal newInstance(String receiver,
                                                    String receiverUid,
@@ -62,7 +67,7 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View{
         args.putString(Constants.ARG_NAME, senderName);
         args.putString(Constants.ARG_SENDER_UID, simpleName);
         args.putInt("CHAT_TYPE", chat_type);
-        args.putString("ORDER_ID",orderId);
+        args.putString("ORDER_ID", orderId);
         ChatFragmentInternal fragment = new ChatFragmentInternal();
         fragment.setArguments(args);
         return fragment;
@@ -85,11 +90,25 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View{
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.fragment_chat, container, false);
         bindViews(fragmentView);
-        
-        
+
+
+        getActivity().registerReceiver(broadcastReceiver,new IntentFilter("initialMessage"));
 
         return fragmentView;
     }
+
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction().equals("initialMessage")){
+                sendMessage("Hello on which order you need help today ?");
+                if (mChatRecyclerAdapter != null){
+                    Chat chat1 = new Chat(Resturant.RESTURANT_SUPPORT_NAME, "", Resturant.RESTURANT_SUPPORT_ID, FirebaseAuth.getInstance().getUid(), "::Chatchooser", System.currentTimeMillis());
+                    mChatRecyclerAdapter.add(chat1);
+                }
+            }
+        }
+    };
 
 
     public void bindViews(View view) {
@@ -98,7 +117,6 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View{
         mETxtMessage = (EditText) view.findViewById(R.id.edit_text_message);
         send_sms = (ImageButton) view.findViewById(R.id.messageSendChat);
         buttonattach = view.findViewById(R.id.buttonattach);
-
 
 
         send_sms.setOnClickListener(new View.OnClickListener() {
@@ -121,7 +139,6 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View{
             }
         });
     }
-
 
 
     @Override
@@ -174,18 +191,18 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View{
         String senderUid = getArguments().getString(Constants.ARG_SENDER_UID);
 
 
-        Chat chat = new Chat(sender,
-                receiver,
-                senderUid,
-                receiverUid,
+        Chat chat = new Chat(
+                Resturant.RESTURANT_SUPPORT_NAME,
+                getArguments().getString(Constants.ARG_NAME),
+                Resturant.RESTURANT_SUPPORT_ID,
+                FirebaseAuth.getInstance().getUid(),
                 message,
                 System.currentTimeMillis());
 
-        mChatPresenter.sendMessage(getActivity().getApplicationContext(),
+        mChatPresenter.sendMessage(getActivity(),
                 chat,
                 "");
     }
-
 
 
     @Override
@@ -200,22 +217,35 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View{
     }
 
     @Override
-    public void onGetMessagesSuccess(Chat chat,long initialMessageCount) {
+    public void onGetMessagesSuccess(Chat chat, long initialMessageCount) {
+        currentSessionMessageCounter++;
+
         if (mChatRecyclerAdapter == null) {
-            mChatRecyclerAdapter = new ChatRecyclerAdapter(getActivity(),new ArrayList<Chat>(),getArguments().getInt("CHAT_TYPE"),initialMessageCount);
+            mChatRecyclerAdapter = new ChatRecyclerAdapter(getActivity(), new ArrayList<Chat>(), getArguments().getInt("CHAT_TYPE"), initialMessageCount);
             mRecyclerViewChat.setAdapter(mChatRecyclerAdapter);
         }
-        mChatRecyclerAdapter.add(chat);
+        if (initialMessageCount == currentSessionMessageCounter) {
+            if (chat.message.equals("Hello on which order you need help today ?")) {
+                Chat chat1 = new Chat(Resturant.RESTURANT_SUPPORT_NAME, "", Resturant.RESTURANT_SUPPORT_ID, FirebaseAuth.getInstance().getUid(), "::Chatchooser", System.currentTimeMillis());
+                mChatRecyclerAdapter.add(chat);
+                mChatRecyclerAdapter.add(chat1);
+            }else {
+                mChatRecyclerAdapter.add(chat);
+            }
+        }else {
+            mChatRecyclerAdapter.add(chat);
+        }
         mRecyclerViewChat.smoothScrollToPosition(mChatRecyclerAdapter.getItemCount() - 1);
-        Toast.makeText(getContext(), "l", Toast.LENGTH_SHORT).show();
+
+
     }
 
     @Override
     public void onGetMessagesFailure(String message) {
-        if (message.equalsIgnoreCase("NoData")){
+        if (message.equalsIgnoreCase("NoData")) {
             sendMessage("Hello on which order you need help today ?");
-        }
-        Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
+        } else
+            Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();
     }
 
     @Subscribe

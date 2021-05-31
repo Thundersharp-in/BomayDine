@@ -8,7 +8,6 @@ import androidx.annotation.NonNull;
 import com.thundersharp.conversation.utils.Resturant;
 
 import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
@@ -68,11 +67,11 @@ public class ChatStarter {
     }
 
     @NonNull
-    public void setSenderName(@NonNull String senderName){
-        this.senderName = senderName;
+    public void setCostomerName(@NonNull String costomerName){
+        this.senderName = costomerName;
     }
 
-    public String getSenderName(){
+    public String getCostomerName(){
         return senderName;
     }
 
@@ -95,7 +94,7 @@ public class ChatStarter {
 
     public void startChat() throws ParametersMissingException{
 
-        if (getChatMode() == null || getSenderUid() == null || getSenderName() == null){
+        if (getChatMode() == null || getSenderUid() == null || getCostomerName() == null){
 
             StringBuilder stringBuilder = new StringBuilder();
             stringBuilder.append("Failed to start chat\n");
@@ -107,7 +106,7 @@ public class ChatStarter {
             stringBuilder.append("Current values =======================================================");
             stringBuilder.append("Chat mode : ").append(getChatMode()).append("\n");
             stringBuilder.append("Chat Sender Uid : ").append(getSenderUid()).append("\n");
-            stringBuilder.append("Chat Sender Name : ").append(getSenderName()).append("\n");
+            stringBuilder.append("Chat Sender Name : ").append(getCostomerName()).append("\n");
             throw new ParametersMissingException(stringBuilder.toString());
 
         }else {
@@ -117,7 +116,7 @@ public class ChatStarter {
                             .startActivity(context,
                                     Resturant.RESTURANT_SUPPORT_NAME,
                                     Resturant.RESTURANT_SUPPORT_ID,
-                                    getSenderName(),
+                                    getCostomerName(),
                                     getSenderUid(),
                                     getChatMode());
                     break;
@@ -126,12 +125,12 @@ public class ChatStarter {
                     break;
 
                 case ChatStarter.MODE_CHAT_FROM_PROFILE_HELP_N_FEEDBACK:
-                    if (getSenderName() != null)
+                    if (getCostomerName() != null)
                     ChatActivity
                             .startActivity(context,
                                     Resturant.RESTURANT_SUPPORT_NAME,
                                     Resturant.RESTURANT_SUPPORT_ID,
-                                    getSenderName(),
+                                    getCostomerName(),
                                     getSenderUid(),
                                     getChatMode());
                     break;
@@ -142,7 +141,7 @@ public class ChatStarter {
                             .startActivity(context,
                                     Resturant.RESTURANT_SUPPORT_NAME,
                                     Resturant.RESTURANT_SUPPORT_ID,
-                                    getSenderName(),
+                                    getCostomerName(),
                                     getSenderUid(),
                                     getChatMode());
 
@@ -156,7 +155,7 @@ public class ChatStarter {
                             .startActivity(context,
                                     Resturant.RESTURANT_SUPPORT_NAME,
                                     Resturant.RESTURANT_SUPPORT_ID,
-                                    getSenderName(),
+                                    getCostomerName(),
                                     getSenderUid(),
                                     getChatMode(),
                                     getOrderId());
@@ -167,7 +166,7 @@ public class ChatStarter {
                             .startActivity(context,
                                     Resturant.RESTURANT_SUPPORT_NAME,
                                     Resturant.RESTURANT_SUPPORT_ID,
-                                    getSenderName(),
+                                    getCostomerName(),
                                     getSenderUid(),
                                     getChatMode(),
                                     getOrderId());
@@ -178,7 +177,7 @@ public class ChatStarter {
 
                         throw new ParametersMissingException("Costumer id not defined. Have you called setCostumerId() ?");
 
-                    }else ChatActivity.startActivity(context, Resturant.RESTURANT_SUPPORT_NAME, getCostumerUid() ,getSenderName(),getSenderUid(),getChatMode());
+                    }else ChatActivity.startActivity(context,getCostomerName(),getCostumerUid(),Resturant.RESTURANT_SUPPORT_NAME,getSenderUid(),getChatMode());
                     break;
 
                 default:

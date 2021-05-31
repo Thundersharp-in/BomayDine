@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#1C75BC">
+
+
+    <TextView
+        android:id="@+id/orderdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="#234567890"
+        android:fontFamily="sans-serif-condensed"
+        android:textColor="#FFEB3B"/>
+
+    <TextView
+        android:id="@+id/orderid"
+        android:layout_below="@id/orderdate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Order On : 26/56/2020"
+        android:fontFamily="sans-serif-medium"
+        android:textSize="13sp"
+        android:textColor="#FFEB3B"/>
+
+    <TextView
+        android:id="@+id/orderitems"
+        android:layout_below="@id/orderid"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Items in the order "
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:textSize="13dp"
+        android:layout_marginTop="3dp"
+        android:textColor="#FFEB3B"/>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="#CDC472"
+        android:layout_below="@id/orderitems"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginHorizontal="10dp"/>
+
+</RelativeLayout>

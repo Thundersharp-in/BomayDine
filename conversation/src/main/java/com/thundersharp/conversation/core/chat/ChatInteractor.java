@@ -119,7 +119,7 @@ public class ChatInteractor implements ChatContract.Interactor {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                             Chat chat = dataSnapshot.getValue(Chat.class);
-                            mOnGetMessagesListener.onGetMessagesSuccess(chat,dataSnapshotm.getChildrenCount());
+                            mOnGetMessagesListener.onGetMessagesSuccess(chat,dataSnapshotm.child(room_type_1).getChildrenCount());
                             //TODO
                             //ChatFragment.shimmer_view_container1.stopShimmer();
                             //ChatFragment.shimmer_view_container1.setVisibility(View.GONE);
@@ -155,7 +155,7 @@ public class ChatInteractor implements ChatContract.Interactor {
                         @Override
                         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                             Chat chat = dataSnapshot.getValue(Chat.class);
-                            mOnGetMessagesListener.onGetMessagesSuccess(chat,dataSnapshotm.getChildrenCount());
+                            mOnGetMessagesListener.onGetMessagesSuccess(chat,dataSnapshotm.child(room_type_2).getChildrenCount());
                             //ChatFragment.shimmer_view_container1.stopShimmer();
                             //ChatFragment.shimmer_view_container1.setVisibility(View.GONE);
                             //TODO

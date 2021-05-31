@@ -23,15 +23,12 @@ import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
 import com.thundersharp.bombaydine.user.core.animation.Animator;
 import com.thundersharp.bombaydine.user.core.login.AccountHelper;
-import com.thundersharp.bombaydine.user.core.login.AccountSwitcher;
 import com.thundersharp.bombaydine.user.core.login.Logout;
 import com.thundersharp.bombaydine.user.ui.home.MainPage;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
 import com.thundersharp.bombaydine.user.ui.startup.MainActivity;
 import com.thundersharp.conversation.ChatStarter;
 import com.thundersharp.conversation.ParametersMissingException;
-
-import java.util.HashMap;
 
 
 public class Profile extends Fragment {
@@ -65,7 +62,7 @@ public class Profile extends Fragment {
 
         helpNfeedback.setOnClickListener(view1 -> {
             ChatStarter chatStarter = ChatStarter.initializeChat(getActivity());
-            chatStarter.setSenderName("Hrishikesh Prateek");
+            chatStarter.setCostomerName("Hrishikesh Prateek");
             chatStarter.setChatType(ChatStarter.MODE_CHAT_FROM_PROFILE_HELP_N_FEEDBACK);
             chatStarter.setSenderUid(FirebaseAuth.getInstance().getUid());
 
