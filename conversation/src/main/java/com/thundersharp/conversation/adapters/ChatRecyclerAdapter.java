@@ -30,6 +30,7 @@ import com.thundersharp.conversation.utils.Resturant;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.thundersharp.conversation.ChatFragmentInternal.mETxtMessage;
 import static com.thundersharp.conversation.ChatFragmentInternal.sendmessageRecycler;
 
 
@@ -55,11 +56,18 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (getItemCount()>initalMessageCount) {
             if (chat.message.equals("/end")) {
                 sendmessageRecycler.setVisibility(View.GONE);
+
                 Toast.makeText(context, "This Chat has been closed", Toast.LENGTH_SHORT).show();
             }
         }
         notifyItemInserted(mChats.size() - 1);
     }
+
+    public void remove(int pos){
+        mChats.remove(pos);
+        notifyItemRemoved(pos);
+    }
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
