@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -38,6 +39,7 @@ import java.util.ArrayList;
  */
 public class ChatFragmentInternal extends Fragment implements ChatContract.View {
 
+    public static RelativeLayout sendmessageRecycler;
     private RecyclerView mRecyclerViewChat;
     private EditText mETxtMessage;
     private ProgressDialog mProgressDialog;
@@ -51,6 +53,8 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View 
     long initialMessageCount =0;
     ImageButton send_sms;
     int currentSessionMessageCounter = 0;
+    private String dataBrodcast;
+    private boolean isBroadCasted = false;
 
     public static ChatFragmentInternal newInstance(String receiver,
                                                    String receiverUid,
@@ -89,10 +93,13 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View fragmentView = inflater.inflate(R.layout.fragment_chat, container, false);
+
+        sendmessageRecycler = fragmentView.findViewById(R.id.tttrrr);
         bindViews(fragmentView);
 
 
         getActivity().registerReceiver(broadcastReceiver,new IntentFilter("initialMessage"));
+        getActivity().registerReceiver(broadcastReceiver,new IntentFilter("updateRequest"));
 
         return fragmentView;
     }
@@ -106,6 +113,12 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View 
                     Chat chat1 = new Chat(Resturant.RESTURANT_SUPPORT_NAME, "", Resturant.RESTURANT_SUPPORT_ID, FirebaseAuth.getInstance().getUid(), "::Chatchooser", System.currentTimeMillis());
                     mChatRecyclerAdapter.add(chat1);
                 }
+            }else if (intent.getAction().equals("updateRequest")){
+                //TODO UPDATE FOR INSTANT UPDATE OF CHAT ELEMENTS
+                dataBrodcast= intent.getStringExtra("data");
+                sendMessage(dataBrodcast,0);
+
+
             }
         }
     };
@@ -182,6 +195,26 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View 
                 "");
     }
 
+    private void sendMessage(String Custommesssage,int k) {
+        isBroadCasted = true;
+        String receiver = getArguments().getString(Constants.ARG_RECEIVER);
+        String receiverUid = getArguments().getString(Constants.ARG_RECEIVER_UID);
+        String sender = getArguments().getString(Constants.ARG_NAME);
+        String senderUid = getArguments().getString(Constants.ARG_SENDER_UID);
+
+
+        Chat chat = new Chat(sender,
+                receiver,
+                senderUid,
+                receiverUid,
+                Custommesssage,
+                System.currentTimeMillis());
+
+        mChatPresenter.sendMessage(getActivity(),
+                chat,
+                "");
+    }
+
 
     private void sendMessage(String message) {
 
@@ -208,7 +241,7 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View 
     @Override
     public void onSendMessageSuccess() {
         mETxtMessage.setText("");
-        Toast.makeText(getActivity(), "Message sent", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(getActivity(), "Message sent", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -220,6 +253,17 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View 
     public void onGetMessagesSuccess(Chat chat, long initialMessageCount) {
         currentSessionMessageCounter++;
 
+        if (isBroadCasted){
+            if (dataBrodcast.equals(chat.message)){
+                sendmessageRecycler.setVisibility(View.VISIBLE);
+                sendMessage("Please further elaborate your query.");
+                isBroadCasted = false;
+            }
+        }
+        if (chat.message.equals("/chat")){
+            sendmessageRecycler.setVisibility(View.GONE);
+            Toast.makeText(getContext(), "This Chat has been closed", Toast.LENGTH_SHORT).show();
+        }
         if (mChatRecyclerAdapter == null) {
             mChatRecyclerAdapter = new ChatRecyclerAdapter(getActivity(), new ArrayList<Chat>(), getArguments().getInt("CHAT_TYPE"), initialMessageCount);
             mRecyclerViewChat.setAdapter(mChatRecyclerAdapter);
@@ -243,6 +287,7 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View 
     @Override
     public void onGetMessagesFailure(String message) {
         if (message.equalsIgnoreCase("NoData")) {
+            sendmessageRecycler.setVisibility(View.GONE);
             sendMessage("Hello on which order you need help today ?");
         } else
             Toast.makeText(getActivity(), message, Toast.LENGTH_SHORT).show();

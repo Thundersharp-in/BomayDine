@@ -18,6 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.thundersharp.conversation.ChatFragmentInternal;
 import com.thundersharp.conversation.ChatStarter;
 import com.thundersharp.conversation.FirebaseChatMainApp;
 import com.thundersharp.conversation.R;
@@ -72,7 +73,6 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
         if (chatType == ChatStarter.MODE_CHAT_ADMIN){
             if (TextUtils.equals(mChats.get(position).senderUid, Resturant.RESTURANT_SUPPORT_ID)) {
 
@@ -84,6 +84,12 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             }
 
         }else {
+
+            if (position == getItemCount() -1) {
+
+                if (!mChats.get(position).message.equals("/end") && !mChats.get(position).message.equals("::Chatchooser"))
+                    ChatFragmentInternal.sendmessageRecycler.setVisibility(View.VISIBLE);
+            }
 
             if (TextUtils.equals(mChats.get(position).senderUid, FirebaseAuth.getInstance().getCurrentUser().getUid())) {
 
@@ -138,11 +144,11 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             } else otherChatViewHolder.name.setVisibility(View.VISIBLE);
 
         }else {
-
             otherChatViewHolder.name.setText(chat.sender);
             otherChatViewHolder.name.setVisibility(View.VISIBLE);
 
         }
+
 
         if (mChats.get(position).message.equals("::Chatchooser")){
 
