@@ -30,6 +30,8 @@ import com.thundersharp.conversation.utils.Resturant;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.thundersharp.conversation.ChatFragmentInternal.sendmessageRecycler;
+
 
 public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final int VIEW_TYPE_ME = 1;
@@ -39,6 +41,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private Context context;
     private int chatType;
     long initalMessageCount;
+    int xyz=0;
 
     public ChatRecyclerAdapter(Context context ,List<Chat> chats, int ChatType, long initialMessageCount) {
         mChats = chats;
@@ -49,6 +52,12 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void add(Chat chat) {
         mChats.add(chat);
+        if (getItemCount()>initalMessageCount) {
+            if (chat.message.equals("/end")) {
+                sendmessageRecycler.setVisibility(View.GONE);
+                Toast.makeText(context, "This Chat has been closed", Toast.LENGTH_SHORT).show();
+            }
+        }
         notifyItemInserted(mChats.size() - 1);
     }
 
@@ -88,7 +97,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if (position == getItemCount() -1) {
 
                 if (!mChats.get(position).message.equals("/end") && !mChats.get(position).message.equals("::Chatchooser"))
-                    ChatFragmentInternal.sendmessageRecycler.setVisibility(View.VISIBLE);
+                    sendmessageRecycler.setVisibility(View.VISIBLE);
             }
 
             if (TextUtils.equals(mChats.get(position).senderUid, FirebaseAuth.getInstance().getCurrentUser().getUid())) {
@@ -106,8 +115,10 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (position == (initalMessageCount-1)){
 
             if (mChats.get(position).message.equals("/end")) {
-
-                context.sendBroadcast(new Intent("initialMessage"));
+                if (xyz==0){
+                    context.sendBroadcast(new Intent("initialMessage"));
+                    xyz++;
+                }
 
             }
         }
@@ -175,7 +186,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
                                 otherChatViewHolder.otherRecycler.setAdapter(new OrderSelecterAdapter(details));
                                 //TODO UPDATE AFTER SELECTION
 
-                            }else Toast.makeText(context, "", Toast.LENGTH_SHORT).show();
+                            }else Toast.makeText(context, "No Recent Orders !!", Toast.LENGTH_SHORT).show();
                         }
 
                         @Override

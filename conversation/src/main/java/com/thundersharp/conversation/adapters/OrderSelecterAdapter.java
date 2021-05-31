@@ -31,6 +31,7 @@ public class OrderSelecterAdapter extends RecyclerView.Adapter<OrderSelecterAdap
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.setIsRecyclable(false);
         OrederBasicDetails orederBasicDetails = details.get(position);
         holder.orderdate.setText("Ordered on :"+TimestampUtils.getTimeFromTimeStamp(orederBasicDetails.getOrderID()));
         holder.orderid.setText("Order id #"+orederBasicDetails.getOrderID());
@@ -63,6 +64,7 @@ public class OrderSelecterAdapter extends RecyclerView.Adapter<OrderSelecterAdap
             itemView.getContext().sendBroadcast(
                     new Intent("updateRequest")
                             .putExtra("data","I want assistance on my order with id #"+details.get(getAdapterPosition()).getOrderID()+" Which was created on "+TimestampUtils.getTimeFromTimeStamp(details.get(getAdapterPosition()).getOrderID())));
+            //itemView.setOnClickListener(null);
         }
     }
 }
