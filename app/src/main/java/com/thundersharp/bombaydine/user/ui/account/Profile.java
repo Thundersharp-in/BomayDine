@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ import com.thundersharp.bombaydine.user.core.login.AccountHelper;
 import com.thundersharp.bombaydine.user.core.login.Logout;
 import com.thundersharp.bombaydine.user.ui.home.MainPage;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
+import com.thundersharp.bombaydine.user.ui.settings.SettingsActivity;
 import com.thundersharp.bombaydine.user.ui.startup.MainActivity;
 import com.thundersharp.conversation.ChatStarter;
 import com.thundersharp.conversation.ParametersMissingException;
@@ -58,6 +60,10 @@ public class Profile extends Fragment {
         your_orders.setOnClickListener(view1 -> {
 
             MainPage.navController.navigate(R.id.discover);
+        });
+
+        ((LinearLayout)view.findViewById(R.id.settings)).setOnClickListener(vir ->{
+            startActivity(new Intent(getActivity(), SettingsActivity.class));
         });
 
         helpNfeedback.setOnClickListener(view1 -> {
