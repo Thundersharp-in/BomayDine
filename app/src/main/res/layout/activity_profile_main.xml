@@ -75,6 +75,7 @@
                                 android:textSize="15sp" />
 
                             <TextView
+                                android:id="@+id/updatedata"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="5dp"
@@ -114,7 +115,7 @@
                         android:weightSum="3">
 
                         <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/breakfast"
+                            android:id="@+id/wallet"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -312,6 +313,7 @@
                     android:weightSum="4">
 
                     <LinearLayout
+                        android:id="@+id/bookmarks"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -336,6 +338,7 @@
                     </LinearLayout>
 
                     <LinearLayout
+                        android:id="@+id/addAddress"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -362,6 +365,7 @@
 
 
                     <LinearLayout
+                        android:id="@+id/payments"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -490,6 +494,7 @@
 
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/refunds"
                         android:layout_width="match_parent"
                         android:layout_height="140dp"
                         android:layout_marginStart="20dp"
@@ -547,6 +552,7 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/ratingsNreview"
                         android:layout_width="match_parent"
                         android:layout_height="120dp"
                         android:layout_marginStart="20dp"
@@ -617,6 +623,7 @@
                     android:orientation="vertical">
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/allOffers"
                         android:layout_width="match_parent"
                         android:layout_height="120dp"
                         android:layout_marginStart="7dp"
@@ -728,6 +735,7 @@
                     </com.google.android.material.card.MaterialCardView>
 
                     <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/reportIssue"
                         android:layout_width="match_parent"
                         android:layout_height="160dp"
                         android:layout_marginStart="7dp"

@@ -17,9 +17,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BombayDine"
         tools:replace="android:theme,android:allowBackup">
+        <activity android:name=".user.ui.account.UpdateProfileActivity"></activity>
+        <activity android:name=".user.ui.wallets.WalletActivity" />
+        <activity android:name=".user.ui.offers.AllOffersDisplay" />
+        <activity android:name=".user.ui.account.Bookmarks" />
+        <activity android:name=".user.ui.account.Refunds" />
+        <activity android:name=".user.ui.ratings.RatingsNReview" />
+        <activity android:name=".user.ui.account.Payments" />
+        <activity android:name=".user.ui.location.AddAddressActivity" />
+        <activity android:name=".user.ui.account.HelpNFeedback" />
+        <activity android:name=".user.ui.account.ReportSeriousIssue" />
         <activity
             android:name=".user.ui.settings.SettingsActivity"
-            android:label="@string/title_activity_settings"></activity>
+            android:label="@string/title_activity_settings" />
         <activity android:name=".user.ui.orders.OrderStatus" />
 
         <service
