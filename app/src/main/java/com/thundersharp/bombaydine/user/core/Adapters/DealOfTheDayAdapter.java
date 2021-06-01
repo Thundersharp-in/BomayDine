@@ -39,6 +39,7 @@ public class DealOfTheDayAdapter extends RecyclerView.Adapter<DealOfTheDayAdapte
     private ElegentNumberHelper elegentNumberHelper;
     private CartProvider cartProvider;
     private int position;
+    public static int currentpos =0;
 
     public static DealOfTheDayAdapter initializeAdapter(List<Object> objects, Context context){
         return new DealOfTheDayAdapter(objects,context);
@@ -164,6 +165,7 @@ public class DealOfTheDayAdapter extends RecyclerView.Adapter<DealOfTheDayAdapte
         public int OnTextChangeListner(int val) {
             FoodItemAdapter foodItemAdapter = (FoodItemAdapter) itemObjectlist.get(getAdapterPosition());
             cartProvider.AddItemToCart(CartItemModel.initializeValues(foodItemAdapter.getAMOUNT(),foodItemAdapter.getDESC(),foodItemAdapter.getFOOD_TYPE(),foodItemAdapter.getICON_URL(),foodItemAdapter.getNAME(),foodItemAdapter.getID(),val),val);
+            currentpos = getAdapterPosition();
             return 0;
         }
     }

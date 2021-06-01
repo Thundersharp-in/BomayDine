@@ -269,6 +269,7 @@
                 android:text="Breaking out of the norm doesn't get more louis ipson trufr esds lour "
                 android:layout_marginEnd="20dp"
                 android:layout_marginTop="5dp"
+                android:textSize="13sp"
                 android:fontFamily="@font/calibri"
                 android:layout_marginBottom="10dp"
                 android:textColor="#8F8F8F"

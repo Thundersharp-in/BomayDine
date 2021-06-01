@@ -380,6 +380,7 @@ public class AllItemsActivity extends AppCompatActivity implements
 
         if (recomended.getVisibility()==View.VISIBLE){
             recomended.setAdapter(new DealOfTheDayAdapter(staticAllItemsRecomended,this));
+            //Animator.initializeAnimator().recyclerTooPos(recomended,DealOfTheDayAdapter.currentpos);
         }
     }
 
@@ -408,9 +409,6 @@ public class AllItemsActivity extends AppCompatActivity implements
 
         recyclermain.setVisibility(View.VISIBLE);
 
-        Animator
-                .initializeAnimator()
-                .runRecyclerSlideRightAnimation(recyclermain);
 
         shl.stopShimmer();
         shl.setVisibility(View.GONE);
@@ -426,7 +424,11 @@ public class AllItemsActivity extends AppCompatActivity implements
             recomended.setVisibility(View.VISIBLE);
             for (int i=0;i<5;i++){
                 Random random=new Random();
-                list.add(data.get(random.nextInt(data.size())));
+                Object dataselected = data.get(random.nextInt(data.size()));
+                if (!list.contains(dataselected)){
+                    list.add(dataselected);
+                }
+
             }
             recomended.setAdapter(new DealOfTheDayAdapter(list,this));
             staticAllItemsRecomended=list;
