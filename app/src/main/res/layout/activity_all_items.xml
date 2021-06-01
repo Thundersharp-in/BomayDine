@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#1e2026"
     android:id="@+id/container"
-    tools:context=".user.ui.menu.AllItemsActivity">
+    >
 
 
     <LinearLayout

@@ -34,6 +34,7 @@ import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapterMailAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.AllOfferAdapters;
 import com.thundersharp.bombaydine.user.core.Adapters.CartItemAdapter;
+import com.thundersharp.bombaydine.user.core.Adapters.DealOfTheDayAdapter;
 import com.thundersharp.bombaydine.user.core.Data.HomeDataContract;
 import com.thundersharp.bombaydine.user.core.Data.HomeDataProvider;
 import com.thundersharp.bombaydine.user.core.Data.OfferListner;
@@ -58,6 +59,7 @@ import com.thundersharp.payments.payments.Payments;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class AllItemsActivity extends AppCompatActivity implements
         HomeDataContract.AllItems,
@@ -86,6 +88,7 @@ public class AllItemsActivity extends AppCompatActivity implements
     private AppCompatButton pay;
 
     public static List<Object> staticAllItemsData = new ArrayList<>();
+    public static List<Object> staticAllItemsRecomended = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,6 +114,8 @@ public class AllItemsActivity extends AppCompatActivity implements
         filter = findViewById(R.id.filter);
         radiogroup = findViewById(R.id.chkbox);
         radiogroup.setVisibility(View.GONE);
+        recomended=findViewById(R.id.recomended);
+
         bottomholder.setVisibility(View.INVISIBLE);
 
         bottomholder.setOnClickListener(view -> {
@@ -372,6 +377,10 @@ public class AllItemsActivity extends AppCompatActivity implements
         recyclermain.setAdapter(allItemAdapterMailAdapter);
 
         recyclermain.setVisibility(View.VISIBLE);
+
+        if (recomended.getVisibility()==View.VISIBLE){
+            recomended.setAdapter(new DealOfTheDayAdapter(staticAllItemsRecomended,this));
+        }
     }
 
     BroadcastReceiver broadcastReceiver =new BroadcastReceiver() {
@@ -398,13 +407,31 @@ public class AllItemsActivity extends AppCompatActivity implements
         recyclermain.setAdapter(allItemAdapterMailAdapter);
 
         recyclermain.setVisibility(View.VISIBLE);
+
         Animator
                 .initializeAnimator()
                 .runRecyclerSlideRightAnimation(recyclermain);
+
         shl.stopShimmer();
         shl.setVisibility(View.GONE);
+        setDealOfTheDay(data);
     }
 
+    private synchronized void setDealOfTheDay(List<Object> data) {
+        List<Object> list=new ArrayList<>();
+
+        if (data.size()<5){
+            recomended.setVisibility(View.GONE);
+        }else {
+            recomended.setVisibility(View.VISIBLE);
+            for (int i=0;i<5;i++){
+                Random random=new Random();
+                list.add(data.get(random.nextInt(data.size())));
+            }
+            recomended.setAdapter(new DealOfTheDayAdapter(list,this));
+            staticAllItemsRecomended=list;
+        }
+    }
 
 
     @Override
