@@ -1,12 +1,15 @@
 package com.thundersharp.bombaydine.user.ui.account;
 
+import android.content.ActivityNotFoundException;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,8 +28,14 @@ import com.thundersharp.bombaydine.user.core.animation.Animator;
 import com.thundersharp.bombaydine.user.core.login.AccountHelper;
 import com.thundersharp.bombaydine.user.core.login.Logout;
 import com.thundersharp.bombaydine.user.ui.home.MainPage;
+import com.thundersharp.bombaydine.user.ui.location.AddAddressActivity;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
+import com.thundersharp.bombaydine.user.ui.offers.AllOffersActivity;
+import com.thundersharp.bombaydine.user.ui.offers.AllOffersDisplay;
+import com.thundersharp.bombaydine.user.ui.ratings.RatingsNReview;
+import com.thundersharp.bombaydine.user.ui.settings.SettingsActivity;
 import com.thundersharp.bombaydine.user.ui.startup.MainActivity;
+import com.thundersharp.bombaydine.user.ui.wallets.WalletActivity;
 import com.thundersharp.conversation.ChatStarter;
 import com.thundersharp.conversation.ParametersMissingException;
 
@@ -59,6 +68,56 @@ public class Profile extends Fragment {
 
             MainPage.navController.navigate(R.id.discover);
         });
+
+        ((TextView)view.findViewById(R.id.updatedata)).setOnClickListener(b->{
+            startActivity(new Intent(getActivity(),UpdateProfileActivity.class));
+        });
+
+        ((MaterialCardView)view.findViewById(R.id.wallet)).setOnClickListener(V->{
+            startActivity(new Intent(getActivity(), WalletActivity.class));
+        });
+
+        ((LinearLayout)view.findViewById(R.id.rate)).setOnClickListener(xc -> {
+            try {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + getActivity().getPackageName())));
+            } catch (ActivityNotFoundException e) {
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://play.google.com/store/apps/details?id=" + getActivity().getPackageName())));
+            }
+        });
+
+        ((LinearLayout)view.findViewById(R.id.settings)).setOnClickListener(vir ->{
+            startActivity(new Intent(getActivity(), SettingsActivity.class));
+        });
+
+        ((LinearLayout)view.findViewById(R.id.bookmarks)).setOnClickListener(vir ->{
+            startActivity(new Intent(getActivity(), Bookmarks.class));
+        });
+
+        ((LinearLayout)view.findViewById(R.id.payments)).setOnClickListener(vir ->{
+            startActivity(new Intent(getActivity(), Payments.class));
+        });
+
+        ((LinearLayout)view.findViewById(R.id.addAddress)).setOnClickListener(vir ->{
+            startActivity(new Intent(getActivity(), AddAddressActivity.class));
+        });
+
+
+        ((MaterialCardView)view.findViewById(R.id.allOffers)).setOnClickListener(itemView->{
+            startActivity(new Intent(getActivity(), AllOffersDisplay.class));
+        });
+
+        ((MaterialCardView)view.findViewById(R.id.reportIssue)).setOnClickListener(itemView->{
+            startActivity(new Intent(getActivity(), ReportSeriousIssue.class));
+        });
+
+        ((MaterialCardView)view.findViewById(R.id.ratingsNreview)).setOnClickListener(V ->{
+            startActivity(new Intent(getActivity(), RatingsNReview.class));
+        });
+
+        ((MaterialCardView)view.findViewById(R.id.refunds)).setOnClickListener(V ->{
+            startActivity(new Intent(getActivity(), Refunds.class));
+        });
+
 
         helpNfeedback.setOnClickListener(view1 -> {
             ChatStarter chatStarter = ChatStarter.initializeChat(getActivity());
