@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph_kitchen"
+    app:startDestination="@id/homeKitchen">
+
+    <fragment
+        android:id="@+id/homeKitchen"
+        android:name="com.thundersharp.bombaydine.kitchen.HomeKitchenFragment"
+        android:label="Kitchen staff home"
+        tools:layout="@layout/fragment_home_kitchen"/>
+
+
+</navigation>
