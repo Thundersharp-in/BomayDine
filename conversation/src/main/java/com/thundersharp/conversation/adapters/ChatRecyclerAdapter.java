@@ -18,9 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.thundersharp.conversation.ChatFragmentInternal;
 import com.thundersharp.conversation.ChatStarter;
-import com.thundersharp.conversation.FirebaseChatMainApp;
 import com.thundersharp.conversation.R;
 import com.thundersharp.conversation.model.Chat;
 import com.thundersharp.conversation.model.OrederBasicDetails;
@@ -30,7 +28,6 @@ import com.thundersharp.conversation.utils.Resturant;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.thundersharp.conversation.ChatFragmentInternal.mETxtMessage;
 import static com.thundersharp.conversation.ChatFragmentInternal.sendmessageRecycler;
 
 
@@ -91,6 +88,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (chatType == ChatStarter.MODE_CHAT_ADMIN){
+            sendmessageRecycler.setVisibility(View.VISIBLE);
             if (TextUtils.equals(mChats.get(position).senderUid, Resturant.RESTURANT_SUPPORT_ID)) {
 
                 configureMyChatViewHolder((MyChatViewHolder) holder, position);
