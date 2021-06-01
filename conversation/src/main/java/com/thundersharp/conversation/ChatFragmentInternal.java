@@ -42,7 +42,7 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View 
 
     public static RelativeLayout sendmessageRecycler;
     private RecyclerView mRecyclerViewChat;
-    private EditText mETxtMessage;
+    public EditText mETxtMessage;
     private ProgressDialog mProgressDialog;
     SharedPreferences data;
     public RecyclerView recyclerView;
@@ -215,6 +215,9 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View 
 
     private void sendMessage(String Custommesssage,int k) {
         isBroadCasted = true;
+        if (mChatRecyclerAdapter != null){
+            mChatRecyclerAdapter.remove(mChatRecyclerAdapter.getItemCount()-1);
+        }
         String receiver = getArguments().getString(Constants.ARG_RECEIVER);
         String receiverUid = getArguments().getString(Constants.ARG_RECEIVER_UID);
         String sender = getArguments().getString(Constants.ARG_NAME);

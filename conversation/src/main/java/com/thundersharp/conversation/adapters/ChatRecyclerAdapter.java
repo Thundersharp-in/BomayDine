@@ -18,9 +18,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.thundersharp.conversation.ChatFragmentInternal;
 import com.thundersharp.conversation.ChatStarter;
-import com.thundersharp.conversation.FirebaseChatMainApp;
 import com.thundersharp.conversation.R;
 import com.thundersharp.conversation.model.Chat;
 import com.thundersharp.conversation.model.OrederBasicDetails;
@@ -29,6 +27,8 @@ import com.thundersharp.conversation.utils.Resturant;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.thundersharp.conversation.ChatFragmentInternal.sendmessageRecycler;
 
 
 public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -39,6 +39,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     private Context context;
     private int chatType;
     long initalMessageCount;
+    int xyz=0;
 
     public ChatRecyclerAdapter(Context context ,List<Chat> chats, int ChatType, long initialMessageCount) {
         mChats = chats;
@@ -49,8 +50,21 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     public void add(Chat chat) {
         mChats.add(chat);
+        if (getItemCount()>initalMessageCount) {
+            if (chat.message.equals("/end")) {
+                sendmessageRecycler.setVisibility(View.GONE);
+
+                Toast.makeText(context, "This Chat has been closed", Toast.LENGTH_SHORT).show();
+            }
+        }
         notifyItemInserted(mChats.size() - 1);
     }
+
+    public void remove(int pos){
+        mChats.remove(pos);
+        notifyItemRemoved(pos);
+    }
+
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -74,6 +88,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         if (chatType == ChatStarter.MODE_CHAT_ADMIN){
+            sendmessageRecycler.setVisibility(View.VISIBLE);
             if (TextUtils.equals(mChats.get(position).senderUid, Resturant.RESTURANT_SUPPORT_ID)) {
 
                 configureMyChatViewHolder((MyChatViewHolder) holder, position);
@@ -88,7 +103,7 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             if (position == getItemCount() -1) {
 
                 if (!mChats.get(position).message.equals("/end") && !mChats.get(position).message.equals("::Chatchooser"))
-                    ChatFragmentInternal.sendmessageRecycler.setVisibility(View.VISIBLE);
+                    sendmessageRecycler.setVisibility(View.VISIBLE);
             }
 
             if (TextUtils.equals(mChats.get(position).senderUid, FirebaseAuth.getInstance().getCurrentUser().getUid())) {
@@ -106,8 +121,10 @@ public class ChatRecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         if (position == (initalMessageCount-1)){
 
             if (mChats.get(position).message.equals("/end")) {
-
-                context.sendBroadcast(new Intent("initialMessage"));
+                if (xyz==0){
+                    context.sendBroadcast(new Intent("initialMessage"));
+                    xyz++;
+                }
 
             }
         }
