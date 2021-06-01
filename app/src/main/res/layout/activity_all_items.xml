@@ -125,7 +125,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@id/bottomholder"
+
         android:layout_below="@id/layouttop">
 
         <LinearLayout
@@ -175,12 +175,59 @@
                 android:id="@+id/recyclermain"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:nestedScrollingEnabled="false"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="80dp">
+
+                <TextView
+                    android:id="@+id/tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginStart="20dp"
+                    android:fontFamily="@font/amaranth_bold_italic"
+                    android:text="@string/app_name"
+                    android:textColor="#9C9C9C"
+                    android:textSize="20sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_below="@id/tag"
+                    android:layout_toEndOf="@id/tag"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="-10dp"
+                    android:fontFamily="@font/arizonia"
+                    android:text="Great food above !"
+                    android:textColor="#A6A7A8"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/version"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginEnd="15dp"
+                    android:fontFamily="sans-serif-light"
+                    android:text="V 2.1.89"
+                    android:textSize="12sp"
+                    android:textColor="#969697"
+                    android:textStyle="bold" />
+
+            </RelativeLayout>
 
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
 
     <RelativeLayout
         android:id="@+id/bottomholder"

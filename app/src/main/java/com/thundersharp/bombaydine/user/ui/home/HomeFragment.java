@@ -19,6 +19,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -171,7 +172,7 @@ public class HomeFragment extends Fragment implements
     private LinearLayout bottom_clickable_linear;
     private TextView view_action;
     private AppCompatButton pay;
-
+    private EditText search_home;
     private RelativeLayout containermain;
 
 
@@ -222,6 +223,7 @@ public class HomeFragment extends Fragment implements
         clearcompleate = view.findViewById(R.id.clearcompleate);
         bottom_clickable_linear = view.findViewById(R.id.bottom_clickable_linear);
         view_action = view.findViewById(R.id.view_action);
+        search_home=view.findViewById(R.id.search_home);
         homeDataProvider = new HomeDataProvider(getActivity(), this, this, this, this);
 
         bottomnoti.setVisibility(View.INVISIBLE);

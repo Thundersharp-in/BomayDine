@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,15 +34,16 @@ import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.List;
 
 import static android.graphics.Color.*;
 
-public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapterMailAdapter.ViewHolder>{
+public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapterMailAdapter.ViewHolder> implements Filterable {
 
     public AllItemAdapterMailAdapter(){}
 
-    private List<Object> itemObjectlist;
+    private List<Object> itemObjectlist,allList;
     private Context context;
     private ElegentNumberHelper elegentNumberHelper;
     private CartProvider cartProvider;
@@ -52,6 +55,7 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
 
     public AllItemAdapterMailAdapter(List<Object> itemObjectlist, Context context) {
         this.itemObjectlist = itemObjectlist;
+        allList = new ArrayList<>(itemObjectlist);
         this.context = context;
     }
 
@@ -66,6 +70,7 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.setIsRecyclable(false);
         FoodItemAdapter foodItemAdapter = (FoodItemAdapter) itemObjectlist.get(position);
 
         elegentNumberHelper.bindviewHolder(holder.initial,holder.finalview,R.id.minus,R.id.plus,R.id.displaytext,R.id.plusinit);
@@ -119,6 +124,41 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
             return 0;
     }
 
+    @Override
+    public Filter getFilter() {
+        return foodName;
+    }
+
+    Filter foodName = new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence charSequence) {
+            List<Object> allFoodData=new ArrayList<>();
+            if (charSequence == null || charSequence.length() == 0){
+                allFoodData.addAll(allList);
+
+            }else {
+                String filterData = charSequence.toString().toLowerCase().trim();
+                for (Object item : itemObjectlist){
+
+                    if (((FoodItemAdapter)item).getNAME().toLowerCase().contains(filterData)
+                            ||((FoodItemAdapter)item).getCAT_NAME_ID().toLowerCase().contains(filterData)
+                            ||((FoodItemAdapter)item).getDESC().toLowerCase().contains(filterData)){
+                        allFoodData.add(item);
+                    }
+                }
+            }
+            FilterResults results=new FilterResults();
+            results.values=allFoodData;
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence charSequence, FilterResults results) {
+            itemObjectlist.clear();
+            itemObjectlist.addAll((List)results.values);
+            notifyDataSetChanged();
+        }
+    };
 
 
     class ViewHolder extends RecyclerView.ViewHolder implements

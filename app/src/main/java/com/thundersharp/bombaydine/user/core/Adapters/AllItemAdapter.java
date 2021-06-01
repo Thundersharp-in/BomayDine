@@ -8,6 +8,8 @@ import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -32,7 +34,7 @@ import java.lang.reflect.Type;
 import java.util.HashMap;
 import java.util.List;
 
-public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHolder> {
+public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHolder> implements Filterable {
 
     private List<Object> itemObjectlist;
     private Context context;
@@ -94,6 +96,22 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
         if (itemObjectlist != null) return itemObjectlist.size(); else return 0;
     }
 
+    @Override
+    public Filter getFilter() {
+        return filter;
+    }
+
+    Filter filter=new Filter() {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint) {
+            return null;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results) {
+
+        }
+    };
 
 
     class ViewHolder extends RecyclerView.ViewHolder implements ElegantNumberInteractor.setOnTextChangeListner{

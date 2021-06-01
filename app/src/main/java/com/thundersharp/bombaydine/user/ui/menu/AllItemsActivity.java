@@ -6,8 +6,13 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.EditText;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -56,7 +61,8 @@ import java.util.List;
 
 public class AllItemsActivity extends AppCompatActivity implements
         HomeDataContract.AllItems,
-        HomeDataContract.DataLoadFailure, PaymentResultWithDataListener {
+        HomeDataContract.DataLoadFailure,
+        PaymentResultWithDataListener{
 
     private  SharedPrefHelper sharedPrefHelper;
     private RecyclerView recyclermain;
@@ -73,8 +79,9 @@ public class AllItemsActivity extends AppCompatActivity implements
     private LinearLayout radiogroup;
     public static BottomSheetDialog bottomSheetDialog;
     private RecyclerView rec1;
+    private EditText searchbar;
 
-
+    private RecyclerView recomended;
     private TextView itemtotal,delehevry,grandtot,promoamt;
     private AppCompatButton pay;
 
@@ -91,6 +98,8 @@ public class AllItemsActivity extends AppCompatActivity implements
         offlineDataProvider = OfflineDataProvider.getInstance(this);
         recyclermain = findViewById(R.id.recyclermain);
         offerscroll = findViewById(R.id.offerscroll);
+        searchbar = findViewById(R.id.searchbar);
+
         shl = findViewById(R.id.shl);
         shl.setVisibility(View.VISIBLE);
         recyclermain.setVisibility(View.GONE);
@@ -210,6 +219,23 @@ public class AllItemsActivity extends AppCompatActivity implements
             }
         });
 
+        searchbar.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                //allItemAdapterMailAdapter.getFilter().filter(s.toString());
+                //Toast.makeText(AllItemsActivity.this, "before "+ s, Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                allItemAdapterMailAdapter.getFilter().filter(s);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
        registerReceiver(broadcastReceiver,new IntentFilter("updated"));
     }
@@ -399,4 +425,5 @@ public class AllItemsActivity extends AppCompatActivity implements
     public void onPaymentError(int i, String s, PaymentData paymentData) {
         Toast.makeText(this, ""+s, Toast.LENGTH_SHORT).show();
     }
+
 }
