@@ -18,6 +18,7 @@ public class Payments {
     private Checkout checkout;
     private PaymentObserver paymentObserver;
     private static Payments payments;
+    private String orderid;
 
     private Payments(Activity contextMain) {
         context = contextMain;
@@ -32,6 +33,12 @@ public class Payments {
 
     public Payments startPayment(String description, double amount,String customerEmail,String customerPhone){
         pay(description, amount, customerEmail, customerPhone);
+        return payments;
+    }
+
+    public Payments startPayment(String description,String orderid, double amount,String customerEmail,String customerPhone){
+        pay(description, amount, customerEmail, customerPhone);
+        this.orderid = orderid;
         return payments;
     }
 
@@ -70,15 +77,18 @@ public class Payments {
             options.put("name","Bombay Dine Restaurant");
             options.put("description", description);
             options.put("image", "https://s3.amazonaws.com/rzp-mobile/images/rzp.png");
-           // options.put("order_id", orderid);//from response of step 3.
+            //if (orderid != null)
+            //options.put("order_id", "order_"+orderid);//from response of step 3.
+
             options.put("theme.color", "#3399cc");
             options.put("currency", "INR");
             options.put("amount", String.valueOf((amount * 100)));//pass amount in currency subunits
             options.put("prefill.email", customerEmail);
             options.put("prefill.contact", customerPhone);
+            options.put("send_sms_hash", true);
             JSONObject retryObj = new JSONObject();
             retryObj.put("enabled", true);
-            retryObj.put("max_count", 4);
+            retryObj.put("max_count", 2);
             options.put("retry", retryObj);
 
             checkout.open(activity, options);

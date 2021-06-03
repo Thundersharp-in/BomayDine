@@ -32,11 +32,14 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.maps.android.PolyUtil;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.address.CordinatesInteractor;
 import com.thundersharp.bombaydine.user.core.address.Cordinateslistner;
 import com.thundersharp.bombaydine.user.core.animation.Animator;
 import com.thundersharp.bombaydine.user.core.location.DirectionsJSONParser;
+import com.thundersharp.bombaydine.user.core.location.DistanceFromCoordinates;
+import com.thundersharp.bombaydine.user.core.utils.LatLongConverter;
 import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
 
 import org.json.JSONObject;
@@ -45,9 +48,11 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -61,8 +66,8 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
 
     private Marker restmark,markedmarker;
     private RecyclerView recyclerView;
-
-    private TextView coordinates,addresst;
+    private List<LatLng> coordinatesVal = new ArrayList<>();
+    private TextView coordinates,addresst,deliveryTime,delevrable,distanceAvg;
 
 
     @SuppressLint("MissingPermission")
@@ -87,6 +92,9 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
 
         coordinates = view.findViewById(R.id.coord);
         addresst = view.findViewById(R.id.address);
+        deliveryTime = view.findViewById(R.id.name);
+        delevrable = view.findViewById(R.id.delevrable);
+        distanceAvg = view.findViewById(R.id.areaname);
 
         return view;
     }
@@ -108,6 +116,7 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
         mMap.setMyLocationEnabled(true);
         restmark = mMap.addMarker(markerOptions);
 
+
         CordinatesInteractor cordinatesInteractor = new CordinatesInteractor(this);
         cordinatesInteractor.fetchAllCoordinates();
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -128,17 +137,46 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
 
                 // Start downloading json data from Google Directions API
                 //downloadTask.execute(url);
-                Address address = null;
-                try {
-                    address = getLocationfromLat(latLng.latitude,latLng.longitude);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                boolean isInsideBondry = PolyUtil.containsLocation(latLng,coordinatesVal,true);
+                long distance = Math.round(DistanceFromCoordinates.getInstance().convertLatLongToDistance(ResturantCoordinates.resturantLatLong, latLng));
+                int time = (int) ((distance/ResturantCoordinates.averageSpaeed)*60)+ResturantCoordinates.averagePreperationTime;
+
+                if (isInsideBondry){
+                    distanceAvg.setText("Approximate Distance : "+distance+" Km");
+                    deliveryTime.setText("ETA : "+time+" mins");
+                    deliveryTime.setTextColor(Color.YELLOW);
+                    delevrable.setTextColor(Color.YELLOW);
+                    delevrable.setText("Delivery available : yes");
+                    Address address = null;
+                    try {
+                        address = getLocationfromLat(latLng.latitude,latLng.longitude);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (address != null){
+                        coordinates.setText(""+latLng.latitude+","+latLng.longitude);
+                        addresst.setText(address.getAddressLine(0));
+                    }
+                }else {
+                    distanceAvg.setText("Approximate Distance : "+distance+" Km");
+                    deliveryTime.setText("Not Serviceable");
+                    deliveryTime.setTextColor(Color.RED);
+                    delevrable.setTextColor(Color.RED);
+                    delevrable.setText("Delivery available : no");
+                    Address address = null;
+                    try {
+                        address = getLocationfromLat(latLng.latitude,latLng.longitude);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                    if (address != null){
+                        coordinates.setText(""+latLng.latitude+","+latLng.longitude);
+                        addresst.setText(address.getAddressLine(0));
+                    }
                 }
 
-                if (address != null){
-                    coordinates.setText(""+latLng.latitude+","+latLng.longitude);
-                    addresst.setText(address.getAddressLine(0));
-                }
 
             }
         });
@@ -163,6 +201,7 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
 
     @Override
     public void onCordinatesSuccess(LatLng... coOrdinates) {
+        coordinatesVal = Arrays.asList(coOrdinates);
         mMap.addPolyline((new PolylineOptions())
                 .add(coOrdinates)
                 .width(8)

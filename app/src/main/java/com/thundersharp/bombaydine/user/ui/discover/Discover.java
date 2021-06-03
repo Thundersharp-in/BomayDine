@@ -9,8 +9,10 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
+import com.payumoney.sdkui.ui.utils.ToastUtils;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.RecentAdapter;
 import com.thundersharp.bombaydine.user.core.animation.Animator;
@@ -19,6 +21,9 @@ import com.thundersharp.bombaydine.user.core.orders.OrderHistoryProvider;
 import com.thundersharp.conversation.ChatStarter;
 import com.thundersharp.conversation.ParametersMissingException;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 
@@ -32,6 +37,7 @@ public class Discover extends Fragment implements OrderContract.onOrderFetch {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_discover, container, false);
+
         Animator.initializeAnimator()
                 .customAnimation(R.anim.slide_from_right_fast,view.findViewById(R.id.containermain));
 
@@ -61,11 +67,12 @@ public class Discover extends Fragment implements OrderContract.onOrderFetch {
 
     @Override
     public void onOrderFetchSuccess(List<Object> data) {
+        Collections.reverse(data);
         recyclerView.setAdapter(RecentAdapter.initialize(getActivity(),data));
     }
 
     @Override
     public void onDataFetchFailure(Exception e) {
-
+        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 }

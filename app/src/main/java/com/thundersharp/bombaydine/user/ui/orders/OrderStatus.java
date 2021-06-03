@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -18,6 +19,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.vipulasri.timelineview.TimelineView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.gson.JsonObject;
+import com.razorpay.PaymentData;
+import com.razorpay.PaymentResultListener;
+import com.razorpay.PaymentResultWithDataListener;
 import com.thundersharp.billgenerator.Billing;
 import com.thundersharp.billgenerator.InfoData;
 import com.thundersharp.billgenerator.InvoiceGenerateObserver;
@@ -31,11 +36,17 @@ import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
 import com.thundersharp.bombaydine.user.core.utils.TimeUtils;
 import com.thundersharp.conversation.ChatStarter;
 import com.thundersharp.conversation.ParametersMissingException;
+import com.thundersharp.payments.payments.Payments;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderListner, InvoiceGenerateObserver {
+public class OrderStatus extends AppCompatActivity implements
+        OrderDetail.OrderListner,
+        InvoiceGenerateObserver, PaymentResultListener {
 
     private List<OrderModel> modeldatas;
 
@@ -46,7 +57,21 @@ public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderL
     private OrederBasicDetails orederBasicDetails;
     private TimelineView timelineView;
 
-    private TextView fav, unfav, promo_code, delevery_charge, grand_total, order_no, order_date, delever_address, order_caller_no, item_total, promo_amount, total_saving, payment_type, order_phone_no;
+    private TextView fav,
+            unfav,
+            promo_code,
+            delevery_charge,
+            grand_total,
+            order_no,
+            order_date,
+            delever_address,
+            order_caller_no,
+            item_total,
+            promo_amount,
+            total_saving,
+            payment_type,
+            order_phone_no,
+            textupdate;
 
     private RecyclerView recycler_dishes;
     private LinearLayout lllb;
@@ -118,6 +143,15 @@ public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderL
         promo_code.setText(orederBasicDetails.getPromocodeNameNdiscount());
         order_caller_no.setText("Call Resturant on : " + ResturantCoordinates.resturantcontact);
         helper.FetchOrder(orederBasicDetails.getOrderID());
+
+        if (orederBasicDetails.getStatus().equalsIgnoreCase("0")){
+            textupdate.setText("Current order status is Payment pending, Click here to retry payment");
+            textupdate.setOnClickListener(v -> {
+                if (FirebaseAuth.getInstance().getCurrentUser().getEmail() != null && FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() !=null)
+                    Payments.initialize(this).startPayment("Order #"+orederBasicDetails.getOrderID(),orederBasicDetails.getOrderID(),Double.parseDouble(orederBasicDetails.getTotalamt()),FirebaseAuth.getInstance().getCurrentUser().getEmail(),FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+                else Toast.makeText(this,"Update phone no and email in profile",Toast.LENGTH_SHORT).show();
+            });
+        }
     }
 
     private void initializeViews() {
@@ -138,6 +172,7 @@ public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderL
         recycler_dishes = findViewById(R.id.recycler_dishes);
         lllb = findViewById(R.id.lllb);
         unfav = findViewById(R.id.unfav);
+        textupdate = findViewById(R.id.textupdate);
     }
 
 
@@ -173,7 +208,7 @@ public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderL
 
     @Override
     public void pdfCreatedSuccess(Uri pdfLink) {
-        Toast.makeText(this, "", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, ""+pdfLink, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -201,6 +236,33 @@ public class OrderStatus extends AppCompatActivity implements OrderDetail.OrderL
             e.printStackTrace();
         }
         return super.onOptionsItemSelected(item);
+    }
+
+
+    @Override
+    public void onPaymentSuccess(String s) {
+        if (s.contains("pay_")){
+            Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onPaymentError(int i, String s) {
+        //Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
+        try {
+            String replace = s.replace("&error=", "");
+            JSONObject jsonObject = new JSONObject(replace);
+
+            if (jsonObject.has("metadata")) {
+                JSONObject metadata = jsonObject.getJSONObject("metadata");
+                Toast.makeText(this, "" + metadata.getString("payment_id"), Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(this, "Payment failed : "+jsonObject.getJSONObject("error").getString("code"), Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 }
 

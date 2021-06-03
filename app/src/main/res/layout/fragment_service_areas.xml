@@ -31,7 +31,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="10dp"
             android:clipChildren="false"
-            android:minHeight="140dp"
+            android:minHeight="100dp"
             app:cardElevation="4dp"
             app:cardCornerRadius="7dp"
             app:cardBackgroundColor="#22242c"
@@ -40,13 +40,12 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="140dp">
+                android:layout_height="wrap_content">
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="140dp">
+                    android:minHeight="120dp">
 
                     <LinearLayout
                         android:id="@+id/imgh"
@@ -78,7 +77,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:minHeight="140dp"
+                        android:minHeight="120dp"
                         android:orientation="vertical"
                         android:layout_toEndOf="@id/imgh"
                         android:layout_marginStart="10dp">
@@ -110,7 +109,7 @@
                             android:maxLines="3"
                             android:ellipsize="end"
                             android:textAllCaps="false"
-                            android:text="Location selected : Acharya Doctor Sarvepalli Radhakrishnan Road, Bengaluru, Karnataka 560090, India"
+                            android:text="Location selected : Acharya Doctor , Bengaluru, Karnataka 560090, India"
                             android:textSize="14sp"/>
 
                         <TextView
@@ -123,7 +122,7 @@
                             android:layout_marginTop="10dp"
                             android:textAlignment="viewStart"
                             android:textAllCaps="false"
-                            android:text="Pin Area name"
+                            android:text="Approx distance : "
                             android:textSize="14sp"/>
 
 
@@ -137,8 +136,10 @@
                             android:layout_marginEnd="10dp"
                             android:textAlignment="viewEnd"
                             android:textAllCaps="false"
+                            android:layout_marginBottom="@dimen/dimen_10dp"
                             android:text="Delivery available : yes"
-                            android:textSize="14sp"/>
+                            android:textSize="14sp"
+                            tools:ignore="RtlCompat" />
 
 
 

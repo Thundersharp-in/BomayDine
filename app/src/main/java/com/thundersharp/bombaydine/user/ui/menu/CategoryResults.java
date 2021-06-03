@@ -46,7 +46,6 @@ public class CategoryResults extends AppCompatActivity implements CategoryDataCo
 
         categoryDataProvider.fetchCategoryData(categoryData);
 
-
     }
 
     @Override
