@@ -31,12 +31,13 @@ import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHolder> implements Filterable {
 
-    private List<Object> itemObjectlist;
+    private List<Object> itemObjectlist , itemList;
     private Context context;
     private ElegentNumberHelper elegentNumberHelper;
     private int position;
@@ -46,6 +47,7 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
 
     public AllItemAdapter(List<Object> itemObjectlist, Context context) {
         this.itemObjectlist = itemObjectlist;
+        itemList = new ArrayList<>(itemObjectlist);
         this.context = context;
     }
 
@@ -104,12 +106,31 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
     Filter filter=new Filter() {
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
-            return null;
+            List<Object> filterItemList = new ArrayList<>();
+            if (constraint == null || constraint.length() == 0){
+                filterItemList.addAll(itemList);
+            }else {
+                String filterText = constraint.toString().toLowerCase().trim();
+
+                for (Object items : itemObjectlist){
+                    if (((FoodItemAdapter)items).getNAME().toLowerCase().contains(filterText)
+                            ||((FoodItemAdapter)items).getCAT_NAME_ID().toLowerCase().contains(filterText)
+                            ||((FoodItemAdapter)items).getDESC().toLowerCase().contains(filterText)){
+                        filterItemList.add(items);
+                    }
+                }
+            }
+
+            FilterResults filterResults = new FilterResults();
+            filterResults.values = filterItemList;
+            return filterResults;
         }
 
         @Override
         protected void publishResults(CharSequence constraint, FilterResults results) {
-
+            itemObjectlist.clear();
+            itemObjectlist.addAll((List)results.values);
+            notifyDataSetChanged();
         }
     };
 

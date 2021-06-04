@@ -1,9 +1,22 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/tool"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:title="@string/app_name"
+        app:subtitle="Press to move back"
+        app:navigationIcon="@drawable/close"
+        />
+
 
     <FrameLayout
-        android:id="@+id/settings"
+        android:id="@+id/setting"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
+
 </LinearLayout>

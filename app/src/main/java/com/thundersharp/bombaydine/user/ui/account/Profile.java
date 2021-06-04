@@ -39,14 +39,20 @@ import com.thundersharp.bombaydine.user.ui.wallets.WalletActivity;
 import com.thundersharp.conversation.ChatStarter;
 import com.thundersharp.conversation.ParametersMissingException;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 
 public class Profile extends Fragment {
 
     private RelativeLayout bottomHolderprofile;
     private MaterialCardView your_orders,helpNfeedback;
     private CoordinatorLayout containermain;
-    private TextView switchbtn,logout;
+    private TextView switchbtn,logout,open;
     private BottomSheetDialog bottomSheetDialogloc;
+
+    private TextView profile_name,profile_email,updatedata;
+    private CircleImageView profilepic;
+    private TextView wallet_balance,orderNo,foodie_level;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -59,6 +65,15 @@ public class Profile extends Fragment {
         switchbtn = view.findViewById(R.id.switchbtn);
         logout = view.findViewById(R.id.logoutn);
         helpNfeedback = view.findViewById(R.id.help);
+
+        open = view.findViewById(R.id.open);
+        profile_name = view.findViewById(R.id.profile_name);
+        profile_email = view.findViewById(R.id.profile_email);
+        updatedata = view.findViewById(R.id.updatedata);
+        profilepic = view.findViewById(R.id.profilepic);
+        wallet_balance = view.findViewById(R.id.wallet_balance);
+        orderNo = view.findViewById(R.id.orderNo);
+        foodie_level = view.findViewById(R.id.foodie_level);
 
         Animator
                 .initializeAnimator()

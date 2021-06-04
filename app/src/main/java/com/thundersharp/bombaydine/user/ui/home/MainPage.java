@@ -20,6 +20,7 @@ import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
 import com.thundersharp.bombaydine.user.core.cart.CartHandler;
 import com.thundersharp.bombaydine.user.core.cart.CartProvider;
+import com.thundersharp.bombaydine.user.ui.settings.SettingData;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -39,6 +40,12 @@ public class MainPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        SettingData settingData = new SettingData(this);
+        if (settingData.loadTheme()){
+            setTheme(R.style.AppTheme_default);
+        }  else {
+            setTheme(R.style.MyTheme);
+        }
         setContentView(R.layout.activity_main_page);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
@@ -59,6 +66,15 @@ public class MainPage extends AppCompatActivity {
         //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
+        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                if (intent.getAction().equals("recreate"))
+                    MainPage.this.recreate();
+            }
+        };
+
+        registerReceiver(broadcastReceiver ,new IntentFilter("recreate"));
 
     }
 
