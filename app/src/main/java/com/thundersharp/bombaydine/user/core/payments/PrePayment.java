@@ -1,5 +1,6 @@
 package com.thundersharp.bombaydine.user.core.payments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 
 import androidx.annotation.NonNull;
@@ -84,7 +85,7 @@ public class PrePayment {
     }
 
     private String getDate(){
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("DD-MM-YYYY");
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         return simpleDateFormat.format(Calendar.getInstance().getTime());
     }
 

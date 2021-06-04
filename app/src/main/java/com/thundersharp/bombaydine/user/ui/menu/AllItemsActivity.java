@@ -11,8 +11,6 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -26,9 +24,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
-import com.payumoney.core.response.PaymentResponse;
 import com.razorpay.PaymentData;
-import com.razorpay.PaymentResultListener;
 import com.razorpay.PaymentResultWithDataListener;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapterMailAdapter;
@@ -54,7 +50,6 @@ import com.thundersharp.bombaydine.user.core.utils.LatLongConverter;
 import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
 import com.thundersharp.bombaydine.user.ui.offers.AllOffersActivity;
-import com.thundersharp.payments.payments.PaymentObserver;
 import com.thundersharp.payments.payments.Payments;
 
 import org.json.JSONException;
@@ -300,7 +295,8 @@ public class AllItemsActivity extends AppCompatActivity implements
                             delehevry.getText().toString().replace("\u20B9", ""),
                             grandtot.getText().toString().replace("\u20B9", ""),
                             "",
-                            String.valueOf(System.currentTimeMillis()));
+                            String.valueOf(System.currentTimeMillis()),
+                            "");
 
                     PrePayment
                             .getInstance()

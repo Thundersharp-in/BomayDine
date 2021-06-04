@@ -23,4 +23,21 @@ public class TimeUtils {
         return date;
 
     }
+
+    public static String getDateFromTimeStamp(String timeStamp) throws NumberFormatException {
+        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+        long time;
+        time = Long.parseLong(timeStamp);
+        cal.setTimeInMillis(time);
+        String date = DateFormat.format("dd-MM-yyyy", cal).toString();
+        return date;
+
+    }
+
+    public static String getDateFromTimeStamp(long time){
+        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+        cal.setTimeInMillis(time);
+        String date = DateFormat.format("dd-MM-yyyy", cal).toString();
+        return date;
+    }
 }

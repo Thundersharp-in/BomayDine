@@ -230,13 +230,13 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
 
         addresses = geocoder.getFromLocation(lat, longi, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
 
-        String address = addresses.get(0).getAddressLine(0);
+        /*String address = addresses.get(0).getAddressLine(0);
         String city = addresses.get(0).getLocality();
         String state = addresses.get(0).getAdminArea();
         String country = addresses.get(0).getCountryName();
         String postalCode = addresses.get(0).getPostalCode();
         String knownName = addresses.get(0).getFeatureName();
-
+*/
         return addresses.get(0);
     }
 
