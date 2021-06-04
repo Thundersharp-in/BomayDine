@@ -1,0 +1,15 @@
+
+
+        {ORDER STATUS CODES WITH EXPLANATION}
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+        // Order status 0 : Payment not received            ::::   Delivery status : Not Delivered        //
+        // Order status 1 : Payment successfully received   ::::   Delivery status : Food being prepared  //
+        // Order status 2 : Payment successfully received   ::::   Delivery status : In transit           //
+        // Order status 3 : Payment successfully received   ::::   Delivery status : Delivered            //
+        // Order status 4 : Payment Failed                  ::::   Delivery status : Not Delivered        //
+        // Order status 5 : Payment successfully refunded   ::::   Delivery status : Not Delivered        //
+        // Order status 6 : Payment successfully received   ::::   Delivery status : Not Delivered        //
+        ////////////////////////////////////////////////////////////////////////////////////////////////////
+

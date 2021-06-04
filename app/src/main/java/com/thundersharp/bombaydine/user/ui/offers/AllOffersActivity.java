@@ -11,7 +11,9 @@ import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllOfferAdapters;
 import com.thundersharp.bombaydine.user.core.Data.OfferListner;
 import com.thundersharp.bombaydine.user.core.Data.OffersProvider;
+import com.thundersharp.bombaydine.user.core.aligantnumber.ElegentNumberHelper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AllOffersActivity extends AppCompatActivity implements OfferListner.getOfferListner {
@@ -24,6 +26,8 @@ public class AllOffersActivity extends AppCompatActivity implements OfferListner
         setContentView(R.layout.activity_all_offers);
 
         re =findViewById(R.id.recycler);
+
+
 
         OffersProvider
                 .initializeOffersProvider()

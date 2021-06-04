@@ -12,12 +12,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thundersharp.bombaydine.R;
+import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
+import com.thundersharp.bombaydine.user.core.Model.FoodItemAdapter;
 import com.thundersharp.bombaydine.user.core.aligantnumber.ElegantNumberInteractor;
 import com.thundersharp.bombaydine.user.core.aligantnumber.ElegentNumberHelper;
+import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 
 import java.util.List;
 
-public class CategoryitemAdapter extends RecyclerView.Adapter<CategoryitemAdapter.holder> implements ElegantNumberInteractor.setOnTextChangeListner {
+public class CategoryitemAdapter extends RecyclerView.Adapter<CategoryitemAdapter.holder>{
 
     private Context context;
     private List<Object> objectList;
@@ -32,7 +35,7 @@ public class CategoryitemAdapter extends RecyclerView.Adapter<CategoryitemAdapte
     @Override
     public holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_food_cat_uni,parent,false);
-        elegentNumberHelper = new ElegentNumberHelper(context,this,view);
+
         return new holder(view);
     }
 
@@ -49,22 +52,37 @@ public class CategoryitemAdapter extends RecyclerView.Adapter<CategoryitemAdapte
         if (objectList != null) return objectList.size();else return 0;
     }
 
-    @Override
-    public int OnTextChangeListner(int val) {
 
-        return 0;
-    }
-
-    public class holder extends RecyclerView.ViewHolder {
+    public class holder extends RecyclerView.ViewHolder implements ElegantNumberInteractor.setOnTextChangeListner  {
         ImageView imageView;
         TextView name;
         LinearLayout initial,finalview;
+        CartProvider cartProvider;
 
         public holder(@NonNull View itemView) {
             super(itemView);
 
             initial = itemView.findViewById(R.id.initial);
             finalview = itemView.findViewById(R.id.finl);
+            cartProvider = CartProvider.initialize(context);
+            elegentNumberHelper = new ElegentNumberHelper(context,this,itemView);
+        }
+
+
+        @Override
+        public int OnTextChangeListner(int val) {
+           /* FoodItemAdapter foodItemAdapter = (FoodItemAdapter) objectList.get(getAdapterPosition());
+            cartProvider.AddItemToCart(
+                    CartItemModel.initializeValues(
+                            foodItemAdapter.getAMOUNT(),
+                            foodItemAdapter.getDESC(),
+                            foodItemAdapter.getFOOD_TYPE(),
+                            foodItemAdapter.getICON_URL(),
+                            foodItemAdapter.getNAME(),
+                            foodItemAdapter.getID(),
+                            val),
+                    val);*/
+            return 0;
         }
     }
 }
