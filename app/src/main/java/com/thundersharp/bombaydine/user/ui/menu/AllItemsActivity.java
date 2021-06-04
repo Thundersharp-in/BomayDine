@@ -57,6 +57,9 @@ import com.thundersharp.bombaydine.user.ui.offers.AllOffersActivity;
 import com.thundersharp.payments.payments.PaymentObserver;
 import com.thundersharp.payments.payments.Payments;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -452,7 +455,20 @@ public class AllItemsActivity extends AppCompatActivity implements
 
     @Override
     public void onPaymentError(int i, String s, PaymentData paymentData) {
-        Toast.makeText(this, ""+s, Toast.LENGTH_SHORT).show();
+        try {
+            String replace = s.replace("&error=", "");
+            JSONObject jsonObject = new JSONObject(replace);
+
+            if (jsonObject.has("metadata")) {
+                JSONObject metadata = jsonObject.getJSONObject("metadata");
+                Toast.makeText(this, "" + metadata.getString("payment_id"), Toast.LENGTH_SHORT).show();
+            }
+            else {
+                Toast.makeText(this, "Payment failed : "+jsonObject.getJSONObject("error").getString("code"), Toast.LENGTH_SHORT).show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
 }
