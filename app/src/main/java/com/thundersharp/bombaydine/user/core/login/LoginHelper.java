@@ -2,6 +2,7 @@ package com.thundersharp.bombaydine.user.core.login;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -185,6 +186,7 @@ public class LoginHelper implements
                                                         .addOnCompleteListener(task1 -> {
 
                                                             if (task1.isSuccessful()){
+
                                                                 setLoginSucessListner(task,true,true);
                                                             }
 
