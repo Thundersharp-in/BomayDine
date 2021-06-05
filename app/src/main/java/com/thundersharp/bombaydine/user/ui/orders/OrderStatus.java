@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,10 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.gson.JsonObject;
-import com.razorpay.PaymentData;
 import com.razorpay.PaymentResultListener;
-import com.razorpay.PaymentResultWithDataListener;
 import com.thundersharp.billgenerator.Billing;
 import com.thundersharp.billgenerator.InfoData;
 import com.thundersharp.billgenerator.InvoiceGenerateObserver;
@@ -112,6 +108,7 @@ public class OrderStatus extends AppCompatActivity implements
             }
         });
 
+        toolbar.setNavigationOnClickListener(v ->finish());
         timelineView = findViewById(R.id.timeline);
         TimeLineAdapter timeLineAdapter = new TimeLineAdapter(getdata(), Integer.parseInt(orederBasicDetails.getStatus()));
         ((RecyclerView) findViewById(R.id.recycler)).setAdapter(timeLineAdapter);
@@ -137,6 +134,7 @@ public class OrderStatus extends AppCompatActivity implements
                 e.printStackTrace();
             }
         });
+
 
     }
 
@@ -239,21 +237,23 @@ public class OrderStatus extends AppCompatActivity implements
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        ChatStarter chatStarter = ChatStarter.initializeChat(this);
+        if (item.getItemId() == R.id.chat) {
+            ChatStarter chatStarter = ChatStarter.initializeChat(this);
 
-        chatStarter.setSenderUid(FirebaseAuth.getInstance().getUid());
-        chatStarter.setCostomerName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
-        chatStarter.setOrderId(orederBasicDetails.getOrderID());
+            chatStarter.setSenderUid(FirebaseAuth.getInstance().getUid());
+            chatStarter.setCostomerName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+            chatStarter.setOrderId(orederBasicDetails.getOrderID());
 
-        if (orederBasicDetails.getStatus().equalsIgnoreCase("3")) {
-            chatStarter.setChatType(ChatStarter.MODE_CHAT_FROM_SPECIFIC_ORDER);
+            if (orederBasicDetails.getStatus().equalsIgnoreCase("3")) {
+                chatStarter.setChatType(ChatStarter.MODE_CHAT_FROM_SPECIFIC_ORDER);
 
-        } else chatStarter.setChatType(ChatStarter.MODE_CHAT_FROM_SPECIFIC_ORDER_PRE_DELIVERY);
+            } else chatStarter.setChatType(ChatStarter.MODE_CHAT_FROM_SPECIFIC_ORDER_PRE_DELIVERY);
 
-        try {
-            chatStarter.startChat();
-        } catch (ParametersMissingException e) {
-            e.printStackTrace();
+            try {
+                chatStarter.startChat();
+            } catch (ParametersMissingException e) {
+                e.printStackTrace();
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -303,7 +303,32 @@ public class OrderStatus extends AppCompatActivity implements
 
             if (jsonObject.has("metadata")) {
                 JSONObject metadata = jsonObject.getJSONObject("metadata");
-                Toast.makeText(this, "" + metadata.getString("payment_id"), Toast.LENGTH_SHORT).show();
+                String payId = metadata.getString("payment_id");
+
+                HashMap<String,Object> updateDataRequest = new HashMap<>();
+                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS+"/"+TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID())+"/"+orederBasicDetails.getOrderID()+"/status","4");
+                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS+"/"+TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID())+"/"+orederBasicDetails.getOrderID()+"/paymentid",payId);
+
+                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS+"/"+FirebaseAuth.getInstance().getUid()+"/"+CONSTANTS.DATABASE_NODE_ORDERS+"/"+CONSTANTS.DATABASE_NODE_OVERVIEW+"/"+orederBasicDetails.getOrderID()+"/status","4");
+                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS+"/"+FirebaseAuth.getInstance().getUid()+"/"+CONSTANTS.DATABASE_NODE_ORDERS+"/"+CONSTANTS.DATABASE_NODE_OVERVIEW+"/"+orederBasicDetails.getOrderID()+"/paymentid",payId);
+
+                FirebaseDatabase
+                        .getInstance()
+                        .getReference()
+                        .updateChildren(updateDataRequest)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    //TODO UPDATE DIALOG BOX LOGIC
+                                    Toast.makeText(OrderStatus.this,"Payment Failed.",Toast.LENGTH_LONG).show();
+                                    orederBasicDetails.setStatus("4");
+                                    orederBasicDetails.setPaymentid(payId);
+                                    textupdate.setText("Payment Failed please re order !!");
+                                    recreate();
+                                }
+                            }
+                        });
             }
             else {
                 Toast.makeText(this, "Payment failed : "+jsonObject.getJSONObject("error").getString("code"), Toast.LENGTH_SHORT).show();

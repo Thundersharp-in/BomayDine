@@ -17,13 +17,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.razorpay.PaymentData;
 import com.razorpay.PaymentResultWithDataListener;
 import com.thundersharp.bombaydine.R;
@@ -46,16 +50,20 @@ import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 import com.thundersharp.bombaydine.user.core.location.DistanceFromCoordinates;
 import com.thundersharp.bombaydine.user.core.payments.PrePayment;
 import com.thundersharp.bombaydine.user.core.payments.parePayListener;
+import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.user.core.utils.LatLongConverter;
 import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
+import com.thundersharp.bombaydine.user.core.utils.TimeUtils;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
 import com.thundersharp.bombaydine.user.ui.offers.AllOffersActivity;
+import com.thundersharp.bombaydine.user.ui.orders.OrderStatus;
 import com.thundersharp.payments.payments.Payments;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -87,6 +95,8 @@ public class AllItemsActivity extends AppCompatActivity implements
 
     public static List<Object> staticAllItemsData = new ArrayList<>();
     public static List<Object> staticAllItemsRecomended = new ArrayList<>();
+
+    private OrederBasicDetails orederBasicDetails;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -287,7 +297,7 @@ public class AllItemsActivity extends AppCompatActivity implements
                                     .append(", ");
                         }
                     }
-                    OrederBasicDetails orederBasicDetails = new OrederBasicDetails(
+                    orederBasicDetails = new OrederBasicDetails(
                             sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1(),
                             sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG(),
                             "",
@@ -446,7 +456,40 @@ public class AllItemsActivity extends AppCompatActivity implements
     @Override
     public void onPaymentSuccess(String s, PaymentData paymentData) {
 
-        Toast.makeText(this, ""+paymentData.getData().toString(), Toast.LENGTH_SHORT).show();
+        if (s.contains("pay_")){
+            Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
+            HashMap<String,Object> updateDataRequest = new HashMap<>();
+            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS+"/"+ TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID())+"/"+orederBasicDetails.getOrderID()+"/status","1");
+            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS+"/"+TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID())+"/"+orederBasicDetails.getOrderID()+"/paymentid",s);
+
+            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS+"/"+FirebaseAuth.getInstance().getUid()+"/"+CONSTANTS.DATABASE_NODE_ORDERS+"/"+CONSTANTS.DATABASE_NODE_OVERVIEW+"/"+orederBasicDetails.getOrderID()+"/status","1");
+            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS+"/"+FirebaseAuth.getInstance().getUid()+"/"+CONSTANTS.DATABASE_NODE_ORDERS+"/"+CONSTANTS.DATABASE_NODE_OVERVIEW+"/"+orederBasicDetails.getOrderID()+"/paymentid",s);
+
+            FirebaseDatabase
+                    .getInstance()
+                    .getReference()
+                    .updateChildren(updateDataRequest)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                //TODO UPDATE DIALOG BOX LOGIC AND CART EMPTY LOGIC
+                                cartProvider.clearCart();
+
+                                Toast.makeText(AllItemsActivity.this,"Order placed",Toast.LENGTH_LONG).show();
+                                orederBasicDetails.setStatus("1");
+                                orederBasicDetails.setPaymentid(s);
+                                OrderStatus.showOrderStatus(AllItemsActivity.this,orederBasicDetails);
+
+                                finish();
+                            }else {
+                                //TODO UPDATE AUTO REFUND LOGIC
+                                Toast.makeText(AllItemsActivity.this,"Could not update order contact support for your refund if not generated automatically",Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+
+        }
     }
 
     @Override
@@ -457,11 +500,42 @@ public class AllItemsActivity extends AppCompatActivity implements
 
             if (jsonObject.has("metadata")) {
                 JSONObject metadata = jsonObject.getJSONObject("metadata");
-                Toast.makeText(this, "" + metadata.getString("payment_id"), Toast.LENGTH_SHORT).show();
+                String payId = metadata.getString("payment_id");
+
+                HashMap<String,Object> updateDataRequest = new HashMap<>();
+                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS+"/"+TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID())+"/"+orederBasicDetails.getOrderID()+"/status","4");
+                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS+"/"+TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID())+"/"+orederBasicDetails.getOrderID()+"/paymentid",payId);
+
+                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS+"/"+FirebaseAuth.getInstance().getUid()+"/"+CONSTANTS.DATABASE_NODE_ORDERS+"/"+CONSTANTS.DATABASE_NODE_OVERVIEW+"/"+orederBasicDetails.getOrderID()+"/status","4");
+                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS+"/"+FirebaseAuth.getInstance().getUid()+"/"+CONSTANTS.DATABASE_NODE_ORDERS+"/"+CONSTANTS.DATABASE_NODE_OVERVIEW+"/"+orederBasicDetails.getOrderID()+"/paymentid",payId);
+
+                FirebaseDatabase
+                        .getInstance()
+                        .getReference()
+                        .updateChildren(updateDataRequest)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()){
+                                    //TODO UPDATE DIALOG BOX LOGIC
+                                    Toast.makeText(AllItemsActivity.this,"Payment Failed.",Toast.LENGTH_LONG).show();
+                                    cartProvider.clearCart();
+                                    orederBasicDetails.setStatus("4");
+                                    orederBasicDetails.setPaymentid(payId);
+                                    OrderStatus.showOrderStatus(AllItemsActivity.this,orederBasicDetails);
+                                    //textupdate.setText("Payment Failed please re order !!");
+                                    finish();
+                                }
+                            }
+                        });
             }
             else {
+                cartProvider.clearCart();
+                OrderStatus.showOrderStatus(AllItemsActivity.this,orederBasicDetails);
                 Toast.makeText(this, "Payment failed : "+jsonObject.getJSONObject("error").getString("code"), Toast.LENGTH_SHORT).show();
+                finish();
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

@@ -130,6 +130,8 @@ public class TimeLineAdapter extends RecyclerView.Adapter<TimeLineAdapter.TimeLi
                 break;
             case 4:
 
+
+
             case 5:
 
             case 6:

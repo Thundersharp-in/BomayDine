@@ -62,6 +62,10 @@ import com.google.android.libraries.places.api.model.Place;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.PolyUtil;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllAddressHolderAdapter;
@@ -381,47 +385,74 @@ public class HomeFragment extends Fragment implements
 
 
         ArrayList<String> listUrl = new ArrayList<>();
+        Bundle bundle = new Bundle();
 
-        listUrl.add("https://firebasestorage.googleapis.com/v0/b/bombay-dine.appspot.com/o/4349754.jpg?alt=media&token=1f4c313b-d8dc-4316-a04a-8613710a1567");
+        FirebaseDatabase
+                .getInstance()
+                .getReference("TOP_CAROUSEL")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            RequestOptions requestOptions = new RequestOptions();
+                            requestOptions.centerCrop();
+                            for (DataSnapshot dataSnapshot :snapshot.getChildren()){
 
-        listUrl.add("https://thumbs.dreamstime.com/z/pizzeria-discount-banner-pepperoni-margherita-slices-italian-food-advertisement-pizza-tomatoes-mozzarella-ketchup-186048578.jpg");
+                                DefaultSliderView sliderView = new DefaultSliderView(getActivity());
+                                sliderView
+                                        .image(dataSnapshot.child("URL").getValue(String.class))
+                                        .description(null)
+                                        .setRequestOption(requestOptions)
+                                        .setProgressBarVisible(true)
+                                        .setOnSliderClickListener(HomeFragment.this);
 
-        listUrl.add("https://firebasestorage.googleapis.com/v0/b/bombay-dine.appspot.com/o/4349754.jpg?alt=media&token=1f4c313b-d8dc-4316-a04a-8613710a1567");
+                                //add your extra information
+                                Bundle bundle1 = new Bundle();
+                                bundle1.putInt("PAGE",dataSnapshot.child("PAGE").getValue(Integer.class));
+                                sliderView.bundle(bundle1);
 
-        listUrl.add("https://thumbs.dreamstime.com/z/pizzeria-discount-banner-pepperoni-margherita-slices-italian-food-advertisement-pizza-tomatoes-mozzarella-ketchup-186048578.jpg");
+                                mDemoSlider.addSlider(sliderView);
+                            }
 
-        RequestOptions requestOptions = new RequestOptions();
-        requestOptions.centerCrop();
-        //.diskCacheStrategy(DiskCacheStrategy.NONE)
-        //.placeholder(R.drawable.placeholder)
-        //.error(R.drawable.placeholder);
 
-        for (int i = 0; i < listUrl.size(); i++) {
-            DefaultSliderView sliderView = new DefaultSliderView(getActivity());
-            // if you want show image only / without description text use DefaultSliderView instead
+                        }else {
+                            listUrl.add("https://thumbs.dreamstime.com/z/pizzeria-discount-banner-pepperoni-margherita-slices-italian-food-advertisement-pizza-tomatoes-mozzarella-ketchup-186048578.jpg");
+                            RequestOptions requestOptions = new RequestOptions();
+                            requestOptions.centerCrop();
 
-            // initialize SliderLayout
-            sliderView
-                    .image(listUrl.get(i))
-                    .description(null)
-                    .setRequestOption(requestOptions)
-                    .setProgressBarVisible(true)
-                    .setOnSliderClickListener(this);
+                            for (int i = 0; i < listUrl.size(); i++) {
+                                DefaultSliderView sliderView = new DefaultSliderView(getActivity());
+                                // if you want show image only / without description text use DefaultSliderView instead
 
-            //add your extra information
-            sliderView.bundle(new Bundle());
+                                // initialize SliderLayout
+                                sliderView
+                                        .image(listUrl.get(i))
+                                        .description(null)
+                                        .setRequestOption(requestOptions)
+                                        .setProgressBarVisible(true)
+                                        .setOnSliderClickListener(HomeFragment.this);
 
-            mDemoSlider.addSlider(sliderView);
-        }
+                                //add your extra information
+                                sliderView.bundle(bundle);
 
-        // set Slider Transition Animation
-        // mDemoSlider.setPresetTransformer(SliderLayout.Transformer.Default);
+                                mDemoSlider.addSlider(sliderView);
+                            }
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
         mDemoSlider.setPresetTransformer(SliderLayout.Transformer.ZoomOutSlide);
 
         mDemoSlider.setPresetIndicator(SliderLayout.PresetIndicators.Center_Bottom);
         mDemoSlider.setCustomAnimation(new DescriptionAnimation());
         mDemoSlider.setDuration(4000);
-        mDemoSlider.addOnPageChangeListener(this);
+        mDemoSlider.addOnPageChangeListener(HomeFragment.this);
         mDemoSlider.stopCyclingWhenTouch(false);
 
 
@@ -622,7 +653,8 @@ public class HomeFragment extends Fragment implements
 
     @Override
     public void onSliderClick(BaseSliderView slider) {
-        //Toast.makeText(getActivity(), "", Toast.LENGTH_SHORT).show();
+
+        Toast.makeText(getActivity(), ""+slider.getBundle().getInt("PAGE"), Toast.LENGTH_SHORT).show();
     }
 
     @Override
