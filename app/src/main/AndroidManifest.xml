@@ -56,7 +56,9 @@
 
         <activity android:name=".user.ui.login.EmailAccountCreate" />
         <activity android:name=".user.ui.login.EmailLoginActivity" />
-        <activity android:name=".user.ui.login.OtpVerificationActivity" />
+        <activity android:name=".user.ui.login.OtpVerificationActivity"
+            android:configChanges="keyboard|orientation|screenSize"/>
+
         <activity android:name=".user.ui.login.LoginActivity" />
         <activity android:name=".user.ui.startup.MainActivity">
             <intent-filter>

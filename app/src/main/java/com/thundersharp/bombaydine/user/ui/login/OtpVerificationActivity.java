@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.snackbar.Snackbar;
@@ -17,7 +18,8 @@ import com.thundersharp.bombaydine.R;
 public class OtpVerificationActivity extends AppCompatActivity {
 
     OtpView otp_view;
-    AppCompatButton submit,cancel;
+    AppCompatButton submit;
+    TextView cancel;
     boolean isSubmitEnabled = false;
     private String otp;
 
@@ -25,7 +27,7 @@ public class OtpVerificationActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_otp_verification);
+        setContentView(R.layout.otp);
 
         otp_view = findViewById(R.id.otp_view);
         submit = findViewById(R.id.vieify);
