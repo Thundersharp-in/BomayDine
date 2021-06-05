@@ -8,16 +8,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".kitchen.HomeKitchen"
+    tools:openDrawer="start"
     android:fitsSystemWindows="true">
 
     <!-- Layout to contain contents of main body of screen (drawer will slide over this) -->
-    <androidx.fragment.app.FragmentContainerView
+    <!--androidx.fragment.app.FragmentContainerView
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:id="@+id/nav_host_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph_kitchen" />
+        app:navGraph="@navigation/nav_graph_kitchen" /-->
+
+    <include
+        layout="@layout/app_bar_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
 
     <!-- Container for contents of drawer - use NavigationView to make configuration easier -->
     <com.google.android.material.navigation.NavigationView
@@ -25,6 +31,10 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true" />
+        android:fitsSystemWindows="true"
+        app:menu="@menu/kitchen_menu"
+        />
 
 </androidx.drawerlayout.widget.DrawerLayout>
+
+

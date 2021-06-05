@@ -9,6 +9,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.thundersharp.bombaydine.user.core.Adapters.OrderItem;
 import com.thundersharp.bombaydine.user.core.Model.OrderModel;
+import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,10 +30,10 @@ public class OrderDetailHelper implements OrderDetail{
 
         FirebaseDatabase
                 .getInstance()
-                .getReference("USERS")
+                .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
                 .child(FirebaseAuth.getInstance().getUid())
-                .child("ORDERS")
-                .child("DETAILS")
+                .child(CONSTANTS.DATABASE_NODE_ORDERS)
+                .child(CONSTANTS.DATABASE_NODE_DETAILS)
                 .child(ID)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
