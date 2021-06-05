@@ -470,6 +470,7 @@ public class HomeFragment extends Fragment implements
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (allItemAdapter!= null)
                 allItemAdapter.getFilter().filter(s);
             }
 

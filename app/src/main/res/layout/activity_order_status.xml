@@ -315,6 +315,7 @@
                     android:id="@+id/order_no"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:textIsSelectable="true"
                     android:text="207392446231"
                     android:textSize="14sp"
                     android:gravity="start"

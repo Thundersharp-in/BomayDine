@@ -16,8 +16,17 @@ public class OrederBasicDetails implements Serializable {
     private String orderID;
     private String uid;
     private String status;
+    private String paymentid;
 
-    public OrederBasicDetails(String delivery_address, String deliveryCoOrdinates, String promocodeNameNdiscount, String itemsMain, String delivery_charge, String totalamt, String deliveryNameData, String orderID) {
+    public String getPaymentid() {
+        return paymentid;
+    }
+
+    public void setPaymentid(String paymentid) {
+        this.paymentid = paymentid;
+    }
+
+    public OrederBasicDetails(String delivery_address, String deliveryCoOrdinates, String promocodeNameNdiscount, String itemsMain, String delivery_charge, String totalamt, String deliveryNameData, String orderID, String paymentid) {
         this.delivery_address = delivery_address;
         this.deliveryCoOrdinates = deliveryCoOrdinates;
         this.promocodeNameNdiscount = promocodeNameNdiscount;
@@ -26,10 +35,11 @@ public class OrederBasicDetails implements Serializable {
         this.totalamt = totalamt;
         this.deliveryNameData = deliveryNameData;
         this.orderID = orderID;
+        this.paymentid =paymentid;
 
     }
 
-    public OrederBasicDetails(String delivery_address, String deliveryCoOrdinates, String promocodeNameNdiscount, String itemsMain, String delivery_charge, String totalamt, String deliveryNameData, String orderID, String uid, String status) {
+    public OrederBasicDetails(String delivery_address, String deliveryCoOrdinates, String promocodeNameNdiscount, String itemsMain, String delivery_charge, String totalamt, String deliveryNameData, String orderID, String uid, String status,String paymentid) {
         this.delivery_address = delivery_address;
         this.deliveryCoOrdinates = deliveryCoOrdinates;
         this.promocodeNameNdiscount = promocodeNameNdiscount;
@@ -40,6 +50,7 @@ public class OrederBasicDetails implements Serializable {
         this.orderID = orderID;
         this.uid = uid;
         this.status = status;
+        this.paymentid = paymentid;
     }
 
     public String getStatus() {

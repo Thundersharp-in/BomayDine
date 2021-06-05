@@ -40,22 +40,12 @@ public class MainPage extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SettingData settingData = new SettingData(this);
-        if (settingData.loadTheme()){
-            setTheme(R.style.AppTheme_default);
-        }  else {
-            setTheme(R.style.MyTheme);
-        }
         setContentView(R.layout.activity_main_page);
 
         BottomNavigationView navView = findViewById(R.id.nav_view);
         navView.setDuplicateParentStateEnabled(false);
         checkForPermissions();
-        // Passing each menu ID as a set of Ids because each
-        // menu should be considered as top level destinations.
-        /*AppBarConfiguration appBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.navigation_home, R.id.navigation_dashboard, R.id.navigation_notifications)
-                .build();*/
+       
         navView.setOnNavigationItemReselectedListener(new BottomNavigationView.OnNavigationItemReselectedListener() {
             @Override
             public void onNavigationItemReselected(@NonNull MenuItem item) {
@@ -66,15 +56,6 @@ public class MainPage extends AppCompatActivity {
         //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 
-        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals("recreate"))
-                    MainPage.this.recreate();
-            }
-        };
-
-        registerReceiver(broadcastReceiver ,new IntentFilter("recreate"));
 
     }
 

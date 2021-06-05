@@ -18,7 +18,10 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.vipulasri.timelineview.TimelineView;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.gson.JsonObject;
 import com.razorpay.PaymentData;
 import com.razorpay.PaymentResultListener;
@@ -32,16 +35,19 @@ import com.thundersharp.bombaydine.user.core.Adapters.OrderItem;
 import com.thundersharp.bombaydine.user.core.Adapters.TimeLineAdapter;
 import com.thundersharp.bombaydine.user.core.Model.OrderModel;
 import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
+import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
 import com.thundersharp.bombaydine.user.core.utils.TimeUtils;
 import com.thundersharp.conversation.ChatStarter;
 import com.thundersharp.conversation.ParametersMissingException;
+import com.thundersharp.conversation.utils.Resturant;
 import com.thundersharp.payments.payments.Payments;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class OrderStatus extends AppCompatActivity implements
@@ -145,11 +151,25 @@ public class OrderStatus extends AppCompatActivity implements
         helper.FetchOrder(orederBasicDetails.getOrderID());
 
         if (orederBasicDetails.getStatus().equalsIgnoreCase("0")){
-            textupdate.setText("Current order status is Payment pending, Click here to retry payment");
+            textupdate.setText("Current order status is Payment pending, Click here to retry payment within 10 minutes.");
             textupdate.setOnClickListener(v -> {
-                if (FirebaseAuth.getInstance().getCurrentUser().getEmail() != null && FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() !=null)
-                    Payments.initialize(this).startPayment("Order #"+orederBasicDetails.getOrderID(),orederBasicDetails.getOrderID(),Double.parseDouble(orederBasicDetails.getTotalamt()),FirebaseAuth.getInstance().getCurrentUser().getEmail(),FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-                else Toast.makeText(this,"Update phone no and email in profile",Toast.LENGTH_SHORT).show();
+                Resturant.isOpen(new Resturant.Resturantopen() {
+                    @Override
+                    public void isOpen(boolean isOpen) {
+                        if (isOpen) {
+                            if (FirebaseAuth.getInstance().getCurrentUser().getEmail() != null && FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() != null)
+                                Payments.initialize(OrderStatus.this).startPayment("Order #" + orederBasicDetails.getOrderID(), orederBasicDetails.getOrderID(), Double.parseDouble(orederBasicDetails.getTotalamt()), FirebaseAuth.getInstance().getCurrentUser().getEmail(), FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+                            else
+                                Toast.makeText(OrderStatus.this, "Update phone no and email in profile", Toast.LENGTH_SHORT).show();
+                        }else Toast.makeText(OrderStatus.this,"Resturant not accepting orders",Toast.LENGTH_SHORT).show();
+                    }
+                });
+            });
+        }else if (orederBasicDetails.getStatus().equalsIgnoreCase("1")){
+            textupdate.setText("Your order is being prepared click here to chat with the cook for customisations.");
+            order_no.setText("#" + orederBasicDetails.getOrderID()+"\nPayment id : "+orederBasicDetails.getPaymentid());
+            textupdate.setOnClickListener(c ->{
+
             });
         }
     }
@@ -243,6 +263,34 @@ public class OrderStatus extends AppCompatActivity implements
     public void onPaymentSuccess(String s) {
         if (s.contains("pay_")){
             Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
+            HashMap<String,Object> updateDataRequest = new HashMap<>();
+            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS+"/"+TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID())+"/"+orederBasicDetails.getOrderID()+"/status","1");
+            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS+"/"+TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID())+"/"+orederBasicDetails.getOrderID()+"/paymentid",s);
+
+            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS+"/"+FirebaseAuth.getInstance().getUid()+"/"+CONSTANTS.DATABASE_NODE_ORDERS+"/"+CONSTANTS.DATABASE_NODE_OVERVIEW+"/"+orederBasicDetails.getOrderID()+"/status","1");
+            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS+"/"+FirebaseAuth.getInstance().getUid()+"/"+CONSTANTS.DATABASE_NODE_ORDERS+"/"+CONSTANTS.DATABASE_NODE_OVERVIEW+"/"+orederBasicDetails.getOrderID()+"/paymentid",s);
+
+            FirebaseDatabase
+                    .getInstance()
+                    .getReference()
+                    .updateChildren(updateDataRequest)
+                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            if (task.isSuccessful()){
+                                //TODO UPDATE DIALOG BOX LOGIC
+                                Toast.makeText(OrderStatus.this,"Order placed",Toast.LENGTH_LONG).show();
+                                orederBasicDetails.setStatus("1");
+                                orederBasicDetails.setPaymentid(s);
+                                textupdate.setText("Your order is being prepared click here to chat with the cook for customisations.");
+                                recreate();
+                            }else {
+                                //TODO UPDATE AUTO REFUND LOGIC
+                                Toast.makeText(OrderStatus.this,"Could not update order contact support for your refund if not generated automatically",Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
+
         }
     }
 
@@ -260,6 +308,7 @@ public class OrderStatus extends AppCompatActivity implements
             else {
                 Toast.makeText(this, "Payment failed : "+jsonObject.getJSONObject("error").getString("code"), Toast.LENGTH_SHORT).show();
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }

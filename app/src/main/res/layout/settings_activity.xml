@@ -10,7 +10,7 @@
         android:layout_height="?attr/actionBarSize"
         app:title="@string/app_name"
         app:subtitle="Press to move back"
-        app:navigationIcon="@drawable/close"
+        app:navigationIcon="@drawable/ic_baseline_close_24"
         />
 
 

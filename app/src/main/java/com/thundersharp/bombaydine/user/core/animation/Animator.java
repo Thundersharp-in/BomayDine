@@ -13,6 +13,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.thundersharp.bombaydine.R;
 
+/**
+ * @apiNote
+ * Animation Helper class which supports running animation
+ * application wise easily.
+ * @see com.thundersharp.bombaydine.user.core.animation.AnimatorListner
+ *
+ * @implNote
+ * Usage : Animator.initializeAnimator().{AnimationMethod}<br><br>
+ *
+ * Supported animation : <br><br>
+ *
+ * 1. Recycler view slide right animation.      @params {RecyclerView} <br>
+ * 2. Recycler view fall down animation.        @params {RecyclerView} <br>
+ * 3. View slide up and slide down animation.   @params {View}         <br>
+ * 4. Scroll recycler view to desired position. @params {RecyclerView} <br>
+ * 5. View fade in and fade out animation.      @params {View}         <br>
+ * 6. Run any custom animation to a view        @params {View}         <br>
+ * @apiNote
+ */
 public final class Animator implements AnimatorListner{
 
     public static Animator initializeAnimator(){
