@@ -109,13 +109,13 @@ public class CartProvider implements CartHandler {
 
             } else {
                 //Toast.makeText(context, "RC", Toast.LENGTH_SHORT).show();
-                clearSharedPref();
+                clearCart();
             }
 
         }
     }
 
-    private void clearSharedPref() {
+    public void clearCart() {
         SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.CART_SHARED_PREFERENCES, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear();
