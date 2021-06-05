@@ -17,9 +17,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BombayDine"
         tools:replace="android:theme,android:allowBackup">
-
-
-        <activity android:name=".user.ui.account.UpdateProfileActivity"></activity>
+        <activity android:name=".user.ui.login.UserDetails"></activity>
+        <activity android:name=".user.ui.account.UpdateProfileActivity" />
         <activity android:name=".user.ui.wallets.WalletActivity" />
         <activity android:name=".user.ui.offers.AllOffersDisplay" />
         <activity android:name=".user.ui.account.Bookmarks" />
@@ -43,22 +42,18 @@
         <activity android:name=".user.ui.location.HomeLocationChooser" />
         <activity android:name=".user.ui.location.AddressEdit" />
         <activity android:name=".user.ui.scanner.QrScanner" />
-
         <activity
             android:name=".user.ui.menu.AllItemsActivity"
             android:configChanges="orientation|screenSize|keyboard" />
-
         <activity android:name=".user.ui.orders.RecentOrders" />
-
         <activity
             android:name=".user.ui.home.MainPage"
             android:configChanges="orientation|screenSize|keyboard" />
-
         <activity android:name=".user.ui.login.EmailAccountCreate" />
         <activity android:name=".user.ui.login.EmailLoginActivity" />
-        <activity android:name=".user.ui.login.OtpVerificationActivity"
-            android:configChanges="keyboard|orientation|screenSize"/>
-
+        <activity
+            android:name=".user.ui.login.OtpVerificationActivity"
+            android:configChanges="keyboard|orientation|screenSize" />
         <activity android:name=".user.ui.login.LoginActivity" />
         <activity android:name=".user.ui.startup.MainActivity">
             <intent-filter>
@@ -71,7 +66,6 @@
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
@@ -80,7 +74,6 @@
             android:name=".user.core.OrderStatusUpdater"
             android:enabled="true"
             android:exported="true" />
-
     </application>
 
 </manifest>

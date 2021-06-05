@@ -18,13 +18,13 @@ import com.thundersharp.bombaydine.user.core.orders.OrderContract;
 import com.thundersharp.conversation.ChatStarter;
 import com.thundersharp.conversation.ParametersMissingException;
 
+import java.util.Collections;
 import java.util.List;
 
 
 public class HomeKitchenFragment extends Fragment implements OrderContract.onOrderFetch{
 
     RecyclerView rv_order;
-    KitchenOrderListner kitchenOrderListner;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -33,6 +33,11 @@ public class HomeKitchenFragment extends Fragment implements OrderContract.onOrd
         View view =  inflater.inflate(R.layout.fragment_home_kitchen, container, false);
 
         rv_order = view.findViewById(R.id.rv_order);
+
+        KitchenOrderListner
+                .getKitchenOrderInstance()
+                .setOnOrderSuccessFailureListner(this)
+                .fetchRecentOrders();
 
         view.findViewById(R.id.acccswitch).setOnClickListener(viewclk -> {
 
@@ -53,12 +58,6 @@ public class HomeKitchenFragment extends Fragment implements OrderContract.onOrd
                     .clearAllData();
             startActivity(new Intent(this, MainActivity.class));
             finish();*/
-
-            kitchenOrderListner = new KitchenOrderListner().setOnOrderSuccessFailureListner(this);
-
-            KitchenOrderListner
-                    .getKitchenOrderInstance()
-                    .fetchRecentOrders();
 
 
             /*
@@ -102,6 +101,8 @@ public class HomeKitchenFragment extends Fragment implements OrderContract.onOrd
 
     @Override
     public void onOrderFetchSuccess(List<Object> data) {
+        Collections.reverse(data);
+        // Toast.makeText(getContext(), "data"+data.size(), Toast.LENGTH_SHORT).show();
         rv_order.setAdapter(new ItemOrderHolder(getContext(),data));
     }
 

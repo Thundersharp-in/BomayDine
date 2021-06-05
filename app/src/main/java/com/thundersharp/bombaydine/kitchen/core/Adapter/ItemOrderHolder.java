@@ -51,6 +51,11 @@ public class ItemOrderHolder extends RecyclerView.Adapter<ItemOrderHolder.ViewHo
         holder.user_name.setText(orederBasicDetails.getDeliveryNameData());
         holder.user_phone.setText("+91 9876543210");
 
+        if (orederBasicDetails.getStatus().equals("1")){
+            holder.btn_preparation_stated.setText("START PREPARATION");
+        }else {
+            holder.btn_preparation_stated.setText("FOOD PREPARATION !!");
+        }
         holder.btn_chat.setOnClickListener( (view)-> {
 
         });
@@ -58,19 +63,22 @@ public class ItemOrderHolder extends RecyclerView.Adapter<ItemOrderHolder.ViewHo
         holder.btn_preparation_stated.setOnClickListener( (view)-> {
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Confirmation Dialog");
+            builder.setMessage("Are you sure you have started preparing food !!");
             builder.setCancelable(false);
 
             builder.setPositiveButton("YES", (dialog, which) -> {
-                holder.btn_preparation_stated.setText("Started");
 
                 KitchenOrderListner
                         .getKitchenOrderInstance()
                         .setOnStatusSuccessFailureListner(this)
-                        .setStatus(orederBasicDetails.getOrderID(),1);
-                //TODO status to database
+                        .setStatus(orederBasicDetails.getOrderID(),2);
+
+                holder.btn_preparation_stated.setText("Started");
+                dialog.dismiss();
 
             }).setNegativeButton("NO", (dialog, which) -> {
                 holder.btn_preparation_stated.setText("Not Started");
+                dialog.cancel();
             });
 
             AlertDialog dialog = builder.create();
@@ -81,7 +89,7 @@ public class ItemOrderHolder extends RecyclerView.Adapter<ItemOrderHolder.ViewHo
             KitchenOrderListner
                     .getKitchenOrderInstance()
                     .setOnStatusSuccessFailureListner(this)
-                    .setStatus(orederBasicDetails.getOrderID(),2);
+                    .setStatus(orederBasicDetails.getOrderID(),3);
         });
 
     }

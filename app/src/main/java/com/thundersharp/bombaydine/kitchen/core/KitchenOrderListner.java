@@ -1,6 +1,9 @@
 package com.thundersharp.bombaydine.kitchen.core;
 
+import android.annotation.SuppressLint;
 import android.text.format.DateFormat;
+import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -12,6 +15,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.thundersharp.bombaydine.user.core.orders.OrderContract;
 import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -51,28 +56,22 @@ public class KitchenOrderListner implements OrderContract , OrderContract.Status
     @Override
     public void fetchRecentOrders() {
         List<Object> allOrders =new ArrayList<>();
-
+        Log.e("Start","Statred");
         FirebaseDatabase
                 .getInstance()
                 .getReference(CONSTANTS.DATABASE_NODE_ALL_ORDERS)
+                .child("05-06-2021")//  getDate()
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()){
                             for (DataSnapshot snapshot1 : snapshot.getChildren()){
-                                if (snapshot1.exists()){
-                                    for (DataSnapshot snapshot2 : snapshot1.getChildren()){
-                                        if (snapshot2.exists()){
-                                            allOrders.add(snapshot2);
-                                        }else onOrderFetch.onDataFetchFailure(new Exception("Orders Not Placed Yet !"));
-                                    }
-                                }else onOrderFetch.onDataFetchFailure(new Exception("Orders Not Placed Yet !"));
-
+                                allOrders.add(snapshot1);
                             }
                             onOrderFetch.onOrderFetchSuccess(allOrders);
 
                         }else {
-                            onOrderFetch.onDataFetchFailure(new Exception("Orders Not Placed Yet !"));
+                            onOrderFetch.onDataFetchFailure(new Exception("No orders Today yet !"));
                         }
                     }
 
@@ -93,15 +92,12 @@ public class KitchenOrderListner implements OrderContract , OrderContract.Status
                 .child(date)
                 .child(order_id)
                 .child("status")
-                .setValue("2")
-                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()){
-                            statusSuccessFailure.onSuccess(task);
-                        }else {
-                            statusSuccessFailure.onFailure(task.getException());
-                        }
+                .setValue(String.valueOf(value))
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()){
+                        statusSuccessFailure.onSuccess(task);
+                    }else {
+                        statusSuccessFailure.onFailure(task.getException());
                     }
                 });
     }
@@ -110,5 +106,10 @@ public class KitchenOrderListner implements OrderContract , OrderContract.Status
         Calendar cal = Calendar.getInstance(Locale.ENGLISH);
         cal.setTimeInMillis(time);
         return DateFormat.format("dd-MM-yyyy", cal).toString();
+    }
+
+    private String getDate(){
+        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        return simpleDateFormat.format(Calendar.getInstance().getTime());
     }
 }

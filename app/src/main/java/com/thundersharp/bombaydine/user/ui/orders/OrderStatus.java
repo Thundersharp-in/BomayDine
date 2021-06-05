@@ -296,7 +296,7 @@ public class OrderStatus extends AppCompatActivity implements
 
     @Override
     public void onPaymentError(int i, String s) {
-        //Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
         try {
             String replace = s.replace("&error=", "");
             JSONObject jsonObject = new JSONObject(replace);

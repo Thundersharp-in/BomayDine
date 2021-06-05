@@ -12,15 +12,16 @@
         android:id="@+id/rv_order"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
 
 
-    <Button
+    <androidx.appcompat.widget.AppCompatButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Home back to home user"
         android:id="@+id/acccswitch"
-        android:layout_gravity="bottom"/>
+        android:layout_gravity="bottom"
+        android:background="@drawable/rounded_rect_bg"
+        android:layout_marginHorizontal="@dimen/dimen_50dp"/>
 
 </LinearLayout>

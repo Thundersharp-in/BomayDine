@@ -113,7 +113,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 >
                 <TextView
                     android:layout_width="wrap_content"
@@ -144,7 +144,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="6dp"
                 >
                 <TextView
                     android:layout_width="wrap_content"
@@ -175,7 +175,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="6dp"
                 >
                 <TextView
                     android:layout_width="wrap_content"
@@ -207,7 +207,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="6dp"
                 >
                 <TextView
                     android:layout_width="wrap_content"
@@ -239,7 +239,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="6dp"
                 >
                 <TextView
                     android:layout_width="wrap_content"
@@ -268,7 +268,7 @@
                 android:id="@+id/view_bottom"
                 android:layout_width="match_parent"
                 android:layout_height="0.3dp"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginBottom="10dp"
                 android:background="#B5B5B5"/>
 
@@ -297,7 +297,7 @@
                 android:layout_marginHorizontal="@dimen/dimen_10dp"
                 android:textColor="#fff"
                 android:text="Prepared"
-                android:fontFamily="@font/coiny"
+                android:fontFamily="@font/allerta"
                 />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -325,7 +325,7 @@
             android:textColor="#6AFF00"
             android:layout_below="@+id/lower"
             android:layout_marginBottom="15dp"
-            android:fontFamily="@font/coiny"
+            android:fontFamily="@font/allerta"
             android:text="Start Preparation"
             />
 

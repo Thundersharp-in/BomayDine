@@ -50,7 +50,7 @@ public class Payments {
     private void pay(String description, double amount,String customerEmail,String customerPhone) {
 
         Checkout checkout = new Checkout();
-        checkout.setKeyID("rzp_test_DZNbcClq06ahsT");
+        checkout.setKeyID("rzp_test_0xZ2jDyzMKlGXj");
         /**
          * Instantiate Checkout
          */
