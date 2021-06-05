@@ -81,7 +81,7 @@
 
         <meta-data
             android:name="android.app.shortcuts"
-            android:resource="@xml/actions" />
+           /><!--  android:resource="@xml/actions"  -->
 
     </application>
 
