@@ -19,18 +19,39 @@ import com.thundersharp.bombaydine.kitchen.core.KitchenOrderListner;
 import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
 import com.thundersharp.bombaydine.user.core.orders.OrderContract;
 import com.thundersharp.bombaydine.user.core.utils.TimeUtils;
+import com.thundersharp.conversation.model.Chat;
 
 import java.util.List;
+
+import static com.thundersharp.conversation.ChatFragmentInternal.sendmessageRecycler;
 
 public class ItemDeliverHolder extends RecyclerView.Adapter<ItemDeliverHolder.ViewHolder> implements OrderContract.StatusSuccessFailure {
 
     private Context context;
-    private List<Object> objectList;
+    private List<DataSnapshot> objectList;
 
-    public ItemDeliverHolder(Context context, List<Object> objectList) {
+    public ItemDeliverHolder(Context context, List<DataSnapshot> objectList) {
         this.context = context;
         this.objectList = objectList;
     }
+
+    public void addNew(DataSnapshot data) {
+        objectList.add(data);
+
+        notifyItemInserted(objectList.size() - 1);
+    }
+
+    public void upDateExisting(DataSnapshot data) {
+        if (objectList.contains(data.child("orderID"))){
+
+            int index = objectList.indexOf(data.child("orderID"));
+            Toast.makeText(context,"True ",index).show();
+            objectList.add(index,data);
+            notifyItemChanged(index);
+        }else Toast.makeText(context,"Fal ",Toast.LENGTH_SHORT).show();
+    }
+
+
 
     @NonNull
     @Override

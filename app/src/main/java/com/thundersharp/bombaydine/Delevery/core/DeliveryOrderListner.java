@@ -24,7 +24,7 @@ import java.util.Locale;
 public class DeliveryOrderListner implements OrderContract , OrderContract.Status{
 
     static DeliveryOrderListner kitchenOrderListner;
-    private OrderContract.onOrderFetch onOrderFetch;
+    private DeliveryOrderContract onOrderFetch;
     private String date;
     private StatusSuccessFailure statusSuccessFailure;
 
@@ -36,7 +36,7 @@ public class DeliveryOrderListner implements OrderContract , OrderContract.Statu
     public DeliveryOrderListner() {
     }
 
-    public DeliveryOrderListner setOnOrderSuccessFailureListner(OrderContract.onOrderFetch orderSuccessFailureListner){
+    public DeliveryOrderListner setOnOrderSuccessFailureListner(DeliveryOrderContract orderSuccessFailureListner){
         kitchenOrderListner.KitchenOrderListner(orderSuccessFailureListner);
         return kitchenOrderListner;
     }
@@ -63,13 +63,14 @@ public class DeliveryOrderListner implements OrderContract , OrderContract.Statu
     public void KitchenOrderListner(StatusSuccessFailure statusSuccessFailure){
         this.statusSuccessFailure = statusSuccessFailure;
     }
-    public void KitchenOrderListner(OrderContract.onOrderFetch orderFetch){
+    public void KitchenOrderListner(DeliveryOrderContract orderFetch){
         this.onOrderFetch = orderFetch;
     }
 
+    int a = 0,b= 0;
     @Override
     public void fetchRecentOrders() {
-        List<Object> allOrders =new ArrayList<>();
+
         FirebaseDatabase
                 .getInstance()
                 .getReference(CONSTANTS.DATABASE_NODE_ALL_ORDERS)
@@ -77,12 +78,10 @@ public class DeliveryOrderListner implements OrderContract , OrderContract.Statu
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                        Log.d("CH",""+(a++));
                         if (snapshot.exists()){
-                            for (DataSnapshot snapshot1 : snapshot.getChildren()){
-                                //OrederBasicDetails orederBasicDetails= snapshot1.getValue(OrederBasicDetails.class);
-                                allOrders.add(snapshot1);
-                            }
-                            onOrderFetch.onOrderFetchSuccess(allOrders);
+
+                            onOrderFetch.onOrderFetchSuccess(snapshot,true);
 
                         }else {
                             onOrderFetch.onDataFetchFailure(new Exception("No orders Today yet !"));
@@ -91,7 +90,10 @@ public class DeliveryOrderListner implements OrderContract , OrderContract.Statu
 
                     @Override
                     public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                        Log.d("CHC",""+(b++));
+                        Log.d("CHCDAT",snapshot.child("status").getValue(String.class));
 
+                        onOrderFetch.onOrderFetchSuccess(snapshot,false);
                     }
 
                     @Override

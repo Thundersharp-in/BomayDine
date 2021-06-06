@@ -22,6 +22,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -327,6 +328,19 @@ public class LoginHelper implements
                             .addOnCompleteListener(task1 -> {
 
                                 if (task1.isSuccessful()){
+                                    UserProfileChangeRequest.Builder builder = new UserProfileChangeRequest.Builder();
+                                    builder.setDisplayName(name);
+                                    UserProfileChangeRequest userProfileChangeRequest = builder.build();
+                                    FirebaseAuth
+                                            .getInstance()
+                                            .getCurrentUser()
+                                            .updateProfile(userProfileChangeRequest)
+                                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+
+                                        }
+                                    });
                                     setOnRegisterSucess(task,true);
                                 }
                             });

@@ -27,6 +27,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseTooManyRequestsException;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseUser;
@@ -151,12 +153,12 @@ public class LoginActivity extends AppCompatActivity implements FirebaseLoginCli
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             loginHelper.loginfirebaseAuthWithGoogle(task.getResult().getIdToken());
 
-        }else dialog.dismiss();
+        }
         if (requestCode == 10001){
 
             PhoneAuthCredential credential = PhoneAuthProvider.getCredential(verificationId, data.getAction());
             activityHandler.postOtpSentListner(true,credential);
-        }else dialog.dismiss();
+        }
     }
 
 
@@ -184,7 +186,9 @@ public class LoginActivity extends AppCompatActivity implements FirebaseLoginCli
     @Override
     public void setOnLoginSucessListner(Task<AuthResult> task, boolean isDataRegisteredToDatabase, boolean isDataExists) {
         //Toast.makeText(this,task.getResult().getUser().getPhoneNumber(),Toast.LENGTH_SHORT).show();
-        startActivity(new Intent(this, MainPage.class));
+        if (FirebaseAuth.getInstance().getCurrentUser().getDisplayName() == null){
+            startActivity(new Intent(this, UserDetails.class));
+        }else startActivity(new Intent(this, MainPage.class));
         finish();
         dialog.dismiss();
     }
@@ -194,7 +198,10 @@ public class LoginActivity extends AppCompatActivity implements FirebaseLoginCli
     protected void onStart() {
         super.onStart();
         if (FirebaseAuth.getInstance().getCurrentUser() != null){
-            startActivity(new Intent(this, MainPage.class));
+
+            if (FirebaseAuth.getInstance().getCurrentUser().getDisplayName() == null || FirebaseAuth.getInstance().getCurrentUser().getDisplayName().isEmpty()){
+                startActivity(new Intent(this, UserDetails.class));
+            }else startActivity(new Intent(this, MainPage.class));
             finish();
         }
     }

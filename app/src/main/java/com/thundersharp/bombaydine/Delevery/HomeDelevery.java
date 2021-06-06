@@ -4,28 +4,24 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.google.firebase.database.DataSnapshot;
+import com.thundersharp.bombaydine.Delevery.core.DeliveryOrderContract;
 import com.thundersharp.bombaydine.Delevery.core.DeliveryOrderListner;
 import com.thundersharp.bombaydine.Delevery.core.ItemDeliverHolder;
 import com.thundersharp.bombaydine.R;
-import com.thundersharp.bombaydine.kitchen.core.Adapter.ItemOrderHolder;
-import com.thundersharp.bombaydine.kitchen.core.KitchenOrderListner;
-import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
-import com.thundersharp.bombaydine.user.core.login.AccountHelper;
-import com.thundersharp.bombaydine.user.core.orders.OrderContract;
-import com.thundersharp.bombaydine.user.ui.startup.MainActivity;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
 import java.util.List;
 
-public class HomeDelevery extends AppCompatActivity implements OrderContract.onOrderFetch{
+public class HomeDelevery extends AppCompatActivity implements  DeliveryOrderContract {
 
     RecyclerView rv_delivery_orders;
+    ItemDeliverHolder itemDeliverHolder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,15 +56,17 @@ public class HomeDelevery extends AppCompatActivity implements OrderContract.onO
     }
 
     @Override
-    public void onOrderFetchSuccess(List<Object> data) {
-        Toast.makeText(this, "data"+data.size(), Toast.LENGTH_SHORT).show();
+    public void onOrderFetchSuccess(DataSnapshot data, boolean isNew) {
 
-        Collections.reverse(data);
-        if (data!=null){
-            rv_delivery_orders.setAdapter(new ItemDeliverHolder(this,data));
-        }else {
-            Toast.makeText(this, "No Data Found!", Toast.LENGTH_SHORT).show();
-        }
+            if (isNew){
+                if (itemDeliverHolder == null) {
+                    List<DataSnapshot> list= new ArrayList<>();
+                    list.add(data);
+                    itemDeliverHolder = new ItemDeliverHolder(HomeDelevery.this,list);
+                    rv_delivery_orders.setAdapter(itemDeliverHolder);
+                }else itemDeliverHolder.addNew(data);
+
+            }else itemDeliverHolder.upDateExisting(data);
 
     }
 
@@ -76,4 +74,6 @@ public class HomeDelevery extends AppCompatActivity implements OrderContract.onO
     public void onDataFetchFailure(Exception e) {
         Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
     }
+
+
 }
