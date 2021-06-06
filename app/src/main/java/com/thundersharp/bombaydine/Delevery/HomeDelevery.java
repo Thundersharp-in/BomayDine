@@ -13,6 +13,7 @@ import com.thundersharp.bombaydine.Delevery.core.ItemDeliverHolder;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.kitchen.core.Adapter.ItemOrderHolder;
 import com.thundersharp.bombaydine.kitchen.core.KitchenOrderListner;
+import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
 import com.thundersharp.bombaydine.user.core.login.AccountHelper;
 import com.thundersharp.bombaydine.user.core.orders.OrderContract;
 import com.thundersharp.bombaydine.user.ui.startup.MainActivity;
@@ -33,20 +34,23 @@ public class HomeDelevery extends AppCompatActivity implements OrderContract.onO
 
         rv_delivery_orders = findViewById(R.id.rv_delivery_orders);
 
-        DeliveryOrderListner
-                .getKitchenOrderInstance()
-                .setDate(getDate())
-                .setOnOrderSuccessFailureListner(this)
-                .fetchRecentOrders();
+
 
 
         findViewById(R.id.acccswitch).setOnClickListener(view -> {
-            AccountHelper
+            DeliveryOrderListner
+                    .getKitchenOrderInstance()
+                    .setDate(getDate())
+                    .setOnOrderSuccessFailureListner(this)
+                    .fetchRecentOrders();
+        });
+        /*
+        AccountHelper
                     .getInstance(this)
                     .clearAllData();
             startActivity(new Intent(this, MainActivity.class));
             finish();
-        });
+         */
 
     }
 
@@ -57,9 +61,15 @@ public class HomeDelevery extends AppCompatActivity implements OrderContract.onO
 
     @Override
     public void onOrderFetchSuccess(List<Object> data) {
+        Toast.makeText(this, "data"+data.size(), Toast.LENGTH_SHORT).show();
+
         Collections.reverse(data);
-        // Toast.makeText(getContext(), "data"+data.size(), Toast.LENGTH_SHORT).show();
-        rv_delivery_orders.setAdapter(new ItemDeliverHolder(this,data));
+        if (data!=null){
+            rv_delivery_orders.setAdapter(new ItemDeliverHolder(this,data));
+        }else {
+            Toast.makeText(this, "No Data Found!", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override

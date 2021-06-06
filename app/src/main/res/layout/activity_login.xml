@@ -167,6 +167,7 @@
                     android:gravity="center"
                     android:fontFamily="@font/calibri"
                     android:text="Continue with Email"
+                    android:drawableTint="#252525"
                     android:textColor="#252525"
                     android:textSize="18sp" />
 

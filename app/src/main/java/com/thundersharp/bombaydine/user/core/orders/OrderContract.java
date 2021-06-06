@@ -3,6 +3,7 @@ package com.thundersharp.bombaydine.user.core.orders;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.Task;
+import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
 
 import java.util.List;
 

@@ -1,9 +1,13 @@
 package com.thundersharp.bombaydine.Delevery.core;
 
 import android.text.format.DateFormat;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
+import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -70,9 +74,9 @@ public class DeliveryOrderListner implements OrderContract , OrderContract.Statu
                 .getInstance()
                 .getReference(CONSTANTS.DATABASE_NODE_ALL_ORDERS)
                 .child(date)//  getDate()
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addChildEventListener(new ChildEventListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                         if (snapshot.exists()){
                             for (DataSnapshot snapshot1 : snapshot.getChildren()){
                                 //OrederBasicDetails orederBasicDetails= snapshot1.getValue(OrederBasicDetails.class);
@@ -86,8 +90,23 @@ public class DeliveryOrderListner implements OrderContract , OrderContract.Statu
                     }
 
                     @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                    public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
 
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.e("CHeck____________", "Not Found");
                     }
                 });
     }

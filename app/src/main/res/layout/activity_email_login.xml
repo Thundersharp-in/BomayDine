@@ -93,6 +93,8 @@
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true"
+                    android:drawableTint="#303030"
+                    android:textColor="#303030"
                     android:textColorHint="#b7b7b7" />
             </LinearLayout>
 
@@ -120,6 +122,8 @@
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true"
+                    android:drawableTint="#303030"
+                    android:textColor="#303030"
                     android:textColorHint="#b7b7b7" />
             </LinearLayout>
 
@@ -199,6 +203,7 @@
                     android:layout_height="match_parent"
                     android:layout_marginStart="10dp"
                     android:drawableStart="@drawable/ic_outline_alternate_email_24"
+                    android:drawableTint="#252525"
                     android:drawablePadding="-30dp"
                     android:fontFamily="@font/calibri"
                     android:gravity="center"
