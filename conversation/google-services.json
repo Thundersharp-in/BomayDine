@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "353168856447",
+    "firebase_url": "https://bombay-dine-default-rtdb.firebaseio.com",
     "project_id": "bombay-dine",
     "storage_bucket": "bombay-dine.appspot.com"
   },
@@ -8,6 +9,43 @@
     {
       "client_info": {
         "mobilesdk_app_id": "1:353168856447:android:d44a4096c1efabca6a764a",
+        "android_client_info": {
+          "package_name": "com.thundersharp.bombaydine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "353168856447-6dskj1prns2vgj19o3crmkc6prddcq4k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thundersharp.bombaydine",
+            "certificate_hash": "b420b5f93b466b5e1d073bd5210b0c62ab540be1"
+          }
+        },
+        {
+          "client_id": "353168856447-hor767iiff69q011a17eua9c7e5dung8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAqrxTorttM0gyGM1-sW0MV1lrb5DeCyIo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "353168856447-hor767iiff69q011a17eua9c7e5dung8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:353168856447:android:78e7249c2c31f7476a764a",
         "android_client_info": {
           "package_name": "com.thundersharp.conversation"
         }
