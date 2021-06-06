@@ -38,6 +38,7 @@ public class ChatStarter {
             MODE_CHAT_FROM_SPECIFIC_ORDER_PRE_DELIVERY,
             MODE_CHAT_FROM_PROFILE_HELP_N_FEEDBACK,
             MODE_CHAT_FROM_PROFILE_REPORT,
+            MODE_CHAT_FROM_COOK_SPECIFIC_ORDER,
             MODE_CHAT_ADMIN})
     public @interface ChatMode {}
     public static final int MODE_CHAT_FROM_ORDERS = 0;
@@ -46,6 +47,7 @@ public class ChatStarter {
     public static final int MODE_CHAT_FROM_SPECIFIC_ORDER_PRE_DELIVERY  = 3;
     public static final int MODE_CHAT_FROM_PROFILE_HELP_N_FEEDBACK = 4;
     public static final int MODE_CHAT_FROM_PROFILE_REPORT = 5;
+    public static final int MODE_CHAT_FROM_COOK_SPECIFIC_ORDER = 7;
 
     public static final int MODE_CHAT_ADMIN = 6;
 
@@ -170,6 +172,14 @@ public class ChatStarter {
                                     getSenderUid(),
                                     getChatMode(),
                                     getOrderId());
+                    break;
+
+                case ChatStarter.MODE_CHAT_FROM_COOK_SPECIFIC_ORDER:
+                    if (getCostumerUid() == null){
+
+                        throw new ParametersMissingException("Costumer id not defined. Have you called setCostumerId() ?");
+
+                    }
                     break;
 
                 case ChatStarter.MODE_CHAT_ADMIN:
