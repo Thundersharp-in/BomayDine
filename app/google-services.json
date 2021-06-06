@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "353168856447",
+    "firebase_url": "https://bombay-dine-default-rtdb.firebaseio.com",
     "project_id": "bombay-dine",
     "storage_bucket": "bombay-dine.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "353168856447-6dskj1prns2vgj19o3crmkc6prddcq4k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.thundersharp.bombaydine",
+            "certificate_hash": "b420b5f93b466b5e1d073bd5210b0c62ab540be1"
+          }
+        },
         {
           "client_id": "353168856447-hor767iiff69q011a17eua9c7e5dung8.apps.googleusercontent.com",
           "client_type": 3
