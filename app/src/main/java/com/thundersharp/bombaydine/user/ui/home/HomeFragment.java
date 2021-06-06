@@ -485,10 +485,10 @@ public class HomeFragment extends Fragment implements
         BroadcastReceiver broadcastReceiver =new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
-                cartProvider.syncData();
-               /* if (intent!=null){
-                        allItemAdapter.notifyItemChanged(intent.getIntExtra("adapterPos",0));
-                }*/
+                if (intent.getAction().equals("updated")) {
+                    if (cartProvider != null)
+                        cartProvider.syncData();
+                }
             }
 
         };

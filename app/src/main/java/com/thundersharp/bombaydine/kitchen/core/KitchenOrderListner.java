@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
@@ -19,6 +20,7 @@ import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
@@ -26,6 +28,7 @@ public class KitchenOrderListner implements OrderContract , OrderContract.Status
 
     static KitchenOrderListner kitchenOrderListner;
     private OrderContract.onOrderFetch onOrderFetch;
+    private String date;
     private OrderContract.StatusSuccessFailure statusSuccessFailure;
 
     public static KitchenOrderListner getKitchenOrderInstance(){
@@ -46,6 +49,20 @@ public class KitchenOrderListner implements OrderContract , OrderContract.Status
         return kitchenOrderListner;
     }
 
+    /**
+     * @apiNote Provide date in format {dd-MM-yyyy}
+     * @param date
+     * @return
+     */
+    public KitchenOrderListner setDate(String date){
+        this.date= date;
+        return kitchenOrderListner;
+    }
+
+    public String getDate(){
+        return date;
+    }
+
     public void KitchenOrderListner(OrderContract.StatusSuccessFailure statusSuccessFailure){
         this.statusSuccessFailure = statusSuccessFailure;
     }
@@ -60,7 +77,7 @@ public class KitchenOrderListner implements OrderContract , OrderContract.Status
         FirebaseDatabase
                 .getInstance()
                 .getReference(CONSTANTS.DATABASE_NODE_ALL_ORDERS)
-                .child("05-06-2021")//  getDate()
+                .child(date)//  getDate()
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -84,15 +101,17 @@ public class KitchenOrderListner implements OrderContract , OrderContract.Status
 
 
     @Override
-    public void setStatus(String order_id, int value) {
+    public void setStatus(String order_id, int value,String custUid) {
         String date=getDateFromTimeStamp(Long.parseLong(order_id));
+
+        HashMap<String,Object> updateToLocation = new HashMap<>();
+        updateToLocation.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS+"/"+date+"/"+order_id+"/status",String.valueOf(value));
+        updateToLocation.put(CONSTANTS.DATABASE_NODE_ALL_USERS+"/"+ custUid+"/" +CONSTANTS.DATABASE_NODE_ORDERS+"/"+CONSTANTS.DATABASE_NODE_OVERVIEW+"/"+order_id+"/status",String.valueOf(value));
+
         FirebaseDatabase
                 .getInstance()
-                .getReference(CONSTANTS.DATABASE_NODE_ALL_ORDERS)
-                .child(date)
-                .child(order_id)
-                .child("status")
-                .setValue(String.valueOf(value))
+                .getReference()
+                .updateChildren(updateToLocation)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
                         statusSuccessFailure.onSuccess(task);
@@ -108,8 +127,5 @@ public class KitchenOrderListner implements OrderContract , OrderContract.Status
         return DateFormat.format("dd-MM-yyyy", cal).toString();
     }
 
-    private String getDate(){
-        @SuppressLint("SimpleDateFormat") SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        return simpleDateFormat.format(Calendar.getInstance().getTime());
-    }
+
 }

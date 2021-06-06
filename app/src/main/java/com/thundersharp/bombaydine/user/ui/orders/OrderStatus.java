@@ -167,6 +167,17 @@ public class OrderStatus extends AppCompatActivity implements
             textupdate.setText("Your order is being prepared click here to chat with the cook for customisations.");
             order_no.setText("#" + orederBasicDetails.getOrderID()+"\nPayment id : "+orederBasicDetails.getPaymentid());
             textupdate.setOnClickListener(c ->{
+                ChatStarter chatStarter = ChatStarter.initializeChat(this);
+                chatStarter.setChatType(ChatStarter.MODE_CHAT_FROM_COOK_SPECIFIC_ORDER);
+                chatStarter.setSenderUid(FirebaseAuth.getInstance().getUid());
+                chatStarter.setCostomerName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                chatStarter.setOrderId(orederBasicDetails.getOrderID());
+
+                try {
+                    chatStarter.startChat();
+                } catch (ParametersMissingException e) {
+                    e.printStackTrace();
+                }
 
             });
         }
@@ -212,7 +223,7 @@ public class OrderStatus extends AppCompatActivity implements
         recycler_dishes.setAdapter(adapter);
         double total = 0.0;
         for (int i = 0; i < model.size(); i++) {
-            total = total + model.get(i).getAmount();
+            total = total + (model.get(i).getQuantity() * model.get(i).getAmount());
         }
         item_total.setText("\u20B9 " + String.valueOf(total));
 

@@ -71,7 +71,7 @@ public class ItemOrderHolder extends RecyclerView.Adapter<ItemOrderHolder.ViewHo
                 KitchenOrderListner
                         .getKitchenOrderInstance()
                         .setOnStatusSuccessFailureListner(this)
-                        .setStatus(orederBasicDetails.getOrderID(),2);
+                        .setStatus(orederBasicDetails.getOrderID(),2,orederBasicDetails.getUid());
 
                 holder.btn_preparation_stated.setText("Started");
                 dialog.dismiss();
@@ -89,7 +89,7 @@ public class ItemOrderHolder extends RecyclerView.Adapter<ItemOrderHolder.ViewHo
             KitchenOrderListner
                     .getKitchenOrderInstance()
                     .setOnStatusSuccessFailureListner(this)
-                    .setStatus(orederBasicDetails.getOrderID(),3);
+                    .setStatus(orederBasicDetails.getOrderID(),3,orederBasicDetails.getUid());
         });
 
     }

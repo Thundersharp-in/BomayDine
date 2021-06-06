@@ -70,9 +70,9 @@ import java.util.Random;
 public class AllItemsActivity extends AppCompatActivity implements
         HomeDataContract.AllItems,
         HomeDataContract.DataLoadFailure,
-        PaymentResultWithDataListener{
+        PaymentResultWithDataListener {
 
-    private  SharedPrefHelper sharedPrefHelper;
+    private SharedPrefHelper sharedPrefHelper;
     private RecyclerView recyclermain;
     private AllItemAdapterMailAdapter allItemAdapterMailAdapter;
     private HomeDataProvider homeDataProvider;
@@ -81,7 +81,7 @@ public class AllItemsActivity extends AppCompatActivity implements
     private RelativeLayout bottomholder;
     private OfflineDataProvider offlineDataProvider;
     private CartProvider cartProvider;
-    private TextView noofItems,totalamt;
+    private TextView noofItems, totalamt;
     private ImageView filter;
     boolean isfilerOpen = false;
     private LinearLayout radiogroup;
@@ -90,7 +90,7 @@ public class AllItemsActivity extends AppCompatActivity implements
     private EditText searchbar;
 
     private RecyclerView recomended;
-    private TextView itemtotal,delehevry,grandtot,promoamt;
+    private TextView itemtotal, delehevry, grandtot, promoamt;
     private AppCompatButton pay;
 
     public static List<Object> staticAllItemsData = new ArrayList<>();
@@ -102,9 +102,9 @@ public class AllItemsActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_all_items);
-        homeDataProvider = new HomeDataProvider(this,this,this);
+        homeDataProvider = new HomeDataProvider(this, this, this);
         bottomSheetDialog = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
-        sharedPrefHelper = new SharedPrefHelper(this,null);
+        sharedPrefHelper = new SharedPrefHelper(this, null);
 
         offlineDataProvider = OfflineDataProvider.getInstance(this);
         recyclermain = findViewById(R.id.recyclermain);
@@ -122,7 +122,7 @@ public class AllItemsActivity extends AppCompatActivity implements
         filter = findViewById(R.id.filter);
         radiogroup = findViewById(R.id.chkbox);
         radiogroup.setVisibility(View.GONE);
-        recomended=findViewById(R.id.recomended);
+        recomended = findViewById(R.id.recomended);
 
         bottomholder.setVisibility(View.INVISIBLE);
 
@@ -133,54 +133,52 @@ public class AllItemsActivity extends AppCompatActivity implements
         CartEmptyUpdater
                 .initializeCartUpdater()
                 .setOnCartEmptyListener(new CartHandler.OnCartEmpty() {
-            @Override
-            public void OnCartEmptyListener() {
-                if (bottomSheetDialog != null){
-                    if (bottomSheetDialog.isShowing()){
-                        bottomSheetDialog.hide();
+                    @Override
+                    public void OnCartEmptyListener() {
+                        if (bottomSheetDialog != null) {
+                            if (bottomSheetDialog.isShowing()) {
+                                bottomSheetDialog.hide();
+                            }
+                        }
                     }
-                }
-            }
-        });
+                });
         homeDataProvider.fetchAllitems();
 
         filter.setOnClickListener(view -> {
-            if (isfilerOpen){
+            if (isfilerOpen) {
                 isfilerOpen = false;
                 radiogroup.setVisibility(View.GONE);
 
-            }else {
+            } else {
                 isfilerOpen = true;
                 radiogroup.setVisibility(View.VISIBLE);
 
             }
         });
 
-        if (offlineDataProvider.doSharedPrefExists()){
+        if (offlineDataProvider.doSharedPrefExists()) {
             String dataraw = offlineDataProvider.fetchitemfromStorage();
-            if (!dataraw.equalsIgnoreCase("[]")){
+            if (!dataraw.equalsIgnoreCase("[]")) {
 
                 List<CartItemModel> data = offlineDataProvider.returnDataFromString(dataraw);
 
                 double totalamount = 0.0;
-                for (int i = 0; i<data.size(); i++){
-                    if (data.get(i).getQUANTITY() > 1){
+                for (int i = 0; i < data.size(); i++) {
+                    if (data.get(i).getQUANTITY() > 1) {
                         totalamount = totalamount + (data.get(i).getQUANTITY() * data.get(i).getAMOUNT());
-                    }else totalamount = totalamount+data.get(i).getAMOUNT();
+                    } else totalamount = totalamount + data.get(i).getAMOUNT();
                 }
-                totalamt.setText("Rs. "+totalamount+" plus taxes");
+                totalamt.setText("Rs. " + totalamount + " plus taxes");
 
-                noofItems.setText(data.size()+" ITEMS");
+                noofItems.setText(data.size() + " ITEMS");
 
                 Animator.initializeAnimator().slideUp(bottomholder);
 
-            }else {
+            } else {
                 offlineDataProvider.clearSharedPref();
             }
         }
 
-
-        
 
         OffersProvider
                 .initializeOffersProvider()
@@ -188,7 +186,7 @@ public class AllItemsActivity extends AppCompatActivity implements
                 .setGetOfferListner(new OfferListner.getOfferListner() {
                     @Override
                     public void OnGetOfferSuccess(List<Object> data) {
-                        offerscroll.setAdapter(AllOfferAdapters.getInstance(AllItemsActivity.this,data,0));
+                        offerscroll.setAdapter(AllOfferAdapters.getInstance(AllItemsActivity.this, data, 0));
                     }
 
                     @Override
@@ -198,7 +196,7 @@ public class AllItemsActivity extends AppCompatActivity implements
                 }).fetchAllOffers();
 
 
-         cartProvider = CartProvider.initialize(this, new CartHandler.cart() {
+        cartProvider = CartProvider.initialize(this, new CartHandler.cart() {
 
             @Override
             public void onItemAddSuccess(boolean isAdded, List<CartItemModel> data) {
@@ -207,20 +205,20 @@ public class AllItemsActivity extends AppCompatActivity implements
                 refreshAdapter();
                 double totalamount = 0.0;
 
-                if (data == null || data.isEmpty()){
+                if (data == null || data.isEmpty()) {
                     Animator.initializeAnimator().slideDown(bottomholder);
 
-                }else {
+                } else {
 
-                    for (int i = 0; i<data.size(); i++){
-                        if (data.get(i).getQUANTITY() > 1){
+                    for (int i = 0; i < data.size(); i++) {
+                        if (data.get(i).getQUANTITY() > 1) {
                             totalamount = totalamount + (data.get(i).getQUANTITY() * data.get(i).getAMOUNT());
-                        }else totalamount = totalamount+data.get(i).getAMOUNT();
+                        } else totalamount = totalamount + data.get(i).getAMOUNT();
                     }
-                    totalamt.setText("Rs. "+totalamount+" plus taxes");
+                    totalamt.setText("Rs. " + totalamount + " plus taxes");
 
-                    noofItems.setText(data.size()+" ITEMS");
-                    if (bottomholder.getVisibility() == View.GONE || bottomholder.getVisibility() ==View.INVISIBLE){
+                    noofItems.setText(data.size() + " ITEMS");
+                    if (bottomholder.getVisibility() == View.GONE || bottomholder.getVisibility() == View.INVISIBLE) {
                         Animator.initializeAnimator().slideUp(bottomholder);
                     }
                 }
@@ -228,7 +226,7 @@ public class AllItemsActivity extends AppCompatActivity implements
 
             @Override
             public void addFailure(Exception exception) {
-                Toast.makeText(AllItemsActivity.this, ""+exception.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(AllItemsActivity.this, "" + exception.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -250,7 +248,7 @@ public class AllItemsActivity extends AppCompatActivity implements
             }
         });
 
-       registerReceiver(broadcastReceiver,new IntentFilter("updated"));
+        registerReceiver(broadcastReceiver, new IntentFilter("updated"));
     }
 
     private void showCart() {
@@ -261,7 +259,7 @@ public class AllItemsActivity extends AppCompatActivity implements
         bottomSheetDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
         rec1 = bottomview.findViewById(R.id.rec1);
-        rec1.setAdapter(CartItemAdapter.initializeAdapter(offlineDataProvider.returnDataFromString(offlineDataProvider.fetchitemfromStorage()),this,2));
+        rec1.setAdapter(CartItemAdapter.initializeAdapter(offlineDataProvider.returnDataFromString(offlineDataProvider.fetchitemfromStorage()), this, 2));
 
         TextView shoe_offers = bottomview.findViewById(R.id.shoe_offers);
         TextView delevering_to_address = bottomview.findViewById(R.id.delevering_to_address);
@@ -273,9 +271,9 @@ public class AllItemsActivity extends AppCompatActivity implements
 
         List<CartItemModel> data = updateCartData();
 
-        delevering_to_address.setText("Delivering to :"+sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1());
+        delevering_to_address.setText("Delivering to :" + sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1());
 
-        shoe_offers.setOnClickListener(viewk -> startActivityForResult(new Intent(this, AllOffersActivity.class),001));
+        shoe_offers.setOnClickListener(viewk -> startActivityForResult(new Intent(this, AllOffersActivity.class), 001));
 
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -283,13 +281,13 @@ public class AllItemsActivity extends AppCompatActivity implements
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                     StringBuilder stringBuilder = new StringBuilder();
                     for (int q = 0; q < data.size(); q++) {
-                        if (q == data.size() -1){
+                        if (q == data.size() - 1) {
                             stringBuilder
                                     .append(data.get(q).getQUANTITY())
                                     .append(" X ")
                                     .append(data.get(q).getNAME());
 
-                        }else {
+                        } else {
                             stringBuilder
                                     .append(data.get(q).getQUANTITY())
                                     .append(" X ")
@@ -324,7 +322,7 @@ public class AllItemsActivity extends AppCompatActivity implements
                                     Toast.makeText(AllItemsActivity.this, "Payment cannot be initialized cause :" + exception.getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }).setOrderToDatabase(data, orederBasicDetails);
-                }else {
+                } else {
                     Toast.makeText(AllItemsActivity.this, "Log in first", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(AllItemsActivity.this, LoginActivity.class));
                 }
@@ -337,7 +335,7 @@ public class AllItemsActivity extends AppCompatActivity implements
     }
 
 
-    private List<CartItemModel> updateCartData(){
+    private List<CartItemModel> updateCartData() {
         List<CartItemModel> data = offlineDataProvider.returnDataFromString(offlineDataProvider.fetchitemfromStorage());
 
         if (data != null) {
@@ -366,7 +364,7 @@ public class AllItemsActivity extends AppCompatActivity implements
                 delehevry.setText("\u20B9 " + Math.round(deleveryCharges));
 
                 grandtot.setText("" + (sum + Math.round(deleveryCharges))); //TODO SUBTRACT DISCOUNT LATER
-                pay.setText("PAY \u20B9"+(sum+Math.round(deleveryCharges)));
+                pay.setText("PAY \u20B9" + (sum + Math.round(deleveryCharges)));
 
             } else {
                 itemtotal.setText("\u20B9 0");
@@ -381,19 +379,19 @@ public class AllItemsActivity extends AppCompatActivity implements
     }
 
     private void refreshAdapter() {
-        allItemAdapterMailAdapter = new AllItemAdapterMailAdapter(staticAllItemsData,this);
+        allItemAdapterMailAdapter = new AllItemAdapterMailAdapter(staticAllItemsData, this);
         recyclermain.setHasFixedSize(true);
         recyclermain.setAdapter(allItemAdapterMailAdapter);
 
         recyclermain.setVisibility(View.VISIBLE);
 
-        if (recomended.getVisibility()==View.VISIBLE){
-            recomended.setAdapter(new DealOfTheDayAdapter(staticAllItemsRecomended,this));
+        if (recomended.getVisibility() == View.VISIBLE) {
+            recomended.setAdapter(new DealOfTheDayAdapter(staticAllItemsRecomended, this));
             //Animator.initializeAnimator().recyclerTooPos(recomended,DealOfTheDayAdapter.currentpos);
         }
     }
 
-    BroadcastReceiver broadcastReceiver =new BroadcastReceiver() {
+    BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             cartProvider.syncData();
@@ -412,7 +410,7 @@ public class AllItemsActivity extends AppCompatActivity implements
     @Override
     public void OnallItemsFetchSucess(List<Object> data) {
         staticAllItemsData = data;
-        allItemAdapterMailAdapter = new AllItemAdapterMailAdapter(data,this);
+        allItemAdapterMailAdapter = new AllItemAdapterMailAdapter(data, this);
         recyclermain.setHasFixedSize(true);
         recyclermain.setAdapter(allItemAdapterMailAdapter);
 
@@ -425,22 +423,22 @@ public class AllItemsActivity extends AppCompatActivity implements
     }
 
     private synchronized void setDealOfTheDay(List<Object> data) {
-        List<Object> list=new ArrayList<>();
+        List<Object> list = new ArrayList<>();
 
-        if (data.size()<5){
+        if (data.size() < 5) {
             recomended.setVisibility(View.GONE);
-        }else {
+        } else {
             recomended.setVisibility(View.VISIBLE);
-            for (int i=0;i<5;i++){
-                Random random=new Random();
+            for (int i = 0; i < 5; i++) {
+                Random random = new Random();
                 Object dataselected = data.get(random.nextInt(data.size()));
-                if (!list.contains(dataselected)){
+                if (!list.contains(dataselected)) {
                     list.add(dataselected);
                 }
 
             }
-            recomended.setAdapter(new DealOfTheDayAdapter(list,this));
-            staticAllItemsRecomended=list;
+            recomended.setAdapter(new DealOfTheDayAdapter(list, this));
+            staticAllItemsRecomended = list;
         }
     }
 
@@ -452,18 +450,17 @@ public class AllItemsActivity extends AppCompatActivity implements
     }
 
 
-
     @Override
     public void onPaymentSuccess(String s, PaymentData paymentData) {
 
-        if (s.contains("pay_")){
-            Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
-            HashMap<String,Object> updateDataRequest = new HashMap<>();
-            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS+"/"+ TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID())+"/"+orederBasicDetails.getOrderID()+"/status","1");
-            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS+"/"+TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID())+"/"+orederBasicDetails.getOrderID()+"/paymentid",s);
+        if (s.contains("pay_")) {
+            Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+            HashMap<String, Object> updateDataRequest = new HashMap<>();
+            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS + "/" + TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID()) + "/" + orederBasicDetails.getOrderID() + "/status", "1");
+            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS + "/" + TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID()) + "/" + orederBasicDetails.getOrderID() + "/paymentid", s);
 
-            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS+"/"+FirebaseAuth.getInstance().getUid()+"/"+CONSTANTS.DATABASE_NODE_ORDERS+"/"+CONSTANTS.DATABASE_NODE_OVERVIEW+"/"+orederBasicDetails.getOrderID()+"/status","1");
-            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS+"/"+FirebaseAuth.getInstance().getUid()+"/"+CONSTANTS.DATABASE_NODE_ORDERS+"/"+CONSTANTS.DATABASE_NODE_OVERVIEW+"/"+orederBasicDetails.getOrderID()+"/paymentid",s);
+            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS + "/" + FirebaseAuth.getInstance().getUid() + "/" + CONSTANTS.DATABASE_NODE_ORDERS + "/" + CONSTANTS.DATABASE_NODE_OVERVIEW + "/" + orederBasicDetails.getOrderID() + "/status", "1");
+            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS + "/" + FirebaseAuth.getInstance().getUid() + "/" + CONSTANTS.DATABASE_NODE_ORDERS + "/" + CONSTANTS.DATABASE_NODE_OVERVIEW + "/" + orederBasicDetails.getOrderID() + "/paymentid", s);
 
             FirebaseDatabase
                     .getInstance()
@@ -472,19 +469,19 @@ public class AllItemsActivity extends AppCompatActivity implements
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 //TODO UPDATE DIALOG BOX LOGIC AND CART EMPTY LOGIC
                                 cartProvider.clearCart();
 
-                                Toast.makeText(AllItemsActivity.this,"Order placed",Toast.LENGTH_LONG).show();
+                                Toast.makeText(AllItemsActivity.this, "Order placed", Toast.LENGTH_LONG).show();
                                 orederBasicDetails.setStatus("1");
                                 orederBasicDetails.setPaymentid(s);
-                                OrderStatus.showOrderStatus(AllItemsActivity.this,orederBasicDetails);
-
+                                OrderStatus.showOrderStatus(AllItemsActivity.this, orederBasicDetails);
+                                sendBroadcast(new Intent("updated"));
                                 finish();
-                            }else {
+                            } else {
                                 //TODO UPDATE AUTO REFUND LOGIC
-                                Toast.makeText(AllItemsActivity.this,"Could not update order contact support for your refund if not generated automatically",Toast.LENGTH_LONG).show();
+                                Toast.makeText(AllItemsActivity.this, "Could not update order contact support for your refund if not generated automatically", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
@@ -502,12 +499,12 @@ public class AllItemsActivity extends AppCompatActivity implements
                 JSONObject metadata = jsonObject.getJSONObject("metadata");
                 String payId = metadata.getString("payment_id");
 
-                HashMap<String,Object> updateDataRequest = new HashMap<>();
-                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS+"/"+TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID())+"/"+orederBasicDetails.getOrderID()+"/status","4");
-                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS+"/"+TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID())+"/"+orederBasicDetails.getOrderID()+"/paymentid",payId);
+                HashMap<String, Object> updateDataRequest = new HashMap<>();
+                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS + "/" + TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID()) + "/" + orederBasicDetails.getOrderID() + "/status", "4");
+                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS + "/" + TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID()) + "/" + orederBasicDetails.getOrderID() + "/paymentid", payId);
 
-                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS+"/"+FirebaseAuth.getInstance().getUid()+"/"+CONSTANTS.DATABASE_NODE_ORDERS+"/"+CONSTANTS.DATABASE_NODE_OVERVIEW+"/"+orederBasicDetails.getOrderID()+"/status","4");
-                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS+"/"+FirebaseAuth.getInstance().getUid()+"/"+CONSTANTS.DATABASE_NODE_ORDERS+"/"+CONSTANTS.DATABASE_NODE_OVERVIEW+"/"+orederBasicDetails.getOrderID()+"/paymentid",payId);
+                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS + "/" + FirebaseAuth.getInstance().getUid() + "/" + CONSTANTS.DATABASE_NODE_ORDERS + "/" + CONSTANTS.DATABASE_NODE_OVERVIEW + "/" + orederBasicDetails.getOrderID() + "/status", "4");
+                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS + "/" + FirebaseAuth.getInstance().getUid() + "/" + CONSTANTS.DATABASE_NODE_ORDERS + "/" + CONSTANTS.DATABASE_NODE_OVERVIEW + "/" + orederBasicDetails.getOrderID() + "/paymentid", payId);
 
                 FirebaseDatabase
                         .getInstance()
@@ -516,23 +513,23 @@ public class AllItemsActivity extends AppCompatActivity implements
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()){
+                                if (task.isSuccessful()) {
                                     //TODO UPDATE DIALOG BOX LOGIC
-                                    Toast.makeText(AllItemsActivity.this,"Payment Failed.",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(AllItemsActivity.this, "Payment Failed.", Toast.LENGTH_LONG).show();
                                     cartProvider.clearCart();
                                     orederBasicDetails.setStatus("4");
                                     orederBasicDetails.setPaymentid(payId);
-                                    OrderStatus.showOrderStatus(AllItemsActivity.this,orederBasicDetails);
+                                    OrderStatus.showOrderStatus(AllItemsActivity.this, orederBasicDetails);
                                     //textupdate.setText("Payment Failed please re order !!");
                                     finish();
                                 }
                             }
                         });
-            }
-            else {
+            } else {
                 cartProvider.clearCart();
-                OrderStatus.showOrderStatus(AllItemsActivity.this,orederBasicDetails);
-                Toast.makeText(this, "Payment failed : "+jsonObject.getJSONObject("error").getString("code"), Toast.LENGTH_SHORT).show();
+                sendBroadcast(new Intent("updated"));
+                OrderStatus.showOrderStatus(AllItemsActivity.this, orederBasicDetails);
+                Toast.makeText(this, "Payment failed : " + jsonObject.getJSONObject("error").getString("code"), Toast.LENGTH_SHORT).show();
                 finish();
             }
 

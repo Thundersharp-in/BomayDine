@@ -16,7 +16,7 @@ public interface OrderContract {
     }
 
     interface Status {
-        void setStatus(String order_id , int value);
+        void setStatus(String order_id , int value,String custUid);
     }
 
     interface StatusSuccessFailure {
