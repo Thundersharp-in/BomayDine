@@ -288,7 +288,7 @@
 
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_prepared"
+                android:id="@+id/btn_pick_up"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
@@ -296,21 +296,21 @@
                 android:background="@drawable/button_red_round"
                 android:layout_marginHorizontal="@dimen/dimen_10dp"
                 android:textColor="#fff"
-                android:text="Prepared"
+                android:text="Pick up"
                 android:fontFamily="@font/allerta"
                 android:clickable="true"
                 android:enabled="true"
                 />
 
             <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btn_chat"
+                android:id="@+id/btn_delever"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="@dimen/dimen_10dp"
                 android:elevation="5dp"
                 android:background="@drawable/button_curved_round"
-                android:text="Chat"
+                android:text="Deliver"
                 android:textColor="#FDF660"
                 android:fontFamily="@font/coiny"
                 android:textStyle="bold"
@@ -321,7 +321,7 @@
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_preparation_stated"
+            android:id="@+id/btn_navigate_map"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:elevation="5dp"
@@ -331,7 +331,7 @@
             android:layout_below="@+id/lower"
             android:layout_marginBottom="15dp"
             android:fontFamily="@font/allerta"
-            android:text="Start Preparation"
+            android:text="Navigate"
             android:clickable="true"
             android:enabled="true"
             />

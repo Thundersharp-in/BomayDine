@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#1e2026"
+    android:orientation="vertical"
     tools:context=".Delevery.HomeDelevery">
 
-    <Button
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_delivery_orders"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+
+    <androidx.appcompat.widget.AppCompatButton
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Home back to home user"
-        android:id="@+id/acccswitch"/>
+        android:id="@+id/acccswitch"
+        android:layout_gravity="bottom"
+        android:background="@drawable/rounded_rect_bg"
+        android:layout_marginHorizontal="@dimen/dimen_50dp"/>
 
-</RelativeLayout>
+</LinearLayout>

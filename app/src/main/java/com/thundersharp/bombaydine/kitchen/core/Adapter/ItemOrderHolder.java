@@ -51,11 +51,125 @@ public class ItemOrderHolder extends RecyclerView.Adapter<ItemOrderHolder.ViewHo
         holder.user_name.setText(orederBasicDetails.getDeliveryNameData());
         holder.user_phone.setText("+91 9876543210");
 
-        if (orederBasicDetails.getStatus().equals("1")){
-            holder.btn_preparation_stated.setText("START PREPARATION");
-        }else {
-            holder.btn_preparation_stated.setText("FOOD PREPARATION !!");
+
+        switch (orederBasicDetails.getStatus()){
+            case "0":
+                holder.btn_preparation_stated.setEnabled(false);
+                holder.btn_chat.setEnabled(false);
+                holder.btn_prepared.setEnabled(false);
+                holder.btn_preparation_stated.setClickable(false);
+                holder.btn_chat.setClickable(false);
+                holder.btn_prepared.setClickable(false);
+                break;
+            case "1":
+                //holder.btn_preparation_stated.setText("");
+                //holder.btn_prepared.setText("");
+                holder.btn_preparation_stated.setEnabled(true);
+                holder.btn_chat.setEnabled(true);
+                holder.btn_prepared.setEnabled(false);
+                holder.btn_chat.setClickable(true);
+                holder.btn_preparation_stated.setClickable(true);
+                holder.btn_prepared.setClickable(false);
+                break;
+            case "2":
+                holder.btn_chat.setClickable(true);
+                holder.btn_chat.setEnabled(true);
+                holder.btn_preparation_stated.setClickable(false);
+                holder.btn_preparation_stated.setEnabled(false);
+                holder.btn_prepared.setClickable(true);
+                holder.btn_prepared.setEnabled(true);
+                break;
+            case "3":
+                holder.btn_preparation_stated.setEnabled(true);
+                holder.btn_chat.setEnabled(false);
+                holder.btn_prepared.setEnabled(false);
+                holder.btn_chat.setClickable(false);
+                holder.btn_preparation_stated.setClickable(true);
+                holder.btn_prepared.setClickable(false);
+                break;
+            case "4":
+                holder.btn_chat.setEnabled(true);
+                holder.btn_preparation_stated.setEnabled(false);
+                holder.btn_prepared.setEnabled(false);
+                holder.btn_chat.setClickable(true);
+                holder.btn_preparation_stated.setClickable(false);
+                holder.btn_prepared.setClickable(false);
+                break;
+            case "5":
+                holder.btn_chat.setEnabled(true);
+                holder.btn_preparation_stated.setEnabled(false);
+                holder.btn_prepared.setEnabled(false);
+                holder.btn_chat.setClickable(true);
+                holder.btn_preparation_stated.setClickable(false);
+                holder.btn_prepared.setClickable(false);
+                break;
+            case "6":
+                holder.btn_chat.setEnabled(true);
+                holder.btn_preparation_stated.setEnabled(true);
+                holder.btn_prepared.setEnabled(false);
+                holder.btn_chat.setClickable(true);
+                holder.btn_preparation_stated.setClickable(true);
+                holder.btn_prepared.setClickable(false);
+                break;
+            case "7":
+                holder.btn_chat.setEnabled(false);
+                holder.btn_preparation_stated.setEnabled(false);
+                holder.btn_prepared.setEnabled(false);
+                holder.btn_chat.setClickable(false);
+                holder.btn_preparation_stated.setClickable(false);
+                holder.btn_prepared.setClickable(false);
+                break;
+            case "8":
+                holder.btn_chat.setEnabled(true);
+                holder.btn_preparation_stated.setEnabled(true);
+                holder.btn_prepared.setEnabled(false);
+                holder.btn_chat.setClickable(true);
+                holder.btn_preparation_stated.setClickable(true);
+                holder.btn_prepared.setClickable(false);
+                break;
+            case "9":
+                holder.btn_chat.setEnabled(true);
+                holder.btn_preparation_stated.setEnabled(false);
+                holder.btn_prepared.setEnabled(true);
+                holder.btn_chat.setClickable(true);
+                holder.btn_preparation_stated.setClickable(false);
+                holder.btn_prepared.setClickable(true);
+                break;
+            case "10":
+                holder.btn_chat.setEnabled(true);
+                holder.btn_preparation_stated.setEnabled(false);
+                holder.btn_prepared.setEnabled(false);
+                holder.btn_chat.setClickable(true);
+                holder.btn_preparation_stated.setClickable(false);
+                holder.btn_prepared.setClickable(false);
+                break;
+            case "11":
+                holder.btn_chat.setEnabled(true);
+                holder.btn_preparation_stated.setEnabled(false);
+                holder.btn_prepared.setEnabled(false);
+                holder.btn_chat.setClickable(true);
+                holder.btn_preparation_stated.setClickable(false);
+                holder.btn_prepared.setClickable(false);
+                break;
+            case "12":
+                holder.btn_chat.setEnabled(false);
+                holder.btn_preparation_stated.setEnabled(false);
+                holder.btn_prepared.setEnabled(false);
+                holder.btn_chat.setClickable(false);
+                holder.btn_preparation_stated.setClickable(false);
+                holder.btn_prepared.setClickable(false);
+                break;
+
+            default:
+                holder.btn_preparation_stated.setEnabled(false);
+                holder.btn_chat.setEnabled(false);
+                holder.btn_prepared.setEnabled(false);
+                holder.btn_chat.setClickable(false);
+                holder.btn_preparation_stated.setClickable(false);
+                holder.btn_prepared.setClickable(false);
+
         }
+
         holder.btn_chat.setOnClickListener( (view)-> {
 
         });
@@ -71,7 +185,7 @@ public class ItemOrderHolder extends RecyclerView.Adapter<ItemOrderHolder.ViewHo
                 KitchenOrderListner
                         .getKitchenOrderInstance()
                         .setOnStatusSuccessFailureListner(this)
-                        .setStatus(orederBasicDetails.getOrderID(),2,orederBasicDetails.getUid());
+                        .setStatus(orederBasicDetails.getOrderID(),9,orederBasicDetails.getUid());
 
                 holder.btn_preparation_stated.setText("Started");
                 dialog.dismiss();
@@ -89,7 +203,7 @@ public class ItemOrderHolder extends RecyclerView.Adapter<ItemOrderHolder.ViewHo
             KitchenOrderListner
                     .getKitchenOrderInstance()
                     .setOnStatusSuccessFailureListner(this)
-                    .setStatus(orederBasicDetails.getOrderID(),3,orederBasicDetails.getUid());
+                    .setStatus(orederBasicDetails.getOrderID(),10,orederBasicDetails.getUid());
         });
 
     }

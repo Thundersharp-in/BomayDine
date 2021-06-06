@@ -1,51 +1,43 @@
-package com.thundersharp.bombaydine.kitchen.core;
+package com.thundersharp.bombaydine.Delevery.core;
 
-import android.annotation.SuppressLint;
 import android.text.format.DateFormat;
-import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
 import com.thundersharp.bombaydine.user.core.orders.OrderContract;
 import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-public class KitchenOrderListner implements OrderContract , OrderContract.Status{
+public class DeliveryOrderListner implements OrderContract , OrderContract.Status{
 
-    static KitchenOrderListner kitchenOrderListner;
+    static DeliveryOrderListner kitchenOrderListner;
     private OrderContract.onOrderFetch onOrderFetch;
     private String date;
-    private OrderContract.StatusSuccessFailure statusSuccessFailure;
+    private StatusSuccessFailure statusSuccessFailure;
 
-    public static KitchenOrderListner getKitchenOrderInstance(){
-        kitchenOrderListner = new KitchenOrderListner();
+    public static DeliveryOrderListner getKitchenOrderInstance(){
+        kitchenOrderListner = new DeliveryOrderListner();
         return kitchenOrderListner;
     }
 
-    public KitchenOrderListner() {
+    public DeliveryOrderListner() {
     }
 
-    public KitchenOrderListner setOnOrderSuccessFailureListner(OrderContract.onOrderFetch orderSuccessFailureListner){
+    public DeliveryOrderListner setOnOrderSuccessFailureListner(OrderContract.onOrderFetch orderSuccessFailureListner){
         kitchenOrderListner.KitchenOrderListner(orderSuccessFailureListner);
         return kitchenOrderListner;
     }
 
-    public KitchenOrderListner setOnStatusSuccessFailureListner(OrderContract.StatusSuccessFailure statusSuccessFailure){
+    public DeliveryOrderListner setOnStatusSuccessFailureListner(StatusSuccessFailure statusSuccessFailure){
         kitchenOrderListner.KitchenOrderListner(statusSuccessFailure);
         return kitchenOrderListner;
     }
@@ -55,7 +47,7 @@ public class KitchenOrderListner implements OrderContract , OrderContract.Status
      * @param date
      * @return
      */
-    public KitchenOrderListner setDate(String date){
+    public DeliveryOrderListner setDate(String date){
         this.date= date;
         return kitchenOrderListner;
     }
@@ -64,7 +56,7 @@ public class KitchenOrderListner implements OrderContract , OrderContract.Status
         return date;
     }
 
-    public void KitchenOrderListner(OrderContract.StatusSuccessFailure statusSuccessFailure){
+    public void KitchenOrderListner(StatusSuccessFailure statusSuccessFailure){
         this.statusSuccessFailure = statusSuccessFailure;
     }
     public void KitchenOrderListner(OrderContract.onOrderFetch orderFetch){
