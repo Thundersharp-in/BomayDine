@@ -30,7 +30,7 @@
     <fragment android:name="com.thundersharp.bombaydine.user.ui.account.Profile"
         android:id="@+id/profile"
         android:label="Profile"
-        tools:layout="@layout/fragment_profile">
+        tools:layout="@layout/activity_profile_main">
     </fragment>
 
 </navigation>

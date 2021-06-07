@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginVertical="10dp"
+    android:background="@null">
+
+    <View
+        android:id="@+id/viewc"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/rectangle"/>
+
+    <View
+        android:id="@+id/viewrsf"
+        android:layout_width="70dp"
+        android:layout_height="15dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_below="@id/viewc"
+        android:background="@drawable/rectangle"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:layout_toEndOf="@id/viewc"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical">
+
+
+            <View
+                android:id="@+id/viewrb"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:background="@drawable/rectangle"/>
+
+
+            <View
+                android:id="@+id/viewrs"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="70dp"
+                android:background="@drawable/rectangle"/>
+
+
+        </LinearLayout>
+    
+
+
+    
+</RelativeLayout>
