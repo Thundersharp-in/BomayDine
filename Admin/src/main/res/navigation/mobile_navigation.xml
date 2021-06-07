@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/home">
+
+
+    <fragment
+        android:name="com.thundersharp.bombaydine.user.ui.home.HomeFragment"
+        android:id="@+id/home"
+        android:label="Home"
+        tools:layout="@layout/fragment_home">
+    </fragment>
+
+    <fragment android:name="com.thundersharp.bombaydine.user.ui.location.Service_areas"
+        android:id="@+id/dilevery_area"
+        android:label="Delivery area"
+        tools:layout="@layout/fragment_service_areas">
+    </fragment>
+
+    <fragment android:name="com.thundersharp.bombaydine.user.ui.discover.Discover"
+        android:id="@+id/discover"
+        android:label="Discover"
+        tools:layout="@layout/fragment_discover">
+    </fragment>
+
+
+
+    <fragment android:name="com.thundersharp.bombaydine.user.ui.account.Profile"
+        android:id="@+id/profile"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile">
+    </fragment>
+
+</navigation>

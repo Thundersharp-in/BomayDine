@@ -8,6 +8,7 @@ import android.os.Handler;
 import android.view.View;
 import android.widget.Toast;
 
+import com.thundersharp.admin.AdminModule;
 import com.thundersharp.bombaydine.Delevery.HomeDelevery;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.kitchen.HomeKitchen;
@@ -24,7 +25,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        //getWindow().getDecorView().getRootView();
         accountHelper = AccountHelper.getInstance(this);
 
         new Handler().postDelayed(new Runnable() {
@@ -37,19 +37,30 @@ public class MainActivity extends AppCompatActivity {
                             .setAdminDataListener(new AccountSwitcher.onGetAdministrativeData() {
                                 @Override
                                 public void fetchSuccess(SavedAccountData accountData) {
-                                    Toast.makeText(MainActivity.this, "s", Toast.LENGTH_SHORT).show();
-                                    if (accountData.getType().equals("1")) {
-                                        startActivity(new Intent(MainActivity.this, HomeKitchen.class));
-                                        finish();
-                                    }else if (accountData.getType().equals("2")){
-                                        startActivity(new Intent(MainActivity.this, HomeDelevery.class));
-                                        finish();
+                                    switch (accountData.getType()) {
+                                        case "1":
+                                            startActivity(new Intent(MainActivity.this, HomeKitchen.class));
+                                            finish();
+                                            break;
+                                        case "2":
+                                            startActivity(new Intent(MainActivity.this, HomeDelevery.class));
+                                            finish();
+                                            break;
+                                        case "0":
+
+                                            AdminModule
+                                                    .getInstance(MainActivity.this)
+                                                    .useFirebaseServices(true)
+                                                    .setSupportiveData(new Bundle())
+                                                    .startAdmin();
+                                            finish();
+                                            break;
                                     }
                                 }
 
                                 @Override
                                 public void fetchFailure() {
-                                    Toast.makeText(MainActivity.this, "f", Toast.LENGTH_SHORT).show();
+
                                     startActivity(new Intent(MainActivity.this, LoginActivity.class));
                                     finish();
                                 }

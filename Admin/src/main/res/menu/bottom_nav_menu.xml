@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:id="@+id/home"
+        android:icon="@drawable/ic_outline_home_24"
+        android:iconTint="#ff975d"
+        android:title="Home"/>
+
+    <item android:id="@+id/dilevery_area"
+        android:title="Delivery area"
+        android:iconTint="#ff975d"
+        android:icon="@drawable/ic_outline_map_24"/>
+
+    <item android:id="@+id/discover"
+        android:title="Discover"
+        android:iconTint="#ff975d"
+        android:icon="@drawable/ic_outline_fastfood_24"/>
+
+
+    <item android:id="@+id/profile"
+        android:title="Profile"
+        android:iconTint="#ff975d"
+        android:icon="@drawable/ic_baseline_person_pin_24"/>
+
+
+</menu>
