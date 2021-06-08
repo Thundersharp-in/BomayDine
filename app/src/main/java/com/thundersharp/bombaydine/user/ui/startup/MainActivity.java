@@ -6,6 +6,7 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.thundersharp.admin.AdminModule;
 import com.thundersharp.bombaydine.Delevery.HomeDelevery;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.kitchen.HomeKitchen;
@@ -45,12 +46,12 @@ public class MainActivity extends AppCompatActivity {
                                             break;
                                         case "0":
 
-                                            /*AdminModule
+                                            AdminModule
                                                     .getInstance(MainActivity.this)
                                                     .useFirebaseServices(true)
                                                     .setSupportiveData(new Bundle())
                                                     .startAdmin();
-                                            finish();*/
+                                            finish();
                                             break;
                                     }
                                 }

@@ -22,7 +22,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.thundersharp.admin.R;
 import com.thundersharp.admin.core.AdminHelpers;
-import com.thundersharp.admin.core.models.AdminData;
 
 import java.io.Serializable;
 
@@ -50,7 +49,7 @@ public class AdminMain extends AppCompatActivity {
             finish();
         }
 
-        BottomNavigationView navView = findViewById(R.id.nav_view);
+        BottomNavigationView navView = findViewById(R.id.nav_view2);
         navView.setDuplicateParentStateEnabled(false);
         checkForPermissions();
 
@@ -60,7 +59,7 @@ public class AdminMain extends AppCompatActivity {
 
             }
         });
-        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment2);
         //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
 

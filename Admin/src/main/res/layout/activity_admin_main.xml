@@ -9,7 +9,7 @@
 
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/nav_view"
+        android:id="@+id/nav_view2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#1e2026"
@@ -17,15 +17,15 @@
         app:itemIconTint="@drawable/tabcolor"
         app:itemTextColor="@drawable/tabcolor"
         app:labelVisibilityMode="auto"
-        app:menu="@menu/bottom_nav_menu" />
+        app:menu="@menu/bottom_nav_menu_admin" />
 
     <fragment
-        android:id="@+id/nav_host_fragment"
+        android:id="@+id/nav_host_fragment2"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:defaultNavHost="true"
-        android:layout_above="@id/nav_view"
-        app:navGraph="@navigation/mobile_navigation" />
+        android:layout_above="@id/nav_view2"
+        app:navGraph="@navigation/admin_mobile_navigation" />
 
 </RelativeLayout>

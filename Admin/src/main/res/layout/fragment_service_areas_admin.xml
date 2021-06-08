@@ -13,7 +13,7 @@
         android:layout_height="match_parent"
         android:elevation="3dp"
         android:id="@+id/shimmermap">
-        <include layout="@layout/mapsupdateplaceholder"/>
+        <include layout="@layout/mapsupdateplaceholder_admin"/>
     </com.facebook.shimmer.ShimmerFrameLayout>
     <RelativeLayout
         android:layout_width="match_parent"
@@ -160,7 +160,7 @@
                         android:layout_marginStart="10dp"
                         android:layout_marginEnd="10dp"
                         android:orientation="vertical">
-                        <include layout="@layout/location_info_placeholder" />
+                        <include layout="@layout/location_info_placeholder_admin" />
                     </LinearLayout>
 
 

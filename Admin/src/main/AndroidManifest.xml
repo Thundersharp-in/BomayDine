@@ -3,7 +3,17 @@
     package="com.thundersharp.admin">
 
     <application>
-        <activity android:name=".ui.AdminMain"></activity>
+        <activity android:name=".ui.orders.OrderStatus"></activity>
+        <activity android:name=".ui.offers.AllOffersActivity" />
+        <activity android:name=".ui.menu.CategoryResults" />
+        <activity android:name=".ui.location.AddressEdit" />
+        <activity android:name=".ui.orders.RecentOrders" />
+        <activity android:name=".ui.location.HomeLocationChooser" />
+        <activity android:name=".ui.menu.AllCategoryActivity" />
+        <activity android:name=".ui.menu.AllItemsActivity" />
+        <activity android:name=".ui.menu.TopSellingAll" />
+        <activity android:name=".ui.dailyfood.DailyfoodActivity" />
+        <activity android:name=".ui.AdminMain" />
     </application>
 
 </manifest>

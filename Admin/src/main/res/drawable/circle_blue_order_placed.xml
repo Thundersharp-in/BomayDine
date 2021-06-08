@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:drawable="@drawable/circle_blue"/>
+    <item android:drawable="@drawable/ic_outline_add_business_24"
+        android:top="@dimen/dimen_15dp"
+        android:bottom="@dimen/dimen_15dp"
+        android:right="@dimen/dimen_15dp"
+        android:left="@dimen/dimen_15dp"/>
+</layer-list>

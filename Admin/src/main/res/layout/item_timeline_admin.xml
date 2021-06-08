@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="90dp"
+    android:background="#1e2026"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.github.vipulasri.timelineview.TimelineView
+        android:id="@+id/timeline"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:markerSize="50dp"
+        android:layout_marginStart="20dp"
+        app:marker="@drawable/round"
+        app:markerInCenter="true"
+        app:lineStyleDashGap="5dp"
+        app:lineOrientation="vertical"
+        app:lineStyle="dash"
+        app:lineWidth="5dp"
+        app:startLineColor="#ffff"
+        app:endLineColor="#C1C1C1" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/timeline"
+        android:layout_marginStart="@dimen/dimen_15dp"
+        android:layout_marginEnd="15dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/dummy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:text="Order Summary"
+            android:textColor="#C5C5C5"
+            android:textSize="14sp"
+            android:fontFamily="sans-serif-smallcaps"/>
+
+
+        <TextView
+            android:id="@+id/statusdes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Your order has been placed waiting restaurant to start preperation"
+            android:textColor="#AAAAAA"
+            android:textSize="14sp"
+            android:fontFamily="@font/calibri" />
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>

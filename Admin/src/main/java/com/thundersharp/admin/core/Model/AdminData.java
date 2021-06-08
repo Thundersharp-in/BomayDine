@@ -1,4 +1,4 @@
-package com.thundersharp.admin.core.models;
+package com.thundersharp.admin.core.Model;
 
 import java.io.Serializable;
 
