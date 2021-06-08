@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@drawable/green_curve"
+        android:width="@dimen/dimen_10dp"
+        android:height="@dimen/dimen_10dp"
+        />
+    <item android:drawable="@drawable/green_circle"
+        android:width="@dimen/dimen_5dp"
+        android:height="@dimen/dimen_5dp"
+        android:gravity="center"/>
+</layer-list>

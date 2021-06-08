@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout android:id="@+id/botomcontainer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="#1e2026"
+    android:layout_width="match_parent"
+    android:minHeight="190dp"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:id="@+id/search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:background="@drawable/curved_dark"
+        android:elevation="9dp"
+        android:layout_marginTop="15dp"
+        android:minHeight="52dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/searchedit"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:orientation="horizontal">
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="15dp"
+                app:tint="#ff995e"
+                android:src="@drawable/ic_outline_pin_drop_24"/>
+
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="10dp"
+                android:background="@null"
+                android:hint="Choose your address on map"
+                android:enabled="false"
+                android:layout_marginStart="10dp"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="#d3d3d3"
+                android:textColorHint="#b7b7b7" />
+
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/current_loc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
+            android:textColor="#E91E63"
+            android:text="Use current location"
+            android:layout_marginStart="15dp"
+            android:drawableStart="@drawable/ic_baseline_gps_fixed_24"
+            android:gravity="center"
+            android:drawableTint="#E91E63"
+            android:drawablePadding="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="10dp"/>
+
+
+    </LinearLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/search"
+        android:layout_marginTop="15dp"
+        android:id="@+id/addressholder"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerlayout"
+        android:layout_width="match_parent"
+        android:layout_marginTop="15dp"
+        android:layout_height="match_parent"
+        android:layout_below="@id/search">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_marginStart="10dp"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+            <include layout="@layout/locationupdateplaceholder_admin"/>
+
+            <include layout="@layout/locationupdateplaceholder_admin"/>
+
+            <include layout="@layout/locationupdateplaceholder_admin"/>
+
+            <include layout="@layout/locationupdateplaceholder_admin"/>
+
+            <include layout="@layout/locationupdateplaceholder_admin"/>
+
+            <include layout="@layout/locationupdateplaceholder_admin"/>
+
+            <include layout="@layout/locationupdateplaceholder_admin"/>
+
+        </LinearLayout>
+
+    </com.facebook.shimmer.ShimmerFrameLayout>
+
+</RelativeLayout>

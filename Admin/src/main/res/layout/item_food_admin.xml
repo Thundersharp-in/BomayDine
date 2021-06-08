@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:background="#1e2026">
+
+    <LinearLayout
+        android:id="@+id/cathol"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:background="#15171B"
+        android:elevation="6dp">
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ccp_ic_arrow_drop_down"
+            android:layout_marginStart="10dp"
+            android:scaleType="centerCrop"
+            app:tint="#FFEB3B"
+            android:layout_gravity="center_vertical"/>
+
+        <TextView
+            android:id="@+id/cat_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="BREAKFAST"
+            android:layout_marginStart="15sp"
+            android:layout_gravity="center_vertical"
+            android:textColor="#FFEB3B"
+            android:layout_marginEnd="10dp"
+            android:minLines="1"
+            android:textAllCaps="true"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textSize="14sp"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="5dp"
+        android:orientation="horizontal">
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="8dp"
+            android:layout_margin="5dp"
+            >
+            <RelativeLayout
+                android:layout_width="70dp"
+                android:layout_height="70dp"
+                >
+                <ImageView
+                    android:id="@+id/icon_main"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:src="@drawable/download"
+                    android:elevation="4dp"
+                    android:scaleType="centerCrop"
+                    />
+                <ImageView
+                    android:id="@+id/veg_nonveg"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/ic_baseline_circle_24"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="5dp"
+                    app:tint="#4CAF50"
+                    android:layout_marginTop="5dp"
+                    android:elevation="4dp"
+                    />
+
+
+            </RelativeLayout>
+
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginBottom="5dp"
+            android:layout_marginStart="5dp"
+            >
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                >
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_toStartOf="@+id/counter_end"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginTop="5dp"
+                    >
+
+                    <TextView
+                        android:id="@+id/item_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Royal Chicken Rice Bowl (Serves 1)"
+                        android:textColor="#B8BABD"
+                        android:layout_marginEnd="10dp"
+                        android:minLines="1"
+                        android:fontFamily="@font/calibrib"
+                        android:textSize="15sp"
+                        />
+
+                    <TextView
+                        android:id="@+id/category"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="In Rice Bowl"
+                        android:fontFamily="@font/calibri"
+                        android:layout_marginTop="2dp"
+                        android:textColor="#959698"
+                        />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/counter_end"
+                    android:layout_width="85dp"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginTop="5dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="7dp"
+                    >
+                    <RelativeLayout
+                        android:layout_width="75dp"
+                        android:layout_height="28dp"
+                        android:background="@drawable/stroke_only"
+                        >
+
+                        <LinearLayout
+                            android:id="@+id/initial"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:visibility="visible"
+                            android:weightSum="5">
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/calibri"
+                                android:text="ADD"
+                                android:layout_marginStart="7dp"
+                                android:layout_weight="3.3"
+                                android:textAllCaps="false"
+                                android:textColor="#959698"
+                                android:textSize="14sp"
+                                android:textAlignment="center"
+                                android:layout_gravity="center_vertical"
+                                tools:ignore="RtlCompat" />
+
+                            <ImageButton
+                                android:id="@+id/plusinit"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1.7"
+                                android:background="@null"
+                                android:src="@drawable/ic_baseline_add_24"
+                                app:tint="#959698"/>
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/finl"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            android:weightSum="6">
+                            <ImageButton
+                                android:id="@+id/plus"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:background="@null"
+                                android:paddingEnd="12dp"
+                                android:paddingStart="12dp"
+                                android:src="@drawable/ic_baseline_horizontal_rule_24"
+                                app:tint="#959698"/>
+
+                            <TextView
+                                android:id="@+id/displaytext"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:fontFamily="@font/calibri"
+                                android:text="1"
+                                android:layout_weight="2"
+                                android:textAllCaps="false"
+                                android:textColor="#959698"
+                                android:background="#353534"
+                                android:textSize="14sp"
+                                android:layout_marginVertical="1dp"
+                                android:textAlignment="center"
+                                android:gravity="center_vertical"
+                                tools:ignore="RtlCompat" />
+
+                            <ImageButton
+                                android:id="@+id/minus"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:background="@null"
+                                android:paddingEnd="7dp"
+                                android:paddingStart="7dp"
+                                android:src="@drawable/ic_baseline_add_24"
+                                app:tint="#959698"/>
+
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+            </RelativeLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="3dp"
+                >
+
+                <RatingBar
+                    style="@style/Widget.AppCompat.RatingBar.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:numStars="5"
+                    android:progressTint="#FFCE1F"
+                    android:rating="3.5"
+                    android:stepSize=".5" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="18 Votes"
+                    android:textSize="12sp"
+                    android:layout_marginStart="2dp"
+                    android:textColor="#959698"
+                    />
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/amount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Rs. 312"
+                android:textColor="#B8BABD"
+                android:layout_marginTop="5dp"
+                android:textSize="14sp"
+                />
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Breaking out of the norm doesn't get more louis ipson trufr esds lour "
+                android:layout_marginEnd="20dp"
+                android:layout_marginTop="5dp"
+                android:textSize="13sp"
+                android:fontFamily="@font/calibri"
+                android:layout_marginBottom="10dp"
+                android:textColor="#8F8F8F"
+                />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

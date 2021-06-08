@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="wrap_content"
+    android:minHeight="320dp"
+    app:cardBackgroundColor="#22242c"
+    app:cardCornerRadius="10dp"
+    app:cardElevation="7dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@null"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageview"
+                android:layout_width="match_parent"
+                android:layout_height="140dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/homestatic" />
+
+            <ImageView
+                android:id="@+id/veg_nonveg"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="top"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:elevation="4dp"
+                android:src="@drawable/ic_baseline_circle_24"
+                app:tint="#4CAF50" />
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/custom_gradient_bottom" />
+        </FrameLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_10dp"
+            android:layout_marginEnd="@dimen/dimen_10dp"
+            android:layout_marginBottom="@dimen/dimen_12dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:text="Breakfast"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"
+                android:textColor="#B8BABD"
+                android:textSize="14sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/dimen_7dp"
+                android:background="@drawable/green_curve"
+                android:backgroundTint="#FFCE1F"
+                android:paddingHorizontal="@dimen/dimen_7dp"
+                android:paddingVertical="4dp"
+                android:text="Deal of the day"
+                android:textColor="#FFCE1F"
+                android:textSize="10sp" />
+
+
+            <TextView
+                android:id="@+id/desc"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="10dp"
+                android:ellipsize="end"
+                android:fontFamily="@font/calibri"
+                android:maxLines="3"
+                android:text="234 Orders past month. Breaking out of the norm doesn't get more louis ipson trufr esds lourBreaking out of the norm doesn't get more"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"
+                android:textColor="#959698"
+                android:textSize="13sp" />
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:text="Rs. 312"
+                    android:textColor="#B8BABD"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:id="@+id/counter_end"
+                    android:layout_width="77dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="5dp"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="75dp"
+                        android:layout_height="28dp"
+                        android:background="@drawable/stroke_only">
+
+                        <LinearLayout
+                            android:id="@+id/initial"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:visibility="visible"
+                            android:weightSum="5">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginStart="7dp"
+                                android:layout_weight="3.3"
+                                android:fontFamily="@font/calibri"
+                                android:text="ADD"
+                                android:textAlignment="center"
+                                android:textAllCaps="false"
+                                android:textColor="#959698"
+                                android:textSize="14sp"
+                                tools:ignore="RtlCompat" />
+
+                            <ImageButton
+                                android:id="@+id/plusinit"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="1.7"
+                                android:background="@null"
+                                android:src="@drawable/ic_baseline_add_24"
+                                app:tint="#959698" />
+
+                        </LinearLayout>
+
+
+                        <LinearLayout
+                            android:id="@+id/finl"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:visibility="gone"
+                            android:weightSum="6">
+
+                            <ImageButton
+                                android:id="@+id/plus"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:background="@null"
+                                android:paddingStart="12dp"
+                                android:paddingEnd="12dp"
+                                android:src="@drawable/ic_baseline_horizontal_rule_24"
+                                app:tint="#959698" />
+
+                            <TextView
+                                android:id="@+id/displaytext"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_marginVertical="1dp"
+                                android:layout_weight="2"
+                                android:background="#353534"
+                                android:fontFamily="@font/calibri"
+                                android:gravity="center_vertical"
+                                android:text="1"
+                                android:textAlignment="center"
+                                android:textAllCaps="false"
+                                android:textColor="#959698"
+                                android:textSize="14sp"
+                                tools:ignore="RtlCompat" />
+
+                            <ImageButton
+                                android:id="@+id/minus"
+                                android:layout_width="0dp"
+                                android:layout_height="match_parent"
+                                android:layout_weight="2"
+                                android:background="@null"
+                                android:paddingStart="7dp"
+                                android:paddingEnd="7dp"
+                                android:src="@drawable/ic_baseline_add_24"
+                                app:tint="#959698" />
+
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</com.google.android.material.card.MaterialCardView>

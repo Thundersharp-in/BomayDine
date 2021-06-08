@@ -9,13 +9,23 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.thundersharp.admin.R;
+import com.thundersharp.admin.core.animation.Animator;
 
 public class Discover extends Fragment {
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_discover, container, false);
+        View view = inflater.inflate(R.layout.fragment_discover_admin, container, false);
+
+        Animator.initializeAnimator()
+                .customAnimation(R.anim.slide_from_right_fast,view.findViewById(R.id.containermain));
+
+
+
+        return view;
     }
+
+
 }

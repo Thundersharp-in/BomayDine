@@ -1,12 +1,10 @@
 package com.thundersharp.bombaydine.user.ui.startup;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.View;
-import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.thundersharp.admin.AdminModule;
 import com.thundersharp.bombaydine.Delevery.HomeDelevery;
