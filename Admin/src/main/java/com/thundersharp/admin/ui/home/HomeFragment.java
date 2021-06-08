@@ -46,8 +46,18 @@ import com.glide.slider.library.slidertypes.DefaultSliderView;
 import com.glide.slider.library.tricks.ViewPagerEx;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -99,6 +109,7 @@ import java.util.Locale;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 import static com.thundersharp.admin.ui.AdminMain.navController;
 
 public class HomeFragment extends Fragment implements
@@ -225,7 +236,7 @@ public class HomeFragment extends Fragment implements
 
         mRequestQueue = Volley.newRequestQueue(getContext());
 
-        Places.initialize(getActivity(), getResources().getString(R.string.google_maps_key));
+        //Places.initialize(getActivity(), getResources().getString(R.string.google_maps_key));
         //pinCodeInteractor = new PinCodeInteractor(getContext(),this);
         addressHelper = new AddressHelper(getActivity(), this);
 
@@ -357,7 +368,7 @@ public class HomeFragment extends Fragment implements
                     startActivity(new Intent(getActivity(), RecentOrders.class));
                 } else {
                     Toast.makeText(getContext(), "Kindly login to see your recent orders.", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
+                    //startActivity(new Intent(getActivity(), LoginActivity.class));
                 }
             }
         });

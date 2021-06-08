@@ -29,7 +29,14 @@ import android.widget.Toast;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.common.api.ResolvableApiException;
+import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.LocationSettingsRequest;
+import com.google.android.gms.location.LocationSettingsResponse;
+import com.google.android.gms.location.LocationSettingsStatusCodes;
+import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -60,6 +67,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+
+import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 public class HomeLocationChooser extends AppCompatActivity implements OnMapReadyCallback,
         AddressUpdater.OnAddressUpdateListner, Cordinateslistner.fetchSuccessListener{

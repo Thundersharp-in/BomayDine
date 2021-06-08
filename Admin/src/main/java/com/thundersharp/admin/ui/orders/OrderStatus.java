@@ -150,6 +150,7 @@ public class OrderStatus extends AppCompatActivity implements
         if (orederBasicDetails.getStatus().equalsIgnoreCase("0")){
             textupdate.setText("Current order status is Payment pending, Click here to retry payment within 10 minutes.");
             textupdate.setOnClickListener(v -> {
+/*
                 Resturant.isOpen(new Resturant.Resturantopen() {
                     @Override
                     public void isOpen(boolean isOpen) {
@@ -161,6 +162,7 @@ public class OrderStatus extends AppCompatActivity implements
                         }else Toast.makeText(OrderStatus.this,"Resturant not accepting orders",Toast.LENGTH_SHORT).show();
                     }
                 });
+*/
             });
         }else if (orederBasicDetails.getStatus().equalsIgnoreCase("1")){
             textupdate.setText("Your order is being prepared click here to chat with the cook for customisations.");
