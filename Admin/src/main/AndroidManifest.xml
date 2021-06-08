@@ -3,7 +3,8 @@
     package="com.thundersharp.admin">
 
     <application>
-        <activity android:name=".ui.orders.OrderStatus"></activity>
+        <activity android:name=".ui.passcode.PasscodeView"></activity>
+        <activity android:name=".ui.orders.OrderStatus" />
         <activity android:name=".ui.offers.AllOffersActivity" />
         <activity android:name=".ui.menu.CategoryResults" />
         <activity android:name=".ui.location.AddressEdit" />
