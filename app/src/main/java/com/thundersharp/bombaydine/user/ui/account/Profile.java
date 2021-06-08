@@ -75,9 +75,11 @@ public class Profile extends Fragment {
         orderNo = view.findViewById(R.id.orderNo);
         foodie_level = view.findViewById(R.id.foodie_level);
 
-        profile_email.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            profile_email.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
-        profile_name.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+            profile_name.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+        }
 
         Animator
                 .initializeAnimator()

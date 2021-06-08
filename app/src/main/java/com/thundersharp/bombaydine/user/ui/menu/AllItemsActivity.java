@@ -129,7 +129,13 @@ public class AllItemsActivity extends AppCompatActivity implements
         bottomholder.setVisibility(View.INVISIBLE);
 
         bottomholder.setOnClickListener(view -> {
-            showCart();
+            if (FirebaseAuth.getInstance().getCurrentUser() != null)
+                showCart();
+            else {
+                Toast.makeText(this, "Login to place order ", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this, LoginActivity.class));
+
+            }
         });
 
         CartEmptyUpdater
@@ -274,20 +280,20 @@ public class AllItemsActivity extends AppCompatActivity implements
         grandtot = bottomview.findViewById(R.id.grand_tot);
         pay = bottomview.findViewById(R.id.paybtn);
 
-        changeName.setOnClickListener(vv -> startActivityForResult(new Intent(AllItemsActivity.this, ConfirmPhoneName.class),1008));
+        changeName.setOnClickListener(vv -> startActivityForResult(new Intent(AllItemsActivity.this, ConfirmPhoneName.class), 1008));
 
-        if (sharedPrefHelper != null){
-            if (sharedPrefHelper.getNamePhoneData().getName().isEmpty() ||sharedPrefHelper.getNamePhoneData().getPhone().isEmpty()){
-                if (FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber()!= null || !FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber().isEmpty()) {
+        if (sharedPrefHelper != null) {
+            if (sharedPrefHelper.getNamePhoneData().getName().isEmpty() || sharedPrefHelper.getNamePhoneData().getPhone().isEmpty()) {
+                if (FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() != null || !FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber().isEmpty()) {
                     name_phone.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + "," + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-                    sharedPrefHelper.saveNamePhoneData(FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-                }else {
+                    sharedPrefHelper.saveNamePhoneData(FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+                } else {
                     name_phone.setText("Update your phone no in profile first .");
                     pay.setEnabled(false);
                 }
 
-            }else {
-                name_phone.setText(sharedPrefHelper.getNamePhoneData().getName()+","+sharedPrefHelper.getNamePhoneData().getPhone());
+            } else {
+                name_phone.setText(sharedPrefHelper.getNamePhoneData().getName() + "," + sharedPrefHelper.getNamePhoneData().getPhone());
             }
         }
 

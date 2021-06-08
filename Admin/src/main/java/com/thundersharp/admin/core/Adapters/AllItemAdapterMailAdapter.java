@@ -36,8 +36,6 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
 
     private List<Object> itemObjectlist,allList;
     private Context context;
-    private ElegentNumberHelper elegentNumberHelper;
-    private CartProvider cartProvider;
     private int position;
 
     public static AllItemAdapterMailAdapter initializeAdapter(List<Object> objects, Context context){
@@ -55,7 +53,7 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view =  LayoutInflater.from(context).inflate(R.layout.item_food_admin,parent,false);
 
-        cartProvider = CartProvider.initialize(context);
+
         return new ViewHolder(view);
     }
 
@@ -63,9 +61,6 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.setIsRecyclable(false);
         FoodItemAdapter foodItemAdapter = (FoodItemAdapter) itemObjectlist.get(position);
-
-        elegentNumberHelper.bindviewHolder(holder.initial,holder.finalview,R.id.minus,R.id.plus,R.id.displaytext,R.id.plusinit);
-        elegentNumberHelper.getcurrentnumber();
 
         //TODO ADD LOGIC IF IMG ASSET == N
         Glide.with(context).load(foodItemAdapter.getICON_URL()).into(holder.icon_main);
@@ -95,15 +90,6 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
             holder.cathol.setVisibility(View.VISIBLE);
         }
 
-        if (doSharedPrefExists()){
-            List<CartItemModel> cartItemModels = returnDataFromString(fetchitemfromStorage());
-            for (int i = 0;i<cartItemModels.size();i++){
-                if (cartItemModels.get(i).getID().equalsIgnoreCase(foodItemAdapter.getID())){
-                    elegentNumberHelper.updateNo(cartItemModels.get(i).getQUANTITY());
-                    break;
-                }
-            }
-        }
 
     }
 
@@ -152,19 +138,16 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
     };
 
 
-    class ViewHolder extends RecyclerView.ViewHolder implements
-            ElegantNumberInteractor.setOnTextChangeListner{
+    class ViewHolder extends RecyclerView.ViewHolder{
 
         public TextView cat_name;
         private ImageView icon_main,veg_nonveg;
         private TextView name,description,amount,category;
-        private LinearLayout initial,finalview,cathol;
+        private LinearLayout cathol;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            initial = itemView.findViewById(R.id.initial);
-            finalview = itemView.findViewById(R.id.finl);
 
             cat_name = itemView.findViewById(R.id.cat_name);
             icon_main = itemView.findViewById(R.id.icon_main);
@@ -174,15 +157,9 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
             amount = itemView.findViewById(R.id.amount);
             category = itemView.findViewById(R.id.category);
             cathol = itemView.findViewById(R.id.cathol);
-            elegentNumberHelper = new ElegentNumberHelper(context,this,itemView);
+
         }
 
-        @Override
-        public int OnTextChangeListner(int val) {
-            FoodItemAdapter foodItemAdapter = (FoodItemAdapter) itemObjectlist.get(getAdapterPosition());
-            cartProvider.AddItemToCart(CartItemModel.initializeValues(foodItemAdapter.getAMOUNT(),foodItemAdapter.getDESC(),foodItemAdapter.getFOOD_TYPE(),foodItemAdapter.getICON_URL(),foodItemAdapter.getNAME(),foodItemAdapter.getID(),val),val);
-            return 0;
-        }
     }
 
     public String getcatName(String key){
@@ -198,19 +175,4 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
     }
 
 
-    private List<CartItemModel> returnDataFromString(String data){
-        Gson gson = new Gson();
-        Type type = new TypeToken<List<CartItemModel>>(){}.getType();
-        return gson.fromJson(data,type);
-    }
-
-    private boolean doSharedPrefExists(){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.CART_SHARED_PREFERENCES,Context.MODE_PRIVATE);
-        return sharedPreferences.getBoolean(CONSTANTS.CART_SHARED_PREFERENCES_EXISTS,false);
-    }
-
-    private String fetchitemfromStorage() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.CART_SHARED_PREFERENCES,Context.MODE_PRIVATE);
-        return sharedPreferences.getString(CONSTANTS.CART_SHARED_PREFERENCES_DATA,null);
-    }
 }

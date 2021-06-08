@@ -2,6 +2,7 @@ package com.thundersharp.admin.core.Adapters;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,11 +11,14 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.thundersharp.admin.R;
@@ -29,12 +33,13 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHolder> implements Filterable {
+public class AllItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
 
+    private static final int VIEW_TYPE_ME = 1;
+    private static final int VIEW_TYPE_OTHER = 0;
     private List<Object> itemObjectlist , itemList;
     private Context context;
-    private ElegentNumberHelper elegentNumberHelper;
-    private int position;
+    Integer addedPos;
     private CartProvider cartProvider;
 
     public AllItemAdapter(){}
@@ -45,47 +50,62 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
         this.context = context;
     }
 
+    public void addLastItem(Object object ,int position){
+        this.addedPos = position;
+        itemObjectlist.add(object);
+        notifyDataSetChanged();
+
+
+    }
+
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view =  LayoutInflater.from(context).inflate(R.layout.uneversal_holder_admin,parent,false);
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        RecyclerView.ViewHolder view = null;
 
-        return new  ViewHolder(view);
+        switch (viewType){
+            case 1:
+                View viewq = LayoutInflater.from(context).inflate(R.layout.add_new_item_bottom,parent,false);
+                view = new ViewHolderOther(viewq);
+                break;
+            case 0:
+                View viewqw = LayoutInflater.from(context).inflate(R.layout.uneversal_holder_admin,parent,false);
+                view = new ViewHolder(viewqw);
+                break;
+        }
+
+
+        return view;
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        FoodItemAdapter foodItemModel = (FoodItemAdapter) itemObjectlist.get(position);
+    public int getItemViewType(int position) {
 
-        elegentNumberHelper.bindviewHolder(holder.initial,holder.finalview,R.id.minus,R.id.plus,R.id.displaytext,R.id.plusinit);
-        elegentNumberHelper.getcurrentnumber();
 
-        holder.name.setText(foodItemModel.getNAME());
-        holder.amount.setText("Rs. "+foodItemModel.getAMOUNT());
-        holder.description.setText(foodItemModel.getDESC());
-        Glide.with(context).load(foodItemModel.getICON_URL()).into(holder.imageView);
+        if (itemObjectlist.get(position).equals("Add")) {
+            return VIEW_TYPE_ME;
+        } else {
+            return VIEW_TYPE_OTHER;
+        }
 
-        //TODO UPDATE IS NOT HAPPENING LIVE Adapter.notifyDataSetChanged();
-        if (doSharedPrefExists()){
-            List<CartItemModel> cartItemModels = returnDataFromString(fetchitemfromStorage());
-            for (int i = 0;i<cartItemModels.size();i++){
-                if (cartItemModels.get(i).getID().equalsIgnoreCase(foodItemModel.getID())){
-                    elegentNumberHelper.updateNo(cartItemModels.get(i).getQUANTITY());
-                    break;
-                }
-            }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(position) == 0) {
+
+            FoodItemAdapter foodItemModel = (FoodItemAdapter) itemObjectlist.get(position);
+
+            ((ViewHolder)holder).name.setText(foodItemModel.getNAME());
+            ((ViewHolder)holder).amount.setText("Rs. " + foodItemModel.getAMOUNT());
+            ((ViewHolder)holder).description.setText(foodItemModel.getDESC());
+            Glide.with(context).load(foodItemModel.getICON_URL()).into(((ViewHolder)holder).imageView);
+
         }
 
     }
 
 
-    public int getpos(){
-        return position;
-    }
-
-    public void setpos(int pos){
-        this.position = pos;
-    }
 
     @Override
     public int getItemCount() {
@@ -129,57 +149,43 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
     };
 
 
-    class ViewHolder extends RecyclerView.ViewHolder implements ElegantNumberInteractor.setOnTextChangeListner{
+    class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imageView;
         TextView name,description,amount;
-        LinearLayout initial,finalview;
+        SwitchCompat foodAvailable;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            imageView = itemView.findViewById(R.id.imageview);
-            name = itemView.findViewById(R.id.name);
-            description =  itemView.findViewById(R.id.description);
-            amount = itemView.findViewById(R.id.amount);
+                imageView = itemView.findViewById(R.id.imageview);
+                name = itemView.findViewById(R.id.name);
+                description = itemView.findViewById(R.id.description);
+                amount = itemView.findViewById(R.id.amount);
+                foodAvailable = itemView.findViewById(R.id.foodAvailable);
 
-            initial = itemView.findViewById(R.id.initial);
-            finalview = itemView.findViewById(R.id.finl);
-            cartProvider = CartProvider.initialize(context);
-            elegentNumberHelper = new ElegentNumberHelper(context,this,itemView);
+
+
+        }
+
+    }
+
+    class ViewHolderOther extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+
+        public ViewHolderOther(@NonNull View itemView) {
+            super(itemView);
+
+            itemView.setOnClickListener(this);
+
+
         }
 
         @Override
-        public int OnTextChangeListner(int val) {
-            FoodItemAdapter foodItemAdapter = (FoodItemAdapter) itemObjectlist.get(getAdapterPosition());
-            cartProvider.AddItemToCart(
-                    CartItemModel.initializeValues(
-                            foodItemAdapter.getAMOUNT(),
-                            foodItemAdapter.getDESC(),
-                            foodItemAdapter.getFOOD_TYPE(),
-                            foodItemAdapter.getICON_URL(),
-                            foodItemAdapter.getNAME(),
-                            foodItemAdapter.getID(),
-                            val),
-                    val);
-            return 0;
+        public void onClick(View view) {
+            Toast.makeText(context,"Add clk",Toast.LENGTH_SHORT).show();
         }
     }
 
-    private List<CartItemModel> returnDataFromString(String data){
-        Gson gson = new Gson();
-        Type type = new TypeToken<List<CartItemModel>>(){}.getType();
-        return gson.fromJson(data,type);
-    }
-
-    private boolean doSharedPrefExists(){
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.CART_SHARED_PREFERENCES,Context.MODE_PRIVATE);
-        return sharedPreferences.getBoolean(CONSTANTS.CART_SHARED_PREFERENCES_EXISTS,false);
-    }
-
-    private String fetchitemfromStorage() {
-        SharedPreferences sharedPreferences = context.getSharedPreferences(CONSTANTS.CART_SHARED_PREFERENCES,Context.MODE_PRIVATE);
-        return sharedPreferences.getString(CONSTANTS.CART_SHARED_PREFERENCES_DATA,null);
-    }
 
 }
