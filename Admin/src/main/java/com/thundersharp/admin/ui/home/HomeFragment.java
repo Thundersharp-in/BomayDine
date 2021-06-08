@@ -972,7 +972,7 @@ public class HomeFragment extends Fragment implements
     public void OnHomeAlldataFetchSucess(List<Object> data) {
         foodItemAdapterListStatic = data;
         allItemAdapter = new AllItemAdapter(data, getContext());
-
+        allItemAdapter.addLastItem("Add",data.size());
         horizontalScrollView.setAdapter(allItemAdapter);
         shimmerplace_allitem.stopShimmer();
         shimmerplace_allitem.setVisibility(View.GONE);

@@ -177,16 +177,6 @@
 
             </com.facebook.shimmer.ShimmerFrameLayout>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/recomended"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal"
-                android:background="@null"
-                android:scrollbars="none"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
-
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclermain"
@@ -245,73 +235,17 @@
 
     </androidx.core.widget.NestedScrollView>
 
-
-    <RelativeLayout
-        android:id="@+id/bottomholder"
-        android:layout_width="match_parent"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"
-        android:elevation="7dp"
-        android:gravity="bottom"
-        app:layout_anchor="@id/nest"
-        app:layout_anchorGravity="bottom"
-        android:visibility="visible">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:layout_marginHorizontal="10dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/buttonred">
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:orientation="vertical">
-
-                <TextView
-                    android:id="@+id/text2"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:fontFamily="sans-serif-smallcaps"
-                    android:text="3 items"
-                    android:textColor="#ffe8e8"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/totalamt"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="5dp"
-                    android:fontFamily="@font/calibri"
-                    android:text="Rs. 14564 plus taxes"
-                    android:textColor="#ffe8e8" />
-
-
-            </LinearLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_centerVertical="true"
-                android:layout_marginStart="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginEnd="10dp"
-                android:drawableEnd="@drawable/ic_baseline_play_arrow_24"
-                android:drawablePadding="10dp"
-                android:fontFamily="sans-serif-medium"
-                android:gravity="center_vertical"
-                android:text="View cart"
-                android:textColor="#fff4f3"
-                android:textSize="15sp" />
-
-        </RelativeLayout>
-
-    </RelativeLayout>
-
+        app:fabSize="normal"
+        app:borderWidth="@dimen/dimen_1dp"
+        android:src="@drawable/ic_outline_fastfood_24"
+        app:tint="#fff"
+        app:backgroundTint="#4CAF50"
+        app:elevation="@dimen/dimen_7dp"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/dimen_10dp"
+        android:layout_marginBottom="@dimen/dimen_10dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
