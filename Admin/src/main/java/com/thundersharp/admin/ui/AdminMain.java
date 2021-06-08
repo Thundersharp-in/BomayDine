@@ -33,7 +33,7 @@ public class AdminMain extends AppCompatActivity {
     }
 
     public static void startActivity(Bundle data, Context context){
-        context.startActivity(new Intent(context, AdminMain.class).putExtra("data",data).putExtra("dataType",true));
+        context.startActivity(new Intent(context, AdminMain.class).putExtra("data",data).putExtra("dataType",false));
     }
 
     public static NavController navController;

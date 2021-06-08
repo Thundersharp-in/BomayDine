@@ -17,7 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BombayDine"
         tools:replace="android:theme,android:allowBackup">
-        <activity android:name=".user.ui.login.UserDetails"></activity>
+        <activity android:name=".user.ui.orders.ConfirmPhoneName"></activity>
+        <activity android:name=".user.ui.offers.CustomOfferActivity" />
+        <activity android:name=".user.ui.login.UserDetails" />
         <activity android:name=".user.ui.account.UpdateProfileActivity" />
         <activity android:name=".user.ui.wallets.WalletActivity" />
         <activity android:name=".user.ui.offers.AllOffersDisplay" />

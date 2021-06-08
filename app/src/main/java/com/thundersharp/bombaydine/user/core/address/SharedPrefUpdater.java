@@ -12,9 +12,15 @@ public interface SharedPrefUpdater {
 
     AddressData getSavedHomeLocationData();
 
+    void saveNamePhoneData(String name, String phone);
+
     interface OnSharedprefUpdated{
 
         void onSharedPrefUpdate(AddressData addressData);
+    }
+
+    interface namePhoneUpdate{
+        void namePhoneUpdated(String name, String phone);
     }
 
     interface AccountSwitch{

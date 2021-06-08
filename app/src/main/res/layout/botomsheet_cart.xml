@@ -433,6 +433,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/name_phone"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
@@ -445,6 +446,7 @@
                         android:textSize="13sp" />
 
                     <TextView
+                        android:id="@+id/change_Name"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"

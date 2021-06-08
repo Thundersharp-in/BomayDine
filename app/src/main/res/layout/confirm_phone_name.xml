@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#22222B"
+    tools:context=".user.ui.orders.ConfirmPhoneName">
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#2d2d39"
+        app:titleTextColor="#CAC7C7"
+        app:title="Change reciever details"
+        android:id="@+id/toolbar"
+        android:elevation="@dimen/dimen_5dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:orientation="vertical"
+        >
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/img"
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:src="@drawable/delivery_info"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="40dp"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Provide us with correct details of the receiver ie. Name, Phone no providing incorrect details may lead to order cancellation and penalty."
+                    android:drawableStart="@drawable/ic_outline_info_24"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/calibri"
+                    android:textColor="#F44336"
+                    android:drawableTint="#FFEB3B"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="10dp"/>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="7dp"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="#fff"
+                    android:layout_marginHorizontal="@dimen/dimen_15dp"
+                    android:textColorHint="#C6C4C4"
+                    android:layout_marginTop="20dp"
+                    app:startIconDrawable="@drawable/ic_baseline_person_pin_24"
+                    app:startIconTint="#C6C4C4"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:textColor="#fff"
+                        android:hint="Name"
+                        android:drawableTint="#C6C4C4"
+                        android:gravity="center_vertical"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:backgroundTint="#2d2d39"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:elevation="7dp"
+                    android:layout_marginHorizontal="@dimen/dimen_15dp"
+                    android:textColorHint="#C6C4C4"
+                    android:layout_marginTop="20dp"
+                    app:startIconDrawable="@drawable/ic_baseline_perm_phone_msg_24"
+                    app:startIconTint="#C6C4C4"
+                    >
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="phone"
+                        android:textColor="#fff"
+                        android:maxLength="10"
+                        android:gravity="center_vertical"
+                        android:hint="Phone number"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                        android:backgroundTint="#2d2d39"/>
+                </com.google.android.material.textfield.TextInputLayout>
+
+
+                <!--
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:weightSum="4"
+                                    android:orientation="horizontal">
+                                    <com.google.android.material.textfield.TextInputLayout
+                                        android:id="@+id/phone"
+                                        android:layout_weight="3"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:elevation="7dp"
+                                        android:layout_marginHorizontal="@dimen/dimen_15dp"
+                                        android:textColorHint="#C6C4C4"
+                                        android:layout_marginTop="20dp"
+                                        app:startIconDrawable="@drawable/ic_baseline_call_24"
+                                        app:startIconTint="#C6C4C4"
+                                        >
+                                        <com.google.android.material.textfield.TextInputEditText
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:inputType="phone"
+                                            android:textColor="#fff"
+                                            android:gravity="center_vertical"
+                                            android:hint="Phone No."
+                                            style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                                            android:backgroundTint="#2d2d39"/>
+                                    </com.google.android.material.textfield.TextInputLayout>
+
+                                </LinearLayout>
+                -->
+
+
+                <ProgressBar
+                    android:id="@+id/loginprogress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:progressTint="#fff"
+                    android:indeterminateTint="#fff"
+                    android:indeterminate="true"
+                    android:layout_marginHorizontal="@dimen/dimen_15dp"
+                    android:visibility="gone"
+                    />
+
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_width="130dp"
+                    android:layout_height="45dp"
+                    android:id="@+id/buttonsubmit"
+                    android:textColor="#fff"
+                    android:text="Submit"
+                    android:fontFamily="@font/calibrib"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/button_curved_round_blue"
+                    android:layout_marginTop="20dp"/>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>

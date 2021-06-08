@@ -98,6 +98,7 @@ import com.thundersharp.bombaydine.user.ui.menu.AllCategoryActivity;
 import com.thundersharp.bombaydine.user.ui.menu.AllItemsActivity;
 import com.thundersharp.bombaydine.user.ui.menu.TopSellingAll;
 import com.thundersharp.bombaydine.user.ui.offers.AllOffersActivity;
+import com.thundersharp.bombaydine.user.ui.offers.CustomOfferActivity;
 import com.thundersharp.bombaydine.user.ui.orders.RecentOrders;
 import com.thundersharp.bombaydine.user.ui.scanner.QrScanner;
 
@@ -654,7 +655,28 @@ public class HomeFragment extends Fragment implements
     @Override
     public void onSliderClick(BaseSliderView slider) {
 
-        Toast.makeText(getActivity(), ""+slider.getBundle().getInt("PAGE"), Toast.LENGTH_SHORT).show();
+        switch (slider.getBundle().getInt("PAGE")){
+            case 0:
+                startActivity(new Intent(getActivity(),AllItemsActivity.class));
+                break;
+            case 1:
+                startActivity(new Intent(getActivity(),RecentOrders.class));
+                break;
+            case 2:
+                navController.navigate(R.id.discover);
+                break;
+            case 3:
+                startActivity(new Intent(getActivity(),TopSellingAll.class));
+                break;
+            case 4:
+                startActivity(new Intent(getActivity(),AllCategoryActivity.class));
+                break;
+            case 5:
+                startActivity(new Intent(getActivity(), CustomOfferActivity.class));
+                break;
+            default:
+        }
+
     }
 
     @Override

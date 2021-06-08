@@ -18,6 +18,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,6 +57,7 @@ import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
 import com.thundersharp.bombaydine.user.core.utils.TimeUtils;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
 import com.thundersharp.bombaydine.user.ui.offers.AllOffersActivity;
+import com.thundersharp.bombaydine.user.ui.orders.ConfirmPhoneName;
 import com.thundersharp.bombaydine.user.ui.orders.OrderStatus;
 import com.thundersharp.payments.payments.Payments;
 
@@ -263,11 +265,31 @@ public class AllItemsActivity extends AppCompatActivity implements
 
         TextView shoe_offers = bottomview.findViewById(R.id.shoe_offers);
         TextView delevering_to_address = bottomview.findViewById(R.id.delevering_to_address);
+        TextView name_phone = bottomview.findViewById(R.id.name_phone);
+        TextView changeName = bottomview.findViewById(R.id.change_Name);
+
         itemtotal = bottomview.findViewById(R.id.item_tot);
         delehevry = bottomview.findViewById(R.id.del_charges);
         promoamt = bottomview.findViewById(R.id.promotot);
         grandtot = bottomview.findViewById(R.id.grand_tot);
         pay = bottomview.findViewById(R.id.paybtn);
+
+        changeName.setOnClickListener(vv -> startActivityForResult(new Intent(AllItemsActivity.this, ConfirmPhoneName.class),1008));
+
+        if (sharedPrefHelper != null){
+            if (sharedPrefHelper.getNamePhoneData().getName().isEmpty() ||sharedPrefHelper.getNamePhoneData().getPhone().isEmpty()){
+                if (FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber()!= null || !FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber().isEmpty()) {
+                    name_phone.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + "," + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+                    sharedPrefHelper.saveNamePhoneData(FirebaseAuth.getInstance().getCurrentUser().getDisplayName(),FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+                }else {
+                    name_phone.setText("Update your phone no in profile first .");
+                    pay.setEnabled(false);
+                }
+
+            }else {
+                name_phone.setText(sharedPrefHelper.getNamePhoneData().getName()+","+sharedPrefHelper.getNamePhoneData().getPhone());
+            }
+        }
 
         List<CartItemModel> data = updateCartData();
 
@@ -376,6 +398,12 @@ public class AllItemsActivity extends AppCompatActivity implements
         }
 
         return data;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
     private void refreshAdapter() {
