@@ -27,4 +27,7 @@ public class CONSTANTS {
     public static final String CART_SHARED_PREFERENCES = "Cart";
     public static final String CART_SHARED_PREFERENCES_EXISTS = "VALUE";
     public static final String CART_SHARED_PREFERENCES_DATA = "CART_SHARED_DATA";
+
+    public static final String DATABASE_NODE_PROFILEPICURI = "PROFILEPICURI";
+    public static final String PROFILE_NODE_PROFILEPICURI = "PROFILEURL";
 }

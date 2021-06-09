@@ -59,7 +59,7 @@
                                 android:ellipsize="end"
                                 android:fontFamily="@font/allerta"
                                 android:maxLines="1"
-                                android:text="Hrishikesh Prateek"
+                                android:text="Bombay Dine User"
                                 android:textAllCaps="false"
                                 android:textColor="#fff"
                                 android:textSize="22sp"
@@ -71,7 +71,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="3dp"
                                 android:fontFamily="@font/calibri"
-                                android:text="prateekhrishikesh@gmail.com"
+                                android:text="bombaydineuser@gmail.com"
                                 android:textAlignment="viewStart"
                                 android:textColor="#D1D1D1"
                                 android:textSize="15sp" />
@@ -248,6 +248,7 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/email_status"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/cards"
@@ -292,7 +293,9 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@null"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior">
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        android:overScrollMode="never"
+        >
 
         <RelativeLayout
             android:layout_width="match_parent"

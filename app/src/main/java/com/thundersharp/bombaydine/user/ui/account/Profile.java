@@ -1,8 +1,10 @@
 package com.thundersharp.bombaydine.user.ui.account;
 
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,9 +21,12 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.dynamic.IFragmentWrapper;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.thundersharp.admin.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
 import com.thundersharp.bombaydine.user.core.animation.Animator;
@@ -50,14 +55,17 @@ public class Profile extends Fragment {
     private TextView switchbtn,logout,open;
     private BottomSheetDialog bottomSheetDialogloc;
 
-    private TextView profile_name,profile_email,updatedata;
+    private TextView profile_name,profile_email;
     private CircleImageView profilepic;
-    private TextView wallet_balance,orderNo,foodie_level;
+    private TextView wallet_balance,orderNo,foodie_level, email_status;
+    SharedPreferences sharedPreferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_profile_main, container, false);
+
+        sharedPreferences = getActivity().getSharedPreferences(CONSTANTS.PROFILE_NODE_PROFILEPICURI, Context.MODE_PRIVATE);
 
         bottomHolderprofile = view.findViewById(R.id.bottomHolderprofile);
         your_orders = view.findViewById(R.id.your_orders);
@@ -69,16 +77,30 @@ public class Profile extends Fragment {
         open = view.findViewById(R.id.open);
         profile_name = view.findViewById(R.id.profile_name);
         profile_email = view.findViewById(R.id.profile_email);
-        updatedata = view.findViewById(R.id.updatedata);
         profilepic = view.findViewById(R.id.profilepic);
         wallet_balance = view.findViewById(R.id.wallet_balance);
         orderNo = view.findViewById(R.id.orderNo);
         foodie_level = view.findViewById(R.id.foodie_level);
+        email_status = view.findViewById(R.id.email_status);
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             profile_email.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
             profile_name.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+
+            if (!FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()){
+                email_status.setText("Email id is not verified yet to verify navigate to your provided email id or , details in your profile click on Update data above.");
+            }
+
+            if (sharedPreferences!=null){
+                String profile_url = sharedPreferences.getString(CONSTANTS.DATABASE_NODE_PROFILEPICURI, null);
+                if (profile_url != null){
+                    Glide.with(getActivity()).load(profile_url).into(profilepic);
+                }else Glide.with(getActivity()).load(R.mipmap.ic_launcher_round).into(profilepic);
+            }
+            ((TextView)view.findViewById(R.id.updatedata)).setOnClickListener(b->{
+                startActivity(new Intent(getActivity(),UpdateProfileActivity.class));
+            });
         }
 
         Animator
@@ -90,9 +112,7 @@ public class Profile extends Fragment {
             MainPage.navController.navigate(R.id.discover);
         });
 
-        ((TextView)view.findViewById(R.id.updatedata)).setOnClickListener(b->{
-            startActivity(new Intent(getActivity(),UpdateProfileActivity.class));
-        });
+
 
         ((MaterialCardView)view.findViewById(R.id.wallet)).setOnClickListener(V->{
             startActivity(new Intent(getActivity(), WalletActivity.class));

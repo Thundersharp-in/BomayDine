@@ -45,7 +45,7 @@
                     android:layout_gravity="center_horizontal"
                     android:textStyle="italic"
                     android:text="Last Located position"
-                    android:textColor="#fff"
+                    android:textColor="#FFEB3B"
                     android:layout_marginTop="10dp"
                     />
 
@@ -117,6 +117,7 @@
                                         android:layout_marginEnd="5dp"
                                         >
                                         <TextView
+                                            android:id="@+id/location_type"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:text="Home"
@@ -128,6 +129,7 @@
                                             android:gravity="center_vertical"
                                             />
                                         <TextView
+                                            android:id="@+id/address_full"
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
                                             android:text="Near some area at some place near a town "
@@ -152,6 +154,7 @@
                                 </LinearLayout>
 
                                 <TextView
+                                    android:id="@+id/add_new_location"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
                                     android:text="Near some area at some place near a town "
@@ -172,6 +175,7 @@
                         </androidx.cardview.widget.CardView>
 
                         <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/drop_choose"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Drop to choose address "
@@ -189,6 +193,7 @@
                             />
 
                         <androidx.appcompat.widget.AppCompatButton
+                            android:id="@+id/edit_location"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="Add details to the address "
@@ -207,6 +212,7 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <TextView
+                    android:id="@+id/view_detail"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
@@ -228,7 +234,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
             android:orientation="horizontal"
-            android:weightSum="5"
+            android:weightSum="6"
             android:layout_marginEnd="10dp"
             >
             <TextView
@@ -242,84 +248,28 @@
                 />
 
             <TextView
+                android:id="@+id/add_more_location"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
+                android:layout_weight="2"
+                android:gravity="end"
+                android:layout_marginEnd="5dp"
                 android:text="Add More >"
                 android:textColor="#FFD129"
                 android:padding="3dp"
                 />
 
         </LinearLayout>
-        <!--Todo Add Recycler View -->
 
-        <androidx.cardview.widget.CardView
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_location_history"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="5dp"
-            app:cardBackgroundColor="#22242c"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="-10dp"
+            android:orientation="vertical"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:layout_marginTop="10dp"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:background="@drawable/end_round"
-                android:layout_marginEnd="-10dp"
-                android:padding="10dp"
-                >
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
-                    android:layout_gravity="center"
-                    android:src="@drawable/ic_outline_home_24"
-                    android:padding="10dp"
-                    android:background="@drawable/ic_baseline_circle_24"
-                    android:backgroundTint="#146AFF"
-                    android:layout_margin="5dp"
-                    app:tint="#C2E2FF"
-                    />
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:minHeight="40dp"
-                    android:orientation="vertical"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginEnd="15dp"
-                    >
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Home"
-                        android:drawablePadding="10dp"
-                        android:maxLines="1"
-                        android:textSize="16sp"
-                        android:fontFamily="@font/calibrib"
-                        android:textColor="#F6F9FF"
-                        android:gravity="center_vertical"
-                        />
-                    <TextView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="Near some area at some place near a town "
-                        android:drawablePadding="10dp"
-                        android:fontFamily="sans-serif-condensed"
-                        android:textColor="#F6F9FF"
-                        android:layout_marginTop="2dp"
-                        android:textSize="13sp"
-                        android:gravity="center_vertical"
-                        android:layout_marginBottom="5dp"
-                        />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-        </androidx.cardview.widget.CardView>
+            android:layout_marginBottom="@dimen/dimen_10dp"
+            />
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

@@ -17,6 +17,7 @@
             <option value="$PROJECT_DIR$/conversation" />
             <option value="$PROJECT_DIR$/deliveryPartnerCore" />
             <option value="$PROJECT_DIR$/kitchenCore" />
+            <option value="$PROJECT_DIR$/passcode" />
             <option value="$PROJECT_DIR$/payments" />
           </set>
         </option>
