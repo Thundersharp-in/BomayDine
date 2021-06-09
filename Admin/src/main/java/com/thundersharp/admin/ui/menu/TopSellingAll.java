@@ -50,6 +50,7 @@ public class TopSellingAll extends AppCompatActivity implements
 
         TopsellingAdapter categoryAdapter = new TopsellingAdapter(this, data,true);
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this,2);
+        categoryAdapter.addLastItem("Add",data.size());
         topsellingrecycler.setLayoutManager(gridLayoutManager);
         topsellingrecycler.setAdapter(categoryAdapter);
     }

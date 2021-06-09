@@ -132,8 +132,7 @@ public class HomeFragment extends Fragment implements
      */
     private SliderLayout mDemoSlider;
     List<Object> data = new ArrayList<>();
-    private CircleImageView profile;
-    private ImageView qrcode;
+
     private TextView recentorders, allitemsview,allcategory,topsellingallv;
     public static TextView textcurrloc;
     private AllItemAdapter allItemAdapter;
@@ -212,11 +211,11 @@ public class HomeFragment extends Fragment implements
         shimmerplace_topsell = view.findViewById(R.id.shimmerplace_topsell);
         horizontalScrollView = view.findViewById(R.id.allitems);
         topsellingholder = view.findViewById(R.id.topsellingholder);
-        qrcode = view.findViewById(R.id.qrcode);
+
         allitemsview = view.findViewById(R.id.allitemsview);
         horizontalScrollView.setHasFixedSize(true);
         recentorders = view.findViewById(R.id.recentorders);
-        profile = view.findViewById(R.id.profile);
+
         current_loc = view.findViewById(R.id.current_loc);
         textcurrloc = view.findViewById(R.id.textcurrloc);
         allcategory = view.findViewById(R.id.allcategory);
@@ -357,9 +356,6 @@ public class HomeFragment extends Fragment implements
             bottomSheetDialogloc.show();
         });
 
-        profile.setOnClickListener(viewclick -> {
-            navController.navigate(R.id.profile);
-        });
 
         recentorders.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -373,7 +369,6 @@ public class HomeFragment extends Fragment implements
             }
         });
 
-        qrcode.setOnClickListener(view15 -> startActivity(new Intent(getActivity(), QrScanner.class)));
 
 
         categoryRecycler = view.findViewById(R.id.recentordcategoryholderer);
@@ -729,7 +724,6 @@ public class HomeFragment extends Fragment implements
                 bottomSheetDialog.cancel();
             }
         }
-        textcurrloc.setText(addressData.getADDRESS_NICKNAME() + ": " + addressData.getADDRESS_LINE1());
 
     }
 
@@ -944,6 +938,7 @@ public class HomeFragment extends Fragment implements
         CategoryAdapter categoryAdapter = new CategoryAdapter(data, getContext());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 3);
         categoryRecycler.setLayoutManager(gridLayoutManager);
+        categoryAdapter.addLastItem("Add",data.size());
         categoryRecycler.setAdapter(categoryAdapter);
         shimmerplace_cat.stopShimmer();
         shimmerplace_cat.setVisibility(View.GONE);
@@ -957,6 +952,7 @@ public class HomeFragment extends Fragment implements
     public void onTopSellingfetchSuccess(List<Object> data) {
 
         TopsellingAdapter categoryAdapter = new TopsellingAdapter(getContext(), data);
+        categoryAdapter.addLastItem("Add",data.size());
         topsellingholder.setAdapter(categoryAdapter);
         shimmerplace_topsell.stopShimmer();
         shimmerplace_topsell.setVisibility(View.GONE);

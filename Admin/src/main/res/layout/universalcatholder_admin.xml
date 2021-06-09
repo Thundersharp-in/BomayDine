@@ -15,13 +15,30 @@
         app:cardCornerRadius="7dp"
         app:cardBackgroundColor="#22242c">
 
-        <ImageView
-            android:id="@+id/imageview"
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:adjustViewBounds="true"
-            android:src="@drawable/homestatic" />
+            android:layout_height="match_parent">
+            <ImageView
+                android:id="@+id/imageview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                android:src="@drawable/homestatic" />
+
+            <ImageView
+                android:id="@+id/edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:elevation="@dimen/dimen_5dp"
+                android:src="@drawable/ic_outline_edit_24"
+                android:background="@drawable/curved_dark"
+                android:padding="5dp"
+                android:layout_gravity="end"
+                android:layout_marginEnd="@dimen/dimen_5dp"
+                android:layout_marginTop="@dimen/dimen_5dp"/>
+
+        </FrameLayout>
 
     </com.google.android.material.card.MaterialCardView>
 

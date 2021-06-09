@@ -32,7 +32,7 @@ public class AllCategoryActivity extends AppCompatActivity implements HomeDataCo
         swipeRefreshLayout =findViewById(R.id.swipe);
         swipeRefreshLayout.setRefreshing(true);
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            homeDataProvider.fetchTopSellingAll();
+            homeDataProvider.fetchAllCategories();
         });
         toolbar.setNavigationOnClickListener(view -> {finish();});
         homeDataProvider.fetchAllCategories();
@@ -42,6 +42,7 @@ public class AllCategoryActivity extends AppCompatActivity implements HomeDataCo
     public void onCategoryFetchSuccess(List<Object> data) {
         swipeRefreshLayout.setRefreshing(false);
         CategoryAdapter categoryAdapter = new CategoryAdapter(data, this);
+        categoryAdapter.addLastItem("Add",data.size());
         GridLayoutManager gridLayoutManager = new GridLayoutManager(this, 3);
         categoryRecycler.setLayoutManager(gridLayoutManager);
         categoryRecycler.setAdapter(categoryAdapter);

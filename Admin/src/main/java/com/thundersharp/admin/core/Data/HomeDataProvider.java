@@ -155,7 +155,7 @@ public class HomeDataProvider implements HomeDataContract{
     public void fetchhomeAllCategories() {
         Query query = FirebaseDatabase
                 .getInstance()
-                .getReference(CONSTANTS.DATABASE_NODE_CATEGORY).limitToFirst(6);
+                .getReference(CONSTANTS.DATABASE_NODE_CATEGORY).limitToFirst(5);
                 query.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {

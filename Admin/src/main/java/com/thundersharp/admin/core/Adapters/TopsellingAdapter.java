@@ -18,11 +18,15 @@ import com.thundersharp.admin.ui.menu.AllItemsActivity;
 import java.util.HashMap;
 import java.util.List;
 
-public class TopsellingAdapter extends RecyclerView.Adapter<TopsellingAdapter.ViewHolder> {
+public class TopsellingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+
+    private static final int VIEW_TYPE_ME = 1;
+    private static final int VIEW_TYPE_OTHER = 0;
 
     Context context;
     List<Object> listr;
     boolean type = false;
+    private int addedPos;
 
     public TopsellingAdapter(){}
 
@@ -37,23 +41,63 @@ public class TopsellingAdapter extends RecyclerView.Adapter<TopsellingAdapter.Vi
         this.type = type;
     }
 
+    public void addLastItem(Object object ,int position){
+        this.addedPos = position;
+        listr.add(object);
+        notifyDataSetChanged();
+
+    }
+
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        if (type) return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.topsellingmain_admin,parent,false));
-        else return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.topselling_admin,parent,false));
+    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        RecyclerView.ViewHolder view = null;
+
+        switch (viewType){
+            case 1:
+                View cce= null;
+                if (type) cce =  LayoutInflater.from(context).inflate(R.layout.add_new_cat,parent,false);
+                else cce = LayoutInflater.from(context).inflate(R.layout.add_new_cat_sized,parent,false);
+                view = new TopsellingAdapter.ViewHolder(cce);
+                break;
+            case 0:
+                View cc= null;
+                if (type) cc =  LayoutInflater.from(context).inflate(R.layout.topsellingmain_admin,parent,false);
+                else cc = LayoutInflater.from(context).inflate(R.layout.topselling_admin,parent,false);
+                view = new TopsellingAdapter.ViewHolder(cc);
+                break;
+        }
+
+
+        return view;
+    }
+
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        if (getItemViewType(position) == 0) {
+            HashMap<String, String> hashMap = (HashMap<String, String>) listr.get(position);
+
+            ((ViewHolder)holder).name.setText(hashMap.get("NAME"));
+            ((ViewHolder)holder).amount.setText(hashMap.get("NOOFORDERS") + " Orders Past Month");
+            Glide.with(context).load(hashMap.get("IMAGES")).into(((ViewHolder)holder).imageView);
+        }
+
+
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        HashMap<String,String> hashMap = (HashMap<String, String>) listr.get(position);
+    public int getItemViewType(int position) {
 
-        holder.name.setText(hashMap.get("NAME"));
-        holder.amount.setText(hashMap.get("NOOFORDERS")+" Orders Past Month");
-        Glide.with(context).load(hashMap.get("IMAGES")).into(holder.imageView);
 
+        if (listr.get(position).equals("Add")) {
+            return VIEW_TYPE_ME;
+        } else {
+            return VIEW_TYPE_OTHER;
+        }
 
     }
+
 
     @Override
     public int getItemCount() {
@@ -79,5 +123,19 @@ public class TopsellingAdapter extends RecyclerView.Adapter<TopsellingAdapter.Vi
         }
     }
 
+
+    class ViewHolderOther extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+        public ViewHolderOther(@NonNull View itemView) {
+            super(itemView);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            context.startActivity(new Intent(context, AllItemsActivity.class));
+        }
+    }
 
 }

@@ -41,11 +41,12 @@
 
                 <LinearLayout
                     android:id="@+id/current_loc"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:layout_toStartOf="@id/qrcode"
                     android:layout_centerVertical="true"
+                    android:layout_alignParentStart="true"
                     android:layout_marginTop="5dp"
                     android:layout_marginStart="15dp">
                     <TextView
@@ -53,12 +54,12 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="#fff"
-                        android:drawableStart="@drawable/ic_outline_pin_drop_24"
+                        android:drawableStart="@drawable/ic_outline_restaurant_24"
                         android:drawablePadding="10dp"
                         android:maxLines="1"
                         android:ellipsize="end"
                         android:layout_marginEnd="15dp"
-                        android:text="Soldevahanalli "
+                        android:text="Your resturant status is : CLOSED"
                         android:fontFamily="@font/calibri"
                         android:textSize="20sp"/>
 
@@ -72,26 +73,14 @@
                 </LinearLayout>
 
 
-                <ImageView
+                <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/qrcode"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="0dp"
                     android:layout_marginEnd="10dp"
-                    android:src="@drawable/ic_baseline_qr_code_scanner_24"
-                    android:layout_toStartOf="@id/profile"
-                    android:layout_marginBottom="10dp"
-                    android:layout_gravity="end"/>
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/profile"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginEnd="15dp"
-                    android:src="@drawable/prateek"
-                    android:layout_marginBottom="10dp"
                     android:layout_alignParentEnd="true"
+                    android:layout_marginBottom="10dp"
                     android:layout_gravity="end"/>
 
 
@@ -179,7 +168,7 @@
                                 android:layout_height="wrap_content"
                                 android:textColor="#B8BABD"
                                 android:fontFamily="sans-serif-smallcaps"
-                                android:text="Recent orders"
+                                android:text="Create local order"
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="10dp"
                                 android:textStyle="bold"
@@ -193,7 +182,7 @@
                                 android:layout_alignParentEnd="true"
                                 android:layout_marginEnd="15dp"
                                 android:textColor="#ff975d"
-                                android:text="View Orders"
+                                android:text="Create Order"
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="15dp"
                                 android:textSize="13sp"/>
@@ -206,7 +195,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginEnd="15dp"
                             android:textColor="#959698"
-                            android:text="View your 6 recent orders if you are craving to have your last order again !!"
+                            android:text="Create order for a local resturant costumer to reflect their dine in order in their orders section."
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="5dp"
                             android:layout_marginBottom="10dp"

@@ -20,6 +20,7 @@
             android:layout_height="match_parent"
             android:layout_marginHorizontal="7dp"
             android:ellipsize="end"
+
             android:fontFamily="@font/calibrib"
             android:maxLines="1"
             android:text="30% OFF up to Rs. 100"
