@@ -1,5 +1,8 @@
 package com.thundersharp.admin.ui.account;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -35,8 +38,22 @@ public class Profile extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_profiles_admin, container, false);
 
+        ((TextView)view.findViewById(R.id.switchbtn)).setOnClickListener(C ->{
+            clearAllData();
+            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
+            sharingIntent.setPackage("com.thundersharp.bombaydine");
+            startActivity(sharingIntent);
+            getActivity().finish();
+        });
 
         return view;
+    }
+
+    public void clearAllData(){
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("EmpAccount", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
     }
 
 

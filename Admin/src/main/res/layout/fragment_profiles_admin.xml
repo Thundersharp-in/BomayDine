@@ -968,7 +968,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="15dp"
                         android:textColor="#959698"
-                        android:text="If you are a Employee and want to switch to your account then click here."
+                        android:text="Switch to your normal account."
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="5dp"
                         android:layout_marginBottom="10dp"
