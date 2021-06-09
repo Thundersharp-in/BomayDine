@@ -175,7 +175,6 @@ public class HomeFragment extends Fragment implements
     private LinearLayout bottom_clickable_linear;
     private TextView view_action;
     private AppCompatButton pay;
-    private EditText search_home;
     private RelativeLayout containermain;
 
     private static List<Object> foodItemAdapterListStatic = new ArrayList<>();
@@ -227,7 +226,6 @@ public class HomeFragment extends Fragment implements
         clearcompleate = view.findViewById(R.id.clearcompleate);
         bottom_clickable_linear = view.findViewById(R.id.bottom_clickable_linear);
         view_action = view.findViewById(R.id.view_action);
-        search_home=view.findViewById(R.id.search_home);
         homeDataProvider = new HomeDataProvider(getActivity(), this, this, this, this);
 
         bottomnoti.setVisibility(View.INVISIBLE);
@@ -490,23 +488,6 @@ public class HomeFragment extends Fragment implements
 
         };
 
-        search_home.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (allItemAdapter!= null)
-                    allItemAdapter.getFilter().filter(s);
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-
-            }
-        });
 
         getActivity().registerReceiver(broadcastReceiver,new IntentFilter("updated"));
 
@@ -603,26 +584,6 @@ public class HomeFragment extends Fragment implements
         super.onActivityResult(requestCode, resultCode, data);
     }*/
 
-    private TextWatcher filterTextWatcher = new TextWatcher() {
-        public void afterTextChanged(Editable s) {
-            if (!s.toString().equals("")) {
-                mAutoCompleteAdapter.getFilter().filter(s.toString());
-                if (recyclerView.getVisibility() == View.GONE) {
-                    recyclerView.setVisibility(View.VISIBLE);
-                }
-            } else {
-                if (recyclerView.getVisibility() == View.VISIBLE) {
-                    recyclerView.setVisibility(View.GONE);
-                }
-            }
-        }
-
-        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-        }
-
-        public void onTextChanged(CharSequence s, int start, int before, int count) {
-        }
-    };
 
     @Override
     public void click(Place place) {

@@ -105,21 +105,20 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginStart="15dp"
                     app:tint="#ff995e"
-                    android:src="@drawable/ic_baseline_search_24"/>
+                    android:src="@drawable/ic_baseline_imagesearch_roller_24"/>
 
 
-                <EditText
-                    android:id="@+id/search_home"
+                <TextView
+                    android:id="@+id/update_crousl"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="10dp"
                     android:background="@null"
-                    android:hint="Search "
-                    android:layout_marginStart="10dp"
-                    android:inputType="text"
+                    android:text="Update image carousel "
                     android:maxLines="1"
                     android:singleLine="true"
+                    android:layout_marginStart="@dimen/dimen_15dp"
                     android:textColor="#d3d3d3"
                     android:textColorHint="#b7b7b7" />
             </LinearLayout>

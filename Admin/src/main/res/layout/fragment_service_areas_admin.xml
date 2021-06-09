@@ -15,6 +15,7 @@
         android:id="@+id/shimmermap">
         <include layout="@layout/mapsupdateplaceholder_admin"/>
     </com.facebook.shimmer.ShimmerFrameLayout>
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -55,9 +56,9 @@
                         android:layout_centerVertical="true"
                         android:orientation="vertical">
                         <ImageView
-                            android:layout_width="60dp"
-                            android:layout_height="60dp"
-                            android:src="@drawable/fooddelivery"
+                            android:layout_width="50dp"
+                            android:layout_height="50dp"
+                            android:src="@drawable/ic_outline_add_location_alt_24"
                             android:rotationX="360"/>
 
                         <TextView
@@ -69,7 +70,7 @@
                             android:layout_marginTop="10dp"
                             android:textAlignment="center"
                             android:textAllCaps="false"
-                            android:text="ETA : 23 MINS"
+                            android:text="Edit points"
                             android:textSize="14sp"/>
 
                     </LinearLayout>
@@ -81,21 +82,6 @@
                         android:orientation="vertical"
                         android:layout_toEndOf="@id/imgh"
                         android:layout_marginStart="10dp">
-                        <TextView
-                            android:id="@+id/coord"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="#CFCFCF"
-                            android:fontFamily="@font/calibri"
-                            android:layout_marginTop="10dp"
-                            android:layout_marginEnd="10dp"
-                            android:textAlignment="viewStart"
-                            android:focusable="true"
-                            android:clickable="true"
-                            android:textAllCaps="false"
-                            android:text="13.0833209,77.4843393"
-                            android:textSize="14sp"/>
-
 
                         <TextView
                             android:id="@+id/address"
@@ -113,36 +99,79 @@
                             android:textSize="14sp"/>
 
                         <TextView
-                            android:id="@+id/areaname"
+                            android:id="@+id/address1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="#CFCFCF"
                             android:fontFamily="@font/calibri"
+                            android:layout_marginTop="5dp"
                             android:layout_marginEnd="10dp"
-                            android:layout_marginTop="10dp"
                             android:textAlignment="viewStart"
+                            android:maxLines="3"
+                            android:ellipsize="end"
                             android:textAllCaps="false"
-                            android:text="Approx distance : "
+                            android:text="Location selected : Acharya Doctor , Bengaluru, Karnataka 560090, India"
                             android:textSize="14sp"/>
 
+                        <TextView
+                            android:id="@+id/address2"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="#CFCFCF"
+                            android:fontFamily="@font/calibri"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="10dp"
+                            android:textAlignment="viewStart"
+                            android:maxLines="3"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"
+                            android:text="Location selected : Acharya Doctor , Bengaluru, Karnataka 560090, India"
+                            android:textSize="14sp"/>
 
                         <TextView
-                            android:id="@+id/delevrable"
+                            android:id="@+id/info"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="#CDDC39"
                             android:fontFamily="@font/calibri"
                             android:layout_marginTop="5dp"
                             android:layout_marginEnd="10dp"
-                            android:textAlignment="viewEnd"
-                            android:textAllCaps="false"
                             android:layout_marginBottom="@dimen/dimen_10dp"
-                            android:text="Delivery available : yes"
-                            android:textSize="14sp"
-                            tools:ignore="RtlCompat" />
+                            android:textAlignment="viewStart"
+                            android:maxLines="3"
+                            android:ellipsize="end"
+                            android:textAllCaps="false"
+                            android:text="Showing 3 co-ordinates details to update whole delivery area or to update one point click EDIT POINTS"
+                            android:textSize="14sp"/>
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:weightSum="2"
+                            android:layout_marginBottom="@dimen/dimen_10dp">
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:layout_width="0dp"
+                                android:layout_height="30dp"
+                                android:background="@drawable/button_red_round"
+                                android:textColor="#fff"
+                                android:text="UPDATE AREA"
+                                android:layout_marginEnd="@dimen/dimen_5dp"
+                                android:layout_marginVertical="@dimen/dimen_5dp"
+                                android:layout_weight="1"/>
 
+                            <androidx.appcompat.widget.AppCompatButton
+                                android:layout_width="0dp"
+                                android:layout_height="30dp"
+                                android:background="@drawable/green_round"
+                                android:textColor="#fff"
+                                android:text="UPDATE POINTS"
+                                android:layout_marginEnd="@dimen/dimen_10dp"
+                                android:layout_marginStart="@dimen/dimen_5dp"
+                                android:layout_marginVertical="@dimen/dimen_5dp"
+                                android:layout_weight="1"/>
 
+                        </LinearLayout>
                     </LinearLayout>
 
                 </RelativeLayout>
