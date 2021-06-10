@@ -52,7 +52,7 @@ public class Profile extends Fragment {
     private RelativeLayout bottomHolderprofile;
     private MaterialCardView your_orders,helpNfeedback;
     private CoordinatorLayout containermain;
-    private TextView switchbtn,logout,open;
+    private TextView switchbtn,logout;
     private BottomSheetDialog bottomSheetDialogloc;
 
     private TextView profile_name,profile_email;
@@ -74,7 +74,6 @@ public class Profile extends Fragment {
         logout = view.findViewById(R.id.logoutn);
         helpNfeedback = view.findViewById(R.id.help);
 
-        open = view.findViewById(R.id.open);
         profile_name = view.findViewById(R.id.profile_name);
         profile_email = view.findViewById(R.id.profile_email);
         profilepic = view.findViewById(R.id.profilepic);
@@ -144,7 +143,7 @@ public class Profile extends Fragment {
 
 
         ((MaterialCardView)view.findViewById(R.id.allOffers)).setOnClickListener(itemView->{
-            startActivity(new Intent(getActivity(), AllOffersDisplay.class));
+            startActivity(new Intent(getActivity(), AllOffersActivity.class));//AllOffersDisplay
         });
 
         ((MaterialCardView)view.findViewById(R.id.reportIssue)).setOnClickListener(itemView->{
@@ -158,7 +157,6 @@ public class Profile extends Fragment {
         ((MaterialCardView)view.findViewById(R.id.refunds)).setOnClickListener(V ->{
             startActivity(new Intent(getActivity(), Refunds.class));
         });
-
 
         helpNfeedback.setOnClickListener(view1 -> {
             ChatStarter chatStarter = ChatStarter.initializeChat(getActivity());
