@@ -1,6 +1,6 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!--Preference
+    <Preference
         app:fragment="com.thundersharp.bombaydine.user.ui.settings.SettingsActivity$MessagesFragment"
         app:icon="@drawable/messages"
         app:key="messages_header"
@@ -10,16 +10,8 @@
         app:fragment="com.thundersharp.bombaydine.user.ui.settings.SettingsActivity$SyncFragment"
         app:icon="@drawable/sync"
         app:key="sync_header"
-        app:title="@string/sync_header" /-->
+        app:title="@string/sync_header" />
 
-    <PreferenceCategory app:title="General">
-        <SwitchPreferenceCompat
-            app:key="theme"
-            app:title="Theme"
-            app:summaryOff="Disable dark theme"
-            app:summaryOn="Enable light theme"
-            />
 
-    </PreferenceCategory>
 
 </PreferenceScreen>

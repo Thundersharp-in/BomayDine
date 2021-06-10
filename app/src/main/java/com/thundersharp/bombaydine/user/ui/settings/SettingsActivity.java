@@ -8,15 +8,16 @@ import android.view.View;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.SwitchPreferenceCompat;
 
 import com.thundersharp.bombaydine.R;
 
-public class SettingsActivity extends AppCompatActivity {//implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
+public class SettingsActivity extends AppCompatActivity implements PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
-    //TODO design Setting page
     private static final String TITLE_TAG = "settingsActivityTitle";
 
     Toolbar toolbar;
@@ -24,17 +25,15 @@ public class SettingsActivity extends AppCompatActivity {//implements Preference
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        SettingData settingData = new SettingData(this);
-
         setContentView(R.layout.settings_activity);
 
+        /*
         getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.setting, new SyncFragment())
                 .commit();
-        /*
-         if (savedInstanceState == null) {
+         */
+        if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.settings, new HeaderFragment())
@@ -42,6 +41,7 @@ public class SettingsActivity extends AppCompatActivity {//implements Preference
         } else {
             setTitle(savedInstanceState.getCharSequence(TITLE_TAG));
         }
+
          getSupportFragmentManager().addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
                     @Override
@@ -51,9 +51,6 @@ public class SettingsActivity extends AppCompatActivity {//implements Preference
                         }
                     }
                 });
-
-         */
-
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -82,7 +79,7 @@ public class SettingsActivity extends AppCompatActivity {//implements Preference
         registerReceiver(broadcastReceiver ,new IntentFilter("recreate"));
      */
 
-   /*
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -97,9 +94,9 @@ public class SettingsActivity extends AppCompatActivity {//implements Preference
         }
         return super.onSupportNavigateUp();
     }
-    */
 
-   /*
+
+
     @Override
     public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference pref) {
         // Instantiate the new Fragment
@@ -118,10 +115,7 @@ public class SettingsActivity extends AppCompatActivity {//implements Preference
         return true;
     }
 
-    */
-
-    /*
-     public static class HeaderFragment extends PreferenceFragmentCompat {
+    public static class HeaderFragment extends PreferenceFragmentCompat {
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -136,7 +130,7 @@ public class SettingsActivity extends AppCompatActivity {//implements Preference
             setPreferencesFromResource(R.xml.messages_preferences, rootKey);
         }
     }
-     */
+
 
     public static class SyncFragment extends PreferenceFragmentCompat {
 
@@ -145,9 +139,10 @@ public class SettingsActivity extends AppCompatActivity {//implements Preference
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
-            setPreferencesFromResource(R.xml.header_preferences, rootKey);
-            settingData = new SettingData(getActivity());
+            setPreferencesFromResource(R.xml.sync_preferences, rootKey);
+            //settingData = new SettingData(getActivity());
 
+           /*
             final SwitchPreferenceCompat theme = findPreference("theme");
             if (theme != null){
                 theme.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
@@ -166,6 +161,7 @@ public class SettingsActivity extends AppCompatActivity {//implements Preference
                     }
                 });
             }
+            */
 
         }
     }

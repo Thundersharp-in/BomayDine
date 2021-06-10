@@ -140,6 +140,8 @@
                                             android:textSize="13sp"
                                             android:gravity="center_vertical"
                                             android:layout_marginBottom="5dp"
+                                            android:ellipsize="end"
+                                            android:maxLines="1"
                                             />
                                         <View
                                             android:layout_width="match_parent"

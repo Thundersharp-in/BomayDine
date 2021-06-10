@@ -52,6 +52,7 @@
                     android:fontFamily="@font/calibrib"
                     android:textColor="#F6F9FF"
                     android:gravity="center_vertical"
+                    android:ellipsize="end"
                     />
                 <TextView
                     android:layout_width="match_parent"
@@ -64,6 +65,8 @@
                     android:textSize="13sp"
                     android:gravity="center_vertical"
                     android:layout_marginBottom="5dp"
+                    android:ellipsize="end"
+                    android:maxLines="2"
                     />
 
             </LinearLayout>

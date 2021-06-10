@@ -1,9 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#22222B"
     tools:context=".user.ui.offers.AllOffersDisplay">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#2d2d39"
+        app:titleTextColor="#CAC7C7"
+        app:title="Offer details"
+        android:id="@+id/toolbar"
+        android:elevation="@dimen/dimen_5dp"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Offer Name"
+        android:textSize="15sp"
+        android:layout_marginTop="@dimen/dimen_10dp"
+        android:layout_marginHorizontal="@dimen/dimen_10dp"
+        android:textColor="#FF5722"
+        android:textStyle="bold"
+        android:fontFamily="@font/allerta"/>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Offer description like how much amount or how it is applicable to the offer "
+        android:textSize="17sp"
+        android:layout_marginHorizontal="@dimen/dimen_10dp"
+        android:layout_marginTop="15dp"
+        android:textColor="#DFDFDF"
+        android:fontFamily="@font/acme"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Offer description like amount  "
+        android:textSize="12sp"
+        android:layout_marginTop="7dp"
+        android:layout_marginHorizontal="@dimen/dimen_10dp"
+        android:textColor="#B1B1B1"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="@dimen/dimen_10dp"
+        android:layout_marginTop="@dimen/dimen_10dp"
+        android:background="#424242"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="OFFER150"
+        android:textColor="#fff"
+        android:padding="@dimen/dimen_15dp"
+        android:layout_marginTop="@dimen/dimen_10dp"
+        android:layout_marginHorizontal="@dimen/dimen_10dp"
+        android:background="@drawable/offer_code_bg"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TAP TO COPY"
+        android:textColor="#F35454"
+        android:padding="@dimen/dimen_10dp"
+        android:layout_marginTop="@dimen/dimen_10dp"
+        android:layout_marginHorizontal="@dimen/dimen_10dp"
+        />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginHorizontal="@dimen/dimen_10dp"
+        android:layout_marginTop="@dimen/dimen_10dp"
+        android:background="#424242"
+        />
+     <!-- TODO ADD RECYCLERVIEW -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You will rececive an instant discount of Rs. 150 via offer name and code"
+        android:textColor="#D6D6D6"
+        android:padding="@dimen/dimen_10dp"
+        android:layout_marginTop="@dimen/dimen_10dp"
+        android:layout_marginHorizontal="@dimen/dimen_10dp"
+        android:drawableStart="@drawable/ic_outline_info_24"
+        android:drawableTint="#87FF1E"
+        android:drawablePadding="@dimen/dimen_10dp"
+        android:gravity="center_vertical"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You will rececive an instant discount of Rs. 150 via offer name and code"
+        android:textColor="#D6D6D6"
+        android:padding="@dimen/dimen_10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginHorizontal="@dimen/dimen_10dp"
+        android:drawableStart="@drawable/ic_outline_info_24"
+        android:drawableTint="#87FF1E"
+        android:drawablePadding="5dp"
+        android:gravity="center_vertical"
+        />
+
+
+</LinearLayout>

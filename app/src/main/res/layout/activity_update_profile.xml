@@ -67,11 +67,11 @@
             android:id="@+id/profile_nme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Name"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
-            android:textColor="#fff"
             android:fontFamily="@font/calibrib"
+            android:text="Name"
+            android:textColor="#fff"
             android:textSize="16sp"
             />
         <TextView
@@ -85,6 +85,9 @@
             android:fontFamily="@font/calibrib"
             android:textSize="14sp"
             android:textStyle="italic"
+            android:layout_marginHorizontal="@dimen/dimen_10dp"
+            android:ellipsize="middle"
+            android:singleLine="true"
             />
 
         <TextView
@@ -248,6 +251,7 @@
                         android:layout_height="wrap_content"
                         android:text="Home"
                         android:drawablePadding="10dp"
+                        android:ellipsize="end"
                         android:maxLines="1"
                         android:textSize="16sp"
                         android:fontFamily="@font/calibrib"
@@ -266,6 +270,8 @@
                         android:textSize="13sp"
                         android:gravity="center_vertical"
                         android:layout_marginBottom="5dp"
+                        android:ellipsize="end"
+                        android:maxLines="2"
                         />
 
 
