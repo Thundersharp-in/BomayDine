@@ -11,7 +11,7 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="?actionBarSize"
         android:elevation="10dp"
         android:background="#22242B"
         app:navigationIcon="@drawable/quantum_ic_arrow_back_grey600_24"

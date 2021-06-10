@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardUseCompatPadding="true"
+    app:cardBackgroundColor="#101115"
+    app:cardCornerRadius="@dimen/dimen_10dp"
+    app:cardElevation="@dimen/dimen_5dp"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/dimen_10dp"
+        >
+
+        <TextView
+            android:id="@+id/info"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textColor="#CDCDCD"
+            android:fontFamily="@font/calibri"
+            android:layout_marginTop="5dp"
+            android:textIsSelectable="true"
+            android:layout_marginBottom="@dimen/dimen_10dp"
+            android:textAlignment="viewStart"
+            android:ellipsize="end"
+            android:textAllCaps="false"
+            android:text="Co-ordinate\n22.456743,24,45678\n\nAddress\nShowing 3 co-ordinates details to update whole delivery area or to update one point click EDIT POINTS"
+            android:textSize="14sp"/>
+
+        <RelativeLayout
+            android:id="@+id/update"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_30dp"
+            android:background="@drawable/corner_rect_blue"
+            android:layout_alignParentEnd="true"
+            android:layout_below="@+id/info"
+            android:layout_marginBottom="@dimen/dimen_10dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="UPDATE CO-ORDINATE"
+                android:textColor="#D3D3D3"
+                android:textSize="@dimen/dimen_12sp"
+                android:fontFamily="@font/calibrib"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_centerHorizontal="true"/>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>

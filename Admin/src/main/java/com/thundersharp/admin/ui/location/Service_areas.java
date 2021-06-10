@@ -1,17 +1,20 @@
 package com.thundersharp.admin.ui.location;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -45,7 +48,9 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
     private GoogleMap mMap;
     private Marker restmark,markedmarker;
     private ShimmerFrameLayout shimmerFrameLayout;
-    private TextView address,address1,address2;
+    private TextView address,address1,address2,loc_update;
+    LinearLayout btn_holder;
+    boolean isShowing = false;
     private List<LatLng> coordinatesVal = new ArrayList<>();
 
     @Override
@@ -63,6 +68,27 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
         address1 = view.findViewById(R.id.address1);
         address2 = view.findViewById(R.id.address2);
         shimmerFrameLayout.startShimmer();
+        btn_holder = view.findViewById(R.id.btn_holder);
+        loc_update = view.findViewById(R.id.loc_update);
+        ((LinearLayout)view.findViewById(R.id.imgh)).setOnClickListener(b ->{
+            if (isShowing) {
+                if (btn_holder.getVisibility() == View.VISIBLE) {
+                    btn_holder.setVisibility(View.GONE);
+                    loc_update.setText("Update");
+                }
+                isShowing = false;
+            }else {
+                if (btn_holder.getVisibility() == View.GONE) {
+                    btn_holder.setVisibility(View.VISIBLE);
+                    loc_update.setText("Done");
+                }
+                isShowing = true;
+            }
+        });
+
+        ((AppCompatButton)view.findViewById(R.id.updatepoints)).setOnClickListener(c->{
+            startActivity(new Intent(getContext(),UpdatePoints.class));
+        });
 
         return view;
     }

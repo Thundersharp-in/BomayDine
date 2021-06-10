@@ -4,8 +4,11 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application>
-        <activity android:name=".ui.passcode.PasscodeView"></activity>
+        <activity android:name=".ui.location.CoOrdinatesUpdater"></activity>
+        <activity android:name=".ui.location.UpdatePoints" />
+        <activity android:name=".ui.passcode.PasscodeView" />
         <activity android:name=".ui.orders.OrderStatus" />
         <activity android:name=".ui.offers.AllOffersActivity" />
         <activity android:name=".ui.menu.CategoryResults" />
