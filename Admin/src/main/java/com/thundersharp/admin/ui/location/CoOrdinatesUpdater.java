@@ -30,21 +30,26 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.maps.android.PolyUtil;
 import com.thundersharp.admin.R;
 import com.thundersharp.admin.core.address.CordinatesInteractor;
+import com.thundersharp.admin.core.utils.CONSTANTS;
 import com.thundersharp.admin.core.utils.ResturantCoordinates;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
 public class CoOrdinatesUpdater extends AppCompatActivity implements OnMapReadyCallback {
 
-    public static void main(Context context , LatLng latLng){
-        context.startActivity(new Intent(context,CoOrdinatesUpdater.class).putExtra("data",latLng));
+    public static void main(Context context , LatLng latLng, Integer position, Integer size){
+        context.startActivity(new Intent(context,CoOrdinatesUpdater.class).putExtra("data",latLng).putExtra("position",position).putExtra("size",size));
     }
 
     private GoogleMap mMap;
@@ -56,6 +61,7 @@ public class CoOrdinatesUpdater extends AppCompatActivity implements OnMapReadyC
     String marker_value = null;
     AppCompatButton validate_btn;
     Toolbar toolbar;
+    Integer pos = null, size =null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +81,8 @@ public class CoOrdinatesUpdater extends AppCompatActivity implements OnMapReadyC
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(v ->finish());
+        pos = getIntent().getIntExtra("position",1);
+        size = getIntent().getIntExtra("size",1);
 
         //((Toolbar)findViewById(R.id.toolbar)).setNavigationOnClickListener(V->finish());
         coOrdinate=findViewById(R.id.coordinates);
@@ -164,7 +172,7 @@ public class CoOrdinatesUpdater extends AppCompatActivity implements OnMapReadyC
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if (isValited){ isValited = false; }
             }
 
             @Override
@@ -184,7 +192,25 @@ public class CoOrdinatesUpdater extends AppCompatActivity implements OnMapReadyC
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.save){
             if (isValited){
-                Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT).show();
+                if (pos != null && size != null) {
+                    HashMap<String, Object> value = new HashMap<>();
+                    if (pos.equals(1)){
+                        value.put("LATLON" + pos,coOrdinate.getEditText().getText().toString());
+                        value.put("LATLON" + size,coOrdinate.getEditText().getText().toString());
+                    }else value.put("LATLON" + pos,coOrdinate.getEditText().getText().toString());
+
+                    FirebaseDatabase
+                            .getInstance()
+                            .getReference(CONSTANTS.DATABASE_NODE_SERVICIABLE_AREA)
+                            .updateChildren(value)
+                            .addOnCompleteListener(task -> {
+                                if (task.isSuccessful()) {
+                                    Toast.makeText(CoOrdinatesUpdater.this, "Saved!", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(CoOrdinatesUpdater.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                }else Toast.makeText(this, "Position or Size error .\nTry to open again.", Toast.LENGTH_SHORT).show();
             }else Toast.makeText(this, "Validate the location first", Toast.LENGTH_SHORT).show();
         }
         return super.onOptionsItemSelected(item);
