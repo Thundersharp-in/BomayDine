@@ -98,13 +98,59 @@ public class CoOrdinatesUpdater extends AppCompatActivity implements OnMapReadyC
                     String lat=null , log = null;
                     lat=coOrdinate.getEditText().getText().toString().substring(0,coOrdinate.getEditText().getText().toString().indexOf(",")-1);
                     log=coOrdinate.getEditText().getText().toString().substring(coOrdinate.getEditText().getText().toString().indexOf(",")+1);
+                    try {
+                        double latitude = Double.parseDouble(lat);
+                        double longitude = Double.parseDouble(log);
+                        String string = getLocationfromLat(latitude,longitude).getAddressLine(0);
+                        Toast.makeText(this, ""+string, Toast.LENGTH_SHORT).show();
+                        if (string != null){
+                            if (mMap!= null){
+                                markedmarker.remove();
+                                MarkerOptions destmarker = new MarkerOptions();
+                                destmarker.title("Your Location");
+                                destmarker.position(new LatLng(latitude,longitude));
 
+                                markedmarker = mMap.addMarker(destmarker);
+                                addressE.getEditText().setText(string);
+                                isValited = true;
+
+                            }
+                        }
+
+                    }catch (NumberFormatException numberFormatException){
+                        isValited = false;
+
+                        Toast.makeText(this, "Enter LatLong in this format only\n\nLat,Long", Toast.LENGTH_SHORT).show();
+                        if(markedmarker!= null){
+                            markedmarker.remove();
+                        }
+
+                    } catch (IOException e) {
+                        isValited = false;
+                        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                        if(markedmarker!= null){
+                            markedmarker.remove();
+                        }
+                        e.printStackTrace();
+                    }catch (IllegalArgumentException w){
+                        isValited = false;
+                        Toast.makeText(this, "Couldn't validate \n:: IllegalArgument ::"+w.getMessage(), Toast.LENGTH_SHORT).show();
+                        if(markedmarker!= null){
+                            markedmarker.remove();
+                        }
+                    }
 
                 }else {
+                    if(markedmarker!= null){
+                        markedmarker.remove();
+                    }
                     isValited = false;
                     Toast.makeText(this, "Check the coordinate format", Toast.LENGTH_SHORT).show();
                 }
             }else {
+                if(markedmarker!= null){
+                    markedmarker.remove();
+                }
                 isValited = false;
                 Toast.makeText(this, "No co-ordinates present to render !", Toast.LENGTH_SHORT).show();
             }
@@ -118,9 +164,7 @@ public class CoOrdinatesUpdater extends AppCompatActivity implements OnMapReadyC
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                if (isValited){
-                    isValited = false;
-                }
+
             }
 
             @Override
@@ -192,6 +236,8 @@ public class CoOrdinatesUpdater extends AppCompatActivity implements OnMapReadyC
                     e.printStackTrace();
                     existingCoOrdinate = latLng;
                     addressE.getEditText().setText("Error unable to fetch address");
+                }catch (IllegalArgumentException illegalArgumentException){
+
                 }
 
 
@@ -203,7 +249,7 @@ public class CoOrdinatesUpdater extends AppCompatActivity implements OnMapReadyC
     }
 
     @NonNull
-    private Address getLocationfromLat(double lat, double longi) throws IOException {
+    private Address getLocationfromLat(double lat, double longi) throws IOException ,IllegalArgumentException{
 
         Geocoder geocoder;
         List<Address> addresses;
