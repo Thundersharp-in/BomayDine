@@ -153,6 +153,7 @@
                             android:visibility="gone"
                             android:layout_marginBottom="@dimen/dimen_10dp">
                             <androidx.appcompat.widget.AppCompatButton
+                                android:id="@+id/update_area"
                                 android:layout_width="0dp"
                                 android:layout_height="30dp"
                                 android:background="@drawable/button_red_round"

@@ -89,6 +89,9 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
         ((AppCompatButton)view.findViewById(R.id.updatepoints)).setOnClickListener(c->{
             startActivity(new Intent(getContext(),UpdatePoints.class));
         });
+        ((AppCompatButton)view.findViewById(R.id.update_area)).setOnClickListener(c->{
+            startActivity(new Intent(getContext(),AddLocation.class));
+        });
 
         return view;
     }
