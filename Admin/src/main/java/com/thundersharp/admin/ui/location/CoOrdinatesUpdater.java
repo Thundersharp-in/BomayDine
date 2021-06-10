@@ -138,6 +138,12 @@ public class CoOrdinatesUpdater extends AppCompatActivity implements OnMapReadyC
                         if(markedmarker!= null){
                             markedmarker.remove();
                         }
+                    }catch (IndexOutOfBoundsException indexOutOfBoundsException){
+                        isValited = false;
+                        Toast.makeText(this, "Couldn't validate \n:: IndexOutOfBoundsException ::"+indexOutOfBoundsException.getMessage(), Toast.LENGTH_SHORT).show();
+                        if(markedmarker!= null){
+                            markedmarker.remove();
+                        }
                     }
 
                 }else {
@@ -238,6 +244,8 @@ public class CoOrdinatesUpdater extends AppCompatActivity implements OnMapReadyC
                     addressE.getEditText().setText("Error unable to fetch address");
                 }catch (IllegalArgumentException illegalArgumentException){
 
+                }catch (IndexOutOfBoundsException w){
+
                 }
 
 
@@ -249,7 +257,7 @@ public class CoOrdinatesUpdater extends AppCompatActivity implements OnMapReadyC
     }
 
     @NonNull
-    private Address getLocationfromLat(double lat, double longi) throws IOException ,IllegalArgumentException{
+    private Address getLocationfromLat(double lat, double longi) throws IOException ,IllegalArgumentException, IndexOutOfBoundsException{
 
         Geocoder geocoder;
         List<Address> addresses;
