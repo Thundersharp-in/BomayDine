@@ -93,6 +93,7 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/validate_btn"
                 android:layout_width="120dp"
                 android:layout_height="@dimen/dimen_40dp"
                 android:background="@drawable/button_red_round"

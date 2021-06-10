@@ -2,6 +2,7 @@ package com.thundersharp.admin.ui.location;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.Toolbar;
 
 import android.annotation.SuppressLint;
@@ -10,6 +11,10 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,6 +53,9 @@ public class CoOrdinatesUpdater extends AppCompatActivity implements OnMapReadyC
     LatLng existingCoOrdinate;
     TextInputLayout coOrdinate,addressE;
     boolean isValited = false;
+    String marker_value = null;
+    AppCompatButton validate_btn;
+    Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,11 +72,16 @@ public class CoOrdinatesUpdater extends AppCompatActivity implements OnMapReadyC
             finish();
             Toast.makeText(this, "Internal Error", Toast.LENGTH_SHORT).show();
         }
+        toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        toolbar.setNavigationOnClickListener(v ->finish());
 
-        ((Toolbar)findViewById(R.id.toolbar)).setNavigationOnClickListener(V->finish());
+        //((Toolbar)findViewById(R.id.toolbar)).setNavigationOnClickListener(V->finish());
         coOrdinate=findViewById(R.id.coordinates);
         addressE = findViewById(R.id.addAddress);
-        coOrdinate.getEditText().setText(existingCoOrdinate.latitude+","+existingCoOrdinate.longitude);
+        validate_btn = findViewById(R.id.validate_btn);
+        marker_value = existingCoOrdinate.latitude+","+existingCoOrdinate.longitude;
+        coOrdinate.getEditText().setText(marker_value);
         try {
             addressE.getEditText().setText(getLocationfromLat(existingCoOrdinate.latitude,existingCoOrdinate.longitude).getAddressLine(0));
         } catch (IOException e) {
@@ -76,7 +89,61 @@ public class CoOrdinatesUpdater extends AppCompatActivity implements OnMapReadyC
             addressE.getEditText().setText("Error unable to fetch address");
         }
 
+        validate_btn.setOnClickListener(v -> {
+            if (!coOrdinate.getEditText().getText().toString().isEmpty()) {
+                if (coOrdinate.getEditText().getText().toString().equals(marker_value)) {
+                    isValited = true;
+                    Toast.makeText(this, "Validated successfully !", Toast.LENGTH_SHORT).show();
+                } else if (coOrdinate.getEditText().getText().toString().contains(",")){
+                    String lat=null , log = null;
+                    lat=coOrdinate.getEditText().getText().toString().substring(0,coOrdinate.getEditText().getText().toString().indexOf(",")-1);
+                    log=coOrdinate.getEditText().getText().toString().substring(coOrdinate.getEditText().getText().toString().indexOf(",")+1);
 
+
+                }else {
+                    isValited = false;
+                    Toast.makeText(this, "Check the coordinate format", Toast.LENGTH_SHORT).show();
+                }
+            }else {
+                isValited = false;
+                Toast.makeText(this, "No co-ordinates present to render !", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        coOrdinate.getEditText().addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                if (isValited){
+                    isValited = false;
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.save, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if (item.getItemId() == R.id.save){
+            if (isValited){
+                Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT).show();
+            }else Toast.makeText(this, "Validate the location first", Toast.LENGTH_SHORT).show();
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @SuppressLint("MissingPermission")
@@ -99,6 +166,7 @@ public class CoOrdinatesUpdater extends AppCompatActivity implements OnMapReadyC
             MarkerOptions initMarker = new MarkerOptions();
             initMarker.title("Existing Location");
             initMarker.position(existingCoOrdinate);
+            isValited = true;
             markedmarker = mMap.addMarker(initMarker);
         }
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -114,7 +182,9 @@ public class CoOrdinatesUpdater extends AppCompatActivity implements OnMapReadyC
 
                 Address address = null;
                 try {
-                    coOrdinate.getEditText().setText(latLng.latitude+","+latLng.longitude);
+                    marker_value = latLng.latitude+","+latLng.longitude;
+                    coOrdinate.getEditText().setText(marker_value);
+                    isValited = true;
                     address = getLocationfromLat(latLng.latitude, latLng.longitude);
                     addressE.getEditText().setText(address.getAddressLine(0));
                     existingCoOrdinate = latLng;
