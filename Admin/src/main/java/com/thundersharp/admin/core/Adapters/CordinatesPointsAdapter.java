@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -56,8 +57,11 @@ public class CordinatesPointsAdapter extends RecyclerView.Adapter<CordinatesPoin
 
         holder.dataMain.setText(stringBuilder.toString());
         holder.update.setOnClickListener(v->{
-            CoOrdinatesUpdater.main(context,data);
+            if (position+1 != latLngs.size())
+                CoOrdinatesUpdater.main(context,data,position+1,latLngs.size());
+            else Toast.makeText(context, "You can't edit this point.\nTo edit this point edit the starting point.", Toast.LENGTH_SHORT).show();
         });
+
     }
 
     @Override
