@@ -30,4 +30,9 @@ public class CONSTANTS {
 
     public static final String DATABASE_NODE_PROFILEPICURI = "PROFILEPICURI";
     public static final String PROFILE_NODE_PROFILEPICURI = "PROFILEURL";
+
+    public static  final String DATABASE_RESTURANT_STATUS = "RESTURANT_STATUS";
+    public static  final String DATABASE_RESTURANT_OPEN = "OPEN";
+
+    public static  final String DATABASE_ITEM_AVAILABLE = "AVAILABLE";
 }

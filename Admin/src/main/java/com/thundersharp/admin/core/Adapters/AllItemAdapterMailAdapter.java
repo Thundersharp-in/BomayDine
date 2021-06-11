@@ -10,12 +10,19 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.thundersharp.admin.R;
@@ -66,16 +73,16 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
         Glide.with(context).load(foodItemAdapter.getICON_URL()).into(holder.icon_main);
         if (foodItemAdapter.getFOOD_TYPE() == 1){
             holder.veg_nonveg.setColorFilter(ContextCompat.getColor(context, R.color.red), android.graphics.PorterDuff.Mode.MULTIPLY);
-
         }else{
             holder.veg_nonveg.setColorFilter(ContextCompat.getColor(context, R.color.green), android.graphics.PorterDuff.Mode.MULTIPLY);
-
         }
 
         holder.name.setText(foodItemAdapter.getNAME());
         holder.amount.setText("Rs. "+foodItemAdapter.getAMOUNT());
         holder.description.setText(foodItemAdapter.getDESC());
         holder.category.setText("In "+getcatName(foodItemAdapter.getCAT_NAME_ID()));
+        holder.foodAvailable.setChecked(foodItemAdapter.isAVAILABLE());
+
 
         if (position > 0) {
             if (getcatName(foodItemAdapter.getCAT_NAME_ID())
@@ -90,7 +97,50 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
             holder.cathol.setVisibility(View.VISIBLE);
         }
 
+        final boolean[] status = {foodItemAdapter.isAVAILABLE()};
+        holder.foodAvailable.setOnClickListener(click ->{
 
+            holder.foodAvailable.setChecked(status[0]);
+            holder.foodAvailable.isChecked();
+            AlertDialog.Builder builder = new AlertDialog.Builder(context);
+
+            builder.setTitle("RESTAURANT FOOD AVAILABILITY UPDATE");
+            builder.setMessage("Do you really want to update the food availability in the restaurant !");
+            builder.setIcon(R.drawable.ic_round_warning_24);
+            builder.setCancelable(true);
+
+            builder.setPositiveButton("YES", (dialog, which) -> FirebaseDatabase
+                    .getInstance()
+                    .getReference(CONSTANTS.DATABASE_NODE_ALL_ITEMS)
+                    .child(foodItemAdapter.getID())
+                    .child(CONSTANTS.DATABASE_ITEM_AVAILABLE)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            if (snapshot.exists()){
+                                holder.foodAvailable.setChecked(snapshot.getValue(Boolean.class));
+                                status[0] = snapshot.getValue(Boolean.class);
+                            }else {
+                                holder.foodAvailable.setChecked(false);
+                                status[0] = false;
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+                            holder.foodAvailable.setChecked(false);
+                            Toast.makeText(context, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    })).setNegativeButton("NO", (dialog, which) -> dialog.dismiss())
+                    .setNeutralButton("CANCEL", (dialog, which) -> dialog.cancel());
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        });
+
+        holder.edit_item.setOnClickListener(v -> {
+
+        });
     }
 
     @Override
@@ -141,13 +191,13 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
     class ViewHolder extends RecyclerView.ViewHolder{
 
         public TextView cat_name;
-        private ImageView icon_main,veg_nonveg;
+        private ImageView icon_main,veg_nonveg, edit_item;
         private TextView name,description,amount,category;
         private LinearLayout cathol;
+        private SwitchCompat foodAvailable;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
 
             cat_name = itemView.findViewById(R.id.cat_name);
             icon_main = itemView.findViewById(R.id.icon_main);
@@ -157,7 +207,8 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
             amount = itemView.findViewById(R.id.amount);
             category = itemView.findViewById(R.id.category);
             cathol = itemView.findViewById(R.id.cathol);
-
+            foodAvailable = itemView.findViewById(R.id.foodAvailable);
+            edit_item = itemView.findViewById(R.id.edit_item);
         }
 
     }

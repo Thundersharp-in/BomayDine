@@ -86,6 +86,7 @@
             </androidx.cardview.widget.CardView>
 
             <ImageView
+                android:id="@+id/edit_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:elevation="@dimen/dimen_5dp"

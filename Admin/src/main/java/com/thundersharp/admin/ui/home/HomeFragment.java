@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
@@ -28,6 +29,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -55,6 +57,7 @@ import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -62,6 +65,7 @@ import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
+import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -90,6 +94,7 @@ import com.thundersharp.admin.core.animation.Animator;
 import com.thundersharp.admin.core.cart.CartHandler;
 import com.thundersharp.admin.core.cart.CartProvider;
 import com.thundersharp.admin.core.location.DistanceFromCoordinates;
+import com.thundersharp.admin.core.utils.CONSTANTS;
 import com.thundersharp.admin.core.utils.LatLongConverter;
 import com.thundersharp.admin.core.utils.ResturantCoordinates;
 import com.thundersharp.admin.ui.dailyfood.DailyfoodActivity;
@@ -176,6 +181,8 @@ public class HomeFragment extends Fragment implements
     private TextView view_action;
     private AppCompatButton pay;
     private RelativeLayout containermain;
+    private SwitchMaterial restaurantStatus;
+    private boolean stsus;
 
     private static List<Object> foodItemAdapterListStatic = new ArrayList<>();
 
@@ -226,6 +233,8 @@ public class HomeFragment extends Fragment implements
         clearcompleate = view.findViewById(R.id.clearcompleate);
         bottom_clickable_linear = view.findViewById(R.id.bottom_clickable_linear);
         view_action = view.findViewById(R.id.view_action);
+        restaurantStatus = view.findViewById(R.id.restaurantStatus);
+
         homeDataProvider = new HomeDataProvider(getActivity(), this, this, this, this);
 
         bottomnoti.setVisibility(View.INVISIBLE);
@@ -238,8 +247,6 @@ public class HomeFragment extends Fragment implements
         addressHelper = new AddressHelper(getActivity(), this);
 
         //recyclerView = (RecyclerView) view.findViewById(R.id.places_recycler_view);
-
-
 
         if (offlineDataProvider.doSharedPrefExists()){
             if (!offlineDataProvider.fetchitemfromStorage().equalsIgnoreCase("[]")){
@@ -368,7 +375,6 @@ public class HomeFragment extends Fragment implements
         });
 
 
-
         categoryRecycler = view.findViewById(R.id.recentordcategoryholderer);
         categoryRecycler.setHasFixedSize(true);
 
@@ -475,7 +481,14 @@ public class HomeFragment extends Fragment implements
             }
         });
 
+        fetchRestaurantStaus();
 
+        stsus= restaurantStatus.isChecked();
+
+        restaurantStatus.setOnClickListener(v ->{
+            restaurantStatus.setChecked(stsus);
+            UpdateREstStatus();
+        });
 
         BroadcastReceiver broadcastReceiver =new BroadcastReceiver() {
             @Override
@@ -492,6 +505,83 @@ public class HomeFragment extends Fragment implements
         getActivity().registerReceiver(broadcastReceiver,new IntentFilter("updated"));
 
         return view;
+    }
+
+    private void UpdateREstStatus() {
+
+        String open ;
+        if (restaurantStatus.isChecked())open="open";else open="close";
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        builder.setTitle("RESTAURANT STATUS UPDATE");
+        builder.setMessage("Do you really want to "+open+" the restaurant !");
+        builder.setIcon(R.drawable.ic_round_warning_24);
+        builder.setCancelable(true);
+
+        builder
+                .setPositiveButton("YES", (dialog, which) -> UpdateRestaurantStatus(restaurantStatus.isChecked()))
+                .setNegativeButton("NO", (dialog, which) -> dialog.dismiss())
+                .setNeutralButton("CANCEL", (dialog, which) -> dialog.cancel());
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
+    }
+
+    private void fetchRestaurantStaus() {
+        FirebaseDatabase
+                .getInstance()
+                .getReference(CONSTANTS.DATABASE_RESTURANT_STATUS)
+                .child(CONSTANTS.DATABASE_RESTURANT_OPEN)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            restaurantStatus.setChecked(snapshot.getValue(Boolean.class));
+                            textcurrloc.setText("Your resturant status is : OPENED");
+                            stsus = snapshot.getValue(Boolean.class);
+                        }else {
+                            restaurantStatus.setChecked(false);
+                            stsus =  false;
+                            textcurrloc.setText("Your resturant status is : CLOSED");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        restaurantStatus.setChecked(false);
+                        Toast.makeText(getActivity(), ""+error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
+
+    private void UpdateRestaurantStatus(boolean isChecked) {
+
+        FirebaseDatabase
+                .getInstance()
+                .getReference(CONSTANTS.DATABASE_RESTURANT_STATUS)
+                .child(CONSTANTS.DATABASE_RESTURANT_OPEN)
+                .setValue(isChecked)
+                .addOnCompleteListener(task ->{
+                    if (task.isSuccessful()){
+                        if (isChecked){
+                            stsus = true;
+                            restaurantStatus.setChecked(isChecked);
+                            textcurrloc.setText("Your resturant status is : OPENED");
+                            Toast.makeText(getActivity(), "Restaurant opened", Toast.LENGTH_SHORT).show();
+                        }else {
+                            stsus = false;
+                            restaurantStatus.setChecked(isChecked);
+                            textcurrloc.setText("Your resturant status is : CLOSED");
+                            Toast.makeText(getActivity(), "Restaurant closed", Toast.LENGTH_SHORT).show();
+                        }
+                    }else {
+                        Toast.makeText(getActivity(), ""+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                });
+
+
     }
 
     private void showcart(View view) {

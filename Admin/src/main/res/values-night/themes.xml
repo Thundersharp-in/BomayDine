@@ -25,4 +25,6 @@
     <style name="CustomChipChoice" parent="@style/Widget.MaterialComponents.Chip.Choice">
         <item name="chipBackgroundColor">@color/a_chip_bg</item>
     </style>
+
+
 </resources>
