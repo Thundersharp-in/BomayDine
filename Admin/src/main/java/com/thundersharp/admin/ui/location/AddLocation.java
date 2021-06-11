@@ -103,7 +103,7 @@ public class AddLocation extends AppCompatActivity implements OnMapReadyCallback
                 FirebaseDatabase
                         .getInstance()
                         .getReference(CONSTANTS.DATABASE_NODE_SERVICIABLE_AREA)
-                        .updateChildren(setLatLongVal)
+                        .setValue(setLatLongVal)
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
