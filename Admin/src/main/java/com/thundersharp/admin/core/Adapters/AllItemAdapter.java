@@ -149,47 +149,7 @@ public class AllItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             });
             Glide.with(context).load(foodItemModel.getICON_URL()).into(((ViewHolder)holder).imageView);
-            ((ViewHolder)holder).foodAvailable.setChecked(foodItemModel.isAVAILABLE());
-            final boolean[] status = {foodItemModel.isAVAILABLE()};
-            ((ViewHolder)holder).foodAvailable.setOnClickListener(click ->{
 
-                ((ViewHolder)holder).foodAvailable.setChecked(status[0]);
-                ((ViewHolder)holder).foodAvailable.isChecked();
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-                builder.setTitle("RESTAURANT FOOD AVAILABILITY UPDATE");
-                builder.setMessage("Do you really want to update the food availability in the restaurant !");
-                builder.setIcon(R.drawable.ic_round_warning_24);
-                builder.setCancelable(true);
-
-                builder.setPositiveButton("YES", (dialog, which) -> FirebaseDatabase
-                        .getInstance()
-                        .getReference(CONSTANTS.DATABASE_NODE_ALL_ITEMS)
-                        .child(foodItemModel.getID())
-                        .child(CONSTANTS.DATABASE_ITEM_AVAILABLE)
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.exists()){
-                                    ((ViewHolder)holder).foodAvailable.setChecked(snapshot.getValue(Boolean.class));
-                                    status[0] = snapshot.getValue(Boolean.class);
-                                }else {
-                                    ((ViewHolder)holder).foodAvailable.setChecked(false);
-                                    status[0] = false;
-                                }
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                ((ViewHolder)holder).foodAvailable.setChecked(false);
-                                Toast.makeText(context, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        })).setNegativeButton("NO", (dialog, which) -> dialog.dismiss())
-                        .setNeutralButton("CANCEL", (dialog, which) -> dialog.cancel());
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
-            });
         }
 
     }
