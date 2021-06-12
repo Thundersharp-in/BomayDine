@@ -33,6 +33,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -183,6 +184,7 @@ public class HomeFragment extends Fragment implements
     private static List<Object> foodItemAdapterListStatic = new ArrayList<>();
 
     OfflineDataProvider offlineDataProvider;
+    SwipeRefreshLayout swipe_refresh;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -190,6 +192,7 @@ public class HomeFragment extends Fragment implements
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
         containermain = view.findViewById(R.id.containermain);
+
         version = view.findViewById(R.id.version);
         try {
             PackageInfo pInfo = getActivity().getPackageManager().getPackageInfo(getActivity().getPackageName(), 0);
@@ -197,14 +200,9 @@ public class HomeFragment extends Fragment implements
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
+
         bottomSheetDialog = new BottomSheetDialog(getActivity(), R.style.BottomSheetDialogTheme);
 
-        Animator
-                .initializeAnimator()
-                .customAnimation(R.anim.slide_from_right_fast, containermain);
-
-        offlineDataProvider = OfflineDataProvider.getInstance(getContext());
-        sharedPrefHelper = new SharedPrefHelper(getContext(), this);
         mDemoSlider = view.findViewById(R.id.slider);
         shimmerplace_cat = view.findViewById(R.id.shimmerplace_cat);
         shimmerplace_allitem = view.findViewById(R.id.shimmerplace_allitem);
@@ -228,6 +226,28 @@ public class HomeFragment extends Fragment implements
         bottom_clickable_linear = view.findViewById(R.id.bottom_clickable_linear);
         view_action = view.findViewById(R.id.view_action);
         search_home=view.findViewById(R.id.search_home);
+
+        Animator
+                .initializeAnimator()
+                .customAnimation(R.anim.slide_from_right_fast, containermain);
+
+        swipe_refresh = view.findViewById(R.id.swipe);
+        swipe_refresh.setRefreshing(true);
+
+        refresh(view);
+
+        swipe_refresh.setOnRefreshListener(() -> {
+            refresh(view);
+            swipe_refresh.setRefreshing(false);
+        });
+        return view;
+    }
+
+    private void refresh(View view) {
+
+        offlineDataProvider = OfflineDataProvider.getInstance(getContext());
+        sharedPrefHelper = new SharedPrefHelper(getContext(), this);
+
         homeDataProvider = new HomeDataProvider(getActivity(), this, this, this, this);
 
         bottomnoti.setVisibility(View.INVISIBLE);
@@ -503,7 +523,7 @@ public class HomeFragment extends Fragment implements
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (allItemAdapter!= null)
-                allItemAdapter.getFilter().filter(s);
+                    allItemAdapter.getFilter().filter(s);
             }
 
             @Override
@@ -513,9 +533,10 @@ public class HomeFragment extends Fragment implements
         });
 
         getActivity().registerReceiver(broadcastReceiver,new IntentFilter("updated"));
+        swipe_refresh.setRefreshing(false);
 
-        return view;
     }
+
 
     private void showcart(View view) {
 

@@ -108,9 +108,15 @@ public class AllItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ((ViewHolder)holder).name.setText(foodItemModel.getNAME());
             ((ViewHolder)holder).amount.setText("Rs. " + foodItemModel.getAMOUNT());
             ((ViewHolder)holder).description.setText(foodItemModel.getDESC());
-            if (foodItemModel.isAVAILABLE())
-            ((ViewHolder)holder).foodAvailable.setChecked(true);
-            else ((ViewHolder)holder).foodAvailable.setChecked(false);
+            if (foodItemModel.isAVAILABLE()){
+                ((ViewHolder)holder).foodAvailable.setChecked(true);
+                ((ViewHolder)holder).textavlaible.setTextColor(Color.YELLOW);
+                ((ViewHolder)holder).textavlaible.setText("Available");
+            } else{
+                ((ViewHolder)holder).foodAvailable.setChecked(false);
+                ((ViewHolder)holder).textavlaible.setTextColor(Color.RED);
+                ((ViewHolder)holder).textavlaible.setText("Unavailable");
+            }
             ((ViewHolder)holder).foodAvailable.setOnCheckedChangeListener((compoundButton, b) -> {
                 if (b){
                     ((ViewHolder)holder).textavlaible.setTextColor(Color.YELLOW);
