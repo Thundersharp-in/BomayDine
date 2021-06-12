@@ -1,24 +1,20 @@
-package com.thundersharp.bombaydine.kitchen.core;
+package com.thundersharp.bombaydine.kitchen.core.helper;
 
-import android.annotation.SuppressLint;
 import android.text.format.DateFormat;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
-import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
+import com.thundersharp.bombaydine.Delevery.core.DeliveryOrderContract;
+import com.thundersharp.bombaydine.Delevery.core.DeliveryOrderListner;
 import com.thundersharp.bombaydine.user.core.orders.OrderContract;
 import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -28,9 +24,9 @@ import java.util.Locale;
 public class KitchenOrderListner implements OrderContract , OrderContract.Status{
 
     static KitchenOrderListner kitchenOrderListner;
-    private OrderContract.onOrderFetch onOrderFetch;
+    private KitchenOrder onOrderFetch;
     private String date;
-    private OrderContract.StatusSuccessFailure statusSuccessFailure;
+    private StatusSuccessFailure statusSuccessFailure;
 
     public static KitchenOrderListner getKitchenOrderInstance(){
         kitchenOrderListner = new KitchenOrderListner();
@@ -40,13 +36,13 @@ public class KitchenOrderListner implements OrderContract , OrderContract.Status
     public KitchenOrderListner() {
     }
 
-    public KitchenOrderListner setOnOrderSuccessFailureListner(OrderContract.onOrderFetch orderSuccessFailureListner){
-        kitchenOrderListner.KitchenOrderListner(orderSuccessFailureListner);
+    public KitchenOrderListner setOnOrderSuccessFailureListner(KitchenOrder orderSuccessFailureListner){
+        kitchenOrderListner.KitchenOrderListne(orderSuccessFailureListner);
         return kitchenOrderListner;
     }
 
     public KitchenOrderListner setOnStatusSuccessFailureListner(OrderContract.StatusSuccessFailure statusSuccessFailure){
-        kitchenOrderListner.KitchenOrderListner(statusSuccessFailure);
+        kitchenOrderListner.KitchenOrderListne(statusSuccessFailure);
         return kitchenOrderListner;
     }
 
@@ -64,10 +60,10 @@ public class KitchenOrderListner implements OrderContract , OrderContract.Status
         return date;
     }
 
-    public void KitchenOrderListner(OrderContract.StatusSuccessFailure statusSuccessFailure){
+    public void KitchenOrderListne(StatusSuccessFailure statusSuccessFailure){
         this.statusSuccessFailure = statusSuccessFailure;
     }
-    public void KitchenOrderListner(OrderContract.onOrderFetch orderFetch){
+    public void KitchenOrderListne(KitchenOrder orderFetch){
         this.onOrderFetch = orderFetch;
     }
 
@@ -78,19 +74,31 @@ public class KitchenOrderListner implements OrderContract , OrderContract.Status
                 .getInstance()
                 .getReference(CONSTANTS.DATABASE_NODE_ALL_ORDERS)
                 .child(date)//  getDate()
-                .addListenerForSingleValueEvent(new ValueEventListener() {
+                .addChildEventListener(new ChildEventListener() {
                     @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                         if (snapshot.exists()){
-                            for (DataSnapshot snapshot1 : snapshot.getChildren()){
-                                //OrederBasicDetails orederBasicDetails= snapshot1.getValue(OrederBasicDetails.class);
-                                allOrders.add(snapshot1);
-                            }
-                            onOrderFetch.onOrderFetchSuccess(allOrders);
+
+                            onOrderFetch.onOrderFetchSuccess(snapshot,true);
 
                         }else {
                             onOrderFetch.onDataFetchFailure(new Exception("No orders Today yet !"));
                         }
+                    }
+
+                    @Override
+                    public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                        onOrderFetch.onOrderFetchSuccess(snapshot,false);
+                    }
+
+                    @Override
+                    public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                    }
+
+                    @Override
+                    public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
                     }
 
                     @Override

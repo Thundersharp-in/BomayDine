@@ -37,8 +37,8 @@
             android:name=".user.ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity android:name=".user.ui.orders.OrderStatus" />
-        <activity android:name=".Delevery.HomeDelevery" />
-        <activity android:name=".kitchen.HomeKitchen" />
+        <activity android:name=".Delevery.main.HomeDelevery" />
+        <activity android:name=".kitchen.main.HomeKitchen" />
         <activity android:name=".user.ui.offers.AllOffersActivity" />
         <activity android:name=".user.ui.dailyfood.DailyfoodActivity" />
         <activity android:name=".user.ui.menu.TopSellingAll" />

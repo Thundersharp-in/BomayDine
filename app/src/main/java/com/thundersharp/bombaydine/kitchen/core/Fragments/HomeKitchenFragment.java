@@ -12,25 +12,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.thundersharp.bombaydine.Delevery.core.ItemDeliverHolder;
+import com.thundersharp.bombaydine.Delevery.main.HomeDelevery;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.kitchen.core.Adapter.ItemOrderHolder;
-import com.thundersharp.bombaydine.kitchen.core.KitchenOrderListner;
+import com.thundersharp.bombaydine.kitchen.core.helper.KitchenOrder;
+import com.thundersharp.bombaydine.kitchen.core.helper.KitchenOrderListner;
 import com.thundersharp.bombaydine.user.core.login.AccountHelper;
 import com.thundersharp.bombaydine.user.core.orders.OrderContract;
 import com.thundersharp.bombaydine.user.ui.startup.MainActivity;
-import com.thundersharp.conversation.ChatStarter;
-import com.thundersharp.conversation.ParametersMissingException;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 
 
-public class HomeKitchenFragment extends Fragment implements OrderContract.onOrderFetch{
+public class HomeKitchenFragment extends Fragment implements KitchenOrder {
 
     RecyclerView rv_order;
+    ItemOrderHolder itemOrderHolder;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,15 +50,17 @@ public class HomeKitchenFragment extends Fragment implements OrderContract.onOrd
                 .setOnOrderSuccessFailureListner(this)
                 .fetchRecentOrders();
 
-        view.findViewById(R.id.acccswitch).setOnClickListener(viewclk -> {
 
+        view.findViewById(R.id.acccswitch).setOnClickListener(viewclk -> {
             AccountHelper
                     .getInstance(getActivity())
                     .clearAllData();
             startActivity(new Intent(getActivity(), MainActivity.class));
             getActivity().finish();
-
         });
+        /*
+
+         */
 
         return view;
     }
@@ -65,10 +71,21 @@ public class HomeKitchenFragment extends Fragment implements OrderContract.onOrd
     }
 
     @Override
-    public void onOrderFetchSuccess(List<Object> data) {
-        Collections.reverse(data);
+    public void onOrderFetchSuccess(DataSnapshot data, boolean isNew) {
+        if (isNew){
+            if (itemOrderHolder == null) {
+                List<DataSnapshot> list= new ArrayList<>();
+                list.add(data);
+                itemOrderHolder = new ItemOrderHolder(getActivity(),list);
+                rv_order.setAdapter(itemOrderHolder);
+            }else itemOrderHolder.addNew(data);
+
+        }else itemOrderHolder.upDateExisting(data);
+
+
+        //Collections.reverse(data);
         // Toast.makeText(getContext(), "data"+data.size(), Toast.LENGTH_SHORT).show();
-        rv_order.setAdapter(new ItemOrderHolder(getContext(),data));
+       // rv_order.setAdapter(new ItemOrderHolder(getContext(),data));
     }
 
     @Override

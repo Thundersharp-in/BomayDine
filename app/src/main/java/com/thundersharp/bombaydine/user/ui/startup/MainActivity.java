@@ -7,9 +7,9 @@ import android.os.Handler;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.thundersharp.admin.AdminModule;
-import com.thundersharp.bombaydine.Delevery.HomeDelevery;
+import com.thundersharp.bombaydine.Delevery.main.HomeDelevery;
 import com.thundersharp.bombaydine.R;
-import com.thundersharp.bombaydine.kitchen.HomeKitchen;
+import com.thundersharp.bombaydine.kitchen.main.HomeKitchen;
 import com.thundersharp.bombaydine.user.core.Model.SavedAccountData;
 import com.thundersharp.bombaydine.user.core.login.AccountHelper;
 import com.thundersharp.bombaydine.user.core.login.AccountSwitcher;
