@@ -9,17 +9,13 @@ import androidx.core.content.ContextCompat;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.IntentSender;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Looper;
@@ -32,18 +28,13 @@ import android.widget.Toast;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResolvableApiException;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.location.LocationSettingsRequest;
 import com.google.android.gms.location.LocationSettingsResponse;
-import com.google.android.gms.location.LocationSettingsResult;
-import com.google.android.gms.location.LocationSettingsStates;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -56,7 +47,6 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -70,7 +60,7 @@ import com.thundersharp.bombaydine.user.core.address.CordinatesInteractor;
 import com.thundersharp.bombaydine.user.core.address.Cordinateslistner;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefHelper;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
-import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
+import com.thundersharp.bombaydine.user.core.utils.Resturant;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -78,7 +68,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import static android.location.LocationManager.PROVIDERS_CHANGED_ACTION;
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
 
 public class HomeLocationChooser extends AppCompatActivity implements OnMapReadyCallback,
@@ -195,7 +184,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
 
         MarkerOptions markerOptions1 = new MarkerOptions();
         markerOptions1.title("Bombay dine restaurant");
-        markerOptions1.position(ResturantCoordinates.resturantLatLong);
+        markerOptions1.position(Resturant.resturantLatLong);
         markerOptions1.icon(BitmapDescriptorFactory.fromResource(R.drawable.restaurant));
 
         //mMap.setMaxZoomPreference(10f);
@@ -203,7 +192,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
         //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
         //Toast.makeText(this, ""+getlatlang(addressData.getLAT_LONG()).latitude+","+getlatlang(addressData.getLAT_LONG()).longitude, Toast.LENGTH_SHORT).show();
         //TODO UPDATE DEVICE CURRENT LOCATION HERE
-        markerOptions.position(ResturantCoordinates.resturantLatLong);
+        markerOptions.position(Resturant.resturantLatLong);
         markerOptions.draggable(true);
 
         mMap.setMinZoomPreference(5f);
@@ -299,7 +288,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
 */
 
         cordinatesInteractor.fetchAllCoordinates();
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ResturantCoordinates.resturantLatLong, 18));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Resturant.resturantLatLong, 18));
 
 
 
@@ -460,7 +449,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
                                                 AlertDialog.Builder builder = new AlertDialog.Builder(HomeLocationChooser.this);
                                                 builder.setMessage("Sorry we don't deliver in your location, But you can still order for someone in our delivery location.");
                                                 builder.setPositiveButton("OK",(dialogInterface, i) -> {
-                                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ResturantCoordinates.resturantLatLong, 18));
+                                                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Resturant.resturantLatLong, 18));
                                                 });
                                                 builder.setCancelable(false);
                                                 builder.show();
@@ -563,7 +552,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
                                             AlertDialog.Builder builder = new AlertDialog.Builder(HomeLocationChooser.this);
                                             builder.setMessage("Sorry we don't deliver in your location, But you can still order for someone in our delivery location.");
                                             builder.setPositiveButton("OK",(dialogInterface, i) -> {
-                                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ResturantCoordinates.resturantLatLong, 18));
+                                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Resturant.resturantLatLong, 18));
                                             });
                                             builder.setCancelable(false);
                                             builder.show();

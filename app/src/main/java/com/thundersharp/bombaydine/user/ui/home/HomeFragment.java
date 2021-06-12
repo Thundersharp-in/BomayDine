@@ -90,7 +90,7 @@ import com.thundersharp.bombaydine.user.core.cart.CartHandler;
 import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 import com.thundersharp.bombaydine.user.core.location.DistanceFromCoordinates;
 import com.thundersharp.bombaydine.user.core.utils.LatLongConverter;
-import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
+import com.thundersharp.bombaydine.user.core.utils.Resturant;
 import com.thundersharp.bombaydine.user.ui.dailyfood.DailyfoodActivity;
 import com.thundersharp.bombaydine.user.ui.location.HomeLocationChooser;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
@@ -535,8 +535,8 @@ public class HomeFragment extends Fragment implements
         pay = bottomview.findViewById(R.id.paybtn);
         delevering_to_address.setText("Delivering to :"+sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1());
 
-        long distance = Math.round(DistanceFromCoordinates.getInstance().convertLatLongToDistance(ResturantCoordinates.resturantLatLong,LatLongConverter.initialize().getlatlang(sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG())));
-        int time = (int) ((distance/ResturantCoordinates.averageSpaeed)*60)+ResturantCoordinates.averagePreperationTime;
+        long distance = Math.round(DistanceFromCoordinates.getInstance().convertLatLongToDistance(Resturant.resturantLatLong,LatLongConverter.initialize().getlatlang(sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG())));
+        int time = (int) ((distance/ Resturant.averageSpaeed)*60)+ Resturant.averagePreperationTime;
 
 
         est_time.setText("Estimated delivery : "+time+" minutes");
@@ -566,10 +566,10 @@ public class HomeFragment extends Fragment implements
                 deleveryCharges = (DistanceFromCoordinates
                         .getInstance()
                         .convertLatLongToDistance(
-                                ResturantCoordinates.resturantLatLong,
-                                LatLongConverter.initialize().getlatlang(sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG()))) * ResturantCoordinates.deliveryChargesPerKilometer;
-                if (deleveryCharges > ResturantCoordinates.maxDeliveryCharges) {
-                    deleveryCharges = ResturantCoordinates.maxDeliveryCharges;
+                                Resturant.resturantLatLong,
+                                LatLongConverter.initialize().getlatlang(sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG()))) * Resturant.deliveryChargesPerKilometer;
+                if (deleveryCharges > Resturant.maxDeliveryCharges) {
+                    deleveryCharges = Resturant.maxDeliveryCharges;
                 }
 
 

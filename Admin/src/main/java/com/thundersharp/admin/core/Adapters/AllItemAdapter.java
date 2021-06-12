@@ -141,8 +141,8 @@ public class AllItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                                     ((ViewHolder)holder).textavlaible.setText("Available");
                                 }
                             }
-                        })
-                        .updateStatus(b);
+
+                        }).updateStatus(b);
 
             });
             Glide.with(context).load(foodItemModel.getICON_URL()).into(((ViewHolder)holder).imageView);

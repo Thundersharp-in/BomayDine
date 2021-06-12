@@ -24,7 +24,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.BitmapDescriptor;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
@@ -39,8 +38,7 @@ import com.thundersharp.bombaydine.user.core.address.Cordinateslistner;
 import com.thundersharp.bombaydine.user.core.animation.Animator;
 import com.thundersharp.bombaydine.user.core.location.DirectionsJSONParser;
 import com.thundersharp.bombaydine.user.core.location.DistanceFromCoordinates;
-import com.thundersharp.bombaydine.user.core.utils.LatLongConverter;
-import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
+import com.thundersharp.bombaydine.user.core.utils.Resturant;
 
 import org.json.JSONObject;
 
@@ -48,7 +46,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -109,7 +106,7 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
         mMap.setMapStyle(style);
         //mMap.setMaxZoomPreference(10f);
         markerOptions.title("Bombay dine restaurant");
-        markerOptions.position(ResturantCoordinates.resturantLatLong);
+        markerOptions.position(Resturant.resturantLatLong);
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.restaurant));
         mMap.setMinZoomPreference(10f);
         mMap.setBuildingsEnabled(true);
@@ -131,15 +128,15 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
                 markedmarker = mMap.addMarker(destmarker);
 
                 // Getting URL to the Google Directions API
-                String url = getDirectionsUrl(ResturantCoordinates.resturantLatLong, latLng);
+                String url = getDirectionsUrl(Resturant.resturantLatLong, latLng);
                 //Log.d("URL",url);
                 //DownloadTask downloadTask = new DownloadTask();
 
                 // Start downloading json data from Google Directions API
                 //downloadTask.execute(url);
                 boolean isInsideBondry = PolyUtil.containsLocation(latLng,coordinatesVal,true);
-                long distance = Math.round(DistanceFromCoordinates.getInstance().convertLatLongToDistance(ResturantCoordinates.resturantLatLong, latLng));
-                int time = (int) ((distance/ResturantCoordinates.averageSpaeed)*60)+ResturantCoordinates.averagePreperationTime;
+                long distance = Math.round(DistanceFromCoordinates.getInstance().convertLatLongToDistance(Resturant.resturantLatLong, latLng));
+                int time = (int) ((distance/ Resturant.averageSpaeed)*60)+ Resturant.averagePreperationTime;
 
                 if (isInsideBondry){
                     distanceAvg.setText("Approximate Distance : "+distance+" Km");
@@ -208,7 +205,7 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
                 .color(Color.RED)
                 .geodesic(true));
         // on below line we will be starting the drawing of polyline.
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ResturantCoordinates.resturantLatLong, 13));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Resturant.resturantLatLong, 13));
 
         shimmerFrameLayout.stopShimmer();
         shimmerFrameLayout.hideShimmer();
