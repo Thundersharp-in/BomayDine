@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import com.google.firebase.auth.FirebaseAuth;
 import com.thundersharp.bombaydine.user.core.Model.AddressData;
 import com.thundersharp.bombaydine.user.core.Model.NamePhone;
-import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
+import com.thundersharp.bombaydine.user.core.utils.Resturant;
 
 public class SharedPrefHelper implements SharedPrefUpdater{
 
@@ -52,7 +52,7 @@ public class SharedPrefHelper implements SharedPrefUpdater{
             AddressData addressData = new AddressData();
             addressData.setADDRESS_LINE1(sharedPreferences.getString("Address","Soldevahanalli"));
             addressData.setADDRESS_NICKNAME(sharedPreferences.getString("Nickname","Home"));
-            addressData.setLAT_LONG(sharedPreferences.getString("lat_long",ResturantCoordinates.resturantLatLong.latitude+","+ResturantCoordinates.resturantLatLong.longitude));
+            addressData.setLAT_LONG(sharedPreferences.getString("lat_long", Resturant.resturantLatLong.latitude+","+ Resturant.resturantLatLong.longitude));
             onSharedprefUpdated.onSharedPrefUpdate(addressData);
         }
     }
@@ -62,7 +62,7 @@ public class SharedPrefHelper implements SharedPrefUpdater{
         AddressData addressData = new AddressData();
         addressData.setADDRESS_LINE1(sharedPreferences.getString("Address","Soldevahanalli"));
         addressData.setADDRESS_NICKNAME(sharedPreferences.getString("Nickname","Home"));
-        addressData.setLAT_LONG(sharedPreferences.getString("lat_long", ResturantCoordinates.resturantLatLong.latitude+","+ResturantCoordinates.resturantLatLong.longitude));
+        addressData.setLAT_LONG(sharedPreferences.getString("lat_long", Resturant.resturantLatLong.latitude+","+ Resturant.resturantLatLong.longitude));
         return addressData;
     }
 

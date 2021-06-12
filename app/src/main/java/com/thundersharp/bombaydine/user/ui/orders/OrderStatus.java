@@ -32,11 +32,10 @@ import com.thundersharp.bombaydine.user.core.Adapters.TimeLineAdapter;
 import com.thundersharp.bombaydine.user.core.Model.OrderModel;
 import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
 import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
-import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
+import com.thundersharp.bombaydine.user.core.utils.Resturant;
 import com.thundersharp.bombaydine.user.core.utils.TimeUtils;
 import com.thundersharp.conversation.ChatStarter;
 import com.thundersharp.conversation.ParametersMissingException;
-import com.thundersharp.conversation.utils.Resturant;
 import com.thundersharp.payments.payments.Payments;
 
 import org.json.JSONException;
@@ -145,13 +144,13 @@ public class OrderStatus extends AppCompatActivity implements
         order_date.setText(TimeUtils.getTimeFromTimeStamp(orederBasicDetails.getOrderID()));
         delevery_charge.setText("\u20B9" + orederBasicDetails.getDelivery_charge());
         promo_code.setText(orederBasicDetails.getPromocodeNameNdiscount());
-        order_caller_no.setText("Call Resturant on : " + ResturantCoordinates.resturantcontact);
+        order_caller_no.setText("Call Resturant on : " + Resturant.resturantcontact);
         helper.FetchOrder(orederBasicDetails.getOrderID());
 
         if (orederBasicDetails.getStatus().equalsIgnoreCase("0")){
             textupdate.setText("Current order status is Payment pending, Click here to retry payment within 10 minutes.");
             textupdate.setOnClickListener(v -> {
-                Resturant.isOpen(new Resturant.Resturantopen() {
+                Resturant.isOpen(new com.thundersharp.conversation.utils.Resturant.Resturantopen() {
                     @Override
                     public void isOpen(boolean isOpen) {
                         if (isOpen) {

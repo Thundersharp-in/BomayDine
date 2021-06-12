@@ -53,7 +53,7 @@ import com.thundersharp.bombaydine.user.core.payments.PrePayment;
 import com.thundersharp.bombaydine.user.core.payments.parePayListener;
 import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.user.core.utils.LatLongConverter;
-import com.thundersharp.bombaydine.user.core.utils.ResturantCoordinates;
+import com.thundersharp.bombaydine.user.core.utils.Resturant;
 import com.thundersharp.bombaydine.user.core.utils.TimeUtils;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
 import com.thundersharp.bombaydine.user.ui.offers.AllOffersActivity;
@@ -334,22 +334,32 @@ public class AllItemsActivity extends AppCompatActivity implements
                             String.valueOf(System.currentTimeMillis()),
                             "");
 
-                    PrePayment
-                            .getInstance()
-                            .setDadaistListener(new parePayListener() {
-                                @Override
-                                public void addSuccess() {
-                                    Payments
-                                            .initialize(AllItemsActivity.this)
-                                            .startPayment("ORDER #" + orederBasicDetails.getOrderID(), Double.parseDouble(orederBasicDetails.getTotalamt()), "support@thundersharp.in", "7301694135");
+                    Resturant.isOpen(new com.thundersharp.conversation.utils.Resturant.Resturantopen() {
+                        @Override
+                        public void isOpen(boolean isOpen) {
+                            if (isOpen) {
+                                PrePayment
+                                        .getInstance()
+                                        .setDadaistListener(new parePayListener() {
+                                            @Override
+                                            public void addSuccess() {
+                                                Payments
+                                                        .initialize(AllItemsActivity.this)
+                                                        .startPayment("ORDER #" + orederBasicDetails.getOrderID(), Double.parseDouble(orederBasicDetails.getTotalamt()), "support@thundersharp.in", "7301694135");
+                                            }
 
-                                }
+                                            @Override
+                                            public void addFailure(Exception exception) {
+                                                Toast.makeText(AllItemsActivity.this, "Payment cannot be initialized cause :" + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                            }
+                                        }).setOrderToDatabase(data, orederBasicDetails);
 
-                                @Override
-                                public void addFailure(Exception exception) {
-                                    Toast.makeText(AllItemsActivity.this, "Payment cannot be initialized cause :" + exception.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            }).setOrderToDatabase(data, orederBasicDetails);
+                            } else
+                                Toast.makeText(AllItemsActivity.this, "Resturant not open", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+
                 } else {
                     Toast.makeText(AllItemsActivity.this, "Log in first", Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(AllItemsActivity.this, LoginActivity.class));
@@ -377,14 +387,14 @@ public class AllItemsActivity extends AppCompatActivity implements
                 double deleveryCharges =
                         (DistanceFromCoordinates
                                 .getInstance()
-                                .convertLatLongToDistance(ResturantCoordinates.resturantLatLong,
+                                .convertLatLongToDistance(Resturant.resturantLatLong,
                                         LatLongConverter
                                                 .initialize()
                                                 .getlatlang(sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG()))) *
-                                ResturantCoordinates.deliveryChargesPerKilometer;
+                                Resturant.deliveryChargesPerKilometer;
 
-                if (deleveryCharges > ResturantCoordinates.maxDeliveryCharges) {
-                    deleveryCharges = ResturantCoordinates.maxDeliveryCharges;
+                if (deleveryCharges > Resturant.maxDeliveryCharges) {
+                    deleveryCharges = Resturant.maxDeliveryCharges;
                 }
 
 
@@ -511,7 +521,7 @@ public class AllItemsActivity extends AppCompatActivity implements
                                 orederBasicDetails.setStatus("1");
                                 orederBasicDetails.setPaymentid(s);
                                 OrderStatus.showOrderStatus(AllItemsActivity.this, orederBasicDetails);
-                                sendBroadcast(new Intent("updated"));
+                                //sendBroadcast(new Intent("updated"));
                                 finish();
                             } else {
                                 //TODO UPDATE AUTO REFUND LOGIC
