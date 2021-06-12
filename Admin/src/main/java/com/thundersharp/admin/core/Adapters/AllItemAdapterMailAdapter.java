@@ -1,10 +1,11 @@
 package com.thundersharp.admin.core.Adapters;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -12,21 +13,16 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.SwitchCompat;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.thundersharp.admin.R;
-import com.thundersharp.admin.core.Model.CartItemModel;
+import com.thundersharp.admin.core.AdminHelpers;
 import com.thundersharp.admin.core.Model.FoodItemAdapter;
-import com.thundersharp.admin.core.aligantnumber.ElegantNumberInteractor;
-import com.thundersharp.admin.core.aligantnumber.ElegentNumberHelper;
-import com.thundersharp.admin.core.cart.CartProvider;
 import com.thundersharp.admin.core.utils.CONSTANTS;
 
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -90,6 +86,46 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
             holder.cathol.setVisibility(View.VISIBLE);
         }
 
+        if (foodItemAdapter.isAVAILABLE())
+            holder.foodavailable.setChecked(true);
+        else holder.foodavailable.setChecked(false);
+        holder.foodavailable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+                if (b){
+                    holder.textavlaible.setTextColor(Color.YELLOW);
+                    holder.textavlaible.setText("Available");
+                }else {
+                    holder.textavlaible.setTextColor(Color.RED);
+                    holder.textavlaible.setText("Unavailable");
+
+                }
+                AdminHelpers
+                        .getInstance(context)
+                        .setExternalDeletePaths(
+                                CONSTANTS.DATABASE_NODE_ALL_ITEMS+"/"+foodItemAdapter.getID()+"/AVAILABLE",
+                                CONSTANTS.DATABASE_NODE_CATEGORY_ITEMS+"/"+getCatID(foodItemAdapter.getCAT_NAME_ID())+"/"+foodItemAdapter.getID()+"/AVAILABLE")
+                        .setListner(new AdminHelpers.Update() {
+                            @Override
+                            public void updateSuccess() {
+
+                            }
+
+                            @Override
+                            public void updateFailure() {
+                                if (b){
+                                    holder.textavlaible.setTextColor(Color.RED);
+                                    holder.textavlaible.setText("Unavailable");
+                                }else {
+                                    holder.textavlaible.setTextColor(Color.YELLOW);
+                                    holder.textavlaible.setText("Available");
+                                }
+                            }
+                        })
+                        .updateStatus(b);
+            }
+        });
+
 
     }
 
@@ -142,7 +178,8 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
 
         public TextView cat_name;
         private ImageView icon_main,veg_nonveg;
-        private TextView name,description,amount,category;
+        private TextView name,description,amount,category,textavlaible;
+        private SwitchCompat foodavailable;
         private LinearLayout cathol;
 
         public ViewHolder(@NonNull View itemView) {
@@ -157,6 +194,8 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
             amount = itemView.findViewById(R.id.amount);
             category = itemView.findViewById(R.id.category);
             cathol = itemView.findViewById(R.id.cathol);
+            foodavailable = itemView.findViewById(R.id.foodAvailable);
+            textavlaible = itemView.findViewById(R.id.textAvl);
 
         }
 
@@ -170,7 +209,7 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
 
     public String getCatID(String key){
         if (key.contains("%&")){
-            return key.substring(key.indexOf("%&")+1);
+            return key.substring(key.indexOf("&")+1);
         }else return null;
     }
 

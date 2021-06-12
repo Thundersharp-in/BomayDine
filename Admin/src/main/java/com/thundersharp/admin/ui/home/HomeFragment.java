@@ -13,6 +13,15 @@ import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
+import android.os.Looper;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -21,19 +30,6 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.os.Looper;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
@@ -58,7 +54,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
@@ -99,7 +94,6 @@ import com.thundersharp.admin.ui.menu.AllItemsActivity;
 import com.thundersharp.admin.ui.menu.TopSellingAll;
 import com.thundersharp.admin.ui.offers.AllOffersActivity;
 import com.thundersharp.admin.ui.orders.RecentOrders;
-import com.thundersharp.admin.ui.scanner.QrScanner;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -107,10 +101,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 import static com.google.android.gms.location.LocationServices.getFusedLocationProviderClient;
-import static com.thundersharp.admin.ui.AdminMain.navController;
 
 public class HomeFragment extends Fragment implements
         BaseSliderView.OnSliderClickListener,
