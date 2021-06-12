@@ -510,7 +510,7 @@ public class HomeFragment extends Fragment implements
     private void UpdateREstStatus() {
 
         String open ;
-        if (restaurantStatus.isChecked())open="open";else open="close";
+        if (restaurantStatus.isChecked())open="close";else open="open";
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setTitle("RESTAURANT STATUS UPDATE");
@@ -519,7 +519,7 @@ public class HomeFragment extends Fragment implements
         builder.setCancelable(true);
 
         builder
-                .setPositiveButton("YES", (dialog, which) -> UpdateRestaurantStatus(restaurantStatus.isChecked()))
+                .setPositiveButton("YES", (dialog, which) -> UpdateRestaurantStatus(!restaurantStatus.isChecked()))
                 .setNegativeButton("NO", (dialog, which) -> dialog.dismiss())
                 .setNeutralButton("CANCEL", (dialog, which) -> dialog.cancel());
 
@@ -566,12 +566,12 @@ public class HomeFragment extends Fragment implements
                     if (task.isSuccessful()){
                         if (isChecked){
                             stsus = true;
-                            restaurantStatus.setChecked(isChecked);
+                            restaurantStatus.setChecked(true);
                             textcurrloc.setText("Your resturant status is : OPENED");
                             Toast.makeText(getActivity(), "Restaurant opened", Toast.LENGTH_SHORT).show();
                         }else {
                             stsus = false;
-                            restaurantStatus.setChecked(isChecked);
+                            restaurantStatus.setChecked(false);
                             textcurrloc.setText("Your resturant status is : CLOSED");
                             Toast.makeText(getActivity(), "Restaurant closed", Toast.LENGTH_SHORT).show();
                         }
