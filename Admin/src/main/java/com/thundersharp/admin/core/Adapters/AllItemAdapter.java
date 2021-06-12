@@ -111,42 +111,39 @@ public class AllItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             if (foodItemModel.isAVAILABLE())
             ((ViewHolder)holder).foodAvailable.setChecked(true);
             else ((ViewHolder)holder).foodAvailable.setChecked(false);
-            ((ViewHolder)holder).foodAvailable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                    if (b){
-                        ((ViewHolder)holder).textavlaible.setTextColor(Color.YELLOW);
-                        ((ViewHolder)holder).textavlaible.setText("Available");
-                    }else {
-                        ((ViewHolder)holder).textavlaible.setTextColor(Color.RED);
-                        ((ViewHolder)holder).textavlaible.setText("Unavailable");
-                    }
-
-                    AdminHelpers
-                            .getInstance(context)
-                            .setExternalDeletePaths(
-                                    CONSTANTS.DATABASE_NODE_ALL_ITEMS+"/"+foodItemModel.getID()+"/AVAILABLE",
-                                    CONSTANTS.DATABASE_NODE_CATEGORY_ITEMS+"/"+getCatID(foodItemModel.getCAT_NAME_ID())+"/"+foodItemModel.getID()+"/AVAILABLE")
-                            .setListner(new AdminHelpers.Update() {
-                                @Override
-                                public void updateSuccess() {
-
-                                }
-
-                                @Override
-                                public void updateFailure() {
-                                    if (b){
-                                        ((ViewHolder)holder).textavlaible.setTextColor(Color.RED);
-                                        ((ViewHolder)holder).textavlaible.setText("Unavailable");
-                                    }else {
-                                        ((ViewHolder)holder).textavlaible.setTextColor(Color.YELLOW);
-                                        ((ViewHolder)holder).textavlaible.setText("Available");
-                                    }
-                                }
-                            })
-                            .updateStatus(b);
-
+            ((ViewHolder)holder).foodAvailable.setOnCheckedChangeListener((compoundButton, b) -> {
+                if (b){
+                    ((ViewHolder)holder).textavlaible.setTextColor(Color.YELLOW);
+                    ((ViewHolder)holder).textavlaible.setText("Available");
+                }else {
+                    ((ViewHolder)holder).textavlaible.setTextColor(Color.RED);
+                    ((ViewHolder)holder).textavlaible.setText("Unavailable");
                 }
+
+                AdminHelpers
+                        .getInstance(context)
+                        .setExternalDeletePaths(
+                                CONSTANTS.DATABASE_NODE_ALL_ITEMS+"/"+foodItemModel.getID()+"/AVAILABLE",
+                                CONSTANTS.DATABASE_NODE_CATEGORY_ITEMS+"/"+getCatID(foodItemModel.getCAT_NAME_ID())+"/"+foodItemModel.getID()+"/AVAILABLE")
+                        .setListner(new AdminHelpers.Update() {
+                            @Override
+                            public void updateSuccess() {
+
+                            }
+
+                            @Override
+                            public void updateFailure() {
+                                if (b){
+                                    ((ViewHolder)holder).textavlaible.setTextColor(Color.RED);
+                                    ((ViewHolder)holder).textavlaible.setText("Unavailable");
+                                }else {
+                                    ((ViewHolder)holder).textavlaible.setTextColor(Color.YELLOW);
+                                    ((ViewHolder)holder).textavlaible.setText("Available");
+                                }
+                            }
+                        })
+                        .updateStatus(b);
+
             });
             Glide.with(context).load(foodItemModel.getICON_URL()).into(((ViewHolder)holder).imageView);
 
