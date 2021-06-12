@@ -70,6 +70,7 @@ public class ItemDeliverHolder extends RecyclerView.Adapter<ItemDeliverHolder.Vi
 
         switch (orederBasicDetails.getStatus()){
             case "2":
+                holder.btn_pick_up.setText("Picked Up");
                 holder.btn_navigate_map.setEnabled(true);
                 holder.btn_delever.setEnabled(true);
                 holder.btn_pick_up.setEnabled(false);
@@ -89,6 +90,7 @@ public class ItemDeliverHolder extends RecyclerView.Adapter<ItemDeliverHolder.Vi
              */
 
             case "10":
+
                 holder.btn_navigate_map.setEnabled(false);
                 holder.btn_delever.setEnabled(false);
                 holder.btn_pick_up.setEnabled(true);
