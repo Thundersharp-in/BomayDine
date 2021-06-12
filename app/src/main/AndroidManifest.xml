@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="TASKS"/>
+    <uses-permission android:name="TASKS" />
 
     <application
         android:allowBackup="true"
@@ -19,7 +19,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BombayDine"
         tools:replace="android:theme,android:allowBackup">
-        <activity android:name=".user.ui.orders.ConfirmPhoneName"></activity>
+        <activity android:name="com.thundersharp.admin.ui.edits.CategoryAddEdit"></activity>
+        <activity android:name=".user.ui.orders.ConfirmPhoneName" />
         <activity android:name=".user.ui.offers.CustomOfferActivity" />
         <activity android:name=".user.ui.login.UserDetails" />
         <activity android:name=".user.ui.account.UpdateProfileActivity" />

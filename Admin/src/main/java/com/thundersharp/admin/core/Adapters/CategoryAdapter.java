@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.thundersharp.admin.R;
 import com.thundersharp.admin.core.Model.CategoryData;
+import com.thundersharp.admin.ui.edits.CategoryAddEdit;
 import com.thundersharp.admin.ui.menu.CategoryResults;
 
 import java.util.HashMap;
@@ -107,7 +108,7 @@ public class CategoryAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHold
         public void onClick(View view) {
             HashMap<String,String> hashMap = (HashMap<String,String>)itemObjectlist.get(getAdapterPosition());
             CategoryData categoryData = new CategoryData(hashMap.get("NAME"),hashMap.get("ID"),hashMap.get("IMAGES"));
-            context.startActivity(new Intent(context, CategoryResults.class).putExtra("data", categoryData));
+            context.startActivity(new Intent(context, CategoryAddEdit.class).putExtra("data", categoryData));
         }
     }
 
@@ -123,9 +124,7 @@ public class CategoryAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         @Override
         public void onClick(View view) {
-            /*HashMap<String,String> hashMap = (HashMap<String,String>)itemObjectlist.get(getAdapterPosition());
-            CategoryData categoryData = new CategoryData(hashMap.get("NAME"),hashMap.get("ID"),hashMap.get("IMAGES"));
-            context.startActivity(new Intent(context, CategoryResults.class).putExtra("data", categoryData));*/
+            context.startActivity(new Intent(context, CategoryAddEdit.class));
         }
     }
 }
