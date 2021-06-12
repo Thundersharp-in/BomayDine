@@ -3,10 +3,12 @@ package com.thundersharp.admin.core.Adapters;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
@@ -28,6 +30,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.thundersharp.admin.R;
+import com.thundersharp.admin.core.AdminHelpers;
 import com.thundersharp.admin.core.Model.CartItemModel;
 import com.thundersharp.admin.core.Model.FoodItemAdapter;
 import com.thundersharp.admin.core.aligantnumber.ElegantNumberInteractor;
@@ -105,48 +108,45 @@ public class AllItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             ((ViewHolder)holder).name.setText(foodItemModel.getNAME());
             ((ViewHolder)holder).amount.setText("Rs. " + foodItemModel.getAMOUNT());
             ((ViewHolder)holder).description.setText(foodItemModel.getDESC());
-            Glide.with(context).load(foodItemModel.getICON_URL()).into(((ViewHolder)holder).imageView);
-            ((ViewHolder)holder).foodAvailable.setChecked(foodItemModel.isAVAILABLE());
-            final boolean[] status = {foodItemModel.isAVAILABLE()};
-            ((ViewHolder)holder).foodAvailable.setOnClickListener(click ->{
+            if (foodItemModel.isAVAILABLE())
+            ((ViewHolder)holder).foodAvailable.setChecked(true);
+            else ((ViewHolder)holder).foodAvailable.setChecked(false);
+            ((ViewHolder)holder).foodAvailable.setOnCheckedChangeListener((compoundButton, b) -> {
+                if (b){
+                    ((ViewHolder)holder).textavlaible.setTextColor(Color.YELLOW);
+                    ((ViewHolder)holder).textavlaible.setText("Available");
+                }else {
+                    ((ViewHolder)holder).textavlaible.setTextColor(Color.RED);
+                    ((ViewHolder)holder).textavlaible.setText("Unavailable");
+                }
 
-                ((ViewHolder)holder).foodAvailable.setChecked(status[0]);
-                ((ViewHolder)holder).foodAvailable.isChecked();
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-
-                builder.setTitle("RESTAURANT FOOD AVAILABILITY UPDATE");
-                builder.setMessage("Do you really want to update the food availability in the restaurant !");
-                builder.setIcon(R.drawable.ic_round_warning_24);
-                builder.setCancelable(true);
-
-                builder.setPositiveButton("YES", (dialog, which) -> FirebaseDatabase
-                        .getInstance()
-                        .getReference(CONSTANTS.DATABASE_NODE_ALL_ITEMS)
-                        .child(foodItemModel.getID())
-                        .child(CONSTANTS.DATABASE_ITEM_AVAILABLE)
-                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                AdminHelpers
+                        .getInstance(context)
+                        .setExternalDeletePaths(
+                                CONSTANTS.DATABASE_NODE_ALL_ITEMS+"/"+foodItemModel.getID()+"/AVAILABLE",
+                                CONSTANTS.DATABASE_NODE_CATEGORY_ITEMS+"/"+getCatID(foodItemModel.getCAT_NAME_ID())+"/"+foodItemModel.getID()+"/AVAILABLE")
+                        .setListner(new AdminHelpers.Update() {
                             @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                if (snapshot.exists()){
-                                    ((ViewHolder)holder).foodAvailable.setChecked(snapshot.getValue(Boolean.class));
-                                    status[0] = snapshot.getValue(Boolean.class);
+                            public void updateSuccess() {
+
+                            }
+
+                            @Override
+                            public void updateFailure() {
+                                if (b){
+                                    ((ViewHolder)holder).textavlaible.setTextColor(Color.RED);
+                                    ((ViewHolder)holder).textavlaible.setText("Unavailable");
                                 }else {
-                                    ((ViewHolder)holder).foodAvailable.setChecked(false);
-                                    status[0] = false;
+                                    ((ViewHolder)holder).textavlaible.setTextColor(Color.YELLOW);
+                                    ((ViewHolder)holder).textavlaible.setText("Available");
                                 }
                             }
+                        })
+                        .updateStatus(b);
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                                ((ViewHolder)holder).foodAvailable.setChecked(false);
-                                Toast.makeText(context, ""+error.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-                        })).setNegativeButton("NO", (dialog, which) -> dialog.dismiss())
-                        .setNeutralButton("CANCEL", (dialog, which) -> dialog.cancel());
-
-                AlertDialog dialog = builder.create();
-                dialog.show();
             });
+            Glide.with(context).load(foodItemModel.getICON_URL()).into(((ViewHolder)holder).imageView);
+
         }
 
     }
@@ -198,7 +198,7 @@ public class AllItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     class ViewHolder extends RecyclerView.ViewHolder {
 
         ImageView imageView;
-        TextView name,description,amount;
+        TextView name,description,amount,textavlaible;
         SwitchCompat foodAvailable;
 
         public ViewHolder(@NonNull View itemView) {
@@ -209,7 +209,7 @@ public class AllItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 description = itemView.findViewById(R.id.description);
                 amount = itemView.findViewById(R.id.amount);
                 foodAvailable = itemView.findViewById(R.id.foodAvailable);
-
+                textavlaible = itemView.findViewById(R.id.avltext);
 
 
         }
@@ -231,6 +231,18 @@ public class AllItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         public void onClick(View view) {
             Toast.makeText(context,"Add clk",Toast.LENGTH_SHORT).show();
         }
+    }
+
+    public String getcatName(String key){
+        if (key.contains("%&")){
+            return key.substring(0,key.indexOf("%&")).toLowerCase();
+        }else return null;
+    }
+
+    public String getCatID(String key){
+        if (key.contains("%&")){
+            return key.substring(key.indexOf("&")+1);
+        }else return null;
     }
 
 
