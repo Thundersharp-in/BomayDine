@@ -82,6 +82,20 @@
 
                 </LinearLayout>
 
+                <TextView
+                    android:id="@+id/visiblity"
+                    android:text="Currently Unavailible"
+                    android:textColor="#F12727"
+                    android:textSize="12sp"
+                    android:visibility="gone"
+                    android:layout_width="85dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_marginEnd="7dp"
+                    />
+
                 <LinearLayout
                     android:id="@+id/counter_end"
                     android:layout_width="85dp"
@@ -126,7 +140,7 @@
                                 android:layout_weight="1.7"
                                 android:background="@null"
                                 android:src="@drawable/ic_baseline_add_24"
-                                android:tint="#959698"/>
+                                app:tint="#959698"/>
 
                         </LinearLayout>
 
@@ -147,7 +161,7 @@
                                 android:paddingEnd="12dp"
                                 android:paddingStart="12dp"
                                 android:src="@drawable/ic_baseline_horizontal_rule_24"
-                                android:tint="#959698"/>
+                                app:tint="#959698"/>
 
                             <TextView
                                 android:id="@+id/displaytext"

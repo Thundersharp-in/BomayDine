@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#1e2026"
     android:orientation="vertical"
-    tools:context=".Delevery.HomeDelevery">
+    tools:context=".Delevery.main.HomeDelevery">
 
 
 

@@ -1,6 +1,5 @@
 package com.thundersharp.bombaydine.Delevery.core;
 
-import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,15 +14,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.thundersharp.bombaydine.R;
-import com.thundersharp.bombaydine.kitchen.core.KitchenOrderListner;
+import com.thundersharp.bombaydine.kitchen.core.helper.KitchenOrderListner;
 import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
 import com.thundersharp.bombaydine.user.core.orders.OrderContract;
 import com.thundersharp.bombaydine.user.core.utils.TimeUtils;
-import com.thundersharp.conversation.model.Chat;
 
 import java.util.List;
-
-import static com.thundersharp.conversation.ChatFragmentInternal.sendmessageRecycler;
 
 public class ItemDeliverHolder extends RecyclerView.Adapter<ItemDeliverHolder.ViewHolder> implements OrderContract.StatusSuccessFailure {
 
@@ -74,6 +70,7 @@ public class ItemDeliverHolder extends RecyclerView.Adapter<ItemDeliverHolder.Vi
 
         switch (orederBasicDetails.getStatus()){
             case "2":
+                holder.btn_pick_up.setText("Picked Up");
                 holder.btn_navigate_map.setEnabled(true);
                 holder.btn_delever.setEnabled(true);
                 holder.btn_pick_up.setEnabled(false);
@@ -93,6 +90,7 @@ public class ItemDeliverHolder extends RecyclerView.Adapter<ItemDeliverHolder.Vi
              */
 
             case "10":
+
                 holder.btn_navigate_map.setEnabled(false);
                 holder.btn_delever.setEnabled(false);
                 holder.btn_pick_up.setEnabled(true);

@@ -294,12 +294,18 @@
                 android:layout_height="wrap_content"
                 android:elevation="5dp"
                 android:background="@drawable/button_red_round"
-                android:layout_marginHorizontal="@dimen/dimen_10dp"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_marginEnd="5dp"
                 android:textColor="#fff"
                 android:text="Prepared"
-                android:fontFamily="@font/allerta"
+                android:paddingHorizontal="5dp"
+                android:fontFamily="sans-serif-smallcaps"
                 android:clickable="true"
+                android:ellipsize="start"
                 android:enabled="true"
+                android:singleLine="true"
+                android:textAllCaps="false"
+                android:textStyle="bold"
                 />
 
             <androidx.appcompat.widget.AppCompatButton
@@ -307,15 +313,20 @@
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dimen_10dp"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_marginEnd="5dp"
                 android:elevation="5dp"
                 android:background="@drawable/button_curved_round"
                 android:text="Chat"
                 android:textColor="#FDF660"
-                android:fontFamily="@font/coiny"
+                android:fontFamily="sans-serif-smallcaps"
                 android:textStyle="bold"
+                android:paddingHorizontal="5dp"
                 android:clickable="true"
+                android:ellipsize="start"
+                android:textAllCaps="false"
                 android:enabled="true"
+                android:singleLine="true"
                 />
 
         </LinearLayout>
@@ -330,10 +341,12 @@
             android:textColor="#6AFF00"
             android:layout_below="@+id/lower"
             android:layout_marginBottom="15dp"
-            android:fontFamily="@font/allerta"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textStyle="bold"
             android:text="Start Preparation"
             android:clickable="true"
             android:enabled="true"
+            android:textAllCaps="false"
             />
 
 

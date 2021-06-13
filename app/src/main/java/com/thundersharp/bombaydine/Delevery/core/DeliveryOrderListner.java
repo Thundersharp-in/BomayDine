@@ -67,7 +67,6 @@ public class DeliveryOrderListner implements OrderContract , OrderContract.Statu
         this.onOrderFetch = orderFetch;
     }
 
-    int a = 0,b= 0;
     @Override
     public void fetchRecentOrders() {
 
@@ -78,7 +77,6 @@ public class DeliveryOrderListner implements OrderContract , OrderContract.Statu
                 .addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                        Log.d("CH",""+(a++));
                         if (snapshot.exists()){
 
                             onOrderFetch.onOrderFetchSuccess(snapshot,true);
@@ -90,8 +88,6 @@ public class DeliveryOrderListner implements OrderContract , OrderContract.Statu
 
                     @Override
                     public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-                        Log.d("CHC",""+(b++));
-                        Log.d("CHCDAT",snapshot.child("status").getValue(String.class));
 
                         onOrderFetch.onOrderFetchSuccess(snapshot,false);
                     }

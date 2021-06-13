@@ -1,4 +1,4 @@
-package com.thundersharp.bombaydine.Delevery;
+package com.thundersharp.bombaydine.Delevery.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -58,15 +58,15 @@ public class HomeDelevery extends AppCompatActivity implements  DeliveryOrderCon
     @Override
     public void onOrderFetchSuccess(DataSnapshot data, boolean isNew) {
 
-            if (isNew){
-                if (itemDeliverHolder == null) {
-                    List<DataSnapshot> list= new ArrayList<>();
-                    list.add(data);
-                    itemDeliverHolder = new ItemDeliverHolder(HomeDelevery.this,list);
-                    rv_delivery_orders.setAdapter(itemDeliverHolder);
-                }else itemDeliverHolder.addNew(data);
+        if (isNew){
+            if (itemDeliverHolder == null) {
+                List<DataSnapshot> list= new ArrayList<>();
+                list.add(data);
+                itemDeliverHolder = new ItemDeliverHolder(HomeDelevery.this,list);
+                rv_delivery_orders.setAdapter(itemDeliverHolder);
+            }else itemDeliverHolder.addNew(data);
 
-            }else itemDeliverHolder.upDateExisting(data);
+        }else itemDeliverHolder.upDateExisting(data);
 
     }
 

@@ -1,4 +1,4 @@
-package com.thundersharp.bombaydine.kitchen;
+package com.thundersharp.bombaydine.kitchen.main;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;

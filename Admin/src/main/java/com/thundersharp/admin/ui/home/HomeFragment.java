@@ -535,14 +535,19 @@ public class HomeFragment extends Fragment implements
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        if (snapshot.exists()){
-                            restaurantStatus.setChecked(snapshot.getValue(Boolean.class));
-                            textcurrloc.setText("Your resturant status is : OPENED");
-                            stsus = snapshot.getValue(Boolean.class);
+                        if (snapshot.exists()) {
+                            if (snapshot.getValue(Boolean.class)) {
+                                restaurantStatus.setChecked(true);
+                                textcurrloc.setText("Your resturant status is : OPENED");
+                                stsus = true;
+                            } else {
+                                restaurantStatus.setChecked(false);
+                                stsus = false;
+                                textcurrloc.setText("Your resturant status is : CLOSED");
+                            }
                         }else {
                             restaurantStatus.setChecked(false);
-                            stsus =  false;
-                            textcurrloc.setText("Your resturant status is : CLOSED");
+                            stsus = false;
                         }
                     }
 

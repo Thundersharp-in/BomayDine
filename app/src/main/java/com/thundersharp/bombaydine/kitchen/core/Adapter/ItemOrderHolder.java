@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.thundersharp.bombaydine.R;
-import com.thundersharp.bombaydine.kitchen.core.KitchenOrderListner;
+import com.thundersharp.bombaydine.kitchen.core.helper.KitchenOrderListner;
 import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
 import com.thundersharp.bombaydine.user.core.orders.OrderContract;
 import com.thundersharp.bombaydine.user.core.utils.TimeUtils;
@@ -25,9 +25,26 @@ import java.util.List;
 public class ItemOrderHolder extends RecyclerView.Adapter<ItemOrderHolder.ViewHolder> implements OrderContract.StatusSuccessFailure {
 
     private Context context;
-    private List<Object> objectList;
+    private List<DataSnapshot> objectList;
 
-    public ItemOrderHolder(Context context, List<Object> objectList) {
+
+    public void addNew(DataSnapshot data) {
+        objectList.add(data);
+
+        notifyItemInserted(objectList.size() - 1);
+    }
+
+    public void upDateExisting(DataSnapshot data) {
+        if (objectList.contains(data.child("orderID"))){
+
+            int index = objectList.indexOf(data.child("orderID"));
+            Toast.makeText(context,"True ",index).show();
+            objectList.add(index,data);
+            notifyItemChanged(index);
+        }else Toast.makeText(context,"Fal ",Toast.LENGTH_SHORT).show();
+    }
+
+    public ItemOrderHolder(Context context, List<DataSnapshot> objectList) {
         this.context = context;
         this.objectList = objectList;
     }
@@ -53,6 +70,7 @@ public class ItemOrderHolder extends RecyclerView.Adapter<ItemOrderHolder.ViewHo
 
 
         switch (orederBasicDetails.getStatus()){
+            /*
             case "0":
                 holder.btn_preparation_stated.setEnabled(false);
                 holder.btn_chat.setEnabled(false);
@@ -61,25 +79,8 @@ public class ItemOrderHolder extends RecyclerView.Adapter<ItemOrderHolder.ViewHo
                 holder.btn_chat.setClickable(false);
                 holder.btn_prepared.setClickable(false);
                 break;
-            case "1":
-                //holder.btn_preparation_stated.setText("");
-                //holder.btn_prepared.setText("");
-                holder.btn_preparation_stated.setEnabled(true);
-                holder.btn_chat.setEnabled(true);
-                holder.btn_prepared.setEnabled(false);
-                holder.btn_chat.setClickable(true);
-                holder.btn_preparation_stated.setClickable(true);
-                holder.btn_prepared.setClickable(false);
-                break;
-            case "2":
-                holder.btn_chat.setClickable(true);
-                holder.btn_chat.setEnabled(true);
-                holder.btn_preparation_stated.setClickable(false);
-                holder.btn_preparation_stated.setEnabled(false);
-                holder.btn_prepared.setClickable(true);
-                holder.btn_prepared.setEnabled(true);
-                break;
-            case "3":
+
+                case "3":
                 holder.btn_preparation_stated.setEnabled(true);
                 holder.btn_chat.setEnabled(false);
                 holder.btn_prepared.setEnabled(false);
@@ -103,15 +104,8 @@ public class ItemOrderHolder extends RecyclerView.Adapter<ItemOrderHolder.ViewHo
                 holder.btn_preparation_stated.setClickable(false);
                 holder.btn_prepared.setClickable(false);
                 break;
-            case "6":
-                holder.btn_chat.setEnabled(true);
-                holder.btn_preparation_stated.setEnabled(true);
-                holder.btn_prepared.setEnabled(false);
-                holder.btn_chat.setClickable(true);
-                holder.btn_preparation_stated.setClickable(true);
-                holder.btn_prepared.setClickable(false);
-                break;
-            case "7":
+
+                case "7"://Order Cancelled
                 holder.btn_chat.setEnabled(false);
                 holder.btn_preparation_stated.setEnabled(false);
                 holder.btn_prepared.setEnabled(false);
@@ -119,31 +113,7 @@ public class ItemOrderHolder extends RecyclerView.Adapter<ItemOrderHolder.ViewHo
                 holder.btn_preparation_stated.setClickable(false);
                 holder.btn_prepared.setClickable(false);
                 break;
-            case "8":
-                holder.btn_chat.setEnabled(true);
-                holder.btn_preparation_stated.setEnabled(true);
-                holder.btn_prepared.setEnabled(false);
-                holder.btn_chat.setClickable(true);
-                holder.btn_preparation_stated.setClickable(true);
-                holder.btn_prepared.setClickable(false);
-                break;
-            case "9":
-                holder.btn_chat.setEnabled(true);
-                holder.btn_preparation_stated.setEnabled(false);
-                holder.btn_prepared.setEnabled(true);
-                holder.btn_chat.setClickable(true);
-                holder.btn_preparation_stated.setClickable(false);
-                holder.btn_prepared.setClickable(true);
-                break;
-            case "10":
-                holder.btn_chat.setEnabled(true);
-                holder.btn_preparation_stated.setEnabled(false);
-                holder.btn_prepared.setEnabled(false);
-                holder.btn_chat.setClickable(true);
-                holder.btn_preparation_stated.setClickable(false);
-                holder.btn_prepared.setClickable(false);
-                break;
-            case "11":
+                case "11":
                 holder.btn_chat.setEnabled(true);
                 holder.btn_preparation_stated.setEnabled(false);
                 holder.btn_prepared.setEnabled(false);
@@ -159,8 +129,63 @@ public class ItemOrderHolder extends RecyclerView.Adapter<ItemOrderHolder.ViewHo
                 holder.btn_preparation_stated.setClickable(false);
                 holder.btn_prepared.setClickable(false);
                 break;
+             */
+            case "1"://Payment successfully received   ::::   Delivery status : Food being prepared
+                holder.btn_preparation_stated.setText("Preparing...");
+                holder.btn_preparation_stated.setEnabled(false);
+                holder.btn_chat.setEnabled(true);
+                holder.btn_prepared.setEnabled(true);
+                holder.btn_chat.setClickable(true);
+                holder.btn_preparation_stated.setClickable(false);
+                holder.btn_prepared.setClickable(true);
+                break;
+            case "2"://Payment successfully received   ::::   Delivery status : In transit
+                holder.btn_prepared.setText("Prepared Done");
+                holder.btn_preparation_stated.setText("Preparing Done");
+                holder.btn_chat.setText("Chat Unavailable");
+                holder.btn_chat.setClickable(false);
+                holder.btn_chat.setEnabled(false);
+                holder.btn_preparation_stated.setClickable(false);
+                holder.btn_preparation_stated.setEnabled(false);
+                holder.btn_prepared.setClickable(false);
+                holder.btn_prepared.setEnabled(false);
+                break;
+
+            case "6"://Payment successfully received   ::::   Delivery status : Not Delivered
+
+            case "8"://Payment successfully received waiting for admin
+                holder.btn_chat.setEnabled(true);
+                holder.btn_preparation_stated.setEnabled(true);
+                holder.btn_prepared.setEnabled(false);
+                holder.btn_chat.setClickable(true);
+                holder.btn_preparation_stated.setClickable(true);
+                holder.btn_prepared.setClickable(false);
+                break;
+            case "9"://start ot prepare
+                holder.btn_chat.setEnabled(true);
+                holder.btn_preparation_stated.setEnabled(false);
+                holder.btn_preparation_stated.setText("Preparing...");
+                holder.btn_prepared.setEnabled(true);
+                holder.btn_chat.setClickable(true);
+                holder.btn_preparation_stated.setClickable(false);
+                holder.btn_prepared.setClickable(true);
+                break;
+            case "10"://Food prepared
+                holder.btn_prepared.setText("Prepared Done");
+                holder.btn_preparation_stated.setText("Preparing Done");
+                holder.btn_chat.setText("Chat Unavailable");
+                holder.btn_chat.setEnabled(false);
+                holder.btn_preparation_stated.setEnabled(false);
+                holder.btn_prepared.setEnabled(false);
+                holder.btn_chat.setClickable(false);
+                holder.btn_preparation_stated.setClickable(false);
+                holder.btn_prepared.setClickable(false);
+                break;
 
             default:
+                holder.btn_prepared.setText("Not Available");
+                holder.btn_preparation_stated.setText("Not Available");
+                holder.btn_chat.setText("Chat Unavailable");
                 holder.btn_preparation_stated.setEnabled(false);
                 holder.btn_chat.setEnabled(false);
                 holder.btn_prepared.setEnabled(false);
@@ -178,6 +203,7 @@ public class ItemOrderHolder extends RecyclerView.Adapter<ItemOrderHolder.ViewHo
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Confirmation Dialog");
             builder.setMessage("Are you sure you have started preparing food !!");
+            builder.setIcon(R.drawable.ic_round_warning_24);
             builder.setCancelable(false);
 
             builder.setPositiveButton("YES", (dialog, which) -> {
@@ -187,7 +213,7 @@ public class ItemOrderHolder extends RecyclerView.Adapter<ItemOrderHolder.ViewHo
                         .setOnStatusSuccessFailureListner(this)
                         .setStatus(orederBasicDetails.getOrderID(),9,orederBasicDetails.getUid());
 
-                holder.btn_preparation_stated.setText("Started");
+                holder.btn_preparation_stated.setText("Preparing...");
                 dialog.dismiss();
 
             }).setNegativeButton("NO", (dialog, which) -> {
@@ -204,6 +230,9 @@ public class ItemOrderHolder extends RecyclerView.Adapter<ItemOrderHolder.ViewHo
                     .getKitchenOrderInstance()
                     .setOnStatusSuccessFailureListner(this)
                     .setStatus(orederBasicDetails.getOrderID(),10,orederBasicDetails.getUid());
+            holder.btn_prepared.setText("Prepared Done");
+            holder.btn_preparation_stated.setText("Preparing Done");
+            holder.btn_chat.setText("Chat Unavailable");
         });
 
     }
