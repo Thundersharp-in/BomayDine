@@ -2,6 +2,7 @@ package com.thundersharp.admin.core.Adapters;
 
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.text.TextUtils;
@@ -37,6 +38,8 @@ import com.thundersharp.admin.core.aligantnumber.ElegantNumberInteractor;
 import com.thundersharp.admin.core.aligantnumber.ElegentNumberHelper;
 import com.thundersharp.admin.core.cart.CartProvider;
 import com.thundersharp.admin.core.utils.CONSTANTS;
+import com.thundersharp.admin.ui.edits.CategoryAddEdit;
+import com.thundersharp.admin.ui.edits.EditItemActivity;
 
 import java.lang.reflect.Type;
 import java.util.ArrayList;
@@ -235,7 +238,7 @@ public class AllItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         @Override
         public void onClick(View view) {
-            Toast.makeText(context,"Add clk",Toast.LENGTH_SHORT).show();
+            context.startActivity(new Intent(context, EditItemActivity.class));
         }
     }
 

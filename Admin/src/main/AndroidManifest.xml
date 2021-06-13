@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
     <application>
-        <activity android:name=".ui.menu.EditItemActivity"></activity>
+        <activity android:name=".ui.edits.EditItemActivity" />
         <activity android:name=".ui.location.AddLocation" />
         <activity android:name=".ui.location.CoOrdinatesUpdater" />
         <activity android:name=".ui.location.UpdatePoints" />
