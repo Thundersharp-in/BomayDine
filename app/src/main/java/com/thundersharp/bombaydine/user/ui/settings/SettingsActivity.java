@@ -20,19 +20,10 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
 
     private static final String TITLE_TAG = "settingsActivityTitle";
 
-    Toolbar toolbar;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.settings_activity);
-
-        /*
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.setting, new SyncFragment())
-                .commit();
-         */
         if (savedInstanceState == null) {
             getSupportFragmentManager()
                     .beginTransaction()
@@ -41,8 +32,7 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
         } else {
             setTitle(savedInstanceState.getCharSequence(TITLE_TAG));
         }
-
-         getSupportFragmentManager().addOnBackStackChangedListener(
+        getSupportFragmentManager().addOnBackStackChangedListener(
                 new FragmentManager.OnBackStackChangedListener() {
                     @Override
                     public void onBackStackChanged() {
@@ -51,34 +41,11 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
                         }
                     }
                 });
-
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
-        toolbar = findViewById(R.id.tool);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                finish();
-            }
-        });
-
     }
-
-    /*
-
-        BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                if (intent.getAction().equals("recreate"))
-                    SettingsActivity.this.recreate();
-            }
-        };
-
-        registerReceiver(broadcastReceiver ,new IntentFilter("recreate"));
-     */
-
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
@@ -94,8 +61,6 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
         }
         return super.onSupportNavigateUp();
     }
-
-
 
     @Override
     public boolean onPreferenceStartFragment(PreferenceFragmentCompat caller, Preference pref) {
@@ -114,7 +79,6 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
         setTitle(pref.getTitle());
         return true;
     }
-
     public static class HeaderFragment extends PreferenceFragmentCompat {
 
         @Override
@@ -131,40 +95,11 @@ public class SettingsActivity extends AppCompatActivity implements PreferenceFra
         }
     }
 
-
     public static class SyncFragment extends PreferenceFragmentCompat {
-
-        SettingData settingData;
-        SharedPreferences sharedPreferences;
 
         @Override
         public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
             setPreferencesFromResource(R.xml.sync_preferences, rootKey);
-            //settingData = new SettingData(getActivity());
-
-           /*
-            final SwitchPreferenceCompat theme = findPreference("theme");
-            if (theme != null){
-                theme.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                    @Override
-                    public boolean onPreferenceClick(Preference preference) {
-                        if (theme.isChecked()){
-                            settingData.setTheme(true);
-                            getActivity().sendBroadcast(new Intent("recreate"));
-                            getActivity().recreate();
-                        }else {
-                            settingData.setTheme(false);
-                            getActivity().sendBroadcast(new Intent("recreate"));
-                            getActivity().recreate();
-                        }
-                        return true;
-                    }
-                });
-            }
-            */
-
         }
     }
-
-
 }

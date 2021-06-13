@@ -1,26 +1,14 @@
 package com.thundersharp.bombaydine.user.ui.home;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.thundersharp.bombaydine.R;
-import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
-import com.thundersharp.bombaydine.user.core.cart.CartHandler;
-import com.thundersharp.bombaydine.user.core.cart.CartProvider;
-import com.thundersharp.bombaydine.user.ui.settings.SettingData;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -30,8 +18,6 @@ import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.NavigationUI;
-
-import java.util.List;
 
 public class MainPage extends AppCompatActivity {
 
