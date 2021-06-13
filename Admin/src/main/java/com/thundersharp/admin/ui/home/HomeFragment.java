@@ -29,6 +29,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -286,7 +287,7 @@ public class HomeFragment extends Fragment implements
 
         allcategory.setOnClickListener(view14 -> startActivity(new Intent(getActivity(), AllCategoryActivity.class)));
 
-
+       // allcategory.setOnClickListener(view14 ->{ EditCategory(); });
         current_loc.setOnClickListener(viewlocation -> {
 
             bottomSheetDialogloc = new BottomSheetDialog(getContext(), R.style.BottomSheetDialogTheme);
@@ -506,6 +507,7 @@ public class HomeFragment extends Fragment implements
 
         return view;
     }
+
 
     private void UpdateREstStatus() {
 
