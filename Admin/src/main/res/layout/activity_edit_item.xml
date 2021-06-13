@@ -9,170 +9,208 @@
     android:background="#1e2026"
     tools:context=".ui.edits.EditItemActivity">
 
-    <FrameLayout
-        android:id="@+id/imagehomee"
-        android:layout_width="match_parent"
-        android:layout_height="250dp">
-
-        <ImageView
-            android:id="@+id/imagehome"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/homestatic"
-            android:adjustViewBounds="true" />
-
-        <ImageView
-            android:id="@+id/edit"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:elevation="@dimen/dimen_5dp"
-            android:src="@drawable/ic_outline_edit_24"
-            android:background="@drawable/curved_dark"
-            android:padding="5dp"
-            android:layout_gravity="end"
-            android:layout_marginEnd="@dimen/dimen_10dp"
-            android:layout_marginTop="@dimen/dimen_10dp"/>
-
-    </FrameLayout>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="@dimen/dimen_20dp"
-        android:layout_alignParentBottom="true"
-        android:text="Update"
-        android:textAllCaps="false"
-        android:fontFamily="sans-serif-smallcaps"
-        android:textStyle="bold"
-        android:textColor="#fff"
-        android:background="@drawable/top_curved"
-        android:backgroundTint="#090909"
-        android:layout_marginBottom="-2dp"
-        android:paddingBottom="2dp"
-        android:layout_marginStart="-10dp"
-        android:layout_marginEnd="-20dp"
-        android:paddingEnd="@dimen/dimen_10dp"
-        />
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never"
-        >
-        <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginBottom="@dimen/dimen_15dp"
+        android:layout_above="@id/submitbtn">
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@drawable/top_curved"
-            android:orientation="vertical"
-            android:elevation="10dp"
-            android:layout_marginTop="200dp"
-            >
-
-            <TextView
+            android:layout_height="match_parent">
+            <FrameLayout
+                android:id="@+id/imagehomee"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Add/Edit Food Item"
-                android:textStyle="bold"
-                android:fontFamily="@font/calibrib"
-                android:textColor="#FF5722"
-                android:textSize="20sp"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="10dp"
-                android:gravity="center"
-                android:layout_marginTop="20dp"
-                android:id="@+id/txttop"/>
+                android:layout_alignParentTop="true"
+                android:layout_height="160dp">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="#373737"
-                android:layout_marginTop="@dimen/dimen_10dp"
-                android:layout_marginHorizontal="@dimen/dimen_20dp"
-                />
+                <ImageView
+                    android:id="@+id/imagehome"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/homestatic"
+                    android:adjustViewBounds="true" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
-                android:layout_marginEnd="@dimen/dimen_10dp"
-                android:layout_marginTop="10dp"
-                android:drawablePadding="10dp"
-                android:fontFamily="sans-serif-condensed"
-                android:gravity="center_vertical"
-                android:text="If you dont want to provide a image url then click on edit button on top right corner to select a image from your device."
-                android:textColor="#FFE500"
-                app:drawableTint="#FFE500"
-                android:drawableStart="@drawable/ic_outline_info_24" />
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:endIconMode="clear_text"
-                app:endIconTint="#fff"
-                app:boxStrokeColor="#CFCFCF"
-                app:hintTextColor="#CFCFCF"
-                android:layout_marginTop="@dimen/dimen_15dp"
-                android:layout_marginHorizontal="@dimen/dimen_10dp"
-                app:boxStrokeErrorColor="#ff0000"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                >
-
-                <com.google.android.material.textfield.TextInputEditText
+                <LinearLayout
+                    android:id="@+id/cards"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:hintEnabled="true"
-                    android:textColorHint="#E1E1E1"
-                    android:textColor="#ffff"
-                    android:singleLine="true"
-                    android:hint="Food Name"
-                    android:scrollbars="vertical"
-                    android:inputType="text"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginBottom="@dimen/dimen_5dp"
+                    android:gravity="center_vertical"
+                    android:minHeight="80dp"
+                    android:elevation="@dimen/dimen_5dp"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:endIconMode="clear_text"
-                app:endIconTint="#fff"
-                app:boxStrokeColor="#CFCFCF"
-                app:hintTextColor="#CFCFCF"
-                android:layout_marginTop="@dimen/dimen_15dp"
-                android:layout_marginHorizontal="@dimen/dimen_10dp"
-                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
-                >
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/imageGallary"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:minHeight="80dp"
+                        app:cardBackgroundColor="#17191E"
+                        app:cardCornerRadius="7dp"
+                        app:cardElevation="5dp"
+                        app:cardUseCompatPadding="true">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:hintEnabled="true"
-                    android:textColorHint="#E1E1E1"
-                    android:textColor="#ffff"
-                    android:singleLine="true"
-                    android:hint="Food Description"
-                    android:inputType="textMultiLine"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="10dp"
+                                android:src="@drawable/ic_baseline_http_24"
+                                app:tint="#FFEB3B"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginHorizontal="5dp"
+                                android:layout_marginTop="3dp"
+                                android:layout_marginBottom="10dp"
+                                android:ellipsize="end"
+                                android:maxLines="1"
+                                android:text="Select from image gallery"
+                                android:textColor="#BDBDBD"
+                                android:textSize="13sp" />
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/dinner"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:minHeight="80dp"
+                        app:cardBackgroundColor="#17191E"
+                        app:cardCornerRadius="7dp"
+                        app:cardElevation="5dp"
+                        app:cardUseCompatPadding="true">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <ImageView
+                                android:layout_width="30dp"
+                                android:layout_height="30dp"
+                                android:layout_gravity="center"
+                                android:layout_marginTop="10dp"
+                                android:src="@drawable/ic_outline_save_24"
+                                app:tint="#FFEB3B"/>
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="3dp"
+                                android:layout_marginBottom="10dp"
+                                android:text="Select from storage"
+                                android:textColor="#BDBDBD"
+                                android:textSize="13sp" />
+
+                        </LinearLayout>
+
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
+            </FrameLayout>
 
             <LinearLayout
-                android:weightSum="3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/dimen_15dp"
-                android:layout_marginHorizontal="@dimen/dimen_10dp"
+                android:layout_height="match_parent"
+                android:background="@drawable/top_curved"
+                android:layout_alignParentTop="true"
+                android:orientation="vertical"
+                android:layout_marginTop="150dp"
                 >
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Add/Edit Food Item"
+                    android:textColor="#ACACAC"
+                    android:textSize="20sp"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:gravity="center"
+                    android:layout_marginTop="10dp"
+                    android:id="@+id/txttop"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#373737"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    android:layout_marginHorizontal="@dimen/dimen_20dp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="@dimen/dimen_10dp"
+                    android:layout_marginTop="10dp"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/calibri"
+                    android:gravity="center_vertical"
+                    android:text="If you don't want to provide a image url then select a image from your device or select one from previously saved / used images"
+                    android:textColor="#FFE500"
+                    app:drawableTint="#FFE500"
+                    android:drawableStart="@drawable/ic_outline_info_24" />
+
+
                 <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="0dp"
-                    android:layout_weight="2"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     app:endIconMode="clear_text"
                     app:endIconTint="#fff"
-                    app:boxStrokeColor="#CFCFCF"
-                    app:hintTextColor="#CFCFCF"
-                    android:layout_marginEnd="5dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    app:boxStrokeColor="#ACACAC"
+                    app:hintTextColor="#ACACAC"
+                    android:textColorHint="#ACACAC"
+                    android:layout_marginTop="@dimen/dimen_15dp"
+                    android:layout_marginHorizontal="@dimen/dimen_10dp"
+                    app:boxStrokeErrorColor="#ff0000"
+                    app:boxBackgroundColor="#22242c"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    >
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:hintEnabled="true"
+                        android:textColor="#ffff"
+                        android:singleLine="true"
+                        android:hint="Food Name *"
+                        android:scrollbars="vertical"
+                        android:inputType="text"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="#fff"
+                    app:hintTextColor="#ACACAC"
+                    android:textColorHint="#ACACAC"
+                    app:boxStrokeColor="#ACACAC"
+                    android:layout_marginTop="@dimen/dimen_15dp"
+                    android:layout_marginHorizontal="@dimen/dimen_10dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     >
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -182,77 +220,157 @@
                         android:textColorHint="#E1E1E1"
                         android:textColor="#ffff"
                         android:singleLine="true"
-                        android:hint="Amount"
-                        android:inputType="numberDecimal"
-                        />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <CheckBox
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Available"
-                    android:layout_marginStart="5dp"
-                    android:textColor="#FFEB3B"
-                    android:buttonTint="#FFEB3B"
-                    />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginHorizontal="@dimen/dimen_10dp"
-                android:layout_marginTop="@dimen/dimen_10dp"
-                >
-                <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/cat_type"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:hint="Category Type"
-                    app:hintTextColor="#fff"
-                    android:layout_marginEnd="5dp"
-                    >
-
-                    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                        android:id="@+id/cat_text"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:inputType="none"
-                        android:focusable="false"
-                        android:textColorHint="#fff"
-                        tools:ignore="KeyboardInaccessibleWidget"
+                        android:hint="Food Description"
+                        android:inputType="textMultiLine"
                         />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/food_type"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Food Type"
-                    app:hintTextColor="#fff"
-                    android:layout_marginStart="5dp"
+                    app:endIconMode="clear_text"
+                    app:endIconTint="#fff"
+                    app:hintTextColor="#ACACAC"
+                    android:textColorHint="#ACACAC"
+                    app:boxStrokeColor="#ACACAC"
+                    android:layout_marginTop="@dimen/dimen_15dp"
+                    android:layout_marginHorizontal="@dimen/dimen_10dp"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     >
 
-                    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                        android:id="@+id/food_text"
+                    <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:clickable="true"
-                        android:inputType="none"
-                        android:focusable="false"
-                        android:textColorHint="#fff"
-                        tools:ignore="KeyboardInaccessibleWidget" />
+                        app:hintEnabled="true"
+                        android:textColorHint="#E1E1E1"
+                        android:textColor="#ffff"
+                        android:singleLine="true"
+                        android:hint="Food image url"
+                        android:inputType="textMultiLine"
+                        />
                 </com.google.android.material.textfield.TextInputLayout>
 
+                <LinearLayout
+                    android:weightSum="3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/dimen_15dp"
+                    android:layout_marginHorizontal="@dimen/dimen_10dp"
+                    >
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="wrap_content"
+                        app:endIconMode="clear_text"
+                        app:endIconTint="#fff"
+                        app:boxStrokeColor="#ACACAC"
+                        app:hintTextColor="#ACACAC"
+                        android:textColorHint="#ACACAC"
+                        android:layout_marginEnd="5dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:hintEnabled="true"
+                            android:textColorHint="#E1E1E1"
+                            android:textColor="#ffff"
+                            android:singleLine="true"
+                            android:hint="Amount *"
+                            android:inputType="numberDecimal"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <CheckBox
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="Available"
+                        android:layout_marginStart="5dp"
+                        android:textColor="#FFEB3B"
+                        android:buttonTint="#FFEB3B"
+                        />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginHorizontal="@dimen/dimen_10dp"
+                    android:layout_marginTop="@dimen/dimen_10dp"
+                    >
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/cat_type"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:hint="Category Type"
+                        app:hintTextColor="#fff"
+                        android:textColorHint="#ACACAC"
+                        app:boxStrokeColor="#ACACAC"
+                        android:layout_marginEnd="5dp"
+                        >
+
+                        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                            android:id="@+id/cat_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:textColorHint="#fff"
+                            tools:ignore="KeyboardInaccessibleWidget"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/food_type"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:hint="Food Type"
+                        app:boxStrokeColor="#ACACAC"
+                        app:hintTextColor="#CFCFCF"
+                        android:textColorHint="#CFCFCF"
+                        android:layout_marginStart="5dp"
+                        >
+
+                        <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                            android:id="@+id/food_text"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColorHint="#ACACAC"
+                            android:focusable="false"
+                            android:clickable="true"
+                            android:inputType="none"
+                            tools:ignore="KeyboardInaccessibleWidget" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
             </LinearLayout>
-        </LinearLayout>
+        </RelativeLayout>
+
     </androidx.core.widget.NestedScrollView>
+
+
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/submitbtn"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_50dp"
+        android:elevation="7dp"
+        android:layout_alignParentBottom="true"
+        android:text="Update"
+        android:textStyle="bold"
+        android:textColor="#fff"
+        android:background="@drawable/corner_rect_blue"
+        android:layout_marginBottom="-2dp"
+        android:paddingBottom="2dp"
+        />
+
+
 
 </RelativeLayout>

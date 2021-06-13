@@ -204,13 +204,13 @@ public class AllItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     };
 
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        ImageView imageView;
+        ImageView imageView,edit_act;
         TextView name,description,amount,textavlaible;
         SwitchCompat foodAvailable;
 
-        public ViewHolder(@NonNull View itemView) {
+        public ViewHolder(@NonNull View itemView){
             super(itemView);
 
                 imageView = itemView.findViewById(R.id.imageview);
@@ -219,10 +219,14 @@ public class AllItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 amount = itemView.findViewById(R.id.amount);
                 foodAvailable = itemView.findViewById(R.id.foodAvailable);
                 textavlaible = itemView.findViewById(R.id.avltext);
-
-
+                edit_act = itemView.findViewById(R.id.edit_act);
+                edit_act.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View view) {
+            context.startActivity(new Intent(context, EditItemActivity.class).putExtra("data",(FoodItemAdapter)itemObjectlist.get(getAdapterPosition())));
+        }
     }
 
     class ViewHolderOther extends RecyclerView.ViewHolder implements View.OnClickListener {
