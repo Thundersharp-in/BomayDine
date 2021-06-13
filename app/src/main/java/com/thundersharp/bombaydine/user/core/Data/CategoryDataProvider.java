@@ -34,7 +34,7 @@ public class CategoryDataProvider implements CategoryDataContract{
                         if (snapshot.exists()){
                             List<Object> list = new ArrayList<>();
                             for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-                                list.add((HashMap<String, Object>) dataSnapshot.getValue());
+                                list.add(dataSnapshot);
                                 onCategoryDataFetch.OnCategoryDataSuccess(list);
                             }
                         }else {
