@@ -40,8 +40,8 @@ public class CategoryResults extends AppCompatActivity implements CategoryDataCo
         txttop = findViewById(R.id.txttop);
         shimmerac = findViewById(R.id.shimmerac);
         shimmerac.startShimmer();
-        txttop.setText(categoryData.getNAME());
-        Glide.with(CategoryResults.this).load(categoryData.getIMAGES()).into(imagehome);
+        txttop.setText(categoryData.NAME);
+        Glide.with(CategoryResults.this).load(categoryData.IMAGES).into(imagehome);
 
 
         categoryDataProvider.fetchCategoryData(categoryData);

@@ -26,7 +26,7 @@ public class CategoryDataProvider implements CategoryDataContract{
         FirebaseDatabase
                 .getInstance()
                 .getReference(CONSTANTS.DATABASE_NODE_CATEGORY_ITEMS)
-                .child(categoryData.getID())
+                .child(categoryData.ID)
                 .limitToFirst(6).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {

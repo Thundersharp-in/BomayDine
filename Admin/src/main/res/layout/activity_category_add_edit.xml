@@ -135,6 +135,7 @@
             android:layout_alignParentBottom="true"
             android:layout_marginHorizontal="-9dp"
             android:text="CREATE/UPDATE"
+            android:id="@+id/updatec"
             android:gravity="center"
             android:textColor="#fff"/>
     </RelativeLayout>
