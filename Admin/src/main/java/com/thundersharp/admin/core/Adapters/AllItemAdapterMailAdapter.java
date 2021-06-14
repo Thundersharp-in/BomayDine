@@ -1,6 +1,7 @@
 package com.thundersharp.admin.core.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,6 +23,7 @@ import com.thundersharp.admin.R;
 import com.thundersharp.admin.core.AdminHelpers;
 import com.thundersharp.admin.core.Model.FoodItemAdapter;
 import com.thundersharp.admin.core.utils.CONSTANTS;
+import com.thundersharp.admin.ui.edits.EditItemActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,8 +61,8 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
         FoodItemAdapter foodItemAdapter = (FoodItemAdapter) itemObjectlist.get(position);
 
         //TODO ADD LOGIC IF IMG ASSET == N
-        Glide.with(context).load(foodItemAdapter.getICON_URL()).into(holder.icon_main);
-        if (foodItemAdapter.getFOOD_TYPE() == 1){
+        Glide.with(context).load(foodItemAdapter.ICON_URL).into(holder.icon_main);
+        if (foodItemAdapter.FOOD_TYPE == 1){
             holder.veg_nonveg.setColorFilter(ContextCompat.getColor(context, R.color.red), android.graphics.PorterDuff.Mode.MULTIPLY);
 
         }else{
@@ -68,25 +70,25 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
 
         }
 
-        holder.name.setText(foodItemAdapter.getNAME());
-        holder.amount.setText("Rs. "+foodItemAdapter.getAMOUNT());
-        holder.description.setText(foodItemAdapter.getDESC());
-        holder.category.setText("In "+getcatName(foodItemAdapter.getCAT_NAME_ID()));
+        holder.name.setText(foodItemAdapter.NAME);
+        holder.amount.setText("Rs. "+foodItemAdapter.AMOUNT);
+        holder.description.setText(foodItemAdapter.DESC);
+        holder.category.setText("In "+getcatName(foodItemAdapter.CAT_NAME_ID));
 
         if (position > 0) {
-            if (getcatName(foodItemAdapter.getCAT_NAME_ID())
-                    .equalsIgnoreCase(getcatName(((FoodItemAdapter) itemObjectlist.get(position - 1)).getCAT_NAME_ID()))) {
+            if (getcatName(foodItemAdapter.CAT_NAME_ID)
+                    .equalsIgnoreCase(getcatName(((FoodItemAdapter) itemObjectlist.get(position - 1)).CAT_NAME_ID))) {
                 holder.cathol.setVisibility(View.GONE);
             } else {
-                holder.cat_name.setText(getcatName(foodItemAdapter.getCAT_NAME_ID()));
+                holder.cat_name.setText(getcatName(foodItemAdapter.CAT_NAME_ID));
                 holder.cathol.setVisibility(View.VISIBLE);
             }
         }else {
-            holder.cat_name.setText(getcatName(foodItemAdapter.getCAT_NAME_ID()));
+            holder.cat_name.setText(getcatName(foodItemAdapter.CAT_NAME_ID));
             holder.cathol.setVisibility(View.VISIBLE);
         }
 
-        if (foodItemAdapter.isAVAILABLE())
+        if (foodItemAdapter.AVAILABLE)
             holder.foodavailable.setChecked(true);
         else holder.foodavailable.setChecked(false);
         holder.foodavailable.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -103,8 +105,8 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
                 AdminHelpers
                         .getInstance(context)
                         .setExternalDeletePaths(
-                                CONSTANTS.DATABASE_NODE_ALL_ITEMS+"/"+foodItemAdapter.getID()+"/AVAILABLE",
-                                CONSTANTS.DATABASE_NODE_CATEGORY_ITEMS+"/"+getCatID(foodItemAdapter.getCAT_NAME_ID())+"/"+foodItemAdapter.getID()+"/AVAILABLE")
+                                CONSTANTS.DATABASE_NODE_ALL_ITEMS+"/"+foodItemAdapter.ID+"/AVAILABLE",
+                                CONSTANTS.DATABASE_NODE_CATEGORY_ITEMS+"/"+getCatID(foodItemAdapter.CAT_NAME_ID)+"/"+foodItemAdapter.ID+"/AVAILABLE")
                         .setListner(new AdminHelpers.Update() {
                             @Override
                             public void updateSuccess() {
@@ -153,9 +155,9 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
                 String filterData = charSequence.toString().toLowerCase().trim();
                 for (Object item : itemObjectlist){
 
-                    if (((FoodItemAdapter)item).getNAME().toLowerCase().contains(filterData)
-                            ||((FoodItemAdapter)item).getCAT_NAME_ID().toLowerCase().contains(filterData)
-                            ||((FoodItemAdapter)item).getDESC().toLowerCase().contains(filterData)){
+                    if (((FoodItemAdapter)item).NAME.toLowerCase().contains(filterData)
+                            ||((FoodItemAdapter)item).CAT_NAME_ID.toLowerCase().contains(filterData)
+                            ||((FoodItemAdapter)item).DESC.toLowerCase().contains(filterData)){
                         allFoodData.add(item);
                     }
                 }
@@ -174,10 +176,10 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
     };
 
 
-    class ViewHolder extends RecyclerView.ViewHolder{
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         public TextView cat_name;
-        private ImageView icon_main,veg_nonveg;
+        private ImageView icon_main,veg_nonveg,edit_item;
         private TextView name,description,amount,category,textavlaible;
         private SwitchCompat foodavailable;
         private LinearLayout cathol;
@@ -196,9 +198,14 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
             cathol = itemView.findViewById(R.id.cathol);
             foodavailable = itemView.findViewById(R.id.foodAvailable);
             textavlaible = itemView.findViewById(R.id.textAvl);
-
+            edit_item = itemView.findViewById(R.id.edit_item);
+            edit_item.setOnClickListener(this);
         }
 
+        @Override
+        public void onClick(View view) {
+            context.startActivity(new Intent(context, EditItemActivity.class).putExtra("dataMain",((FoodItemAdapter)itemObjectlist.get(getAdapterPosition()))));
+        }
     }
 
     public String getcatName(String key){

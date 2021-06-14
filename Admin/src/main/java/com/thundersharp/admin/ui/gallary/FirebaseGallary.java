@@ -5,6 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -19,9 +24,10 @@ import com.thundersharp.admin.core.utils.CONSTANTS;
 import java.util.ArrayList;
 import java.util.List;
 
-public class FirebaseGallary extends AppCompatActivity {
+public class FirebaseGallary extends AppCompatActivity implements UrlTransfer{
 
     List<String> url;
+    BroadcastReceiver broadcastReceiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +50,7 @@ public class FirebaseGallary extends AppCompatActivity {
                             RecyclerView recyclerView =(RecyclerView)findViewById(R.id.recycler);
 
                             recyclerView.setLayoutManager(new GridLayoutManager(FirebaseGallary.this,2));
-                            recyclerView.setAdapter(new GallaryAdapter(FirebaseGallary.this,url));
+                            recyclerView.setAdapter(new GallaryAdapter(FirebaseGallary.this,url,FirebaseGallary.this));
 
 
                         }else
@@ -57,5 +63,14 @@ public class FirebaseGallary extends AppCompatActivity {
                     }
                 });
 
+
+    }
+
+
+    @Override
+    public void onGetUrl(Uri uri) {
+
+        setResult(1356,getIntent().putExtra("data",uri));
+        finish();
     }
 }

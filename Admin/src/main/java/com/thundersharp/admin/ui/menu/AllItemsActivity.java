@@ -26,6 +26,7 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.razorpay.PaymentData;
@@ -54,6 +55,7 @@ import com.thundersharp.admin.core.utils.CONSTANTS;
 import com.thundersharp.admin.core.utils.LatLongConverter;
 import com.thundersharp.admin.core.utils.ResturantCoordinates;
 import com.thundersharp.admin.core.utils.TimeUtils;
+import com.thundersharp.admin.ui.edits.EditItemActivity;
 import com.thundersharp.admin.ui.offers.AllOffersActivity;
 
 import org.json.JSONException;
@@ -71,6 +73,7 @@ public class AllItemsActivity extends AppCompatActivity implements
         HomeDataContract.AllItems,
         HomeDataContract.DataLoadFailure{
 
+    FloatingActionButton add;
     private SharedPrefHelper sharedPrefHelper;
     private RecyclerView recyclermain;
     private AllItemAdapterMailAdapter allItemAdapterMailAdapter;
@@ -111,6 +114,8 @@ public class AllItemsActivity extends AppCompatActivity implements
         recyclermain.setVisibility(View.GONE);
         shl.startShimmer();
 
+        add = findViewById(R.id.add);
+        add.setOnClickListener(f-> startActivity(new Intent(this, EditItemActivity.class)));
 
         noofItems = findViewById(R.id.text2);
 

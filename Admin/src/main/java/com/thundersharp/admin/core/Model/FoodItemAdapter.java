@@ -6,14 +6,14 @@ public class FoodItemAdapter implements Serializable {
 
     public FoodItemAdapter(){}
 
-    private double AMOUNT;
-    private boolean AVAILABLE;
-    private String CAT_NAME_ID;
-    private String DESC;
-    private int FOOD_TYPE;
-    private String ICON_URL;
-    private String NAME;
-    private String ID;
+    public double AMOUNT;
+    public boolean AVAILABLE;
+    public String CAT_NAME_ID;
+    public String DESC;
+    public int FOOD_TYPE;
+    public String ICON_URL;
+    public String NAME;
+    public String ID;
 
 
     public FoodItemAdapter(double AMOUNT, boolean AVAILABLE, String CAT_NAME_ID, String DESC, int FOOD_TYPE, String ICON_URL, String NAME, String ID) {
@@ -25,70 +25,6 @@ public class FoodItemAdapter implements Serializable {
         this.ICON_URL = ICON_URL;
         this.NAME = NAME;
         this.ID = ID;
-    }
-
-    public String getID() {
-        return ID;
-    }
-
-    public void setID(String ID) {
-        this.ID = ID;
-    }
-
-    public double getAMOUNT() {
-        return AMOUNT;
-    }
-
-    public void setAMOUNT(double AMOUNT) {
-        this.AMOUNT = AMOUNT;
-    }
-
-    public boolean isAVAILABLE() {
-        return AVAILABLE;
-    }
-
-    public void setAVAILABLE(boolean AVAILABLE) {
-        this.AVAILABLE = AVAILABLE;
-    }
-
-    public String getCAT_NAME_ID() {
-        return CAT_NAME_ID;
-    }
-
-    public void setCAT_NAME_ID(String CAT_NAME_ID) {
-        this.CAT_NAME_ID = CAT_NAME_ID;
-    }
-
-    public String getDESC() {
-        return DESC;
-    }
-
-    public void setDESC(String DESC) {
-        this.DESC = DESC;
-    }
-
-    public int getFOOD_TYPE() {
-        return FOOD_TYPE;
-    }
-
-    public void setFOOD_TYPE(int FOOD_TYPE) {
-        this.FOOD_TYPE = FOOD_TYPE;
-    }
-
-    public String getICON_URL() {
-        return ICON_URL;
-    }
-
-    public void setICON_URL(String ICON_URL) {
-        this.ICON_URL = ICON_URL;
-    }
-
-    public String getNAME() {
-        return NAME;
-    }
-
-    public void setNAME(String NAME) {
-        this.NAME = NAME;
     }
 
 

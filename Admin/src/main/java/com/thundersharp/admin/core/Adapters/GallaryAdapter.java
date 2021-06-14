@@ -1,6 +1,8 @@
 package com.thundersharp.admin.core.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.thundersharp.admin.R;
+import com.thundersharp.admin.ui.gallary.UrlTransfer;
 
 import java.util.List;
 
@@ -18,10 +21,12 @@ public class GallaryAdapter extends RecyclerView.Adapter<GallaryAdapter.ViewHold
 
     Context context;
     List<String> url;
+    UrlTransfer urlTransfer;
 
-    public GallaryAdapter(Context context, List<String> url) {
+    public GallaryAdapter(Context context, List<String> url, UrlTransfer urlTransfer) {
         this.context = context;
         this.url = url;
+        this.urlTransfer = urlTransfer;
     }
 
     @NonNull
@@ -40,11 +45,19 @@ public class GallaryAdapter extends RecyclerView.Adapter<GallaryAdapter.ViewHold
         if (url != null) return url.size();else return 0;
     }
 
-    class ViewHolder extends RecyclerView.ViewHolder {
+    class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         ImageView imageview;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageview = itemView.findViewById(R.id.imageview);
+
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+
+            urlTransfer.onGetUrl(Uri.parse(url.get(getAdapterPosition())));
         }
     }
 }

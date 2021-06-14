@@ -69,8 +69,8 @@ public class DealOfTheDayAdapter extends RecyclerView.Adapter<DealOfTheDayAdapte
         elegentNumberHelper.getcurrentnumber();
 
         //TODO ADD LOGIC IF IMG ASSET == N
-        Glide.with(context).load(foodItemAdapter.getICON_URL()).into(holder.icon_main);
-        if (foodItemAdapter.getFOOD_TYPE() == 1){
+        Glide.with(context).load(foodItemAdapter.ICON_URL).into(holder.icon_main);
+        if (foodItemAdapter.FOOD_TYPE == 1){
             holder.veg_nonveg.setColorFilter(ContextCompat.getColor(context, R.color.red), android.graphics.PorterDuff.Mode.MULTIPLY);
 
         }else{
@@ -78,15 +78,15 @@ public class DealOfTheDayAdapter extends RecyclerView.Adapter<DealOfTheDayAdapte
 
         }
 
-        holder.name.setText(foodItemAdapter.getNAME());
-        holder.amount.setText("Rs. "+foodItemAdapter.getAMOUNT());
-        holder.description.setText(foodItemAdapter.getDESC());
+        holder.name.setText(foodItemAdapter.NAME);
+        holder.amount.setText("Rs. "+foodItemAdapter.AMOUNT);
+        holder.description.setText(foodItemAdapter.DESC);
 
 
         if (doSharedPrefExists()){
             List<CartItemModel> cartItemModels = returnDataFromString(fetchitemfromStorage());
             for (int i = 0;i<cartItemModels.size();i++){
-                if (cartItemModels.get(i).getID().equalsIgnoreCase(foodItemAdapter.getID())){
+                if (cartItemModels.get(i).getID().equalsIgnoreCase(foodItemAdapter.ID)){
                     elegentNumberHelper.updateNo(cartItemModels.get(i).getQUANTITY());
                     break;
                 }
@@ -119,9 +119,9 @@ public class DealOfTheDayAdapter extends RecyclerView.Adapter<DealOfTheDayAdapte
                 String filterData = charSequence.toString().toLowerCase().trim();
                 for (Object item : itemObjectlist){
 
-                    if (((FoodItemAdapter)item).getNAME().toLowerCase().contains(filterData)
-                            ||((FoodItemAdapter)item).getCAT_NAME_ID().toLowerCase().contains(filterData)
-                            ||((FoodItemAdapter)item).getDESC().toLowerCase().contains(filterData)){
+                    if (((FoodItemAdapter)item).NAME.toLowerCase().contains(filterData)
+                            ||((FoodItemAdapter)item).CAT_NAME_ID.toLowerCase().contains(filterData)
+                            ||((FoodItemAdapter)item).DESC.toLowerCase().contains(filterData)){
                         allFoodData.add(item);
                     }
                 }
@@ -164,7 +164,7 @@ public class DealOfTheDayAdapter extends RecyclerView.Adapter<DealOfTheDayAdapte
         @Override
         public int OnTextChangeListner(int val) {
             FoodItemAdapter foodItemAdapter = (FoodItemAdapter) itemObjectlist.get(getAdapterPosition());
-            cartProvider.AddItemToCart(CartItemModel.initializeValues(foodItemAdapter.getAMOUNT(),foodItemAdapter.getDESC(),foodItemAdapter.getFOOD_TYPE(),foodItemAdapter.getICON_URL(),foodItemAdapter.getNAME(),foodItemAdapter.getID(),val),val);
+            cartProvider.AddItemToCart(CartItemModel.initializeValues(foodItemAdapter.AMOUNT,foodItemAdapter.DESC,foodItemAdapter.FOOD_TYPE,foodItemAdapter.ICON_URL,foodItemAdapter.NAME,foodItemAdapter.ID,val),val);
             currentpos = getAdapterPosition();
             return 0;
         }

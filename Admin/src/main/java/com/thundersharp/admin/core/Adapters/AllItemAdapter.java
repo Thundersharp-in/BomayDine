@@ -108,10 +108,10 @@ public class AllItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
             FoodItemAdapter foodItemModel = (FoodItemAdapter) itemObjectlist.get(position);
 
-            ((ViewHolder)holder).name.setText(foodItemModel.getNAME());
-            ((ViewHolder)holder).amount.setText("Rs. " + foodItemModel.getAMOUNT());
-            ((ViewHolder)holder).description.setText(foodItemModel.getDESC());
-            if (foodItemModel.isAVAILABLE()){
+            ((ViewHolder)holder).name.setText(foodItemModel.NAME);
+            ((ViewHolder)holder).amount.setText("Rs. " + foodItemModel.AMOUNT);
+            ((ViewHolder)holder).description.setText(foodItemModel.DESC);
+            if (foodItemModel.AVAILABLE){
                 ((ViewHolder)holder).foodAvailable.setChecked(true);
                 ((ViewHolder)holder).textavlaible.setTextColor(Color.YELLOW);
                 ((ViewHolder)holder).textavlaible.setText("Available");
@@ -132,8 +132,8 @@ public class AllItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 AdminHelpers
                         .getInstance(context)
                         .setExternalDeletePaths(
-                                CONSTANTS.DATABASE_NODE_ALL_ITEMS+"/"+foodItemModel.getID()+"/AVAILABLE",
-                                CONSTANTS.DATABASE_NODE_CATEGORY_ITEMS+"/"+getCatID(foodItemModel.getCAT_NAME_ID())+"/"+foodItemModel.getID()+"/AVAILABLE")
+                                CONSTANTS.DATABASE_NODE_ALL_ITEMS+"/"+foodItemModel.ID+"/AVAILABLE",
+                                CONSTANTS.DATABASE_NODE_CATEGORY_ITEMS+"/"+getCatID(foodItemModel.CAT_NAME_ID)+"/"+foodItemModel.ID+"/AVAILABLE")
                         .setListner(new AdminHelpers.Update() {
                             @Override
                             public void updateSuccess() {
@@ -154,7 +154,7 @@ public class AllItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                         }).updateStatus(b);
 
             });
-            Glide.with(context).load(foodItemModel.getICON_URL()).into(((ViewHolder)holder).imageView);
+            Glide.with(context).load(foodItemModel.ICON_URL).into(((ViewHolder)holder).imageView);
 
         }
 
@@ -182,9 +182,9 @@ public class AllItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 String filterText = constraint.toString().toLowerCase().trim();
 
                 for (Object items : itemObjectlist){
-                    if (((FoodItemAdapter)items).getNAME().toLowerCase().contains(filterText)
-                            ||((FoodItemAdapter)items).getCAT_NAME_ID().toLowerCase().contains(filterText)
-                            ||((FoodItemAdapter)items).getDESC().toLowerCase().contains(filterText)){
+                    if (((FoodItemAdapter)items).NAME.toLowerCase().contains(filterText)
+                            ||((FoodItemAdapter)items).CAT_NAME_ID.toLowerCase().contains(filterText)
+                            ||((FoodItemAdapter)items).DESC.toLowerCase().contains(filterText)){
                         filterItemList.add(items);
                     }
                 }
@@ -225,7 +225,7 @@ public class AllItemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
         @Override
         public void onClick(View view) {
-            context.startActivity(new Intent(context, EditItemActivity.class).putExtra("data",(FoodItemAdapter)itemObjectlist.get(getAdapterPosition())));
+            context.startActivity(new Intent(context, EditItemActivity.class).putExtra("dataMain",((FoodItemAdapter)itemObjectlist.get(getAdapterPosition()))));
         }
     }
 
