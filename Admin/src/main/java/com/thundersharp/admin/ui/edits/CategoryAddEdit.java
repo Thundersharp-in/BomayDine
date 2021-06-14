@@ -106,7 +106,7 @@ public class CategoryAddEdit extends AppCompatActivity {
 
         if (requestCode == 10087 && resultCode == RESULT_OK && data != null) {
             Uri pickedImage = data.getData();
-            Toast.makeText(this, ""+pickedImage.toString(), Toast.LENGTH_SHORT).show();
+
             upLoadImageToStorage(pickedImage);
         }
     }

@@ -37,6 +37,10 @@ public class AdminHelpers {
         return adminHelpers;
     }
 
+    public AdminHelpers setExternalUpdatePaths(String... dbPaths) {
+        this.dbPaths = dbPaths;
+        return adminHelpers;
+    }
 
     public AdminHelpers setSingleitemIdToDelete(String itemId) {
         this.dbPath = itemId;
@@ -73,7 +77,6 @@ public class AdminHelpers {
                                 } else
                                 if (update != null) update.updateFailure();
 
-                                Toast.makeText(context, " ERROR : " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
                         });
 
@@ -94,7 +97,6 @@ public class AdminHelpers {
                                 } else {
                                     if (update != null) update.updateFailure();
 
-                                    Toast.makeText(context, " ERROR : " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                                 }
                             }
                         });
@@ -103,6 +105,39 @@ public class AdminHelpers {
             }
         }
     }
+
+
+    public void updateTOPaths(Object data) {
+        if (dbPath != null || dbPaths != null) {
+            if (dbPaths != null) {
+
+                HashMap<String, Object> updateData = new HashMap<>();
+
+                for (int i = 0; i < dbPaths.length; i++) {
+                    updateData.put(dbPaths[i], data);
+                }
+
+                FirebaseDatabase
+                        .getInstance()
+                        .getReference()
+                        .updateChildren(updateData)
+                        .addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                if (task.isSuccessful()) {
+                                    if (update != null) update.updateSuccess();
+                                    Toast.makeText(context, "All paths updated", Toast.LENGTH_SHORT).show();
+                                } else
+                                if (update != null) update.updateFailure();
+
+                            }
+                        });
+
+            }
+        }
+    }
+
+
 
     public AdminHelpers setListner(Update update){
         this.update = update;
