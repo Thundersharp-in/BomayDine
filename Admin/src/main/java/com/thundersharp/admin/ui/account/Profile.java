@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
 import com.thundersharp.admin.R;
+import com.thundersharp.admin.ui.offers.AllOffersActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -37,6 +38,10 @@ public class Profile extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_profiles_admin, container, false);
+
+        ((MaterialCardView)view.findViewById(R.id.allOffers)).setOnClickListener(allOffer ->{
+            startActivity(new Intent(getContext(), AllOffersActivity.class));
+        });
 
         ((TextView)view.findViewById(R.id.switchbtn)).setOnClickListener(C ->{
             clearAllData();

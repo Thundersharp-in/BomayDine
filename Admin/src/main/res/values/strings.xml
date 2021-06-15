@@ -1,4 +1,4 @@
 <resources>
     <string name="app_name">Bombay Dine</string>
-
+    <string name="offer_view_detail"><b> View Details </b></string>
 </resources>

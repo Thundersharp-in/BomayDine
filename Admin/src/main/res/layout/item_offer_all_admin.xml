@@ -1,7 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="#22242B"
+    android:layout_marginBottom="10dp"
+    >
+    <ImageView
+        android:id="@+id/offerBy"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:text="OFFER Name"
+        android:src="@drawable/ic_launcher"
+        android:textStyle="bold"
+        android:textColor="#F1F1F1"
+        android:textSize="20sp"
+        android:fontFamily="@font/amaranth_bold_italic"
+        android:layout_marginTop="20dp"
+        android:layout_marginHorizontal="@dimen/dimen_10dp"
+        />
+    <TextView
+        android:id="@+id/offer_desc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Offer Desc to the offer"
+        android:textColor="#D6D6D6"
+        android:textSize="16sp"
+        android:layout_marginHorizontal="@dimen/dimen_10dp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/allerta"
+        />
+    <TextView
+        android:id="@+id/offer_text_amt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Valid on orders with items worth Rs.159 or more. View Details"
+        android:textColor="#818181"
+        android:textSize="12sp"
+        android:layout_marginHorizontal="@dimen/dimen_10dp"
+        android:layout_marginTop="7dp"
+        />
 
-</RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#323232"
+        android:layout_marginTop="@dimen/dimen_10dp"
+        android:layout_marginHorizontal="@dimen/dimen_10dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginHorizontal="@dimen/dimen_10dp"
+        android:layout_marginTop="@dimen/dimen_20dp"
+        android:layout_marginBottom="@dimen/dimen_20dp"
+        >
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            >
+            <TextView
+                android:id="@+id/offer_code"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="BOMBAYDINE159"
+                android:textColor="#ffffff"
+                android:textSize="18sp"
+                android:background="@drawable/offer_code_bg_admin"
+                android:padding="@dimen/dimen_10dp"
+                android:fontFamily="@font/montserratregular"
+                />
+
+        </LinearLayout>
+        <TextView
+            android:id="@+id/offer_apply"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="Apply"
+            android:textColor="#FF5722"
+            android:textSize="15sp"
+            android:gravity="end"
+            android:layout_gravity="center"
+            />
+
+    </LinearLayout>
+
+</LinearLayout>
