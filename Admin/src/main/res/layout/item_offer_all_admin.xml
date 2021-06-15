@@ -7,19 +7,42 @@
     android:background="#22242B"
     android:layout_marginBottom="10dp"
     >
-    <ImageView
-        android:id="@+id/offerBy"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:text="OFFER Name"
-        android:src="@drawable/ic_launcher"
-        android:textStyle="bold"
-        android:textColor="#F1F1F1"
-        android:textSize="20sp"
-        android:fontFamily="@font/amaranth_bold_italic"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
         android:layout_marginTop="20dp"
-        android:layout_marginHorizontal="@dimen/dimen_10dp"
-        />
+        >
+
+        <ImageView
+            android:id="@+id/offerBy"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/ic_launcher"
+            android:textStyle="bold"
+            android:textColor="#F1F1F1"
+            android:fontFamily="@font/amaranth_bold_italic"
+            android:layout_marginHorizontal="@dimen/dimen_10dp"
+            />
+
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="@dimen/dimen_5dp"
+            android:src="@drawable/ic_outline_edit_24"
+            android:background="@drawable/curved_dark"
+            android:padding="7dp"
+            android:layout_gravity="center"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="20dp"
+            />
+
+
+
+    </RelativeLayout>
+
     <TextView
         android:id="@+id/offer_desc"
         android:layout_width="match_parent"
@@ -81,10 +104,11 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="Apply"
-            android:textColor="#FF5722"
+            android:text="Delete"
+            android:textColor="#FF1E1E"
             android:textSize="15sp"
             android:gravity="end"
+            android:textStyle="bold"
             android:layout_gravity="center"
             />
 

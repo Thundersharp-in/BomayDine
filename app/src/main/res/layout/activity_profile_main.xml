@@ -664,7 +664,7 @@
                                     android:layout_height="70dp"
                                     android:layout_centerHorizontal="true"
                                     android:padding="3dp"
-                                    android:src="@drawable/offer"
+                                    android:src="@drawable/offer_upload"
                                     app:tint="#DCDCDC" />
 
                                 <TextView

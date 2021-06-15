@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllOfferAdapters;
@@ -45,6 +46,6 @@ public class AllOffersActivity extends AppCompatActivity implements OfferListner
 
     @Override
     public void OnOfferFetchFailure(Exception e) {
-
+        Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 }
