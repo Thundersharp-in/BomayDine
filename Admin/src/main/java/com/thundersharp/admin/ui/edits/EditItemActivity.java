@@ -5,7 +5,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -32,6 +35,7 @@ import com.google.firebase.storage.UploadTask;
 import com.thundersharp.admin.R;
 import com.thundersharp.admin.core.AdminHelpers;
 import com.thundersharp.admin.core.Model.FoodItemAdapter;
+import com.thundersharp.admin.core.utils.AlertCreater;
 import com.thundersharp.admin.core.utils.CONSTANTS;
 import com.thundersharp.admin.ui.gallary.FirebaseGallary;
 
@@ -52,6 +56,7 @@ public class EditItemActivity extends AppCompatActivity {
     private AppCompatButton submitbtn;
     private boolean isEdit = false;
     private Integer catPos;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +77,8 @@ public class EditItemActivity extends AppCompatActivity {
         homeImage = findViewById(R.id.imagehome);
         submitbtn = findViewById(R.id.submitbtn);
         choosefromdevice = findViewById(R.id.dinner);
+        dialog = AlertCreater.initialize(this).createAlert("Please Hold on a while we process your request.Patience is bitter, but its fruit is sweet !!");
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));;
 
         choosefromdevice.setOnClickListener(v->{
             Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
@@ -162,7 +169,7 @@ public class EditItemActivity extends AppCompatActivity {
                     foodType.setError("Select food type");
                     foodType.requestFocus();
                 }else {
-
+                    dialog.show();
                     int foodTypen;
                     if (foodType.getText().toString().equalsIgnoreCase("Vegetarian")) {
                         foodTypen = 0;
@@ -183,29 +190,33 @@ public class EditItemActivity extends AppCompatActivity {
                                     @Override
                                     public void updateSuccess() {
                                         if (!getCatID(foodItemModel.CAT_NAME_ID).equals(getCatID(itemUpdate.CAT_NAME_ID))) {
-
                                             AdminHelpers
                                                     .getInstance(EditItemActivity.this)
                                                     .setExternalDeletePaths(CONSTANTS.DATABASE_NODE_CATEGORY_ITEMS + "/" + getCatID(foodItemModel.CAT_NAME_ID) + "/" + foodItemModel.ID)
                                                     .deletePaths();
 
                                         }
+
+                                        dialog.dismiss();
                                     }
 
                                     @Override
                                     public void updateFailure() {
-
+                                        dialog.dismiss();
                                     }
                                 })
                                 .updateTOPaths(itemUpdate);
 
 
-                    } else
+                    } else {
                         Toast.makeText(this, "Category not selected please select.", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
 
                 }
 
             }else {
+
                 if (amount.getEditText().getText().toString().isEmpty()){
                     amount.setError("Amount cannot be empty");
                     amount.requestFocus();
@@ -225,6 +236,7 @@ public class EditItemActivity extends AppCompatActivity {
                     foodType.setError("Select food type");
                     foodType.requestFocus();
                 }else {
+                    dialog.show();
                     int foodTypen;
                     if (foodType.getText().toString().equalsIgnoreCase("Vegetarian")) {
                         foodTypen = 0;
@@ -244,11 +256,13 @@ public class EditItemActivity extends AppCompatActivity {
                                 @Override
                                 public void updateSuccess() {
                                     Toast.makeText(EditItemActivity.this,"Updated",Toast.LENGTH_LONG).show();
+                                    dialog.dismiss();
                                 }
 
                                 @Override
                                 public void updateFailure() {
                                     Toast.makeText(EditItemActivity.this,"Cannot update",Toast.LENGTH_LONG).show();
+                                    dialog.dismiss();
                                 }
                             })
                             .updateTOPaths(itemUpdate);
@@ -272,12 +286,12 @@ public class EditItemActivity extends AppCompatActivity {
             }else Toast.makeText(EditItemActivity.this,"Error in receiving image data",Toast.LENGTH_LONG).show();
         }else if (requestCode ==10089 && resultCode ==RESULT_OK){
             Uri pickedImage = data.getData();
-
             upLoadImageToStorage(pickedImage);
         }
     }
 
     private void upLoadImageToStorage(Uri storageImgUri){
+        dialog.show();
         StorageReference storageReference = FirebaseStorage.getInstance().getReference("CategoryImages/"+System.currentTimeMillis()+".jpg");
         storageReference.putFile(storageImgUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
@@ -308,14 +322,19 @@ public class EditItemActivity extends AppCompatActivity {
 
                                                         imageurl.getEditText().setText(uri.toString());
                                                         Glide.with(EditItemActivity.this).load(uri.toString()).into(homeImage);
+                                                        dialog.dismiss();
 
                                                     }else {
                                                         FirebaseDatabase.getInstance().getReference(path).removeValue();
+                                                        dialog.dismiss();
                                                     }
                                                 }
                                             });
                                 }
                             });
+                }else {
+                    dialog.dismiss();
+                    Toast.makeText(EditItemActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
             }
         });
