@@ -1,8 +1,10 @@
 package com.thundersharp.admin;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.thundersharp.admin.core.Errors.ModuleError;
 import com.thundersharp.admin.ui.AdminMain;
 
@@ -53,6 +55,15 @@ public class AdminModule {
                 AdminMain.startActivity(serializedData,context);
             }else AdminMain.startActivity(dataBundle,context);
         }
+    }
+
+    public static void signOutAndRestartApp(Context context){
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) FirebaseAuth.getInstance().signOut();
+        Intent i = context.getPackageManager().
+                getLaunchIntentForPackage(context.getPackageName());
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
     }
 
 }

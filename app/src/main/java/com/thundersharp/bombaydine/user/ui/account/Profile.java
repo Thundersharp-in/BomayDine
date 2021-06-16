@@ -22,12 +22,12 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.google.android.gms.dynamic.IFragmentWrapper;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.thundersharp.admin.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.R;
+import com.thundersharp.bombaydine.user.TokenVerification;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
 import com.thundersharp.bombaydine.user.core.animation.Animator;
 import com.thundersharp.bombaydine.user.core.login.AccountHelper;
@@ -36,7 +36,6 @@ import com.thundersharp.bombaydine.user.ui.home.MainPage;
 import com.thundersharp.bombaydine.user.ui.location.AddAddressActivity;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
 import com.thundersharp.bombaydine.user.ui.offers.AllOffersActivity;
-import com.thundersharp.bombaydine.user.ui.offers.AllOffersDisplay;
 import com.thundersharp.bombaydine.user.ui.ratings.RatingsNReview;
 import com.thundersharp.bombaydine.user.ui.settings.SettingsActivity;
 import com.thundersharp.bombaydine.user.ui.startup.MainActivity;
@@ -200,62 +199,71 @@ public class Profile extends Fragment {
             cancel.setOnClickListener(c -> bottomSheetDialogloc.hide());
             submit.setOnClickListener(view2 -> {
 
-                if(code.getText().toString().isEmpty()){
-                    code.setError("Cant be empty");
-                    code.requestFocus();
-                }else if (FirebaseAuth.getInstance().getCurrentUser() == null){
-                    Toast.makeText(getActivity(),"Log in first",Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
-                }else {
-                    AccountHelper
-                            .getInstance(getActivity())
-                            .setUid(FirebaseAuth.getInstance().getUid())
-                            .setListner(new SharedPrefUpdater.AccountSwitch.lisetner() {
-                                @Override
-                                public void onSaveSuccess(String employeeCode, String name,String type) {
+                if (FirebaseAuth.getInstance().getCurrentUser().getEmail() !=null || !FirebaseAuth.getInstance().getCurrentUser().getEmail().isEmpty()) {
+                    if (code.getText().toString().isEmpty()) {
+                        code.setError("Cant be empty");
+                        code.requestFocus();
+                    } else if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                        Toast.makeText(getActivity(), "Log in first", Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getActivity(), LoginActivity.class));
+                    } else {
+                        AccountHelper
+                                .getInstance(getActivity())
+                                .setUid(FirebaseAuth.getInstance().getUid())
+                                .setListner(new SharedPrefUpdater.AccountSwitch.lisetner() {
+                                    @Override
+                                    public void onSaveSuccess(String employeeCode, String name, String type) {
 
-                                    if (employeeCode.equals(code.getText().toString())) {
-                                        String des = null;
-                                        if (type.equalsIgnoreCase("1")){
-                                            des = "Kitchen staff";
-                                        }else if (type.equalsIgnoreCase("2")){
-                                            des = "Delivery Partner";
-                                        }else if (type.equalsIgnoreCase("0")){
-                                            des = "Admin";
-                                        }
-                                        new AlertDialog
-                                                .Builder(getActivity())
-                                                .setMessage("Welcome "+name+" Switch to your account as "+des)
-                                                .setCancelable(false)
-                                                .setPositiveButton("SWITCH", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                                        startActivity(new Intent(getActivity(), MainActivity.class));
-                                                        getActivity().finish();
-                                                    }
-                                                })
-                                                .setNegativeButton("NO", new DialogInterface.OnClickListener() {
-                                                    @Override
-                                                    public void onClick(DialogInterface dialogInterface, int i) {
-                                                        AccountHelper
-                                                                .getInstance(getActivity())
-                                                                .clearAllData();
-                                                        dialogInterface.dismiss();
-                                                    }
-                                                })
-                                                .show();
-                                    } else
-                                        Toast.makeText(getContext(), "Entered code is incorrect.", Toast.LENGTH_SHORT).show();
+                                        if (employeeCode.equals(code.getText().toString())) {
+                                            String des = null;
+                                            if (type.equalsIgnoreCase("1")) {
+                                                des = "Kitchen staff";
+                                            } else if (type.equalsIgnoreCase("2")) {
+                                                des = "Delivery Partner";
+                                            } else if (type.equalsIgnoreCase("0")) {
+                                                des = "Admin";
+                                            }
+                                            new AlertDialog
+                                                    .Builder(getActivity())
+                                                    .setMessage("Welcome " + name + " Switch to your account as " + des)
+                                                    .setCancelable(false)
+                                                    .setPositiveButton("SWITCH", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            TokenVerification
+                                                                    .getInstance(getActivity())
+                                                                    .saveCredentials(FirebaseAuth.getInstance().getCurrentUser().getEmail(),
+                                                                            FirebaseAuth.getInstance().getUid());
+                                                            startActivity(new Intent(getActivity(), MainActivity.class));
+                                                            getActivity().finish();
+                                                        }
+                                                    })
+                                                    .setNegativeButton("NO", new DialogInterface.OnClickListener() {
+                                                        @Override
+                                                        public void onClick(DialogInterface dialogInterface, int i) {
+                                                            AccountHelper
+                                                                    .getInstance(getActivity())
+                                                                    .clearAllData();
+                                                            dialogInterface.dismiss();
+                                                        }
+                                                    })
+                                                    .show();
+                                        } else
+                                            Toast.makeText(getContext(), "Entered code is incorrect.", Toast.LENGTH_SHORT).show();
 
-                                }
+                                    }
 
-                                @Override
-                                public void onSaveFailure(Exception e) {
-                                    if (e.getMessage().equals("ER1")) Toast.makeText(getContext(), "Account not Authorised to access this area.", Toast.LENGTH_SHORT).show();
-                                    else Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                }
+                                    @Override
+                                    public void onSaveFailure(Exception e) {
+                                        if (e.getMessage().equals("ER1"))
+                                            Toast.makeText(getContext(), "Account not Authorised to access this area.", Toast.LENGTH_SHORT).show();
+                                        else
+                                            Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
+                }else
+                    Toast.makeText(getActivity(), "Update email to proceed", Toast.LENGTH_SHORT).show();
             });
 
             bottomSheetDialogloc.setContentView(bottomview);

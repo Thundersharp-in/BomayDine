@@ -18,14 +18,13 @@
 
         <TextView
             android:id="@+id/delevering_to_address"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
-            android:layout_toStartOf="@id/ch_address"
             android:drawableStart="@drawable/ic_outline_share_location_24"
             android:drawablePadding="10dp"
             android:drawableTint="#E4D335"
@@ -33,22 +32,8 @@
             android:gravity="center_vertical"
             android:maxLines="1"
             android:paddingVertical="3dp"
-            android:text="Delivering to : A 17 Adarsh co-operative sector 12 bokaro steel city"
+            android:text="Delivering to : Address not applicable dine-in order"
             android:textColor="#B6B6B6"
-            android:textSize="13sp" />
-
-        <TextView
-            android:id="@+id/ch_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="15dp"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:text="change"
-            android:textColor="#E4D335"
             android:textSize="13sp" />
 
     </RelativeLayout>
@@ -79,7 +64,7 @@
             android:gravity="center_vertical"
             android:maxLines="1"
             android:paddingVertical="3dp"
-            android:text="Delivery in : 44 minutes"
+            android:text="Delivery in : Dine-in order"
             android:textColor="#B6B6B6"
             android:textSize="13sp" />
 
@@ -115,16 +100,17 @@
                     android:drawablePadding="10dp"
                     android:drawableTint="#fff"
                     android:gravity="center_vertical"
-                    android:text="Pay using"
+                    android:text="Amount Payable"
                     android:textColor="#fff" />
 
                 <TextView
+                    android:id="@+id/payable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="5dp"
                     android:drawablePadding="10dp"
                     android:gravity="center_vertical"
-                    android:text="Cash on delivery"
+                    android:text="\u20B9 1534"
                     android:textColor="#CDDC39" />
 
             </LinearLayout>
@@ -142,7 +128,8 @@
                 android:layout_height="55dp"
                 android:layout_centerVertical="true"
                 android:layout_marginHorizontal="10dp"
-                android:text="PAY \u20B9 125690"
+                android:text="GENERATE ORDER"
+                android:gravity="center"
                 android:textColor="#FFFFFF"
                 android:textSize="16sp"
                 android:background="@drawable/button_red_round" />
@@ -445,6 +432,7 @@
                         android:textSize="13sp" />
 
                     <TextView
+                        android:id="@+id/change"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"

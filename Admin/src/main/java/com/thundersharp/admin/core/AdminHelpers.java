@@ -9,8 +9,11 @@ import androidx.annotation.RequiresApi;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.thundersharp.admin.core.Errors.DataBaseException;
+import com.thundersharp.admin.core.Errors.ResignException;
 import com.thundersharp.admin.core.utils.CONSTANTS;
 
 import java.util.HashMap;
@@ -189,6 +192,38 @@ public class AdminHelpers {
 
             }
 
+    }
+
+    public void reSignAdmin() throws ResignException {
+        if (TokenVerificationAdmin.getInstance(context).isDataNullOrEmpty()) {
+            SharedPreferences sharedPreferences = TokenVerificationAdmin.getInstance(context).getSharedPrefs();
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) FirebaseAuth.getInstance().signOut();
+            FirebaseAuth
+                    .getInstance()
+                    .signInWithEmailAndPassword(sharedPreferences.getString(TokenVerificationAdmin.SHARED_PREF_EMAIL_ADMIN, "temp@error.com"),
+                            sharedPreferences.getString(TokenVerificationAdmin.SHARED_PREF_PASSWORD_ADMIN, "123456"))
+                    .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) {
+
+                                Toast.makeText(context, "Signed in back", Toast.LENGTH_SHORT).show();
+                                //finish();
+
+                            } else {
+                                Toast.makeText(context, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    });
+
+        }else throw new ResignException("EC:783 Error in resigning either saved password or email id of the admin is null or empty."+"\n\nSUGGESTION :Logout the existing user for security purpose and ask admin to resign to his/her account.");
+    }
+
+    public void clearAllAdminData(){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("EmpAccount", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
     }
 
     public interface Update{

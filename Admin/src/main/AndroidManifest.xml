@@ -4,10 +4,12 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
-        <activity android:name=".ui.gallary.FirebaseGallary"></activity>
+        <activity android:name=".ui.passcode.OtpVerifaction"></activity>
+        <activity android:name=".ui.ReauthCreateUser" />
+        <activity android:name=".ui.gallary.FirebaseGallary" />
         <activity
             android:name=".ui.edits.EditItemActivity"
             android:configChanges="orientation|screenSize|keyboard" />

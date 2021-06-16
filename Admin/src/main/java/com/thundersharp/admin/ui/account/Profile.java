@@ -16,7 +16,9 @@ import android.widget.TextView;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
+import com.thundersharp.admin.AdminModule;
 import com.thundersharp.admin.R;
+import com.thundersharp.admin.core.AdminHelpers;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -39,21 +41,12 @@ public class Profile extends Fragment {
         View view = inflater.inflate(R.layout.fragment_profiles_admin, container, false);
 
         ((TextView)view.findViewById(R.id.switchbtn)).setOnClickListener(C ->{
-            clearAllData();
-            Intent sharingIntent = new Intent(Intent.ACTION_SEND);
-            sharingIntent.setPackage("com.thundersharp.bombaydine");
-            startActivity(sharingIntent);
+            AdminHelpers.getInstance(getActivity()).clearAllAdminData();
+            AdminModule.signOutAndRestartApp(getActivity());
             getActivity().finish();
         });
 
         return view;
-    }
-
-    public void clearAllData(){
-        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("EmpAccount", Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.clear();
-        editor.apply();
     }
 
 

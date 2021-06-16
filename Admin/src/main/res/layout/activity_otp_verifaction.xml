@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#22222B"
+    >
+
+    <androidx.appcompat.widget.Toolbar
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#2d2d39"
+        app:titleTextColor="#CAC7C7"
+        app:title="Costumer phone Verification"
+        android:id="@+id/toolbar"
+        android:elevation="@dimen/dimen_5dp"
+        />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/toolbar"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        >
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <ImageView
+                    android:id="@+id/img"
+                    android:layout_width="140dp"
+                    android:layout_height="140dp"
+                    android:src="@drawable/authentication"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="0dp"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="To continue please Re-enter the verification code sent to costumers phone. If you want to cancel the verification flow then click cancel verification."
+                    android:drawableStart="@drawable/ic_outline_info_24"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/calibri"
+                    android:drawableTint="#FFEB3B"
+                    android:textColor="#FFEB3B"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="20dp"/>
+
+
+                <com.mukesh.OtpView
+                    android:id="@+id/otp_view"
+                    android:layout_width="wrap_content"
+                    android:enabled="true"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:itemBackground="#2d2d39"
+                    android:textColor="@android:color/white"
+                    app:itemCount="6"
+                    app:hideLineWhenFilled="true"
+                    app:lineColor="#AEAEAE"
+                    app:lineWidth="3dp"
+                    app:viewType="rectangle"
+                    android:elevation="5dp"
+                    android:inputType="number"
+                    android:layout_gravity="center_horizontal"
+                    />
+
+
+
+                <ProgressBar
+                    android:id="@+id/loginprogress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                    android:progressTint="#fff"
+                    android:indeterminateTint="#fff"
+                    android:indeterminate="true"
+                    android:layout_marginHorizontal="@dimen/dimen_15dp"
+                    android:visibility="gone"
+                    />
+
+                <TextView
+                    android:id="@+id/cancel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cancel Verification"
+                    android:layout_gravity="end"
+                    android:drawablePadding="10dp"
+                    android:fontFamily="@font/calibri"
+                    android:textColor="#FF723A"
+                    android:layout_marginHorizontal="15dp"
+                    android:layout_marginTop="15dp"/>
+
+                <androidx.appcompat.widget.AppCompatButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="45dp"
+                    android:paddingHorizontal="15dp"
+                    android:id="@+id/vieify"
+                    android:textColor="#fff"
+                    android:text="Submit and Verify"
+                    android:textAllCaps="true"
+                    android:gravity="center"
+                    android:layout_gravity="center_horizontal"
+                    android:background="@drawable/curved_rectange_main"
+                    android:layout_marginTop="20dp"/>
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+
+
+    </LinearLayout>
+
+</RelativeLayout>
