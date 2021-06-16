@@ -2,14 +2,14 @@ package com.thundersharp.bombaydine.user.core.Adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.thundersharp.bombaydine.R;
+import com.thundersharp.bombaydine.user.core.Model.OfferModel;
 
 import java.util.List;
 
@@ -44,6 +44,15 @@ public class AllOfferAdapters extends RecyclerView.Adapter<AllOfferAdapters.View
         if (adapterType == 0){
 
         }else {
+            OfferModel offerModel = (OfferModel) objects.get(position);
+
+            ((View)holder).offer_apply.setOnClickListener(view ->{
+                //TODO Tap to apply
+            });
+            ((View)holder).offer_desc.setText(offerModel.getDESC());
+            ((View)holder).offer_text_amt.setText("Get instant discount of "+offerModel.getPERCENT() +"% Off upto Rs. "+offerModel.getUPTO()+" on your delisious orders."+ context.getString(com.thundersharp.admin.R.string.offer_view_detail));
+            ((View)holder).offer_code.setText(offerModel.getCODE());
+
 
         }
 
@@ -55,8 +64,16 @@ public class AllOfferAdapters extends RecyclerView.Adapter<AllOfferAdapters.View
     }
 
     class View extends RecyclerView.ViewHolder {
+        ImageView offerBy;
+        TextView offer_desc, offer_text_amt, offer_code, offer_apply;
+
         public View(@NonNull android.view.View itemView) {
             super(itemView);
+            offerBy =itemView.findViewById(com.thundersharp.admin.R.id.offerBy);
+            offer_desc =itemView.findViewById(com.thundersharp.admin.R.id.offer_desc);
+            offer_text_amt =itemView.findViewById(com.thundersharp.admin.R.id.offer_text_amt);
+            offer_code =itemView.findViewById(com.thundersharp.admin.R.id.offer_code);
+            offer_apply =itemView.findViewById(com.thundersharp.admin.R.id.offer_apply);
         }
     }
 }

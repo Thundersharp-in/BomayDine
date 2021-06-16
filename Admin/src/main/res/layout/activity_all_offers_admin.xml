@@ -22,11 +22,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <RelativeLayout
+                android:id="@+id/r_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="#121010">
 
                 <EditText
+                    android:id="@+id/code_editor"
                     android:layout_toStartOf="@id/apply"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -34,14 +36,18 @@
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="7dp"
                     android:gravity="center_vertical"
                     android:maxLines="1"
                     android:paddingVertical="3dp"
                     android:hint="Enter promo code"
                     android:textColorHint="#B6B6B6"
                     android:textColor="#B6B6B6"
-                    android:textSize="13sp" />
+                    android:textSize="13sp"
+                    android:background="@null"
+                    android:inputType="textCapCharacters"
+                    android:textCursorDrawable="@drawable/edit_text_cursor"
+                    />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -53,7 +59,14 @@
                     android:layout_marginEnd="10dp"
                     android:layout_centerVertical="true"
                     android:id="@+id/apply"/>
-
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.5dp"
+                    android:background="#B6B6B6"
+                    android:layout_marginHorizontal="@dimen/dimen_10dp"
+                    android:layout_below="@+id/code_editor"
+                    android:layout_marginBottom="5dp"
+                    />
 
             </RelativeLayout>
 
@@ -62,11 +75,22 @@
                 android:layout_height="match_parent"
                 android:id="@+id/recycler"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:nestedScrollingEnabled="false"/>
+                android:nestedScrollingEnabled="false"
+                android:layout_below="@+id/r_code"
+                />
 
         </RelativeLayout>
 
     </androidx.core.widget.NestedScrollView>
 
-
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_offer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:src="@drawable/ic_baseline_add_24"
+        android:backgroundTint="#606060"
+        android:layout_margin="@dimen/dimen_10dp"
+        />
 </RelativeLayout>

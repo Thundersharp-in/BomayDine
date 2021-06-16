@@ -19,6 +19,7 @@ import com.google.android.material.card.MaterialCardView;
 import com.thundersharp.admin.AdminModule;
 import com.thundersharp.admin.R;
 import com.thundersharp.admin.core.AdminHelpers;
+import com.thundersharp.admin.ui.offers.AllOffersActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -40,6 +41,10 @@ public class Profile extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_profiles_admin, container, false);
 
+        ((MaterialCardView)view.findViewById(R.id.allOffers)).setOnClickListener(allOffer ->{
+            startActivity(new Intent(getContext(), AllOffersActivity.class));
+        });
+
         ((TextView)view.findViewById(R.id.switchbtn)).setOnClickListener(C ->{
             AdminHelpers.getInstance(getActivity()).clearAllAdminData();
             AdminModule.signOutAndRestartApp(getActivity());
@@ -47,6 +52,13 @@ public class Profile extends Fragment {
         });
 
         return view;
+    }
+
+    public void clearAllData(){
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("EmpAccount", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear();
+        editor.apply();
     }
 
 
