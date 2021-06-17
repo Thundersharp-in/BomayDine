@@ -33,7 +33,7 @@ public class AllOffersActivity extends AppCompatActivity  implements OfferListne
                 .fetchAllOffers();
 
         ((FloatingActionButton)findViewById(R.id.add_offer)).setOnClickListener(view->{
-            startActivity(new Intent(AllOffersActivity.this, CreateOffer.class));
+            startActivity(new Intent(AllOffersActivity.this, CreateOffer.class).putExtra("edit",false));
         });
 
     }

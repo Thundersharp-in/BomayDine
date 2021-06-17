@@ -26,7 +26,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class Profile extends Fragment {
 
     private RelativeLayout bottomHolderprofile;
-    private MaterialCardView your_orders,helpNfeedback;
+    private MaterialCardView helpNfeedback;
     private CoordinatorLayout containermain;
     private TextView switchbtn,logout,open;
     private BottomSheetDialog bottomSheetDialogloc;
@@ -41,9 +41,12 @@ public class Profile extends Fragment {
 
         View view = inflater.inflate(R.layout.fragment_profiles_admin, container, false);
 
-        ((MaterialCardView)view.findViewById(R.id.allOffers)).setOnClickListener(allOffer ->{
-            startActivity(new Intent(getContext(), AllOffersActivity.class));
-        });
+        ((MaterialCardView)view.findViewById(R.id.allOffers)).setOnClickListener(allOffer -> startActivity(new Intent(getContext(), AllOffersActivity.class)));
+
+        ((MaterialCardView)view.findViewById(R.id.reportIssue)).setOnClickListener(allOffer -> startActivity(new Intent(getContext(), ReportIssue.class)));
+
+        ((MaterialCardView)view.findViewById(R.id.your_orders)).setOnClickListener(allOffer -> startActivity(new Intent(getContext(), ReportIssue.class)));
+
 
         ((TextView)view.findViewById(R.id.switchbtn)).setOnClickListener(C ->{
             AdminHelpers.getInstance(getActivity()).clearAllAdminData();

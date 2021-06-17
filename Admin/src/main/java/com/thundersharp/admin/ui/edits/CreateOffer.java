@@ -1,5 +1,6 @@
 package com.thundersharp.admin.ui.edits;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
@@ -9,6 +10,8 @@ import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.database.FirebaseDatabase;
 import com.thundersharp.admin.R;
@@ -24,7 +27,6 @@ public class CreateOffer extends AppCompatActivity {
 
     AppCompatButton upload_btn;
     TextInputLayout offer_t_c, offer_off_upto, offer_percent, offerdesc, offer_type, offercode;
-    Integer type = 1;
     List<Integer> types;
     AutoCompleteTextView offer_text;
 
@@ -34,7 +36,22 @@ public class CreateOffer extends AppCompatActivity {
         setContentView(R.layout.activity_create_offer);
 
         initViews();
-        //types = new ArrayList<>();
+
+        if (getIntent().getBooleanExtra("edit", false)){
+            if (getIntent().getSerializableExtra("data") != null){
+               OfferModel offerModel = ((OfferModel)getIntent().getSerializableExtra("data"));
+                offer_t_c.getEditText().setText(offerModel.TNC);
+                offer_off_upto.getEditText().setText(String.valueOf(offerModel.UPTO));
+                offer_percent.getEditText().setText(String.valueOf(offerModel.PERCENT));
+                offerdesc.getEditText().setText(offerModel.DESC);
+                offer_type.getEditText().setText(String.valueOf(offerModel.TYPE));
+                offercode.getEditText().setText(offerModel.CODE);
+                upload_btn.setText("UPDATE");
+            }
+        }else {
+            upload_btn.setText("UPLOAD");
+        }
+
         types = getCustomerList();
         ArrayAdapter<Integer> adapter = new ArrayAdapter<>(CreateOffer.this, android.R.layout.simple_spinner_item, types);
         offer_text.setAdapter(adapter);
@@ -58,9 +75,57 @@ public class CreateOffer extends AppCompatActivity {
                 Toast.makeText(this, "Select offer type", Toast.LENGTH_SHORT).show();
             }else {
 
+                int type = 1;
+                String desc ,tc;
+
+                if (offer_t_c.getEditText().getText().toString().isEmpty() || offer_t_c.getEditText().getText().toString() ==null) tc = "";else tc=offer_t_c.getEditText().getText().toString();
+                if (offerdesc.getEditText().getText().toString().isEmpty() || offerdesc.getEditText().getText().toString() ==null) desc = "";else desc=offerdesc.getEditText().getText().toString();
+                if (offer_text.getText().toString().isEmpty() || offer_text.getText().toString()==null)type=1;else type= Integer.parseInt(offer_text.getText().toString());
+
+                String code = offercode.getEditText().getText().toString();
+                if ( code.contains(" ")
+                        ||code.contains(".")
+                        ||code.contains("#")
+                        ||code.contains("$")
+                        ||code.contains("[")
+                        ||code.contains("]")) {
+                    code = code.replace(" ", "");
+                    code = code.replace(".", "");
+                    code = code.replace("#", "");
+                    code = code.replace("$", "");
+                    code = code.replace("[", "");
+                    code = code.replace("]", "");
+
+                }
+                OfferModel offerModel = new OfferModel(code,
+                        desc,
+                        tc,
+                        Integer.valueOf(offer_percent.getEditText().getText().toString()),
+                        type,
+                        Integer.valueOf(offer_off_upto.getEditText().getText().toString()));
+
+                FirebaseDatabase
+                        .getInstance()
+                        .getReference(CONSTANTS.DATABASE_NODE_ALL_OFFERS)
+                        .child(offerModel.CODE)
+                        .setValue(offerModel)
+                        .addOnCompleteListener(task -> {
+                            if (task.isSuccessful()){
+                                offer_t_c.getEditText().setText("");
+                                offercode.getEditText().setText("");
+                                offerdesc.getEditText().setText("");
+                                offer_percent.getEditText().setText("");
+                                offer_off_upto.getEditText().setText("");
+                                offer_text.setText("");
+                                Toast.makeText(this, "Updated Successfully", Toast.LENGTH_SHORT).show();
+
+                            }else
+                                Toast.makeText(this, ""+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        });
 
 
-                Toast.makeText(this, "All set ready to upload with offer type "+ Integer.valueOf(offer_text.getText().toString()), Toast.LENGTH_SHORT).show();
+
+                //Toast.makeText(this, "All set ready to upload with offer type "+ Integer.valueOf(offer_text.getText().toString()), Toast.LENGTH_SHORT).show();
             }
 
         });

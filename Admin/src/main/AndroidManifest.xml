@@ -7,8 +7,9 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
-        <activity android:name=".ui.edits.CreateOffer"></activity>
-        <activity android:name=".ui.passcode.OtpVerifaction"></activity>
+        <activity android:name=".ui.account.ReportIssue"></activity>
+        <activity android:name=".ui.edits.CreateOffer" />
+        <activity android:name=".ui.passcode.OtpVerifaction" />
         <activity android:name=".ui.ReauthCreateUser" />
         <activity android:name=".ui.gallary.FirebaseGallary" />
         <activity

@@ -69,11 +69,11 @@ public class AllOfferAdapters extends RecyclerView.Adapter<AllOfferAdapters.View
 
         public View(@NonNull android.view.View itemView) {
             super(itemView);
-            offerBy =itemView.findViewById(com.thundersharp.admin.R.id.offerBy);
-            offer_desc =itemView.findViewById(com.thundersharp.admin.R.id.offer_desc);
-            offer_text_amt =itemView.findViewById(com.thundersharp.admin.R.id.offer_text_amt);
-            offer_code =itemView.findViewById(com.thundersharp.admin.R.id.offer_code);
-            offer_apply =itemView.findViewById(com.thundersharp.admin.R.id.offer_apply);
+            offerBy =itemView.findViewById(R.id.offerBy);
+            offer_desc =itemView.findViewById(R.id.offer_desc);
+            offer_text_amt =itemView.findViewById(R.id.offer_text_amt);
+            offer_code =itemView.findViewById(R.id.offer_code);
+            offer_apply =itemView.findViewById(R.id.offer_apply);
         }
     }
 }
