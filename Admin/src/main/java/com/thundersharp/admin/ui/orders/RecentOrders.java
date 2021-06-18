@@ -1,10 +1,12 @@
 package com.thundersharp.admin.ui.orders;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -53,6 +55,7 @@ import com.thundersharp.admin.core.cart.CartProvider;
 import com.thundersharp.admin.core.location.DistanceFromCoordinates;
 import com.thundersharp.admin.core.payments.PrePayment;
 import com.thundersharp.admin.core.payments.parePayListener;
+import com.thundersharp.admin.core.utils.AlertCreater;
 import com.thundersharp.admin.ui.ReauthCreateUser;
 import com.thundersharp.conversation.utils.Resturant;
 import com.thundersharp.payments.payments.Payments;
@@ -60,6 +63,7 @@ import com.thundersharp.payments.payments.Payments;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.regex.Pattern;
 
 public class RecentOrders extends AppCompatActivity implements HomeDataContract.AllItems,
         HomeDataContract.DataLoadFailure {
@@ -79,8 +83,8 @@ public class RecentOrders extends AppCompatActivity implements HomeDataContract.
     private LinearLayout radiogroup;
     public BottomSheetDialog bottomSheetDialog;
     private RecyclerView rec1;
-    private EditText searchbar;
-    private TextView namePhoneData;
+    private EditText searchbar,dicount_VAL;
+    private TextView namePhoneData,payable;
 
     private RecyclerView recomended;
     private TextView itemtotal, delehevry, grandtot, promoamt;
@@ -91,11 +95,14 @@ public class RecentOrders extends AppCompatActivity implements HomeDataContract.
 
     private OrederBasicDetails orederBasicDetails;
     private String customerUid, costumerNAme, customerPhone;
+    Dialog dialogMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recent_orders_admin);
+        dialogMain = AlertCreater.initialize(this).createAlert("Please wait while we process your request .. Patience is bitter, but its fruit is sweet !");
+        dialogMain.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         homeDataProvider = new HomeDataProvider(this, this, this);
         bottomSheetDialog = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
         sharedPrefHelper = new SharedPrefHelper(this, null);
@@ -279,8 +286,36 @@ public class RecentOrders extends AppCompatActivity implements HomeDataContract.
         grandtot = bottomview.findViewById(R.id.grand_tot);
         pay = bottomview.findViewById(R.id.paybtn);
         namePhoneData = bottomview.findViewById(R.id.namePhoneData);
-        TextView payable = bottomview.findViewById(R.id.payable);
-        changeName.setOnClickListener(vv -> startActivityForResult(new Intent(RecentOrders.this, ReauthCreateUser.class), 1008));
+        payable = bottomview.findViewById(R.id.payable);
+        dicount_VAL = bottomview.findViewById(R.id.dicount_VAL);
+        changeName.setOnClickListener(vv -> {
+            dialogMain.show();
+            startActivityForResult(new Intent(RecentOrders.this, ReauthCreateUser.class), 1008);
+        });
+
+
+        ((TextView)bottomview.findViewById(R.id.shoe_offers)).setOnClickListener(n ->{
+            if (dicount_VAL.getText().toString().endsWith("%")){
+
+                try {
+
+                    double percentVal = Double.parseDouble(dicount_VAL.getText().toString().replace("%", ""));
+
+                }catch (NumberFormatException numberFormatException){
+                    Toast.makeText(this, numberFormatException.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
+
+            }else {
+                try {
+
+                    double percentamt = Double.parseDouble(dicount_VAL.getText().toString());
+
+                }catch (NumberFormatException numberFormatException){
+                    Toast.makeText(this, numberFormatException.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
 /*        if (sharedPrefHelper != null) {
             if (sharedPrefHelper.getNamePhoneData().getName().isEmpty() || sharedPrefHelper.getNamePhoneData().getPhone().isEmpty()) {
@@ -306,6 +341,7 @@ public class RecentOrders extends AppCompatActivity implements HomeDataContract.
         pay.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                     StringBuilder stringBuilder = new StringBuilder();
                     for (int q = 0; q < data.size(); q++) {
@@ -399,8 +435,12 @@ public class RecentOrders extends AppCompatActivity implements HomeDataContract.
 
                 itemtotal.setText("\u20B9 " + sum);
                 delehevry.setText("\u20B9 " + Math.round(deleveryCharges));
+                if (customerPhone != null && costumerNAme != null)
+                    namePhoneData.setText(costumerNAme + ", " + customerPhone);
+                grandtot.setText("" + (sum + Math.round(deleveryCharges)));
+                //TODO SUBTRACT DISCOUNT LATER
+                payable.setText(grandtot.getText().toString());
 
-                grandtot.setText("" + (sum + Math.round(deleveryCharges))); //TODO SUBTRACT DISCOUNT LATER
 
 
             } else {
@@ -409,6 +449,7 @@ public class RecentOrders extends AppCompatActivity implements HomeDataContract.
                 promoamt.setText("\u20B9 0");
                 grandtot.setText("\u20B9 0");
                 pay.setText("PAY \u20B9 0");
+                payable.setText("\u20B9 0");
             }
         }
 
@@ -536,7 +577,10 @@ public class RecentOrders extends AppCompatActivity implements HomeDataContract.
                 AdminModule.signOutAndRestartApp(this);
                 finish();
             }
+
         }
+
+        dialogMain.dismiss();
     }
 
 

@@ -48,7 +48,8 @@ public class TokenVerificationAdmin {
         SharedPreferences sharedPreferences = context.getSharedPreferences("AdminAuth",Context.MODE_PRIVATE);
 
         if (sharedPreferences != null){
-            return !sharedPreferences.getString(SHARED_PREF_EMAIL_ADMIN, "").isEmpty() && !sharedPreferences.getString(SHARED_PREF_PASSWORD_ADMIN, "").isEmpty();
+            return !sharedPreferences.getString(SHARED_PREF_EMAIL_ADMIN, "").isEmpty() &&
+                    !sharedPreferences.getString(SHARED_PREF_PASSWORD_ADMIN, "").isEmpty();
         }return false;
     }
 

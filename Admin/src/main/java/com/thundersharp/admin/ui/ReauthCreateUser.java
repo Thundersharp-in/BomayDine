@@ -5,7 +5,10 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
+import android.app.Dialog;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.widget.Toast;
 
@@ -30,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.thundersharp.admin.R;
 import com.thundersharp.admin.core.AdminHelpers;
 import com.thundersharp.admin.core.TokenVerificationAdmin;
+import com.thundersharp.admin.core.utils.AlertCreater;
 import com.thundersharp.admin.core.utils.CONSTANTS;
 import com.thundersharp.admin.core.utils.ResturantCoordinates;
 import com.thundersharp.admin.ui.passcode.OtpVerifaction;
@@ -38,6 +42,12 @@ import com.thundersharp.conversation.utils.Resturant;
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * @author hrishikeshprateek
+ * @apiNote
+ * Returns costumer uid,name,phone number if exists and if doesn't exist creates and return the values.
+ * @see FirebaseAuth
+ */
 public class ReauthCreateUser extends AppCompatActivity {
 
     AppCompatButton reAuth;
@@ -47,13 +57,15 @@ public class ReauthCreateUser extends AppCompatActivity {
     private String mVerificationId;
     public PhoneAuthProvider.ForceResendingToken mResendToken;
     public PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
+    Dialog dialogMain;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.authenticate_user);
-
+        dialogMain = AlertCreater.initialize(this).createAlert("Please wait while we process your request .. Patience is bitter, but its fruit is sweet !");
+        dialogMain.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         mAuth = FirebaseAuth.getInstance();
         reAuth = findViewById(R.id.buttonsubmit);
         customerName = findViewById(R.id.name);
@@ -66,6 +78,7 @@ public class ReauthCreateUser extends AppCompatActivity {
             }else if (adminPassword.getEditText().getText().toString().isEmpty()){
                 adminPassword.setError("Admin password required.");
             }else {
+                dialogMain.show();
                 String emailAdmin = FirebaseAuth.getInstance().getCurrentUser().getEmail();
                 AuthCredential authCredential = EmailAuthProvider.getCredential(emailAdmin,adminPassword.getEditText().getText().toString());
                 FirebaseAuth
@@ -238,11 +251,13 @@ public class ReauthCreateUser extends AppCompatActivity {
                                         }
                                     });
                             // Update UI
+                            dialogMain.dismiss();
                         } else {
                             if (task.getException() instanceof FirebaseAuthInvalidCredentialsException) {
                                 // The verification code entered was invalid
                                 Toast.makeText(ReauthCreateUser.this, "Costumer otp invalid", Toast.LENGTH_SHORT).show();
                             }
+                            dialogMain.dismiss();
                         }
                     }
                 });
