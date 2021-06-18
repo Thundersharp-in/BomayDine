@@ -3,6 +3,7 @@ package com.thundersharp.admin.core.orders;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
 
 import java.util.List;
 
@@ -11,7 +12,7 @@ public interface OrderContract {
     void fetchRecentOrders();
 
     interface onOrderFetch {
-        void onOrderFetchSuccess(List<Object> data);
+        void onOrderFetchSuccess(DataSnapshot data, boolean isNew);
         void onDataFetchFailure(Exception e);
     }
 

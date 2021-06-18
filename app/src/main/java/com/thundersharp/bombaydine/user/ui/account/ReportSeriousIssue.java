@@ -15,5 +15,7 @@ public class ReportSeriousIssue extends AppCompatActivity {
         setContentView(R.layout.activity_report_serious_issue);
 
         //((LinearLayout)findViewById(R.id.another_report)).setOnClickListener(view ->{});
+
+
     }
 }

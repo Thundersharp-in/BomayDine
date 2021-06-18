@@ -8,6 +8,7 @@
     app:cardElevation="6dp"
     app:cardUseCompatPadding="true"
     app:cardCornerRadius="10dp"
+    android:background="#22242c"
     app:cardBackgroundColor="#22242c">
 
     <RelativeLayout
@@ -173,10 +174,66 @@
             android:layout_below="@id/view_ed"
             android:textSize="13sp"
             android:layout_marginHorizontal="10dp"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="10dp"
             android:textColor="#EFEBC7"
             android:text="DELIVERY STATUS : Delivered"
             android:ellipsize="end"/>
+
+        <LinearLayout
+            android:id="@+id/lower"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:layout_marginBottom="15dp"
+            android:layout_below="@+id/status"
+            android:orientation="horizontal">
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_approve"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:elevation="5dp"
+                android:background="@drawable/button_red_round"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_marginEnd="5dp"
+                android:textColor="#fff"
+                android:text="Approve"
+                android:gravity="center"
+                android:paddingHorizontal="5dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:clickable="true"
+                android:ellipsize="start"
+                android:enabled="true"
+                android:singleLine="true"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_decline"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_marginEnd="5dp"
+                android:elevation="5dp"
+                android:background="@null"
+                android:text="Decline"
+                android:textColor="#FDF660"
+                android:fontFamily="sans-serif-smallcaps"
+                android:textStyle="bold"
+                android:paddingHorizontal="5dp"
+                android:clickable="true"
+                android:gravity="center"
+                android:ellipsize="start"
+                android:textAllCaps="false"
+                android:enabled="true"
+                android:singleLine="true"
+                />
+
+        </LinearLayout>
 
 
     </RelativeLayout>
