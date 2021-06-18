@@ -264,8 +264,7 @@ public class EditItemActivity extends AppCompatActivity {
                                     Toast.makeText(EditItemActivity.this,"Cannot update",Toast.LENGTH_LONG).show();
                                     dialog.dismiss();
                                 }
-                            })
-                            .updateTOPaths(itemUpdate);
+                            }).updateTOPaths(itemUpdate);
 
 
                 }

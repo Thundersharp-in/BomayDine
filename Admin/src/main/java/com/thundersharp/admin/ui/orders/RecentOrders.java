@@ -19,12 +19,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.thundersharp.admin.AdminModule;
 import com.thundersharp.admin.R;
@@ -59,8 +61,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class RecentOrders extends AppCompatActivity implements   HomeDataContract.AllItems,
-        HomeDataContract.DataLoadFailure{
+public class RecentOrders extends AppCompatActivity implements HomeDataContract.AllItems,
+        HomeDataContract.DataLoadFailure {
 
     private SharedPrefHelper sharedPrefHelper;
     private RecyclerView recyclermain;
@@ -73,11 +75,12 @@ public class RecentOrders extends AppCompatActivity implements   HomeDataContrac
     private CartProvider cartProvider;
     private TextView noofItems, totalamt;
     private ImageView filter;
-    boolean isfilerOpen = false;
+    boolean isfilerOpen = false, gotRequiredCustomerData = false;
     private LinearLayout radiogroup;
-    public static BottomSheetDialog bottomSheetDialog;
+    public BottomSheetDialog bottomSheetDialog;
     private RecyclerView rec1;
     private EditText searchbar;
+    private TextView namePhoneData;
 
     private RecyclerView recomended;
     private TextView itemtotal, delehevry, grandtot, promoamt;
@@ -87,7 +90,7 @@ public class RecentOrders extends AppCompatActivity implements   HomeDataContrac
     public static List<Object> staticAllItemsRecomended = new ArrayList<>();
 
     private OrederBasicDetails orederBasicDetails;
-    private String customerUid;
+    private String customerUid, costumerNAme, customerPhone;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -115,14 +118,19 @@ public class RecentOrders extends AppCompatActivity implements   HomeDataContrac
         radiogroup.setVisibility(View.GONE);
         recomended = findViewById(R.id.recomended);
 
+
         bottomholder.setVisibility(View.INVISIBLE);
 
         bottomholder.setOnClickListener(view -> {
-            if (FirebaseAuth.getInstance().getCurrentUser() != null)
-                showCart();
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                if (TokenVerificationAdmin.getInstance(this).reVerifyAdminCurrentToken()) {
+                    showCart();
+                }else
+                    Toast.makeText(this, "Admin token verification failed relogin", Toast.LENGTH_SHORT).show();
+            }
             else {
                 Toast.makeText(this, "Login to place order ", Toast.LENGTH_SHORT).show();
-               // startActivity(new Intent(this, LoginActivity.class));
+                // startActivity(new Intent(this, LoginActivity.class));
 
             }
         });
@@ -270,6 +278,7 @@ public class RecentOrders extends AppCompatActivity implements   HomeDataContrac
         promoamt = bottomview.findViewById(R.id.promotot);
         grandtot = bottomview.findViewById(R.id.grand_tot);
         pay = bottomview.findViewById(R.id.paybtn);
+        namePhoneData = bottomview.findViewById(R.id.namePhoneData);
         TextView payable = bottomview.findViewById(R.id.payable);
         changeName.setOnClickListener(vv -> startActivityForResult(new Intent(RecentOrders.this, ReauthCreateUser.class), 1008));
 
@@ -314,45 +323,56 @@ public class RecentOrders extends AppCompatActivity implements   HomeDataContrac
                                     .append(", ");
                         }
                     }
-                    orederBasicDetails = new OrederBasicDetails(
-                            sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1(),
-                            sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG(),
-                            "",
-                            stringBuilder.toString(),
-                            delehevry.getText().toString().replace("\u20B9", ""),
-                            grandtot.getText().toString().replace("\u20B9", ""),
-                            "",
-                            String.valueOf(System.currentTimeMillis()),
-                            "");
 
-                    Resturant.isOpen(isOpen -> {
+                    if (gotRequiredCustomerData) {
+                        orederBasicDetails = new OrederBasicDetails(
+                                "Dine-in order",
+                                "Dine-in order",
+                                "",
+                                stringBuilder.toString(),
+                                delehevry.getText().toString().replace("\u20B9", ""),
+                                grandtot.getText().toString().replace("\u20B9", ""),
+                                costumerNAme + "%" + customerPhone,
+                                String.valueOf(System.currentTimeMillis()),
+                                "");
 
-                        if (isOpen) {
-                            PrePayment
-                                    .getInstance()
-                                    .setDadaistListener(new parePayListener() {
-                                        @Override
-                                        public void addSuccess() {
-                                            Payments
-                                                    .initialize(RecentOrders.this)
-                                                    .startPayment("ORDER #" + orederBasicDetails.getOrderID(), Double.parseDouble(orederBasicDetails.getTotalamt()), "support@thundersharp.in", "7301694135");
-                                        }
+                        new AlertDialog
+                                .Builder(RecentOrders.this)
+                                .setMessage("Confirm create order for "+costumerNAme+" phoneNo :"+customerPhone)
+                                .setNegativeButton("CHANGE",(D,I)->{D.dismiss();})
+                                .setPositiveButton("OK",(d,i)->{
+                                    PrePayment
+                                            .getInstance()
+                                            .setDadaistListener(new parePayListener() {
+                                                @Override
+                                                public void addSuccess() {
+                                                    Toast.makeText(RecentOrders.this, "Order created for "+costumerNAme, Toast.LENGTH_SHORT).show();
+                                                    cartProvider.clearCart();
+                                                    bottomSheetDialog.dismiss();
+                                                    refreshAdapter();
+                                                    Animator.initializeAnimator().slideDown(bottomholder);
 
-                                        @Override
-                                        public void addFailure(Exception exception) {
-                                            Toast.makeText(RecentOrders.this, "Payment cannot be initialized cause :" + exception.getMessage(), Toast.LENGTH_SHORT).show();
-                                        }
-                                    }).setOrderToDatabase(data, orederBasicDetails);
+                                                    //TODO ADD VALUE EVENT LISTNER IN USER MODULE ORDER STATUS PAGE
+                                                }
 
-                        } else
-                            Toast.makeText(RecentOrders.this, "Resturant not open", Toast.LENGTH_SHORT).show();
-                    });
+                                                @Override
+                                                public void addFailure(Exception exception) {
+                                                    Toast.makeText(RecentOrders.this, "Payment cannot be initialized cause :" + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                                }
+                                            }).setAdminOrderToDatabase(data, orederBasicDetails, customerUid);
+
+                                }).show();
+
+
+                    } else
+                        Toast.makeText(RecentOrders.this, "Set customer details first", Toast.LENGTH_SHORT).show();
 
 
                 } else {
                     Toast.makeText(RecentOrders.this, "Log in first", Toast.LENGTH_SHORT).show();
                     //startActivity(new Intent(RecentOrders.this, LoginActivity.class));
                 }
+
 
             }
         });
@@ -400,15 +420,15 @@ public class RecentOrders extends AppCompatActivity implements   HomeDataContrac
     public void onBackPressed() {
         super.onBackPressed();
         //TODO UPDATE LOGIC HERE
-        if (TokenVerificationAdmin.getInstance(this).reVerifyAdminCurrentToken()){
+        if (TokenVerificationAdmin.getInstance(this).reVerifyAdminCurrentToken()) {
             Toast.makeText(this, "Admin Account", Toast.LENGTH_SHORT).show();
-        }else {
+        } else {
             Toast.makeText(this, "Admin account tokenVerification failed retrying to resign in !", Toast.LENGTH_SHORT).show();
             try {
                 AdminHelpers.getInstance(this).reSignAdmin();
             } catch (ResignException e) {
                 e.printStackTrace();
-                Toast.makeText(this,"Critical Error in core while ReVerifying Token !! Logging you out.",Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Critical Error in core while ReVerifying Token !! Logging you out.", Toast.LENGTH_LONG).show();
                 AdminHelpers.getInstance(this).clearAllAdminData();
                 AdminModule.signOutAndRestartApp(this);
                 finish();
@@ -493,19 +513,25 @@ public class RecentOrders extends AppCompatActivity implements   HomeDataContrac
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode== 1008){
-            if (data.getAction() != null){
+        if (resultCode == 1008) {
+            if (data.getAction() != null) {
 
                 this.customerUid = data.getAction();
+                this.costumerNAme = data.getStringExtra("name");
+                this.customerPhone = data.getStringExtra("phone");
+                namePhoneData.setText(costumerNAme + ", " + customerPhone);
+                if (customerPhone != null && customerUid != null) {
+                    gotRequiredCustomerData = true;
+                }
 
-            }else Toast.makeText(this,"No data received retry",Toast.LENGTH_LONG).show();
+            } else Toast.makeText(this, "No data received retry", Toast.LENGTH_LONG).show();
 
             try {
                 AdminHelpers.getInstance(this).reSignAdmin();
-                Toast.makeText(this, "Costumer id "+customerUid+"\nAdmin "+FirebaseAuth.getInstance().getUid(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Costumer id " + customerUid + "\nAdmin " + FirebaseAuth.getInstance().getUid(), Toast.LENGTH_SHORT).show();
             } catch (ResignException e) {
                 e.printStackTrace();
-                Toast.makeText(this,"Critical Error in core while ReVerifying Token !! Logging you out."+e.getMessage(),Toast.LENGTH_LONG).show();
+                Toast.makeText(this, "Critical Error in core while ReVerifying Token !! Logging you out." + e.getMessage(), Toast.LENGTH_LONG).show();
                 AdminHelpers.getInstance(this).clearAllAdminData();
                 AdminModule.signOutAndRestartApp(this);
                 finish();

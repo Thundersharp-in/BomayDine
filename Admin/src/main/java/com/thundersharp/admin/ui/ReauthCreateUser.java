@@ -31,7 +31,9 @@ import com.thundersharp.admin.R;
 import com.thundersharp.admin.core.AdminHelpers;
 import com.thundersharp.admin.core.TokenVerificationAdmin;
 import com.thundersharp.admin.core.utils.CONSTANTS;
+import com.thundersharp.admin.core.utils.ResturantCoordinates;
 import com.thundersharp.admin.ui.passcode.OtpVerifaction;
+import com.thundersharp.conversation.utils.Resturant;
 
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
@@ -179,6 +181,10 @@ public class ReauthCreateUser extends AppCompatActivity {
 
                                                 Intent intent = new Intent();
                                                 intent.setAction(user.getUid());
+                                                if (customerName.getEditText().getText().toString().isEmpty())
+                                                    intent.putExtra("name", Resturant.RESTURANT_SUPPORT_NAME+" Costumer");
+                                                else intent.putExtra("name",customerName.getEditText().getText().toString());
+                                                intent.putExtra("phone",costumerPhone.getEditText().getText().toString());
                                                 setResult(1008,intent);
                                                 finish();
 
@@ -202,6 +208,10 @@ public class ReauthCreateUser extends AppCompatActivity {
                                                             if (task1.isSuccessful()){
                                                                 Intent intent = new Intent();
                                                                 intent.setAction(user.getUid());
+                                                                if (customerName.getEditText().getText().toString().isEmpty())
+                                                                    intent.putExtra("name", Resturant.RESTURANT_SUPPORT_NAME+" Costumer");
+                                                                else intent.putExtra("name",customerName.getEditText().getText().toString());
+                                                                intent.putExtra("phone",costumerPhone.getEditText().getText().toString());
                                                                 setResult(1008,intent);
                                                                 finish();
                                                             }
@@ -210,6 +220,10 @@ public class ReauthCreateUser extends AppCompatActivity {
 
                                                     Intent intent = new Intent();
                                                     intent.setAction(user.getUid());
+                                                    if (customerName.getEditText().getText().toString().isEmpty())
+                                                        intent.putExtra("name", Resturant.RESTURANT_SUPPORT_NAME+" Costumer");
+                                                    else intent.putExtra("name",customerName.getEditText().getText().toString());
+                                                    intent.putExtra("phone",costumerPhone.getEditText().getText().toString());
                                                     setResult(1008,intent);
                                                     finish();
                                                 });

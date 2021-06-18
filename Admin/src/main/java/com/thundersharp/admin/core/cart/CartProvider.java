@@ -145,7 +145,7 @@ public class CartProvider implements CartHandler {
      */
     @Override
     public void fetchItemfromServer() {
-        if (fetchitemfromStorage().isEmpty() || fetchitemfromStorage() == null) {
+        if (fetchitemfromStorage() == null || fetchitemfromStorage().isEmpty()) {
             cartlistners.addFailure(new Exception("Error data corrupted"));
         } else cartlistners.onItemAddSuccess(false, returnDataFromString(fetchitemfromStorage()));
     }
