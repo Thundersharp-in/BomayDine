@@ -201,9 +201,9 @@ public class CoOrdinatesUpdater extends AppCompatActivity implements OnMapReadyC
                 if (pos != null && size != null) {
                     HashMap<String, Object> value = new HashMap<>();
                     if (pos.equals(1)){
-                        value.put("LATLON" + pos,coOrdinate.getEditText().getText().toString());
-                        value.put("LATLON" + size,coOrdinate.getEditText().getText().toString());
-                    }else value.put("LATLON" + pos,coOrdinate.getEditText().getText().toString());
+                        value.put("" + pos,coOrdinate.getEditText().getText().toString());
+                        value.put("" + size,coOrdinate.getEditText().getText().toString());
+                    }else value.put("" + pos,coOrdinate.getEditText().getText().toString());
 
                     FirebaseDatabase
                             .getInstance()

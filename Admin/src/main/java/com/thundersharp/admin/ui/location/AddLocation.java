@@ -97,7 +97,7 @@ public class AddLocation extends AppCompatActivity implements OnMapReadyCallback
                 latLngList.add(latLngList.get(0));
                 HashMap<String , Object> setLatLongVal = new HashMap<>();
                 for (int i=0; i<latLngList.size(); i++){
-                    setLatLongVal.put("LATLON"+(i+1),String.valueOf(latLngList.get(i).getPosition().latitude+","+latLngList.get(i).getPosition().longitude));
+                    setLatLongVal.put(""+(i+1),String.valueOf(latLngList.get(i).getPosition().latitude+","+latLngList.get(i).getPosition().longitude));
                 }
 
                 FirebaseDatabase

@@ -13,6 +13,7 @@ import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
 import android.location.Address;
 import android.location.Geocoder;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -27,6 +28,7 @@ import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -34,12 +36,14 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.glide.slider.library.SliderLayout;
@@ -99,6 +103,8 @@ import com.thundersharp.admin.core.utils.CONSTANTS;
 import com.thundersharp.admin.core.utils.LatLongConverter;
 import com.thundersharp.admin.core.utils.ResturantCoordinates;
 import com.thundersharp.admin.ui.dailyfood.DailyfoodActivity;
+import com.thundersharp.admin.ui.edits.EditItemActivity;
+import com.thundersharp.admin.ui.gallary.FirebaseGallary;
 import com.thundersharp.admin.ui.location.HomeLocationChooser;
 import com.thundersharp.admin.ui.menu.AllCategoryActivity;
 import com.thundersharp.admin.ui.menu.AllItemsActivity;
@@ -183,6 +189,7 @@ public class HomeFragment extends Fragment implements
     private AppCompatButton pay;
     private RelativeLayout containermain;
     private SwitchMaterial restaurantStatus;
+    private LinearLayout sliderUpdate;
     private boolean stsus;
 
     private static List<Object> foodItemAdapterListStatic = new ArrayList<>();
@@ -235,6 +242,7 @@ public class HomeFragment extends Fragment implements
         bottom_clickable_linear = view.findViewById(R.id.bottom_clickable_linear);
         view_action = view.findViewById(R.id.view_action);
         restaurantStatus = view.findViewById(R.id.restaurantStatus);
+        sliderUpdate = view.findViewById(R.id.search);
 
         homeDataProvider = new HomeDataProvider(getActivity(), this, this, this, this);
 
@@ -286,6 +294,24 @@ public class HomeFragment extends Fragment implements
         allitemsview.setOnClickListener(view13 -> startActivity(new Intent(getActivity(), AllItemsActivity.class)));
 
         allcategory.setOnClickListener(view14 -> startActivity(new Intent(getActivity(), AllCategoryActivity.class)));
+
+        sliderUpdate.setOnClickListener(view21 ->{
+            PopupMenu popupMenu = new PopupMenu(getActivity(),sliderUpdate);
+            popupMenu.inflate(R.menu.slidermenu);
+            popupMenu.show();
+            popupMenu.setOnMenuItemClickListener(item -> {
+                int itemId = item.getItemId();
+                if (itemId == R.id.gallery) {
+                    startActivityForResult(new Intent(getActivity(), FirebaseGallary.class), 1356);
+                    //TODO startactivity for result
+                } else if (itemId == R.id.storage) {
+                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
+                    photoPickerIntent.setType("image/*");
+                    startActivityForResult(photoPickerIntent, 10089);
+                }
+                return false;
+            });
+        });
 
        // allcategory.setOnClickListener(view14 ->{ EditCategory(); });
         current_loc.setOnClickListener(viewlocation -> {
@@ -437,6 +463,24 @@ public class HomeFragment extends Fragment implements
         return view;
     }
 
+    /*
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        Fragment fragment = getActivity().getSupportFragmentManager().findFragmentById();
+
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 1356){
+            if (data != null) {
+                imageurl.getEditText().setText(data.getParcelableExtra("data").toString());
+                Glide.with(EditItemActivity.this).load(imageurl.getEditText().getText().toString()).into(homeImage);
+
+            }else Toast.makeText(EditItemActivity.this,"Error in receiving image data",Toast.LENGTH_LONG).show();
+        }else if (requestCode ==10089 && resultCode ==RESULT_OK){
+            Uri pickedImage = data.getData();
+            upLoadImageToStorage(pickedImage);
+        }
+    }
+     */
 
     private void UpdateREstStatus() {
 

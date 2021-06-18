@@ -95,6 +95,8 @@ public class RecentOrders extends AppCompatActivity implements HomeDataContract.
 
     private OrederBasicDetails orederBasicDetails;
     private String customerUid, costumerNAme, customerPhone;
+    double discountVal = 0;
+
     Dialog dialogMain;
 
     @Override
@@ -288,6 +290,7 @@ public class RecentOrders extends AppCompatActivity implements HomeDataContract.
         namePhoneData = bottomview.findViewById(R.id.namePhoneData);
         payable = bottomview.findViewById(R.id.payable);
         dicount_VAL = bottomview.findViewById(R.id.dicount_VAL);
+        namePhoneData.setText("Name and phone number needs to be initialized");
         changeName.setOnClickListener(vv -> {
             dialogMain.show();
             startActivityForResult(new Intent(RecentOrders.this, ReauthCreateUser.class), 1008);
@@ -299,7 +302,12 @@ public class RecentOrders extends AppCompatActivity implements HomeDataContract.
 
                 try {
 
-                    double percentVal = Double.parseDouble(dicount_VAL.getText().toString().replace("%", ""));
+                    Double percentDiscount = Double.parseDouble(dicount_VAL.getText().toString().replace("%", ""));
+                    Double total = Double.parseDouble(itemtotal.getText().toString().replace("\u20B9 ",""));
+                    discountVal = (percentDiscount * total)/100;
+                    promoamt.setText("-\u20B9 "+ discountVal);
+                    grandtot.setText("" + (total - discountVal));
+                    payable.setText(grandtot.getText().toString());
 
                 }catch (NumberFormatException numberFormatException){
                     Toast.makeText(this, numberFormatException.getMessage(), Toast.LENGTH_SHORT).show();
@@ -309,7 +317,11 @@ public class RecentOrders extends AppCompatActivity implements HomeDataContract.
             }else {
                 try {
 
-                    double percentamt = Double.parseDouble(dicount_VAL.getText().toString());
+                    discountVal = Double.parseDouble(dicount_VAL.getText().toString());
+                    Double total = Double.parseDouble(itemtotal.getText().toString().replace("\u20B9 ",""));
+                    promoamt.setText("-\u20B9 "+ discountVal);
+                    grandtot.setText("" + (total - discountVal));
+                    payable.setText(grandtot.getText().toString());
 
                 }catch (NumberFormatException numberFormatException){
                     Toast.makeText(this, numberFormatException.getMessage(), Toast.LENGTH_SHORT).show();
@@ -364,7 +376,7 @@ public class RecentOrders extends AppCompatActivity implements HomeDataContract.
                         orederBasicDetails = new OrederBasicDetails(
                                 "Dine-in order",
                                 "Dine-in order",
-                                "",
+                                "BOMBAY_DINE"+discountVal,
                                 stringBuilder.toString(),
                                 delehevry.getText().toString().replace("\u20B9", ""),
                                 grandtot.getText().toString().replace("\u20B9", ""),
@@ -437,8 +449,8 @@ public class RecentOrders extends AppCompatActivity implements HomeDataContract.
                 delehevry.setText("\u20B9 " + Math.round(deleveryCharges));
                 if (customerPhone != null && costumerNAme != null)
                     namePhoneData.setText(costumerNAme + ", " + customerPhone);
-                grandtot.setText("" + (sum + Math.round(deleveryCharges)));
-                //TODO SUBTRACT DISCOUNT LATER
+                promoamt.setText("-\u20B9 "+ discountVal);
+                grandtot.setText("" + (sum + Math.round(deleveryCharges) - discountVal));
                 payable.setText(grandtot.getText().toString());
 
 
