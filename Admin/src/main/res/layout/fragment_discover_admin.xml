@@ -72,7 +72,7 @@
                         android:weightSum="2">
 
                         <com.google.android.material.card.MaterialCardView
-                            android:id="@+id/breakfast"
+                            android:id="@+id/date"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
@@ -93,7 +93,7 @@
                                     android:layout_height="30dp"
                                     android:layout_gravity="center"
                                     android:layout_marginTop="10dp"
-                                    android:src="@drawable/ic_baseline_star_border_24"
+                                    android:src="@drawable/ic_baseline_calendar_today_24"
                                     app:tint="#FFEB3B"/>
 
                                 <TextView
@@ -104,7 +104,7 @@
                                     android:layout_marginBottom="10dp"
                                     android:ellipsize="end"
                                     android:maxLines="1"
-                                    android:text="Recent ratings"
+                                    android:text="Choose Date"
                                     android:textColor="#BDBDBD"
                                     android:textSize="13sp" />
 
