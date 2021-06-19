@@ -148,7 +148,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Mobile Number (optional)"
-                    android:inputType="textMultiLine"
+                    android:inputType="phone"
                     android:singleLine="true"
                     android:textColor="#ffff"
                     android:textColorHint="#E1E1E1"

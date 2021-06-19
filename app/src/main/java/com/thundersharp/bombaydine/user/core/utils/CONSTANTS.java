@@ -18,6 +18,7 @@ public class CONSTANTS {
     public static final String DATABASE_NODE_EMP_CODES = "EMP_CODES";
     public static final String DATABASE_NODE_ALL_ORDERS = "ALL_ORDERS";
 
+    public static final String DATABASE_NODE_REPORT = "REPORT";
 
     public static final String DATABASE_NODE_BREAKFAST = "BREAKFAST";
     public static final String DATABASE_NODE_LUNCH = "LUNCH";
@@ -27,4 +28,5 @@ public class CONSTANTS {
     public static final String CART_SHARED_PREFERENCES = "Cart";
     public static final String CART_SHARED_PREFERENCES_EXISTS = "VALUE";
     public static final String CART_SHARED_PREFERENCES_DATA = "CART_SHARED_DATA";
+
 }
