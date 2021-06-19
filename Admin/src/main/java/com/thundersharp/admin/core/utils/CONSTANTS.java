@@ -35,4 +35,6 @@ public class CONSTANTS {
     public static  final String DATABASE_RESTURANT_OPEN = "OPEN";
 
     public static  final String DATABASE_ITEM_AVAILABLE = "AVAILABLE";
+    public static  final String DATABASE_TOP_CAROUSEL = "TOP_CAROUSEL";
+
 }

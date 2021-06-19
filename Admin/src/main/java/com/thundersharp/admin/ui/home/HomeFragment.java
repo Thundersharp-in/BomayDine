@@ -102,6 +102,7 @@ import com.thundersharp.admin.core.location.DistanceFromCoordinates;
 import com.thundersharp.admin.core.utils.CONSTANTS;
 import com.thundersharp.admin.core.utils.LatLongConverter;
 import com.thundersharp.admin.core.utils.ResturantCoordinates;
+import com.thundersharp.admin.ui.carousel.CarouselActivity;
 import com.thundersharp.admin.ui.dailyfood.DailyfoodActivity;
 import com.thundersharp.admin.ui.edits.EditItemActivity;
 import com.thundersharp.admin.ui.gallary.FirebaseGallary;
@@ -267,6 +268,8 @@ public class HomeFragment extends Fragment implements
             }
         }
 
+        sliderUpdate.setOnClickListener(v -> startActivity(new Intent(getActivity(), CarouselActivity.class)));
+
         clearcompleate.setOnClickListener(view1 -> {
             offlineDataProvider.clearSharedPref();
             Animator.initializeAnimator().slideDown(bottomnoti);
@@ -295,23 +298,7 @@ public class HomeFragment extends Fragment implements
 
         allcategory.setOnClickListener(view14 -> startActivity(new Intent(getActivity(), AllCategoryActivity.class)));
 
-        sliderUpdate.setOnClickListener(view21 ->{
-            PopupMenu popupMenu = new PopupMenu(getActivity(),sliderUpdate);
-            popupMenu.inflate(R.menu.slidermenu);
-            popupMenu.show();
-            popupMenu.setOnMenuItemClickListener(item -> {
-                int itemId = item.getItemId();
-                if (itemId == R.id.gallery) {
-                    startActivityForResult(new Intent(getActivity(), FirebaseGallary.class), 1356);
-                    //TODO startactivity for result
-                } else if (itemId == R.id.storage) {
-                    Intent photoPickerIntent = new Intent(Intent.ACTION_PICK);
-                    photoPickerIntent.setType("image/*");
-                    startActivityForResult(photoPickerIntent, 10089);
-                }
-                return false;
-            });
-        });
+
 
        // allcategory.setOnClickListener(view14 ->{ EditCategory(); });
         current_loc.setOnClickListener(viewlocation -> {
@@ -346,7 +333,7 @@ public class HomeFragment extends Fragment implements
 
         FirebaseDatabase
                 .getInstance()
-                .getReference("TOP_CAROUSEL")
+                .getReference(CONSTANTS.DATABASE_TOP_CAROUSEL)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {

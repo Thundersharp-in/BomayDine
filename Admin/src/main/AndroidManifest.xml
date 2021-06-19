@@ -7,7 +7,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application>
-        <activity android:name=".ui.account.ReportIssue"></activity>
+        <activity android:name=".ui.carousel.CarouselActivity"></activity>
+        <activity android:name=".ui.account.ReportIssue" />
         <activity android:name=".ui.edits.CreateOffer" />
         <activity android:name=".ui.passcode.OtpVerifaction" />
         <activity android:name=".ui.ReauthCreateUser" />
