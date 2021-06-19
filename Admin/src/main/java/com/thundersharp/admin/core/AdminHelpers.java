@@ -50,6 +50,18 @@ public class AdminHelpers {
         return adminHelpers;
     }
 
+    public void saveCurrentTime(){
+        SharedPreferences sharedPreferences = context.getSharedPreferences("time", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putLong("time",System.currentTimeMillis());
+        editor.apply();
+    }
+
+    public long getLastSavedTime() {
+        SharedPreferences sharedPreferences = context.getSharedPreferences("time", Context.MODE_PRIVATE);
+        return sharedPreferences.getLong("time",System.currentTimeMillis());
+    }
+
     public void clearAllData() {
         SharedPreferences sharedPreferences = context.getSharedPreferences("EmpAccount", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();

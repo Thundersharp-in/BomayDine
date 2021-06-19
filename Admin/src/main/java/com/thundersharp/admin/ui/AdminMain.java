@@ -125,4 +125,10 @@ public class AdminMain extends AppCompatActivity {
         //runFadeoutAnimation();
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AdminHelpers.getInstance(this).saveCurrentTime();
+        Toast.makeText(this, "Destroyed", Toast.LENGTH_SHORT).show();
+    }
 }

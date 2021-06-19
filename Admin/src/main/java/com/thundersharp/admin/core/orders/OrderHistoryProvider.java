@@ -9,6 +9,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.thundersharp.admin.core.utils.CONSTANTS;
@@ -60,13 +61,15 @@ public class OrderHistoryProvider implements OrderContract , OrderContract.Statu
         this.onOrderFetch = orderFetch;
     }
 
+
+
     @Override
-    public void fetchRecentOrders() {
-        FirebaseDatabase
+    public ChildEventListener fetchRecentOrders() {
+        DatabaseReference databaseReference = FirebaseDatabase
                 .getInstance()
                 .getReference(CONSTANTS.DATABASE_NODE_ALL_ORDERS)
-                .child(date)
-                .addChildEventListener(new ChildEventListener() {
+                .child(date);
+                return databaseReference.addChildEventListener(new ChildEventListener() {
                     @Override
                     public void onChildAdded(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
                         if (snapshot.exists()){
