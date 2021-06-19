@@ -66,4 +66,12 @@ public class AdminModule {
         context.startActivity(i);
     }
 
+    public static void switchAndRestartApp(Context context){
+        Intent i = context.getPackageManager().
+                getLaunchIntentForPackage(context.getPackageName());
+        i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(i);
+    }
+
 }

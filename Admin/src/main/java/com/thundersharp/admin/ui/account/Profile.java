@@ -50,6 +50,12 @@ public class Profile extends Fragment {
 
         ((TextView)view.findViewById(R.id.switchbtn)).setOnClickListener(C ->{
             AdminHelpers.getInstance(getActivity()).clearAllAdminData();
+            AdminModule.switchAndRestartApp(getActivity());
+            getActivity().finish();
+        });
+
+        ((TextView)view.findViewById(R.id.logoutn)).setOnClickListener(C ->{
+            AdminHelpers.getInstance(getActivity()).clearAllAdminData();
             AdminModule.signOutAndRestartApp(getActivity());
             getActivity().finish();
         });

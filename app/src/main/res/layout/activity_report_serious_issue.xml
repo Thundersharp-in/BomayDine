@@ -1,541 +1,239 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="#1e2026"
-    tools:context=".user.ui.account.ReportSeriousIssue"
-    >
+    android:orientation="vertical"
+    tools:context=".user.ui.account.ReportSeriousIssue">
 
-    <!-- <androidx.appcompat.widget.Toolbar
+    <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
-        android:background="#121010"
-        app:navigationIcon="@drawable/quantum_ic_arrow_back_grey600_24"
-        />
+        android:background="#E91E63"
+        android:elevation="6dp"
+        app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+        app:title="Report a serious issue"
+        app:titleTextColor="#fff" />
 
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="150dp"
-        android:background="#ff0000"
-        app:cardBackgroundColor="#ff0000"
-        app:cardCornerRadius="7dp"
-        app:cardElevation="4dp"
-        app:cardUseCompatPadding="true"
-        android:layout_marginHorizontal="5dp"
-        android:layout_marginTop="10dp"
-        >
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Report an Accident or Emergency"
-                android:layout_centerInParent="true"
-                android:gravity="center"
-                android:textColor="#fff"
-                android:textSize="25sp"
-                android:fontFamily="@font/amaranth_bold_italic"
-                />
-
-        </RelativeLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="7dp"
-        app:cardElevation="4dp"
-        app:cardUseCompatPadding="true"
-        android:background="#181A1E"
-        android:layout_marginHorizontal="5dp"
-        android:layout_marginTop="10dp"
-        >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginVertical="@dimen/dimen_10dp"
-            android:layout_marginHorizontal="5dp"
-            >
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Disclaimer"
-                android:gravity="start"
-                android:textColor="#fff"
-                android:textSize="16sp"
-                android:layout_marginTop="10dp"
-                />
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Please use this page to report a serious incident or accident only. For order related queries, please use our chat support."
-                android:layout_marginTop="8dp"
-                android:gravity="start"
-                android:textColor="#fff"
-                android:textSize="13sp"
-                />
-
-
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:cardCornerRadius="7dp"
-        app:cardElevation="4dp"
-        app:cardUseCompatPadding="true"
-        android:background="#181A1E"
-        android:layout_marginHorizontal="5dp"
-        android:layout_marginTop="10dp"
-        >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:layout_marginVertical="@dimen/dimen_10dp"
-            android:layout_marginHorizontal="5dp"
-            >
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/offer_type"
-                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="How can we help you?*"
-                app:boxStrokeColor="#ACACAC"
-                app:hintTextColor="#CFCFCF"
-                android:textColorHint="#CFCFCF"
-                >
-
-                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                    android:id="@+id/offer_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:textColorHint="#ACACAC"
-                    android:clickable="true"
-                    android:focusable="false"
-                    tools:ignore="KeyboardInaccessibleWidget"
-                    android:inputType="none"
-                    />
-            </com.google.android.material.textfield.TextInputLayout>
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dimen_10dp"
-                android:text="Hided text"
-                android:visibility="gone"
-                android:textSize="13sp"
-                android:layout_marginTop="10dp"
-                android:textStyle="italic"
-                android:textColor="#B1B1B1"
-                />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/cuved_light_dark"
-                android:elevation="7dp"
-                android:minHeight="40dp"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/dimen_10dp"
-                >
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="@null"
-                    android:hint="Name*"
-                    android:drawablePadding="10dp"
-                    android:inputType="textPersonName"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:textColor="#F8F8F8"
-                    android:textColorHint="#b7b7b7"
-                    />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/cuved_light_dark"
-                android:elevation="7dp"
-                android:minHeight="40dp"
-                android:layout_marginTop="10dp"
-                android:orientation="horizontal">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="@null"
-                    android:hint="Email*"
-                    android:drawablePadding="10dp"
-                    android:inputType="textEmailAddress"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:drawableTint="#303030"
-                    android:textColor="#303030"
-                    android:textColorHint="#b7b7b7" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/cuved_light_dark"
-                android:elevation="7dp"
-                android:minHeight="40dp"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                >
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="@null"
-                    android:hint="Phone number*"
-                    android:drawablePadding="10dp"
-                    android:inputType="phone"
-                    android:maxLines="1"
-                    android:singleLine="true"
-                    android:drawableTint="#303030"
-                    android:textColor="#303030"
-                    android:textColorHint="#b7b7b7" />
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/cuved_light_dark"
-                android:elevation="7dp"
-                android:minHeight="100dp"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-                >
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:layout_marginStart="15dp"
-                    android:layout_marginEnd="10dp"
-                    android:background="@null"
-                    android:hint="Massage*"
-                    android:inputType="text"
-                    android:padding="5dp"
-                    android:drawableTint="#303030"
-                    android:textColor="#303030"
-                    android:textColorHint="#b7b7b7" />
-            </LinearLayout>
-             TODO Add recycler view for this feature
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/buttonred"
-        android:elevation="7dp"
-        android:orientation="horizontal"
-        android:backgroundTint="#40CD6161"
-        android:padding="10dp"
-        android:layout_marginTop="10dp"
-        >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="* Please tell us your name. \n* Please enter a valid phone number.\n* Please enter a valid email ID. so we can get in touch with you.\n* Please specify your question in the message filed."
-            android:gravity="start"
-            android:textColor="#fff"
-            android:textSize="14sp"
-            android:padding="5dp"
-            />
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:id="@+id/another_report"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/buttonred"
-        android:elevation="7dp"
-        android:orientation="horizontal"
-        android:padding="10dp"
-        android:layout_marginTop="10dp"
-        >
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Please use this form for accident or abuse related emergency situations. For order or other general queries contact us here."
-            android:gravity="start"
-            android:textColor="#fff"
-            android:textSize="14sp"
-            android:padding="5dp"
-            />
-
-    </LinearLayout>
-
-    <androidx.appcompat.widget.AppCompatButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingHorizontal="15dp"
-        android:paddingVertical="7dp"
-        android:text="Send Message"
-        android:textColor="#fff"
-        android:background="@drawable/btn_round_red"
-        android:backgroundTint="#E10000"
-        android:layout_marginTop="@dimen/dimen_10dp"
-        android:layout_marginBottom="20dp"
-        />
-
-
-
-</LinearLayout>
-    </com.google.android.material.card.MaterialCardView> -->
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <RelativeLayout
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            >
-            <FrameLayout
-                android:id="@+id/imagehomee"
-                android:layout_width="match_parent"
-                android:layout_height="250dp">
+            android:background="#1e2026"
+            android:elevation="10dp"
+            android:orientation="vertical">
 
-                <ImageView
-                    android:id="@+id/imagehome"
+            <TextView
+                android:id="@+id/info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="@dimen/dimen_15dp"
+                android:drawableStart="@drawable/ic_outline_info_24"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/calibri"
+                android:gravity="center_vertical"
+                android:text="Please use this page to report a serious incident or accident only for order related complains view our help center."
+                android:textColor="#BCBCBC"
+                app:drawableTint="#F4E880" />
+
+            <TextView
+                android:id="@+id/information"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="@dimen/dimen_10dp"
+                android:drawableStart="@drawable/ic_outline_info_24"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/calibri"
+                android:gravity="center_vertical"
+                android:text="Incident : If you faced rash behaviour from our delivery partners our there was something very wrong with our food aur any other serious incident with proper evidence.\n\nAccident : If you observed an accident involving any of our delivery partners our our staffs and you want to bring it to our attention."
+                android:textColor="#CDDC39"
+                app:drawableTint="#F4E880" />
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dimen_10dp"
+                android:layout_marginTop="20dp"
+                android:hint="How can we help you?*"
+                android:textColorHint="#CFCFCF"
+                app:boxStrokeColor="#ACACAC"
+                app:hintTextColor="#CFCFCF">
+
+                <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                    android:id="@+id/offer_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:focusable="false"
+                    android:inputType="none"
+                    android:textColor="#ACACAC"
+                    android:textColorHint="#ACACAC"
+                    tools:ignore="KeyboardInaccessibleWidget" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_15dp"
+                android:textColorHint="#ACACAC"
+                app:boxStrokeColor="#ACACAC"
+                app:endIconMode="clear_text"
+                app:endIconTint="#fff"
+                app:hintTextColor="#ACACAC"
+                android:id="@+id/fullName">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Full Name*"
+                    android:inputType="textPersonName"
+                    android:singleLine="true"
+                    android:textColor="#ffff"
+                    android:textColorHint="#E1E1E1"
+                    app:hintEnabled="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_15dp"
+                android:textColorHint="#ACACAC"
+                app:boxStrokeColor="#ACACAC"
+                app:endIconMode="clear_text"
+                app:endIconTint="#fff"
+                app:hintTextColor="#ACACAC"
+                android:id="@+id/emailAddress">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Email Address*"
+                    android:inputType="textEmailAddress"
+                    android:singleLine="true"
+                    android:textColor="#ffff"
+                    android:textColorHint="#E1E1E1"
+                    app:hintEnabled="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/mobileNo"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_15dp"
+                android:textColorHint="#ACACAC"
+                app:boxStrokeColor="#ACACAC"
+                app:endIconMode="clear_text"
+                app:endIconTint="#fff"
+                app:hintTextColor="#ACACAC">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Mobile Number (optional)"
+                    android:inputType="textMultiLine"
+                    android:singleLine="true"
+                    android:textColor="#ffff"
+                    android:textColorHint="#E1E1E1"
+                    app:hintEnabled="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dimen_10dp"
+                android:layout_marginTop="@dimen/dimen_15dp"
+                android:textColorHint="#ACACAC"
+                app:boxStrokeColor="#ACACAC"
+                app:endIconMode="clear_text"
+                app:endIconTint="#fff"
+                app:hintTextColor="#ACACAC"
+                android:id="@+id/typrText">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="start"
+                    android:hint="Type text*"
+                    android:inputType="textMultiLine"
+                    android:minHeight="150dp"
+                    android:textColor="#ffff"
+                    android:textColorHint="#E1E1E1"
+                    app:hintEnabled="true" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/submitbtn"
+                android:layout_width="150dp"
+                android:layout_height="@dimen/dimen_40dp"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/btn_round_red"
+                android:paddingHorizontal="15dp"
+                android:text="Send message"
+                android:layout_marginTop="@dimen/dimen_15dp"
+                android:layout_gravity="center_horizontal"
+                android:textAllCaps="true"
+                android:textColor="#fff" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="5dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
+                android:background="#181A1E"
+                app:cardBackgroundColor="#181A1E"
+                app:cardCornerRadius="7dp"
+                app:cardElevation="4dp"
+                app:cardUseCompatPadding="true">
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/homestatic"
-                    android:adjustViewBounds="true" />
+                    android:layout_marginVertical="@dimen/dimen_10dp"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="@dimen/dimen_10dp">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="We would love to hear from you!"
-                    android:textColor="#fff"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textSize="25sp"
-                    />
-
-            </FrameLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="200dp"
-                android:elevation="10dp"
-                android:background="#1e2026"
-                android:orientation="vertical"
-                >
-
-                <com.google.android.material.textfield.TextInputLayout
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="How can we help you?*"
-                    app:boxStrokeColor="#ACACAC"
-                    app:hintTextColor="#CFCFCF"
-                    android:textColorHint="#CFCFCF"
-                    android:layout_marginTop="30dp"
-                    android:layout_marginHorizontal="@dimen/dimen_10dp"
-                    >
-
-                    <androidx.appcompat.widget.AppCompatAutoCompleteTextView
-                        android:id="@+id/offer_text"
-                        android:layout_width="match_parent"
+                    <TextView
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textColorHint="#ACACAC"
-                        android:clickable="true"
-                        android:focusable="false"
-                        tools:ignore="KeyboardInaccessibleWidget"
-                        android:inputType="none"
-                        />
-                </com.google.android.material.textfield.TextInputLayout>
-
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:endIconMode="clear_text"
-                    app:endIconTint="#fff"
-                    app:hintTextColor="#ACACAC"
-                    android:textColorHint="#ACACAC"
-                    app:boxStrokeColor="#ACACAC"
-                    android:layout_marginTop="@dimen/dimen_15dp"
-                    android:layout_marginHorizontal="@dimen/dimen_10dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    >
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:hintEnabled="true"
-                        android:textColorHint="#E1E1E1"
-                        android:textColor="#ffff"
-                        android:singleLine="true"
-                        android:hint="Full Name*"
-                        android:inputType="textPersonName"
-                        />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:endIconMode="clear_text"
-                    app:endIconTint="#fff"
-                    app:hintTextColor="#ACACAC"
-                    android:textColorHint="#ACACAC"
-                    app:boxStrokeColor="#ACACAC"
-                    android:layout_marginTop="@dimen/dimen_15dp"
-                    android:layout_marginHorizontal="@dimen/dimen_10dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    >
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:hintEnabled="true"
-                        android:textColorHint="#E1E1E1"
-                        android:textColor="#ffff"
-                        android:singleLine="true"
-                        android:hint="Email Address*"
-                        android:inputType="textEmailAddress"
-                        />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:endIconMode="clear_text"
-                    app:endIconTint="#fff"
-                    app:hintTextColor="#ACACAC"
-                    android:textColorHint="#ACACAC"
-                    app:boxStrokeColor="#ACACAC"
-                    android:layout_marginTop="@dimen/dimen_15dp"
-                    android:layout_marginHorizontal="@dimen/dimen_10dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    >
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:hintEnabled="true"
-                        android:textColorHint="#E1E1E1"
-                        android:textColor="#ffff"
-                        android:singleLine="true"
-                        android:hint="Mobile Number (optional)"
-                        android:inputType="textMultiLine"
-                        />
-                </com.google.android.material.textfield.TextInputLayout>
-
-                <com.google.android.material.textfield.TextInputLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:endIconMode="clear_text"
-                    app:endIconTint="#fff"
-                    app:hintTextColor="#ACACAC"
-                    android:textColorHint="#ACACAC"
-                    app:boxStrokeColor="#ACACAC"
-                    android:layout_marginTop="@dimen/dimen_15dp"
-                    android:layout_marginHorizontal="@dimen/dimen_10dp"
-                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-                    >
-
-                    <com.google.android.material.textfield.TextInputEditText
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        app:hintEnabled="true"
-                        android:textColorHint="#E1E1E1"
-                        android:textColor="#ffff"
                         android:gravity="start"
-                        android:hint="Type text*"
-                        android:minHeight="150dp"
-                        android:inputType="textMultiLine"
-                        />
-                </com.google.android.material.textfield.TextInputLayout>
+                        android:text="Issue with your live order?"
+                        android:textColor="#fff" />
 
-                <androidx.appcompat.widget.AppCompatButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="15dp"
-                    android:paddingVertical="7dp"
-                    android:text="Submit Feedback"
-                    android:textAllCaps="false"
-                    android:textColor="#fff"
-                    android:background="@drawable/btn_round_red"
-                    android:backgroundTint="#FF5050"
-                    android:layout_marginTop="@dimen/dimen_10dp"
-                    android:layout_marginBottom="20dp"
-                    android:layout_marginStart="@dimen/dimen_10dp"
-                    />
-
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="7dp"
-                    app:cardElevation="4dp"
-                    app:cardUseCompatPadding="true"
-                    app:cardBackgroundColor="#181A1E"
-                    android:background="#181A1E"
-                    android:layout_marginHorizontal="5dp"
-                    android:layout_marginTop="10dp"
-                    android:layout_marginBottom="20dp"
-                    >
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:layout_marginVertical="@dimen/dimen_10dp"
-                        android:paddingHorizontal="@dimen/dimen_10dp"
-                        >
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Issue with your live order?"
-                            android:gravity="start"
-                            android:textColor="#fff"
-                            android:textSize="20sp"
-                            android:layout_marginTop="10dp"
-                            />
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="Click on the 'Support' or 'Online ordering help' section in your app to connect to our customer support team."
-                            android:layout_marginTop="8dp"
-                            android:gravity="start"
-                            android:textColor="#fff"
-                            android:textSize="15sp"
-                            />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="start"
+                        android:text="Chat with us here and get your issue resolved."
+                        android:textColor="#FFEB3B"
+                        android:textSize="13sp" />
 
 
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
 
 
-            </LinearLayout>
-
-        </RelativeLayout>
+        </LinearLayout>
 
 
     </androidx.core.widget.NestedScrollView>
