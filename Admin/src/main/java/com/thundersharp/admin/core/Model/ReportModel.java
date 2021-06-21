@@ -1,4 +1,4 @@
-package com.thundersharp.bombaydine.user.core.Model;
+package com.thundersharp.admin.core.Model;
 
 public class ReportModel {
     public String NAME, EMAIL, UID, PHONE, MESSAGE, ID;

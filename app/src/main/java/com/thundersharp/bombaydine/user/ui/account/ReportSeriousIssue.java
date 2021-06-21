@@ -61,7 +61,8 @@ public class ReportSeriousIssue extends AppCompatActivity {
                 Toast.makeText(this, "Mention Report type !", Toast.LENGTH_SHORT).show();
             }else {
 
-                ReportModel model = new ReportModel(fullName.getEditText().getText().toString(),emailAddress.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid(),ph_no,typeText.getEditText().getText().toString(),String.valueOf(System.currentTimeMillis()),reportType.getText().toString());
+                ReportModel model = new ReportModel(fullName.getEditText().getText().toString(),emailAddress.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid(),ph_no,typeText.getEditText().getText().toString(),String.valueOf(System.currentTimeMillis()),reportType.getText().toString(),0);
+                //TODO UPdate to user module to
                 FirebaseDatabase
                         .getInstance()
                         .getReference(CONSTANTS.DATABASE_NODE_REPORT)

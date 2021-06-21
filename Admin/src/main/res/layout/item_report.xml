@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="120dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardElevation="6dp"
+    app:cardUseCompatPadding="true"
+    app:cardCornerRadius="10dp"
+    android:background="#22242c"
+    app:cardBackgroundColor="#22242c">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="120dp">
+
+        <LinearLayout
+            android:id="@+id/top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:orientation="vertical"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/dimen_10dp"
+            >
+            <TextView
+                android:id="@+id/report_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="#B8BABD"
+                android:fontFamily="sans-serif-medium"
+                android:textSize="15sp"
+                android:text="#9876543219876540"
+                android:gravity="center"
+                android:maxLines="1"
+                android:ellipsize="end"/>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="100dp"
+                android:background="#6A6A6A"
+                android:layout_marginTop="2dp"
+                />
+
+            <TextView
+                android:id="@+id/report_type"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="1"
+                android:fontFamily="sans-serif"
+                android:textSize="13sp"
+                android:textColor="#AAAAAA"
+                android:textStyle="italic"
+                android:text="Report an Incident"
+                android:gravity="center"
+                android:layout_marginTop="5dp"
+                android:ellipsize="end"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/view_ed"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginHorizontal="10dp"
+            android:layout_below="@id/top">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:textSize="13sp"
+                    android:textColor="#C6C6C6"
+                    android:text="Name : "
+                    />
+
+                <TextView
+                    android:id="@+id/reporter_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:fontFamily="sans-serif"
+                    android:textSize="13sp"
+                    android:textColor="#AAAAAA"
+                    android:text="Reporter Name"
+                    android:ellipsize="end"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:textSize="13sp"
+                    android:textColor="#C6C6C6"
+                    android:text="Email : "
+                    />
+
+                <TextView
+                    android:id="@+id/reporter_email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:fontFamily="sans-serif"
+                    android:textSize="13sp"
+                    android:textColor="#AAAAAA"
+                    android:text="a@a.com"
+                    android:ellipsize="end"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="7dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:textSize="13sp"
+                    android:textColor="#C6C6C6"
+                    android:text="Report On : "
+                    />
+
+                <TextView
+                    android:id="@+id/reported_date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:fontFamily="sans-serif"
+                    android:textSize="13sp"
+                    android:textColor="#AAAAAA"
+                    android:text="07 Mar at 6:45 pm "
+                    android:ellipsize="end"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="7dp"
+                >
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:fontFamily="sans-serif-smallcaps"
+                    android:textSize="13sp"
+                    android:textColor="#C6C6C6"
+                    android:text="Phone No. : "
+                    />
+
+                <TextView
+                    android:id="@+id/phone_no"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="1"
+                    android:fontFamily="sans-serif"
+                    android:textSize="13sp"
+                    android:textColor="#AAAAAA"
+                    android:text="+91 9876543210"
+                    android:ellipsize="end"/>
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view_bottom"
+                android:layout_width="match_parent"
+                android:layout_height="0.3dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
+                android:background="#777777"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/report_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:maxLines="1"
+            android:fontFamily="sans-serif"
+            android:layout_below="@id/view_ed"
+            android:textSize="13sp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="10dp"
+            android:textColor="#EFEBC7"
+            android:text="REPORT STATUS : Report placed"
+            android:ellipsize="end"/>
+
+        <LinearLayout
+            android:id="@+id/lower"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:weightSum="2"
+            android:layout_below="@+id/report_status"
+            android:orientation="horizontal">
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/verify"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:elevation="5dp"
+                android:background="@drawable/button_red_round"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_marginEnd="5dp"
+                android:textColor="#fff"
+                android:text="Verify"
+                android:gravity="center"
+                android:paddingHorizontal="5dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:clickable="true"
+                android:ellipsize="start"
+                android:enabled="true"
+                android:singleLine="true"
+                android:textAllCaps="false"
+                android:textStyle="bold"
+                />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/reply"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_marginEnd="5dp"
+                android:elevation="5dp"
+                android:background="@null"
+                android:text="Reply"
+                android:textColor="#FDF660"
+                android:fontFamily="sans-serif-smallcaps"
+                android:textStyle="bold"
+                android:paddingHorizontal="5dp"
+                android:clickable="true"
+                android:gravity="center"
+                android:ellipsize="start"
+                android:textAllCaps="false"
+                android:enabled="true"
+                android:singleLine="true"
+                />
+
+        </LinearLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_10dp"
+            android:layout_marginEnd="5dp"
+            android:elevation="5dp"
+            android:background="@drawable/green_curve"
+            android:text="Cancel"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="@dimen/dimen_10dp"
+            android:layout_below="@+id/lower"
+            android:textColor="#97FF00"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textStyle="bold"
+            android:paddingHorizontal="5dp"
+            android:clickable="true"
+            android:gravity="center"
+            android:ellipsize="start"
+            android:textAllCaps="false"
+            android:enabled="true"
+            android:singleLine="true"
+            />
+
+
+    </RelativeLayout>
+
+</com.google.android.material.card.MaterialCardView>
