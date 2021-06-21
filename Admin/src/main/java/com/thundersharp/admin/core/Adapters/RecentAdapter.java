@@ -84,6 +84,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewBinder
                     .setOnStatusSuccessFailureListner(this)
                     .setStatus(orederBasicDetails.getOrderID(),9,orederBasicDetails.getUid());
             holder.lower.setVisibility(View.GONE);
+            holder.btn_cancel.setVisibility(View.VISIBLE);
         });
 
         holder.btn_decline.setOnClickListener(view->{
@@ -92,7 +93,27 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewBinder
                     .setOnStatusSuccessFailureListner(this)
                     .setStatus(orederBasicDetails.getOrderID(),7,orederBasicDetails.getUid());
             holder.lower.setVisibility(View.GONE);
+            holder.btn_cancel.setVisibility(View.GONE);
         });
+
+        holder.btn_cancel.setOnClickListener(view->{
+            OrderHistoryProvider
+                    .getOrderInstance()
+                    .setOnStatusSuccessFailureListner(this)
+                    .setStatus(orederBasicDetails.getOrderID(),7,orederBasicDetails.getUid());
+            holder.lower.setVisibility(View.GONE);
+            holder.btn_cancel.setVisibility(View.GONE);
+        });
+
+        if (TimeUtils.getTodaysDate().equals(TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID()))){
+            holder.isToday = true;
+            holder.lower.setVisibility(View.VISIBLE);
+            holder.btn_cancel.setVisibility(View.VISIBLE);
+        }else {
+            holder.isToday = false;
+            holder.lower.setVisibility(View.GONE);
+            holder.btn_cancel.setVisibility(View.GONE);
+        }
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////
         // Order status 0 : Payment not received            ::::   Delivery status : Not Delivered        //
@@ -107,46 +128,112 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewBinder
         switch (orederBasicDetails.getStatus()){
             case "0":
                 holder.status.setText("Status : Payment pending");
-                holder.lower.setVisibility(View.VISIBLE);
+
+                if (holder.isToday){
+                    holder.lower.setVisibility(View.VISIBLE);
+                    holder.btn_cancel.setVisibility(View.VISIBLE);
+                }else {
+                    holder.lower.setVisibility(View.GONE);
+                    holder.btn_cancel.setVisibility(View.GONE);
+                }
                 //holder.status.setTextColor();
                 break;
             case "1":
-                holder.lower.setVisibility(View.GONE);
                 holder.status.setText("Status : Food being prepared");
+
+                if (holder.isToday){
+                    holder.lower.setVisibility(View.GONE);
+                    holder.btn_cancel.setVisibility(View.VISIBLE);
+                }else {
+                    holder.lower.setVisibility(View.GONE);
+                    holder.btn_cancel.setVisibility(View.GONE);
+                }
                 //holder.status.setTextColor(0);
                 break;
             case "2":
-                holder.lower.setVisibility(View.GONE);
+                if (holder.isToday){
+                    holder.lower.setVisibility(View.GONE);
+                    holder.btn_cancel.setVisibility(View.VISIBLE);
+                }else {
+                    holder.lower.setVisibility(View.GONE);
+                    holder.btn_cancel.setVisibility(View.GONE);
+                }
+
                 holder.status.setText("Status : Order in transit");
                 //holder.status.setTextColor(0);
                 break;
             case "3":
                 holder.lower.setVisibility(View.GONE);
+                holder.btn_cancel.setVisibility(View.GONE);
                 holder.status.setText("Status : Delivered");
                 //holder.status.setTextColor(R.color.green);
                 break;
             case "4":
-                holder.lower.setVisibility(View.GONE);
+                if (holder.isToday){
+                    holder.lower.setVisibility(View.GONE);
+                    holder.btn_cancel.setVisibility(View.VISIBLE);
+                }else {
+                    holder.lower.setVisibility(View.GONE);
+                    holder.btn_cancel.setVisibility(View.GONE);
+                }
                 holder.status.setText("Status : Payment failed");
                 //holder.status.setTextColor(0);
                 break;
             case "5":
                 holder.lower.setVisibility(View.GONE);
+                holder.btn_cancel.setVisibility(View.GONE);
                 holder.status.setText("Status : Cancelled and refunded");
                 //holder.status.setTextColor(0);
                 break;
             case "6":
-                holder.lower.setVisibility(View.GONE);
+                if (holder.isToday){
+                    holder.lower.setVisibility(View.GONE);
+                    holder.btn_cancel.setVisibility(View.VISIBLE);
+                }else {
+                    holder.lower.setVisibility(View.GONE);
+                    holder.btn_cancel.setVisibility(View.GONE);
+                }
                 holder.status.setText("Status : Payment received but not delivered contact support");
                 //holder.status.setTextColor(0);
                 break;
             case "8":
-                holder.lower.setVisibility(View.VISIBLE);
+                if (holder.isToday){
+                    holder.lower.setVisibility(View.VISIBLE);
+                    holder.btn_cancel.setVisibility(View.GONE);
+                }else {
+                    holder.lower.setVisibility(View.GONE);
+                    holder.btn_cancel.setVisibility(View.GONE);
+                }
+
                 holder.status.setText("Status : Payment successfully received waiting for admin");
+                //holder.status.setTextColor(0);
+                break;
+            case "7":
+                holder.lower.setVisibility(View.GONE);
+                holder.btn_cancel.setVisibility(View.GONE);
+                holder.status.setText("Status : Order Cancelled Not delivered");
+                //holder.status.setTextColor(0);
+                break;
+            case "9":
+                holder.lower.setVisibility(View.GONE);
+                holder.btn_cancel.setVisibility(View.GONE);
+                holder.status.setText("Status : Food started to prepare Not Delivered");
+                //holder.status.setTextColor(0);
+                break;
+            case "10":
+                if (holder.isToday){
+                    holder.lower.setVisibility(View.GONE);
+                    holder.btn_cancel.setVisibility(View.VISIBLE);
+                }else {
+                    holder.lower.setVisibility(View.GONE);
+                    holder.btn_cancel.setVisibility(View.GONE);
+                }
+                holder.status.setText("Status : Food prepared Delivery Not picked up");
                 //holder.status.setTextColor(0);
                 break;
             default:
                 holder.lower.setVisibility(View.GONE);
+                holder.btn_cancel.setVisibility(View.GONE);
                 holder.status.setText("Status : Unknown");
                 //holder.status.setTextColor(0);
                 break;
@@ -174,8 +261,9 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewBinder
     class ViewBinder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
         TextView status,total_amat,order_time,allitems,el_address,orderid;
-        AppCompatButton btn_decline, btn_approve;
+        AppCompatButton btn_decline, btn_approve, btn_cancel;
         LinearLayout lower;
+        Boolean isToday = false;
 
         public ViewBinder(@NonNull View itemView) {
             super(itemView);
@@ -189,6 +277,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewBinder
 
             btn_decline = itemView.findViewById(R.id.btn_decline);
             btn_approve = itemView.findViewById(R.id.btn_approve);
+            btn_cancel = itemView.findViewById(R.id.btn_cancel);
 
             lower = itemView.findViewById(R.id.lower);
 

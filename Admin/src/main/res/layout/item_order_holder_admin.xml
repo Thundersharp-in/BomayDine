@@ -184,7 +184,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:weightSum="2"
-            android:layout_marginBottom="15dp"
             android:layout_below="@+id/status"
             android:orientation="horizontal">
 
@@ -234,6 +233,29 @@
                 />
 
         </LinearLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dimen_10dp"
+            android:layout_marginEnd="5dp"
+            android:elevation="5dp"
+            android:background="@drawable/green_curve"
+            android:text="Cancel Order"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="@dimen/dimen_10dp"
+            android:layout_below="@+id/lower"
+            android:textColor="#97FF00"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textStyle="bold"
+            android:paddingHorizontal="5dp"
+            android:clickable="true"
+            android:gravity="center"
+            android:ellipsize="start"
+            android:textAllCaps="false"
+            android:enabled="true"
+            android:singleLine="true"
+            />
 
 
     </RelativeLayout>

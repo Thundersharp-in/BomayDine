@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -30,6 +31,8 @@ import com.thundersharp.admin.core.Model.OrederBasicDetails;
 import com.thundersharp.admin.core.utils.CONSTANTS;
 import com.thundersharp.admin.core.utils.ResturantCoordinates;
 import com.thundersharp.admin.core.utils.TimeUtils;
+import com.thundersharp.admin.ui.RestStatus.RestHelper;
+import com.thundersharp.admin.ui.RestStatus.RestStatus;
 import com.thundersharp.billgenerator.Billing;
 import com.thundersharp.billgenerator.InfoData;
 import com.thundersharp.billgenerator.InvoiceGenerateObserver;
@@ -42,7 +45,10 @@ import com.thundersharp.payments.payments.Payments;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -75,11 +81,11 @@ public class OrderStatus extends AppCompatActivity implements
             textupdate;
 
     private RecyclerView recycler_dishes;
-    private LinearLayout lllb;
     private List<OrderModel> model;
     private Toolbar toolbar;
     OrderDetailHelper helper;
     private LinearLayout button;
+    LinearLayout repeatOrder;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,16 +101,12 @@ public class OrderStatus extends AppCompatActivity implements
             Toast.makeText(this, "Error in getting details", Toast.LENGTH_SHORT).show();
             finish();
         }
-
         initializeViews();
 
 
-        unfav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                unfav.setVisibility(View.GONE);
-                fav.setVisibility(View.VISIBLE);
-            }
+        unfav.setOnClickListener(v -> {
+            unfav.setVisibility(View.GONE);
+            fav.setVisibility(View.VISIBLE);
         });
 
         toolbar.setNavigationOnClickListener(v ->finish());
@@ -115,26 +117,48 @@ public class OrderStatus extends AppCompatActivity implements
         helper = new OrderDetailHelper(OrderStatus.this);
         setData();
 
+        if (TimeUtils.getTodaysDate().equals(TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID()))) repeatOrder.setVisibility(View.VISIBLE); else repeatOrder.setVisibility(View.GONE);
 
-        ((LinearLayout) findViewById(R.id.lllb)).setOnClickListener(view -> {
+        repeatOrder.setOnClickListener(view -> {
             //Toast.makeText(this, "yyy", Toast.LENGTH_SHORT).show();
-            ArrayList<InvoiceTableHolder> holderArrayList = new ArrayList<>();
+            RestHelper
+                    .getInstance()
+                    .getReference(this)
+                    .getValue(new RestStatus.updateRestStatus() {
+                        @Override
+                        public void onSuccess(@NonNull Boolean isOpen) {
+                            if (isOpen){
+                                repeatorder();
+                            }else {
+                                Toast.makeText(OrderStatus.this, "Restaurent is closed right now !", Toast.LENGTH_SHORT).show();
+                            }
+                        }
 
-            for (int u = 0; u < modeldatas.size(); u++) {
-                holderArrayList.add(new InvoiceTableHolder(modeldatas.get(u).getQuantity(), modeldatas.get(u).getAmount(), modeldatas.get(u).getName()));
-            }
-            try {
-                Billing
-                        .initializeBiller(OrderStatus.this)
-                        .setInfoData(InfoData.setData(R.drawable.ic_launcher, "Prateek", "7301694135", orederBasicDetails.getDelivery_address(), orederBasicDetails.getOrderID(), "These are terms and Conditions .", "Welcome50", 100))
-                        .attachObserver(this)
-                        .createPdf(holderArrayList);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+                        @Override
+                        public void onFailure(Exception e) {
+                            Toast.makeText(OrderStatus.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
 
 
+    }
+
+    private void repeatorder() {
+        ArrayList<InvoiceTableHolder> holderArrayList = new ArrayList<>();
+
+        for (int u = 0; u < modeldatas.size(); u++) {
+            holderArrayList.add(new InvoiceTableHolder(modeldatas.get(u).getQuantity(), modeldatas.get(u).getAmount(), modeldatas.get(u).getName()));
+        }
+        try {
+            Billing
+                    .initializeBiller(OrderStatus.this)
+                    .setInfoData(InfoData.setData(R.drawable.ic_launcher, "Prateek", "7301694135", orederBasicDetails.getDelivery_address(), orederBasicDetails.getOrderID(), "These are terms and Conditions .", "Welcome50", 100))
+                    .attachObserver(this)
+                    .createPdf(holderArrayList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void setData() {
@@ -200,7 +224,7 @@ public class OrderStatus extends AppCompatActivity implements
         delever_address = findViewById(R.id.delever_address);
         order_caller_no = findViewById(R.id.order_caller_no);
         recycler_dishes = findViewById(R.id.recycler_dishes);
-        lllb = findViewById(R.id.lllb);
+        repeatOrder = findViewById(R.id.lllb);
         unfav = findViewById(R.id.unfav);
         textupdate = findViewById(R.id.textupdate);
     }

@@ -60,10 +60,8 @@ public class ReportSeriousIssue extends AppCompatActivity {
             }else if (reportType.getText().toString().isEmpty()){
                 Toast.makeText(this, "Mention Report type !", Toast.LENGTH_SHORT).show();
             }else {
-                int type = 0;
-                if (reportType.getText().toString().equals("Report a accident")) type = 0;else if (reportType.getText().toString().equals("Report a incident")) type = 1;
 
-                ReportModel model = new ReportModel(fullName.getEditText().getText().toString(),emailAddress.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid(),ph_no,typeText.getEditText().getText().toString(),String.valueOf(System.currentTimeMillis()),type);
+                ReportModel model = new ReportModel(fullName.getEditText().getText().toString(),emailAddress.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid(),ph_no,typeText.getEditText().getText().toString(),String.valueOf(System.currentTimeMillis()),reportType.getText().toString());
                 FirebaseDatabase
                         .getInstance()
                         .getReference(CONSTANTS.DATABASE_NODE_REPORT)

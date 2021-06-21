@@ -102,6 +102,8 @@ import com.thundersharp.admin.core.location.DistanceFromCoordinates;
 import com.thundersharp.admin.core.utils.CONSTANTS;
 import com.thundersharp.admin.core.utils.LatLongConverter;
 import com.thundersharp.admin.core.utils.ResturantCoordinates;
+import com.thundersharp.admin.ui.RestStatus.RestHelper;
+import com.thundersharp.admin.ui.RestStatus.RestStatus;
 import com.thundersharp.admin.ui.carousel.CarouselActivity;
 import com.thundersharp.admin.ui.dailyfood.DailyfoodActivity;
 import com.thundersharp.admin.ui.edits.EditItemActivity;
@@ -136,7 +138,7 @@ public class HomeFragment extends Fragment implements
         HomeDataContract.DataLoadFailure,
         HomeDataContract.topSellingFetch,
         HomeDataContract.HomeAllCategoriesFetch,
-        HomeDataContract.HomeAllItems{
+        HomeDataContract.HomeAllItems {
 
 
     private static final int REQUEST_CHECK_SETTINGS = 140;
@@ -191,7 +193,8 @@ public class HomeFragment extends Fragment implements
     private RelativeLayout containermain;
     private SwitchMaterial restaurantStatus;
     private LinearLayout sliderUpdate;
-    private boolean stsus;
+    boolean stsus;
+    RestHelper restHelper;
 
     private static List<Object> foodItemAdapterListStatic = new ArrayList<>();
 
@@ -244,6 +247,8 @@ public class HomeFragment extends Fragment implements
         view_action = view.findViewById(R.id.view_action);
         restaurantStatus = view.findViewById(R.id.restaurantStatus);
         sliderUpdate = view.findViewById(R.id.search);
+
+        restHelper = RestHelper.getInstance().getReference(getActivity());
 
         homeDataProvider = new HomeDataProvider(getActivity(), this, this, this, this);
 
@@ -424,14 +429,9 @@ public class HomeFragment extends Fragment implements
             }
         });
 
-        fetchRestaurantStaus();
+        //stsus= restaurantStatus.isChecked();
 
-        stsus= restaurantStatus.isChecked();
-
-        restaurantStatus.setOnClickListener(v ->{
-            restaurantStatus.setChecked(stsus);
-            UpdateREstStatus();
-        });
+        //restaurantStatus.setOnClickListener(v -> restaurantStatus.setChecked(stsus));
 
         BroadcastReceiver broadcastReceiver =new BroadcastReceiver() {
             @Override
@@ -446,6 +446,11 @@ public class HomeFragment extends Fragment implements
 
 
         getActivity().registerReceiver(broadcastReceiver,new IntentFilter("updated"));
+
+        fetchRestaurantStaus();
+        stsus = restaurantStatus.isChecked();
+        restaurantStatus.setOnClickListener(v -> UpdateREstStatus(!stsus));
+        //restaurantStatus.setOnCheckedChangeListener((buttonView, isChecked) ->{ }) ;//TODO Check
 
         return view;
     }
@@ -469,10 +474,10 @@ public class HomeFragment extends Fragment implements
     }
      */
 
-    private void UpdateREstStatus() {
+    private void UpdateREstStatus(boolean isChecked) {
 
         String open ;
-        if (restaurantStatus.isChecked())open="close";else open="open";
+        if (!isChecked)open="close";else open="open";
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         builder.setTitle("RESTAURANT STATUS UPDATE");
@@ -481,16 +486,45 @@ public class HomeFragment extends Fragment implements
         builder.setCancelable(true);
 
         builder
-                .setPositiveButton("YES", (dialog, which) -> UpdateRestaurantStatus(!restaurantStatus.isChecked()))
-                .setNegativeButton("NO", (dialog, which) -> dialog.dismiss())
-                .setNeutralButton("CANCEL", (dialog, which) -> dialog.cancel());
+                .setPositiveButton("YES", (dialog, which) -> UpdateRestaurantStatus(isChecked))
+                .setNegativeButton("NO", (dialog, which) -> {
+                    restaurantStatus.setChecked(!isChecked);
+                    dialog.dismiss();
+                })
+                .setNeutralButton("CANCEL", (dialog, which) -> {
+                    restaurantStatus.setChecked(!isChecked);
+                    dialog.cancel();
+                });
 
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
     private void fetchRestaurantStaus() {
-        FirebaseDatabase
+        restHelper.getValue(new RestStatus.updateRestStatus() {
+            @Override
+            public void onSuccess(@NonNull Boolean isOpen) {
+                stsus = isOpen;
+                if (stsus) {
+                    restaurantStatus.setChecked(true);
+                    Toast.makeText(getActivity(), "Status "+stsus, Toast.LENGTH_SHORT).show();
+                    textcurrloc.setText("Your resturant status is : OPENED");
+                    stsus = true;
+                } else {
+                    restaurantStatus.setChecked(false);
+                    stsus = false;
+                    textcurrloc.setText("Your resturant status is : CLOSED");
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(getActivity(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+        //stsus = restHelper.isOpen();
+
+        /*FirebaseDatabase
                 .getInstance()
                 .getReference(CONSTANTS.DATABASE_RESTURANT_STATUS)
                 .child(CONSTANTS.DATABASE_RESTURANT_OPEN)
@@ -498,15 +532,7 @@ public class HomeFragment extends Fragment implements
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         if (snapshot.exists()) {
-                            if (snapshot.getValue(Boolean.class)) {
-                                restaurantStatus.setChecked(true);
-                                textcurrloc.setText("Your resturant status is : OPENED");
-                                stsus = true;
-                            } else {
-                                restaurantStatus.setChecked(false);
-                                stsus = false;
-                                textcurrloc.setText("Your resturant status is : CLOSED");
-                            }
+
                         }else {
                             restaurantStatus.setChecked(false);
                             stsus = false;
@@ -518,13 +544,35 @@ public class HomeFragment extends Fragment implements
                         restaurantStatus.setChecked(false);
                         Toast.makeText(getActivity(), ""+error.getMessage(), Toast.LENGTH_SHORT).show();
                     }
-                });
+                });*/
 
     }
 
     private void UpdateRestaurantStatus(boolean isChecked) {
 
-        FirebaseDatabase
+        restHelper.setValue(isChecked, new RestStatus.updateRestStatus() {
+            @Override
+            public void onSuccess(@NonNull Boolean isOpen) {
+                if (isOpen){
+                    stsus = true;
+                    restaurantStatus.setChecked(true);
+                    textcurrloc.setText("Your resturant status is : OPENED");
+                    Toast.makeText(getActivity(), "Restaurant opened", Toast.LENGTH_SHORT).show();
+                }else {
+                    stsus = false;
+                    restaurantStatus.setChecked(false);
+                    textcurrloc.setText("Your resturant status is : CLOSED");
+                    Toast.makeText(getActivity(), "Restaurant closed", Toast.LENGTH_SHORT).show();
+                }
+            }
+
+            @Override
+            public void onFailure(Exception e) {
+                Toast.makeText(getActivity(), ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        /*FirebaseDatabase
                 .getInstance()
                 .getReference(CONSTANTS.DATABASE_RESTURANT_STATUS)
                 .child(CONSTANTS.DATABASE_RESTURANT_OPEN)
@@ -546,7 +594,7 @@ public class HomeFragment extends Fragment implements
                         Toast.makeText(getActivity(), ""+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     }
 
-                });
+                });*/
 
 
     }
@@ -1003,4 +1051,5 @@ public class HomeFragment extends Fragment implements
     public void onViewStateRestored(@Nullable Bundle savedInstanceState) {
         super.onViewStateRestored(savedInstanceState);
     }
+
 }
