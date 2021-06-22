@@ -92,14 +92,17 @@ public class AllItemsActivity extends AppCompatActivity implements
     private EditText searchbar;
 
     private RecyclerView recomended;
-    private TextView itemtotal, delehevry, grandtot, promoamt;
+    private TextView itemtotal, delehevry, grandtot, promoamt, promo;
+    String code;
+    Double upto, promo_percent;
+    RelativeLayout promo_line;
     private AppCompatButton pay;
 
     public static List<Object> staticAllItemsData = new ArrayList<>();
     public static List<Object> staticAllItemsRecomended = new ArrayList<>();
 
     private OrederBasicDetails orederBasicDetails;
-
+    String PromoCode = "";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -279,6 +282,10 @@ public class AllItemsActivity extends AppCompatActivity implements
         promoamt = bottomview.findViewById(R.id.promotot);
         grandtot = bottomview.findViewById(R.id.grand_tot);
         pay = bottomview.findViewById(R.id.paybtn);
+        promo = bottomview.findViewById(R.id.promo);
+        promo_line = bottomview.findViewById(R.id.promo_line);
+
+        promo_line.setVisibility(View.GONE);
 
         changeName.setOnClickListener(vv -> startActivityForResult(new Intent(AllItemsActivity.this, ConfirmPhoneName.class), 1008));
 
@@ -303,69 +310,72 @@ public class AllItemsActivity extends AppCompatActivity implements
 
         shoe_offers.setOnClickListener(viewk -> startActivityForResult(new Intent(this, AllOffersActivity.class), 001));
 
-        pay.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    StringBuilder stringBuilder = new StringBuilder();
-                    for (int q = 0; q < data.size(); q++) {
-                        if (q == data.size() - 1) {
-                            stringBuilder
-                                    .append(data.get(q).getQUANTITY())
-                                    .append(" X ")
-                                    .append(data.get(q).getNAME());
 
-                        } else {
-                            stringBuilder
-                                    .append(data.get(q).getQUANTITY())
-                                    .append(" X ")
-                                    .append(data.get(q).getNAME())
-                                    .append(", ");
-                        }
+        if (promo_line.getVisibility()==View.VISIBLE){
+            PromoCode = code+"#"+promoamt.getText().toString().replace("-\u20B9 ","");
+        }else {
+            PromoCode = "";
+        }
+        pay.setOnClickListener(view -> {
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int q = 0; q < data.size(); q++) {
+                    if (q == data.size() - 1) {
+                        stringBuilder
+                                .append(data.get(q).getQUANTITY())
+                                .append(" X ")
+                                .append(data.get(q).getNAME());
+
+                    } else {
+                        stringBuilder
+                                .append(data.get(q).getQUANTITY())
+                                .append(" X ")
+                                .append(data.get(q).getNAME())
+                                .append(", ");
                     }
-                    orederBasicDetails = new OrederBasicDetails(
-                            sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1(),
-                            sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG(),
-                            "",
-                            stringBuilder.toString(),
-                            delehevry.getText().toString().replace("\u20B9", ""),
-                            grandtot.getText().toString().replace("\u20B9", ""),
-                            "",
-                            String.valueOf(System.currentTimeMillis()),
-                            "");
-
-                    Resturant.isOpen(new com.thundersharp.conversation.utils.Resturant.Resturantopen() {
-                        @Override
-                        public void isOpen(boolean isOpen) {
-                            if (isOpen) {
-                                PrePayment
-                                        .getInstance()
-                                        .setDadaistListener(new parePayListener() {
-                                            @Override
-                                            public void addSuccess() {
-                                                Payments
-                                                        .initialize(AllItemsActivity.this)
-                                                        .startPayment("ORDER #" + orederBasicDetails.getOrderID(), Double.parseDouble(orederBasicDetails.getTotalamt()), "support@thundersharp.in", "7301694135");
-                                            }
-
-                                            @Override
-                                            public void addFailure(Exception exception) {
-                                                Toast.makeText(AllItemsActivity.this, "Payment cannot be initialized cause :" + exception.getMessage(), Toast.LENGTH_SHORT).show();
-                                            }
-                                        }).setOrderToDatabase(data, orederBasicDetails);
-
-                            } else
-                                Toast.makeText(AllItemsActivity.this, "Resturant not open", Toast.LENGTH_SHORT).show();
-                        }
-                    });
-
-
-                } else {
-                    Toast.makeText(AllItemsActivity.this, "Log in first", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(AllItemsActivity.this, LoginActivity.class));
                 }
+                orederBasicDetails = new OrederBasicDetails(
+                        sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1(),
+                        sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG(),
+                        PromoCode,
+                        stringBuilder.toString(),
+                        delehevry.getText().toString().replace("\u20B9", ""),
+                        grandtot.getText().toString().replace("\u20B9", ""),
+                        "",
+                        String.valueOf(System.currentTimeMillis()),
+                        "");
 
+                Resturant.isOpen(new com.thundersharp.conversation.utils.Resturant.Resturantopen() {
+                    @Override
+                    public void isOpen(boolean isOpen) {
+                        if (isOpen) {
+                            PrePayment
+                                    .getInstance()
+                                    .setDadaistListener(new parePayListener() {
+                                        @Override
+                                        public void addSuccess() {
+                                            Payments
+                                                    .initialize(AllItemsActivity.this)
+                                                    .startPayment("ORDER #" + orederBasicDetails.getOrderID(), Double.parseDouble(orederBasicDetails.getTotalamt()), "support@thundersharp.in", "7301694135");
+                                        }
+
+                                        @Override
+                                        public void addFailure(Exception exception) {
+                                            Toast.makeText(AllItemsActivity.this, "Payment cannot be initialized cause :" + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }).setOrderToDatabase(data, orederBasicDetails);
+
+                        } else
+                            Toast.makeText(AllItemsActivity.this, "Resturant not open", Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+            } else {
+                Toast.makeText(AllItemsActivity.this, "Log in first", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(AllItemsActivity.this, LoginActivity.class));
             }
+
         });
 
 
@@ -400,9 +410,20 @@ public class AllItemsActivity extends AppCompatActivity implements
 
                 itemtotal.setText("\u20B9 " + sum);
                 delehevry.setText("\u20B9 " + Math.round(deleveryCharges));
-
-                grandtot.setText("" + (sum + Math.round(deleveryCharges))); //TODO SUBTRACT DISCOUNT LATER
-                pay.setText("PAY \u20B9" + (sum + Math.round(deleveryCharges)));
+                promo.setText("Promo - (" + code + ")");
+                Double amt ;
+                if (promo_line.getVisibility()==View.VISIBLE){
+                    if (((sum*promo_percent)/100) > upto){
+                        if (sum>upto) amt=upto; else amt = sum;
+                    }else amt = (sum*promo_percent)/100;
+                    promoamt.setText("-\u20B9 "+ amt);
+                    grandtot.setText("" + (sum + Math.round(deleveryCharges)-amt));
+                    pay.setText("PAY \u20B9" + (sum + Math.round(deleveryCharges)-amt));
+                }else {
+                    promoamt.setText("-\u20B9 "+ 0);
+                    grandtot.setText("" + (sum + Math.round(deleveryCharges)));
+                    pay.setText("PAY \u20B9" + (sum + Math.round(deleveryCharges)));
+                }
 
             } else {
                 itemtotal.setText("\u20B9 0");
@@ -410,6 +431,7 @@ public class AllItemsActivity extends AppCompatActivity implements
                 promoamt.setText("\u20B9 0");
                 grandtot.setText("\u20B9 0");
                 pay.setText("PAY \u20B9 0");
+                promoamt.setText("-\u20B9 "+ 0);
             }
         }
 
@@ -419,6 +441,36 @@ public class AllItemsActivity extends AppCompatActivity implements
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 001) {
+            promo_line.setVisibility(View.VISIBLE);
+            String codeAmount = data.getStringExtra("code_name");
+            code = codeAmount.substring(0, codeAmount.indexOf("#"));
+            Double total= 0.0;
+            try {
+                promo_percent = Double.parseDouble(codeAmount.substring(codeAmount.indexOf("#") + 1, codeAmount.indexOf("$")));
+                upto = Double.parseDouble(codeAmount.substring(codeAmount.indexOf("$") + 1));
+                total = Double.parseDouble(itemtotal.getText().toString().replace("\u20B9 ",""));
+            }catch (NumberFormatException e){
+                Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+            Double amt ;
+            promo.setText("Promo - (" + code + ")");
+            if (((total*promo_percent)/100) > upto){
+                if (total>upto) amt=upto; else amt = total;
+            }else amt = (total*promo_percent)/100;
+
+            promoamt.setText("-\u20B9 "+ amt);
+            grandtot.setText(""+(total+Double.parseDouble(delehevry.getText().toString().replace("\u20B9 ",""))-amt));
+            pay.setText(grandtot.getText().toString());
+
+        }else{
+            Double total = Double.parseDouble(itemtotal.getText().toString().replace("\u20B9 ",""));
+            code = null; promo_percent = 0.0; upto = 0.0;
+            grandtot.setText(""+(total+Double.parseDouble(delehevry.getText().toString().replace("\u20B9 ",""))));
+            pay.setText(grandtot.getText().toString());
+            promo_line.setVisibility(View.GONE);
+            Toast.makeText(this, "Code Not found", Toast.LENGTH_SHORT).show();
+        }
 
     }
 

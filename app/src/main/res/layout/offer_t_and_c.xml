@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#22222B"
+    >
+
+    <TextView
+        android:id="@+id/tc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="You will rececive an instant discount of Rs. 150 via offer name and code"
+        android:textColor="#D6D6D6"
+        android:padding="@dimen/dimen_10dp"
+        android:layout_marginTop="@dimen/dimen_10dp"
+        android:layout_marginHorizontal="@dimen/dimen_10dp"
+        android:drawableStart="@drawable/ic_outline_info_24"
+        android:drawableTint="#87FF1E"
+        android:drawablePadding="@dimen/dimen_10dp"
+        android:gravity="center_vertical"
+        />
+
+
+</RelativeLayout>

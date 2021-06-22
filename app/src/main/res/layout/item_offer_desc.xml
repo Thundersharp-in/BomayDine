@@ -4,10 +4,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
     android:background="#22222B"
-    tools:context=".user.ui.offers.AllOffersDisplay">
+    >
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -20,6 +20,7 @@
         />
 
     <TextView
+        android:id="@+id/offer_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Offer Name"
@@ -29,7 +30,9 @@
         android:textColor="#FF5722"
         android:textStyle="bold"
         android:fontFamily="@font/allerta"/>
+
     <TextView
+        android:id="@+id/offer_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Offer description like how much amount or how it is applicable to the offer "
@@ -40,6 +43,7 @@
         android:fontFamily="@font/acme"
         />
     <TextView
+        android:id="@+id/amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Offer description like amount  "
@@ -57,27 +61,38 @@
         android:background="#424242"
         />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="OFFER150"
-        android:textColor="#fff"
-        android:padding="@dimen/dimen_15dp"
-        android:layout_marginTop="@dimen/dimen_10dp"
-        android:layout_marginHorizontal="@dimen/dimen_10dp"
-        android:background="@drawable/offer_code_bg"
-        android:textStyle="bold"
-        android:textSize="18sp"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="TAP TO COPY"
-        android:textColor="#F35454"
-        android:padding="@dimen/dimen_10dp"
-        android:layout_marginTop="@dimen/dimen_10dp"
-        android:layout_marginHorizontal="@dimen/dimen_10dp"
-        />
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/offer_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="OFFER150"
+            android:textColor="#fff"
+            android:padding="@dimen/dimen_15dp"
+            android:layout_marginTop="@dimen/dimen_10dp"
+            android:layout_marginHorizontal="@dimen/dimen_10dp"
+            android:background="@drawable/offer_code_bg_admin"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            />
+
+        <TextView
+            android:id="@+id/copy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TAP TO COPY"
+            android:textColor="#FFEB3B"
+            android:padding="@dimen/dimen_10dp"
+            android:gravity="end"
+            android:layout_marginTop="@dimen/dimen_10dp"
+            android:layout_marginHorizontal="@dimen/dimen_10dp"
+            />
+
+    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
@@ -86,34 +101,13 @@
         android:layout_marginTop="@dimen/dimen_10dp"
         android:background="#424242"
         />
-     <!-- TODO ADD RECYCLERVIEW -->
-    <TextView
-        android:layout_width="wrap_content"
+    <!-- TODO ADD RECYCLERVIEW -->
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/tandc"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="You will rececive an instant discount of Rs. 150 via offer name and code"
-        android:textColor="#D6D6D6"
-        android:padding="@dimen/dimen_10dp"
-        android:layout_marginTop="@dimen/dimen_10dp"
-        android:layout_marginHorizontal="@dimen/dimen_10dp"
-        android:drawableStart="@drawable/ic_outline_info_24"
-        android:drawableTint="#87FF1E"
-        android:drawablePadding="@dimen/dimen_10dp"
-        android:gravity="center_vertical"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_marginBottom="10dp"
         />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="You will rececive an instant discount of Rs. 150 via offer name and code"
-        android:textColor="#D6D6D6"
-        android:padding="@dimen/dimen_10dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginHorizontal="@dimen/dimen_10dp"
-        android:drawableStart="@drawable/ic_outline_info_24"
-        android:drawableTint="#87FF1E"
-        android:drawablePadding="5dp"
-        android:gravity="center_vertical"
-        />
-
-
 </LinearLayout>

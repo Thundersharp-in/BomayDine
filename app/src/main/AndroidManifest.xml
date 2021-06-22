@@ -25,7 +25,6 @@
         <activity android:name=".user.ui.login.UserDetails" />
         <activity android:name=".user.ui.account.UpdateProfileActivity" />
         <activity android:name=".user.ui.wallets.WalletActivity" />
-        <activity android:name=".user.ui.offers.AllOffersDisplay" />
         <activity android:name=".user.ui.account.Bookmarks" />
         <activity android:name=".user.ui.account.Refunds" />
         <activity android:name=".user.ui.ratings.RatingsNReview" />

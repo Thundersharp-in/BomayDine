@@ -376,7 +376,7 @@ public class RecentOrders extends AppCompatActivity implements HomeDataContract.
                         orederBasicDetails = new OrederBasicDetails(
                                 "Dine-in order",
                                 "Dine-in order",
-                                "BOMBAY_DINE"+discountVal,
+                                "BOMBAY_DINE"+"#"+discountVal,
                                 stringBuilder.toString(),
                                 delehevry.getText().toString().replace("\u20B9", ""),
                                 grandtot.getText().toString().replace("\u20B9", ""),
