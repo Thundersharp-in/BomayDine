@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.thundersharp.admin.R;
 import com.thundersharp.admin.core.Model.ReportModel;
+import com.thundersharp.admin.core.utils.TimeUtils;
 
 import java.util.List;
 
@@ -41,12 +42,15 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
 
         holder.report_id.setText("#"+reportModel.ID);
         holder.report_type.setText(reportModel.TYPE);
-        holder.reporter_name.setText(reportModel.NAME);
         holder.reporter_email.setText(reportModel.EMAIL);
-        holder.reported_date.setText(reportModel.ID);
-        holder.phone_no.setText(reportModel.PHONE);
-        //holder.report_status.setText(reportModel);
+        holder.reported_date.setText(TimeUtils.getTimeFromTimeStamp(reportModel.ID));
 
+        holder.btn_cancel.setOnClickListener(view-> Toast.makeText(context, "No operation performed on cancel btn clicked", Toast.LENGTH_SHORT).show());
+        holder.verify.setOnClickListener(view-> Toast.makeText(context, "No operation performed on Verify btn clicked", Toast.LENGTH_SHORT).show());
+
+        //holder.reporter_name.setText(reportModel.NAME);
+        //holder.phone_no.setText(reportModel.PHONE);
+        //holder.report_status.setText(reportModel);
 
         /*
          ////////////////////////////////////////////////////////////////////////////
@@ -65,27 +69,41 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
             case 0:
                 holder.report_status.setText("Report Placed");
                 holder.lower.setVisibility(View.VISIBLE);
-                holder.btn_cancel.setVisibility(View.VISIBLE);
-
-                //holder.status.setTextColor();
                 break;
             case 1:
-                holder.report_status.setText("Report Placed");
+                holder.report_status.setText("Report Reviewed by admin");
                 holder.lower.setVisibility(View.VISIBLE);
-                holder.btn_cancel.setVisibility(View.VISIBLE);
                 break;
             case 2:
-                holder.report_status.setText("Report Placed");
+                holder.report_status.setText("Reported cancelled by user ");
                 holder.lower.setVisibility(View.VISIBLE);
-                holder.btn_cancel.setVisibility(View.VISIBLE);
                 break;
             case 3:
-                holder.report_status.setText("Report Placed");
+                holder.report_status.setText("Report cancelled by admin");
                 holder.lower.setVisibility(View.VISIBLE);
-                holder.btn_cancel.setVisibility(View.VISIBLE);
+                break;
+            case 4:
+                holder.report_status.setText("Report Approved by admin ");
+                holder.lower.setVisibility(View.VISIBLE);
+                break;
+            case 5:
+                holder.report_status.setText("Problem Solved ");
+                holder.lower.setVisibility(View.VISIBLE);
+                break;
+            case 6:
+                holder.report_status.setText("User Satisfied with Solution");
+                holder.lower.setVisibility(View.VISIBLE);
+                break;
+            case 7:
+                holder.report_status.setText("User un-Satisfied with Solution");
+                holder.lower.setVisibility(View.VISIBLE);
+                break;
+            case 8:
+                holder.report_status.setText("Reported Again");
+                holder.lower.setVisibility(View.VISIBLE);
+                break;
             default:
                 holder.lower.setVisibility(View.GONE);
-                holder.btn_cancel.setVisibility(View.GONE);
                 holder.report_status.setText("Status : Unknown");
                 //holder.status.setTextColor(0);
                 break;
@@ -101,23 +119,23 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView report_id, report_type, reporter_name, reporter_email, reported_date, phone_no, report_status;
+        TextView report_id, report_type, reporter_email, reported_date, report_status;//, reporter_name, phone_no,
         LinearLayout lower;
-        AppCompatButton verify, reply, btn_cancel;
+        AppCompatButton verify, btn_cancel;//, reply
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             report_id = itemView.findViewById(R.id.report_id);
             report_type = itemView.findViewById(R.id.report_type);
-            reporter_name = itemView.findViewById(R.id.reporter_name);
+            //reporter_name = itemView.findViewById(R.id.reporter_name);
             reporter_email = itemView.findViewById(R.id.reporter_email);
             reported_date = itemView.findViewById(R.id.reported_date);
-            phone_no = itemView.findViewById(R.id.phone_no);
+           // phone_no = itemView.findViewById(R.id.phone_no);
             report_status = itemView.findViewById(R.id.report_status);
             lower = itemView.findViewById(R.id.lower);
             verify = itemView.findViewById(R.id.verify);
-            reply = itemView.findViewById(R.id.reply);
+            //reply = itemView.findViewById(R.id.reply);
             btn_cancel = itemView.findViewById(R.id.btn_cancel);
 
         }

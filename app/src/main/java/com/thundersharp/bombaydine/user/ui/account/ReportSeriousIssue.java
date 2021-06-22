@@ -62,7 +62,6 @@ public class ReportSeriousIssue extends AppCompatActivity {
             }else {
 
                 ReportModel model = new ReportModel(fullName.getEditText().getText().toString(),emailAddress.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid(),ph_no,typeText.getEditText().getText().toString(),String.valueOf(System.currentTimeMillis()),reportType.getText().toString(),0);
-                //TODO UPdate to user module to
                 FirebaseDatabase
                         .getInstance()
                         .getReference(CONSTANTS.DATABASE_NODE_REPORT)
@@ -79,7 +78,7 @@ public class ReportSeriousIssue extends AppCompatActivity {
 
                             }
                             else
-                                Toast.makeText(ReportSeriousIssue.this, "Sorry you can't report", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ReportSeriousIssue.this, "Sorry you can't report right now", Toast.LENGTH_SHORT).show();
                         });
             }
         });
