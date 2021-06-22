@@ -2,6 +2,7 @@ package com.thundersharp.admin.ui.discover;
 
 import android.annotation.SuppressLint;
 import android.app.DatePickerDialog;
+import android.content.res.Resources;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -118,7 +119,11 @@ public class Discover extends Fragment implements OrderContract.onOrderFetch {
                             recentOrderAdapter = new RecentAdapter(getActivity(), list);
                             recyclerview.setAdapter(recentOrderAdapter);
 
-                        }else Toast.makeText(getContext(), "No orders for "+date, Toast.LENGTH_SHORT).show();
+                        }else{
+                            recentOrderAdapter = null;
+                            recyclerview.setAdapter(recentOrderAdapter);
+                            Toast.makeText(getContext(), "No orders for "+date, Toast.LENGTH_SHORT).show();
+                        }
                     }
 
                     @Override
@@ -130,6 +135,7 @@ public class Discover extends Fragment implements OrderContract.onOrderFetch {
 
     @Override
     public void onOrderFetchSuccess(DataSnapshot data, boolean isNew) {
+        Toast.makeText(getActivity(), "e.getMessage()", Toast.LENGTH_LONG).show();
         if (isNew){
             if (recentOrderAdapter == null) {
                 List<DataSnapshot> list= new ArrayList<>();
@@ -178,7 +184,12 @@ public class Discover extends Fragment implements OrderContract.onOrderFetch {
 
     @Override
     public void onDataFetchFailure(Exception e) {  //TODO CHECK
-        Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+        if (e instanceof DataNotFound) {
+            Toast.makeText(getActivity(), e.getMessage()+"e", Toast.LENGTH_LONG).show();
+            recyclerview.setAdapter(null);
+        } else {
+            Toast.makeText(getActivity(), e.getMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 
     private String getDate(){

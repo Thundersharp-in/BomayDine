@@ -1,5 +1,6 @@
 package com.thundersharp.admin.core.orders;
 
+import android.content.res.Resources;
 import android.text.format.DateFormat;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.thundersharp.admin.core.utils.CONSTANTS;
+import com.thundersharp.admin.ui.discover.DataNotFound;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -77,7 +79,7 @@ public class OrderHistoryProvider implements OrderContract , OrderContract.Statu
                             onOrderFetch.onOrderFetchSuccess(snapshot,true);
 
                         }else {
-                            onOrderFetch.onDataFetchFailure(new Exception("No orders on "+date+" yet !"));
+                            onOrderFetch.onDataFetchFailure(new DataNotFound("No orders on "+date+" yet !"));
                         }
                     }
 

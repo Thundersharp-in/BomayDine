@@ -24,22 +24,30 @@ import com.thundersharp.admin.core.orders.OrderHistoryProvider;
 import com.thundersharp.admin.core.utils.TimeUtils;
 import com.thundersharp.admin.ui.orders.OrderStatus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewBinder> implements OrderContract.StatusSuccessFailure{
 
     private Context context;
     private List<DataSnapshot> objectList;
+    private List<String> orderidS;
 
     public void addNew(DataSnapshot data) {
         objectList.add(data);
+        if (orderidS == null) {
+            orderidS = new ArrayList<>();
+
+        }
+        orderidS.add(data.child("orderID").getValue(String.class));
         notifyItemInserted(objectList.size() - 1);
     }
 
     public void upDateExisting(DataSnapshot data) {
-        if (objectList.contains(data.child("orderID"))){
+        Toast.makeText(context, orderidS.get(0), Toast.LENGTH_SHORT).show();
+        if (orderidS.contains(data.child("orderID").getValue(String.class))){
 
-            int index = objectList.indexOf(data.child("orderID"));
+            int index = orderidS.indexOf(data.child("orderID").getValue(String.class));
             Toast.makeText(context,"True ",index).show();
             objectList.add(index,data);
             notifyItemChanged(index);
@@ -52,6 +60,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewBinder
     public RecentAdapter(Context context, List<DataSnapshot> objectList) {
         this.context = context;
         this.objectList = objectList;
+        this.orderidS = new ArrayList<>();
     }
 
 
