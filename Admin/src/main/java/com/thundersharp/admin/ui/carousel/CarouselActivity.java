@@ -50,6 +50,7 @@ public class CarouselActivity extends AppCompatActivity {
     RecyclerView rv_slider;
     List<SliderModel> modelList;
     SliderAdapter adapter;
+    int id;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,15 +61,14 @@ public class CarouselActivity extends AppCompatActivity {
 
         loadImages();
 
-        //TODO check and ask for position to upload
-        //imageGallary.setOnClickListener(view->{ startActivityForResult(new Intent(this, FirebaseGallary.class),1356); });
-
         upload.setOnClickListener(view ->{
             if (url.getEditText().getText().toString().isEmpty()){
                 url.getEditText().setError("Required!");
                 url.getEditText().requestFocus();
             }else {
-                uploadTostorage(url.getEditText().getText().toString());
+
+                id = getId();
+                uploadTostorage(url.getEditText().getText().toString(),id);
             }
         });
 
@@ -79,9 +79,13 @@ public class CarouselActivity extends AppCompatActivity {
             startActivityForResult(photoPickerIntent, 10089);
         });
     }
+    private int getId() {
+        return (int)(Math.random()*9000)+1000;
+    }
 
-    private void uploadTostorage(String url) {
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference("SliderImages/"+modelList.size()+".jpg");
+
+    private void uploadTostorage(String url, int id) {
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference("SliderImages/"+String.valueOf(id)+".jpg");
         storageReference.putFile(Uri.parse(url)).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
@@ -92,7 +96,7 @@ public class CarouselActivity extends AppCompatActivity {
                     task.getResult()
                             .getStorage()
                             .getDownloadUrl()
-                            .addOnSuccessListener(uri -> updateDatabase(uri,path));
+                            .addOnSuccessListener(uri -> updateDatabase(uri,path, id));
                 }else {
                     Toast.makeText(CarouselActivity.this, "Storage Error : "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }
@@ -100,15 +104,15 @@ public class CarouselActivity extends AppCompatActivity {
         });
     }
 
-    private void updateDatabase(Uri uri, String path) {
+    private void updateDatabase(Uri uri, String path, int id) {
         HashMap<String,Object> data = new HashMap<>();
-        data.put("PAGE",modelList.size());
+        data.put("PAGE",id);
         data.put("URL",uri.toString());
 
         FirebaseDatabase
                 .getInstance()
                 .getReference(CONSTANTS.DATABASE_TOP_CAROUSEL)
-                .child(String.valueOf(modelList.size()))
+                .child(String.valueOf(id))
                 .updateChildren(data)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -118,6 +122,7 @@ public class CarouselActivity extends AppCompatActivity {
 
                         adapter = new SliderAdapter(this,modelList);
                         Toast.makeText(this, "Uploaded!", Toast.LENGTH_SHORT).show();
+                        url.getEditText().setText("");
                         // imageurl.getEditText().setText(uri.toString());
                         // Glide.with(EditItemActivity.this).load(uri.toString()).into(homeImage);
 

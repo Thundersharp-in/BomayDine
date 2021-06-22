@@ -33,17 +33,6 @@
                     android:src="@drawable/homestatic" />
 
                 <ImageView
-                    android:id="@+id/edit_img"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:elevation="@dimen/dimen_5dp"
-                    android:src="@drawable/ic_outline_edit_24"
-                    android:background="@drawable/curved_dark"
-                    android:padding="7dp"
-                    android:layout_gravity="bottom|end"
-                    android:layout_margin="10dp"
-                    />
-                <ImageView
                     android:id="@+id/delete_img"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -52,8 +41,7 @@
                     android:background="@drawable/curved_dark"
                     android:padding="7dp"
                     android:layout_gravity="bottom|end"
-                    android:layout_marginEnd="60dp"
-                    android:layout_marginBottom="@dimen/dimen_10dp"
+                    android:layout_margin="10dp"
                     />
 
             </FrameLayout>
