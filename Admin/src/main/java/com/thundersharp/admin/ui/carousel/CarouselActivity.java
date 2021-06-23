@@ -96,7 +96,9 @@ public class CarouselActivity extends AppCompatActivity {
                     task.getResult()
                             .getStorage()
                             .getDownloadUrl()
-                            .addOnSuccessListener(uri -> updateDatabase(uri,path, id));
+                            .addOnSuccessListener(uri ->{
+                                updateDatabase(uri,path, id);
+                            });
                 }else {
                     Toast.makeText(CarouselActivity.this, "Storage Error : "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                 }

@@ -33,6 +33,7 @@ import com.thundersharp.bombaydine.user.ui.orders.ConfirmPhoneName;
 import com.thundersharp.payments.payments.Payments;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AllOfferAdapters extends RecyclerView.Adapter<AllOfferAdapters.View> {
@@ -60,8 +61,8 @@ public class AllOfferAdapters extends RecyclerView.Adapter<AllOfferAdapters.View
         this.offerCode = offerCode;
     }
 
-    private Context context;
-    private List<Object> objects;
+    private final Context context;
+    private final List<Object> objects;
     private OfferCode offerCode;
 
     @NonNull
@@ -74,21 +75,24 @@ public class AllOfferAdapters extends RecyclerView.Adapter<AllOfferAdapters.View
 
     @Override
     public void onBindViewHolder(@NonNull View holder, int position) {
-
+        OfferModel offerModel = (OfferModel) objects.get(position);
         if (adapterType == 0){
 
-        }else {
-            OfferModel offerModel = (OfferModel) objects.get(position);
+            holder.offer_code.setText("USE CODE "+offerModel.getCODE());
+            holder.offer_desc.setText(offerModel.getDESC());
+            holder.itemView.setOnClickListener(w->ShowOfferCart(offerModel));
 
-            ((View)holder).offer_text_amt.setOnClickListener(view->{
+        }else {
+
+            holder.offer_text_amt.setOnClickListener(view->{
                 ShowOfferCart(offerModel);
             });
-            ((View)holder).offer_apply.setOnClickListener(view ->{
+            holder.offer_apply.setOnClickListener(view ->{
                 offerCode.getOfferCode(offerModel.getCODE()+"#"+offerModel.getPERCENT()+"$"+offerModel.getUPTO());
             });
-            ((View)holder).offer_desc.setText(offerModel.getDESC());
-            ((View)holder).offer_text_amt.setText("Get instant discount of "+offerModel.getPERCENT() +"% Off upto Rs. "+offerModel.getUPTO()+" on your delisious orders."+ context.getString(com.thundersharp.admin.R.string.offer_view_detail));
-            ((View)holder).offer_code.setText(offerModel.getCODE());
+            holder.offer_desc.setText(offerModel.getDESC());
+            holder.offer_text_amt.setText("Get instant discount of "+offerModel.getPERCENT() +"% Off upto Rs. "+offerModel.getUPTO()+" on your delisious orders."+ context.getString(com.thundersharp.admin.R.string.offer_view_detail));
+            holder.offer_code.setText(offerModel.getCODE());
 
 
         }
@@ -107,9 +111,8 @@ public class AllOfferAdapters extends RecyclerView.Adapter<AllOfferAdapters.View
         TextView copy = bottomSheetDialog.findViewById(R.id.copy);
         RecyclerView tandc = bottomSheetDialog.findViewById(R.id.tandc);
 
-        List<String> list = new ArrayList<>();
-        String list_items = offerModel.getTNC().replace(".","\n");
-        list.add(list_items);
+        String[] list_items = offerModel.getTNC().split("\\.");
+        List<String> list = new ArrayList<>(Arrays.asList(list_items));
 
         offer_name.setText("BOMBAY DINE");
         offer_desc.setText(offerModel.getDESC());
@@ -256,11 +259,16 @@ public class AllOfferAdapters extends RecyclerView.Adapter<AllOfferAdapters.View
 
         public View(@NonNull android.view.View itemView) {
             super(itemView);
-            offerBy =itemView.findViewById(R.id.offerBy);
-            offer_desc =itemView.findViewById(R.id.offer_desc);
-            offer_text_amt =itemView.findViewById(R.id.offer_text_amt);
-            offer_code =itemView.findViewById(R.id.offer_code);
-            offer_apply =itemView.findViewById(R.id.offer_apply);
+            if (adapterType == 0){
+                offer_code = itemView.findViewById(R.id.text3);
+                offer_desc = itemView.findViewById(R.id.text2);
+            }else {
+                offerBy = itemView.findViewById(R.id.offerBy);
+                offer_desc = itemView.findViewById(R.id.offer_desc);
+                offer_text_amt = itemView.findViewById(R.id.offer_text_amt);
+                offer_code = itemView.findViewById(R.id.offer_code);
+                offer_apply = itemView.findViewById(R.id.offer_apply);
+            }
         }
     }
 }

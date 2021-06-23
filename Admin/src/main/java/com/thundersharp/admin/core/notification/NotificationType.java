@@ -11,6 +11,7 @@ import java.lang.annotation.RetentionPolicy;
         NotificationType.MODE_NOTIFY_ORDER_UPDATE,
         NotificationType.MODE_NOTIFY_CHAT_UPDATE,
         NotificationType.MODE_NOTIFY_NEW_CHAT,
+        NotificationType.MODE_NOTIFY_OFFER,
         NotificationType.MODE_NOTIFY_ITEM_IN_CART})
 
 public @interface NotificationType {

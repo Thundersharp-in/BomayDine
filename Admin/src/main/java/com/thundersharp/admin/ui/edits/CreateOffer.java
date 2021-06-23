@@ -102,7 +102,8 @@ public class CreateOffer extends AppCompatActivity {
                         tc,
                         Integer.valueOf(offer_percent.getEditText().getText().toString()),
                         type,
-                        Integer.valueOf(offer_off_upto.getEditText().getText().toString()));
+                        Integer.valueOf(offer_off_upto.getEditText().getText().toString()),
+                        150);
 
                 FirebaseDatabase
                         .getInstance()

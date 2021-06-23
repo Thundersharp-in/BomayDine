@@ -12,12 +12,13 @@
         android:layout_height="wrap_content"
         android:text="You will rececive an instant discount of Rs. 150 via offer name and code"
         android:textColor="#D6D6D6"
-        android:padding="@dimen/dimen_10dp"
+        android:fontFamily="@font/calibri"
+        android:textSize="13sp"
         android:layout_marginTop="@dimen/dimen_10dp"
         android:layout_marginHorizontal="@dimen/dimen_10dp"
-        android:drawableStart="@drawable/ic_outline_info_24"
+        android:drawableStart="@drawable/check"
         android:drawableTint="#87FF1E"
-        android:drawablePadding="@dimen/dimen_10dp"
+        android:drawablePadding="@dimen/dimen_7dp"
         android:gravity="center_vertical"
         />
 
