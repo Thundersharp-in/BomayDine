@@ -5,15 +5,24 @@ public class OfferModel {
     public OfferModel(){}
 
     private String CODE,DESC,TNC;
-    private Integer PERCENT,TYPE,UPTO;
+    private Integer PERCENT,TYPE,UPTO,MINCART;
 
-    public OfferModel(String CODE, String DESC, String TNC, Integer PERCENT, Integer TYPE, Integer UPTO) {
+    public OfferModel(String CODE, String DESC, String TNC, Integer PERCENT, Integer TYPE, Integer UPTO, Integer MINCART) {
         this.CODE = CODE;
         this.DESC = DESC;
         this.TNC = TNC;
         this.PERCENT = PERCENT;
         this.TYPE = TYPE;
         this.UPTO = UPTO;
+        this.MINCART = MINCART;
+    }
+
+    public Integer getMINCART() {
+        return MINCART;
+    }
+
+    public void setMINCART(Integer MINCART) {
+        this.MINCART = MINCART;
     }
 
     public String getCODE() {

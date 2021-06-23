@@ -4,28 +4,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#1e2026"
+    android:background="#111215"
     tools:context=".user.ui.offers.AllOffersActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#121010"
+        android:background="#1e2026"
         app:navigationIcon="@drawable/quantum_ic_arrow_back_grey600_24"/>
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/toolbar">
-        <RelativeLayout
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <RelativeLayout
                 android:id="@+id/r_code"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#121010">
+                android:background="#1e2026">
 
                 <EditText
                     android:id="@+id/code_editor"
@@ -65,8 +66,28 @@
                     android:background="#B6B6B6"
                     android:layout_marginHorizontal="@dimen/dimen_10dp"
                     android:layout_below="@+id/code_editor"
-                    android:layout_marginBottom="5dp"
+                    android:layout_marginBottom="10dp"
                     />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#111215">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Available Offers"
+                    android:textSize="16sp"
+                    android:paddingVertical="@dimen/dimen_15dp"
+                    android:paddingStart="@dimen/dimen_10dp"
+                    android:fontFamily="@font/calibri"
+                    android:textColor="#DDDDDD"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginEnd="10dp"
+                    android:layout_centerVertical="true" />
 
             </RelativeLayout>
 
@@ -79,7 +100,7 @@
                 android:layout_below="@+id/r_code"
                 />
 
-        </RelativeLayout>
+        </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
 

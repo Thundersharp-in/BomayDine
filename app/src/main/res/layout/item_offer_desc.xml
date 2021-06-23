@@ -1,113 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
     android:background="#22222B"
-    >
-
-    <androidx.appcompat.widget.Toolbar
-        android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#2d2d39"
-        app:titleTextColor="#CAC7C7"
-        app:title="Offer details"
-        android:id="@+id/toolbar"
-        android:elevation="@dimen/dimen_5dp"
-        />
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/offer_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Offer Name"
-        android:textSize="15sp"
-        android:layout_marginTop="@dimen/dimen_10dp"
         android:layout_marginHorizontal="@dimen/dimen_10dp"
+        android:layout_marginTop="@dimen/dimen_15dp"
+        android:fontFamily="@font/allerta"
+        android:text="Offer Name"
         android:textColor="#FF5722"
-        android:textStyle="bold"
-        android:fontFamily="@font/allerta"/>
+        android:textSize="15sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/offer_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Offer description like how much amount or how it is applicable to the offer "
-        android:textSize="17sp"
         android:layout_marginHorizontal="@dimen/dimen_10dp"
-        android:layout_marginTop="15dp"
-        android:textColor="#DFDFDF"
-        android:fontFamily="@font/acme"
-        />
+        android:layout_marginTop="10dp"
+        android:fontFamily="@font/calibrib"
+        android:textSize="15sp"
+        android:text="Offer description like how much amount or how it is applicable to the offer "
+        android:textColor="#DFDFDF" />
+
     <TextView
         android:id="@+id/amount"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Offer description like amount  "
-        android:textSize="12sp"
-        android:layout_marginTop="7dp"
         android:layout_marginHorizontal="@dimen/dimen_10dp"
+        android:layout_marginTop="5dp"
+        android:fontFamily="@font/calibri"
+        android:text="Offer description like amount  "
         android:textColor="#B1B1B1"
         />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginHorizontal="@dimen/dimen_10dp"
         android:layout_marginTop="@dimen/dimen_10dp"
-        android:background="#424242"
-        />
+        android:layout_marginBottom="@dimen/dimen_5dp"
+        android:background="#424242" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
+        android:layout_marginStart="@dimen/dimen_10dp"
+        android:orientation="horizontal">
+
         <TextView
             android:id="@+id/offer_code"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="OFFER150"
-            android:textColor="#fff"
-            android:padding="@dimen/dimen_15dp"
-            android:layout_marginTop="@dimen/dimen_10dp"
-            android:layout_marginHorizontal="@dimen/dimen_10dp"
-            android:background="@drawable/offer_code_bg_admin"
-            android:textStyle="bold"
-            android:textSize="18sp"
+            android:text="BOMBAYDINE159"
+            android:textColor="#ffffff"
+            android:textIsSelectable="true"
+            android:textSize="12sp"
+            android:background="@drawable/offer_code_bg"
+            android:paddingEnd="@dimen/dimen_10dp"
+            android:paddingStart="@dimen/dimen_10dp"
+            android:paddingVertical="@dimen/dimen_7dp"
+            android:fontFamily="@font/montserratregular"
             />
 
         <TextView
             android:id="@+id/copy"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="TAP TO COPY"
-            android:textColor="#FFEB3B"
-            android:padding="@dimen/dimen_10dp"
-            android:gravity="end"
-            android:layout_marginTop="@dimen/dimen_10dp"
             android:layout_marginHorizontal="@dimen/dimen_10dp"
-            />
+            android:gravity="end"
+            android:textSize="13sp"
+            android:padding="@dimen/dimen_10dp"
+            android:text="TAP TO COPY"
+            android:textColor="#FFEB3B" />
 
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginHorizontal="@dimen/dimen_10dp"
-        android:layout_marginTop="@dimen/dimen_10dp"
-        android:background="#424242"
-        />
+        android:layout_marginTop="5dp"
+        android:background="#424242" />
     <!-- TODO ADD RECYCLERVIEW -->
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/tandc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         android:layout_marginBottom="10dp"
-        />
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager" />
 </LinearLayout>
