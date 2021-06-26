@@ -13,7 +13,7 @@ import com.thundersharp.admin.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefHelper;
 
-public class     AddAddressActivity extends AppCompatActivity {
+public class AddAddressActivity extends AppCompatActivity {
 
     TextView add_new_location, view_detail, add_more_location;
     RecyclerView rv_location_history;

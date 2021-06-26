@@ -769,6 +769,7 @@ public class HomeFragment extends Fragment implements
 
     @Override
     public void onAddressLoadFailure(Exception e) {
+        shimmerFrameLayout.stopShimmer();
         Toast.makeText(getActivity(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
