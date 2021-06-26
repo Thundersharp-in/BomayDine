@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -25,6 +26,10 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.thundersharp.admin.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.TokenVerification;
@@ -81,6 +86,8 @@ public class Profile extends Fragment {
         foodie_level = view.findViewById(R.id.foodie_level);
         email_status = view.findViewById(R.id.email_status);
 
+        orderNo.setText("0");
+
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             profile_email.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
@@ -96,6 +103,9 @@ public class Profile extends Fragment {
                     Glide.with(getActivity()).load(profile_url).into(profilepic);
                 }else Glide.with(getActivity()).load(R.mipmap.ic_launcher_round).into(profilepic);
             }
+
+            fetchOrderNo();
+
             ((TextView)view.findViewById(R.id.updatedata)).setOnClickListener(b->{
                 startActivity(new Intent(getActivity(),UpdateProfileActivity.class));
             });
@@ -274,6 +284,30 @@ public class Profile extends Fragment {
 
         return view;
 
+    }
+
+    private void fetchOrderNo() {
+        FirebaseDatabase
+                .getInstance()
+                .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
+                .child(FirebaseAuth.getInstance().getUid())
+                .child(CONSTANTS.DATABASE_NODE_ORDERS)
+                .child(CONSTANTS.DATABASE_NODE_OVERVIEW)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            orderNo.setText(String.valueOf(snapshot.getChildrenCount()));
+                        }else {
+                            orderNo.setText("0");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(getActivity(), ""+error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override

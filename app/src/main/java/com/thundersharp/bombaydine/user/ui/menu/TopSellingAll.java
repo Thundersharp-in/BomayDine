@@ -38,7 +38,7 @@ public class TopSellingAll extends AppCompatActivity implements
         swipeRefreshLayout.setOnRefreshListener(() -> {
             homeDataProvider.fetchTopSellingAll();
         });
-        toolbar.setNavigationOnClickListener(view -> {finish();});
+        toolbar.setNavigationOnClickListener(view -> finish());
         homeDataProvider.fetchTopSellingAll();
 
 

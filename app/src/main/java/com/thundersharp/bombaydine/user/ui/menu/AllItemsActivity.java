@@ -10,6 +10,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -97,6 +99,7 @@ public class AllItemsActivity extends AppCompatActivity implements
     Double upto, promo_percent;
     RelativeLayout promo_line;
     private AppCompatButton pay;
+    CheckBox veg, non_veg, egg;
 
     public static List<Object> staticAllItemsData = new ArrayList<>();
     public static List<Object> staticAllItemsRecomended = new ArrayList<>();
@@ -129,7 +132,25 @@ public class AllItemsActivity extends AppCompatActivity implements
         radiogroup.setVisibility(View.GONE);
         recomended = findViewById(R.id.recomended);
 
+        veg = findViewById(R.id.veg);
+        non_veg = findViewById(R.id.non_veg);
+        egg = findViewById(R.id.egg);
+
         bottomholder.setVisibility(View.INVISIBLE);
+        veg.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked)
+            allItemAdapterMailAdapter.getFilter().filter("0");
+        });
+        non_veg.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked)
+                allItemAdapterMailAdapter.getFilter().filter("1");
+        });
+        egg.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked)
+                allItemAdapterMailAdapter.getFilter().filter("2");
+        });
+
+
 
         bottomholder.setOnClickListener(view -> {
             if (FirebaseAuth.getInstance().getCurrentUser() != null)

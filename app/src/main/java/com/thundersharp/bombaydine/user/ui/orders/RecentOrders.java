@@ -38,7 +38,6 @@ public class RecentOrders extends AppCompatActivity {
                 List<Object> objectList = new ArrayList<>();
                 recyclerView.setAdapter(RecentAdapter.initialize(RecentOrders.this,data));
 
-
             }
 
             @Override

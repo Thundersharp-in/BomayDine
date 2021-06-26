@@ -31,16 +31,18 @@ public class ReportIssue extends AppCompatActivity {
 
         rv_report = findViewById(R.id.rv_report);
         modelList = new ArrayList<>();
-        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type",1));
-        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type",1));
-        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type",1));
-        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type",1));
-        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type",1));
-        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type",1));
-        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type",1));
-        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type",1));
+        /*
+        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type"));
+        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type"));
+        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type"));
+        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type"));
+        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type"));
+        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type"));
+        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type"));
+        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type"));
 
-        rv_report.setAdapter(new ReportAdapter(ReportIssue.this, modelList));
+         */
+
         FirebaseDatabase
                 .getInstance()
                 .getReference(CONSTANTS.DATABASE_NODE_REPORT)
@@ -51,7 +53,7 @@ public class ReportIssue extends AppCompatActivity {
                             for (DataSnapshot snapshot1: snapshot.getChildren()){
                                 modelList.add(snapshot1.getValue(ReportModel.class));
                             }
-
+                            rv_report.setAdapter(new ReportAdapter(ReportIssue.this, modelList));
                         }else {
                             Toast.makeText(ReportIssue.this, "No Report found!", Toast.LENGTH_SHORT).show();
                         }

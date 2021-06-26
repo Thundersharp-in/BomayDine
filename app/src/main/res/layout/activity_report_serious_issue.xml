@@ -149,6 +149,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Mobile Number (optional)"
                     android:inputType="phone"
+                    android:maxLength="10"
                     android:singleLine="true"
                     android:textColor="#ffff"
                     android:textColorHint="#E1E1E1"

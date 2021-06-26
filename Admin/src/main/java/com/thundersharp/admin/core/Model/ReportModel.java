@@ -3,13 +3,12 @@ package com.thundersharp.admin.core.Model;
 public class ReportModel {
     public String NAME, EMAIL, UID, PHONE, MESSAGE, ID;
     public String TYPE;
-    public int STATUS;
 
     public ReportModel() {
     }
 
 
-    public ReportModel(String NAME, String EMAIL, String UID, String PHONE, String MESSAGE, String ID, String TYPE, int STATUS) {
+    public ReportModel(String NAME, String EMAIL, String UID, String PHONE, String MESSAGE, String ID, String TYPE) {
         this.NAME = NAME;
         this.EMAIL = EMAIL;
         this.UID = UID;
@@ -17,6 +16,5 @@ public class ReportModel {
         this.MESSAGE = MESSAGE;
         this.ID = ID;
         this.TYPE = TYPE;
-        this.STATUS = STATUS;
     }
 }

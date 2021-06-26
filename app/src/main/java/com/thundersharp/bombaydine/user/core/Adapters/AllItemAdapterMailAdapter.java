@@ -142,7 +142,8 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
 
                     if (((FoodItemAdapter)item).getNAME().toLowerCase().contains(filterData)
                             ||((FoodItemAdapter)item).getCAT_NAME_ID().toLowerCase().contains(filterData)
-                            ||((FoodItemAdapter)item).getDESC().toLowerCase().contains(filterData)){
+                            ||((FoodItemAdapter)item).getDESC().toLowerCase().contains(filterData)
+                            ||String.valueOf(((FoodItemAdapter)item).getFOOD_TYPE()).toLowerCase().contains(filterData)){
                         allFoodData.add(item);
                     }
                 }

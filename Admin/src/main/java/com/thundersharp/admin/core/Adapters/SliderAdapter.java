@@ -1,6 +1,7 @@
 package com.thundersharp.admin.core.Adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
 import android.view.LayoutInflater;
@@ -22,6 +23,8 @@ import com.thundersharp.admin.R;
 import com.thundersharp.admin.core.AdminHelpers;
 import com.thundersharp.admin.core.Model.SliderModel;
 import com.thundersharp.admin.core.utils.CONSTANTS;
+import com.thundersharp.admin.ui.carousel.CarouselActivity;
+import com.thundersharp.admin.ui.edits.EditItemActivity;
 import com.thundersharp.admin.ui.gallary.UrlTransfer;
 
 import java.util.List;
@@ -48,7 +51,9 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.ViewHolder
 
         Glide.with(context).load(sliderModel.URL).into(holder.imageview);
 
-        holder.delete_img.setOnClickListener(view->{
+        holder.edit_slider_detail.setOnClickListener(view->{
+            context.startActivity(new Intent(context, CarouselActivity.class).putExtra("data",sliderModel).putExtra("pos",position));
+            /*
             FirebaseStorage
                     .getInstance()
                     .getReference("SliderImages/"+sliderModel.PAGE+".jpg")
@@ -69,7 +74,32 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.ViewHolder
 
                         }else Toast.makeText(context, "Storage ERROR : "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                     });
+             */
         });
+        holder.delete_img.setOnClickListener(view->{
+            FirebaseStorage
+                    .getInstance()
+                    .getReference("SliderImages/"+sliderModel.ID+".jpg")
+                    .delete()
+                    .addOnCompleteListener(task -> {
+                if (task.isSuccessful()){
+                    FirebaseDatabase
+                            .getInstance()
+                            .getReference(CONSTANTS.DATABASE_TOP_CAROUSEL)
+                            .child(String.valueOf(sliderModel.ID))
+                            .removeValue()
+                            .addOnCompleteListener(database_task -> {
+                                if (task.isSuccessful()){
+                                    url.remove(position);
+                                    notifyDataSetChanged();
+                                    Toast.makeText(context, "Deleted!", Toast.LENGTH_SHORT).show();
+                                }else Toast.makeText(context, "DATABASE ERROR : "+database_task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            });
+
+                }else Toast.makeText(context, "Storage ERROR : "+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+            });
+        });
+
 
     }
 
@@ -80,13 +110,13 @@ public class SliderAdapter extends RecyclerView.Adapter<SliderAdapter.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView imageview, delete_img;
+        ImageView imageview, edit_slider_detail, delete_img;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             imageview = itemView.findViewById(R.id.imageview);
+            edit_slider_detail = itemView.findViewById(R.id.edit_slider_detail);
             delete_img = itemView.findViewById(R.id.delete_img);
-
         }
     }
 }

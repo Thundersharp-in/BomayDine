@@ -115,7 +115,8 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
                 for (Object items : itemObjectlist){
                     if (((FoodItemAdapter)items).getNAME().toLowerCase().contains(filterText)
                             ||((FoodItemAdapter)items).getCAT_NAME_ID().toLowerCase().contains(filterText)
-                            ||((FoodItemAdapter)items).getDESC().toLowerCase().contains(filterText)){
+                            ||((FoodItemAdapter)items).getDESC().toLowerCase().contains(filterText)
+                            ||String.valueOf(((FoodItemAdapter)items).getFOOD_TYPE()).toLowerCase().contains(filterText)){
                         filterItemList.add(items);
                     }
                 }

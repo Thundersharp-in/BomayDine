@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ public class Profile extends Fragment {
     private CoordinatorLayout containermain;
     private TextView switchbtn,logout,open;
     private BottomSheetDialog bottomSheetDialogloc;
+    LinearLayout bookmarks;
 
     private TextView profile_name,profile_email,updatedata;
     private CircleImageView profilepic;
@@ -59,7 +61,8 @@ public class Profile extends Fragment {
             AdminModule.signOutAndRestartApp(getActivity());
             getActivity().finish();
         });
-
+        bookmarks =  view.findViewById(R.id.bookmarks);
+        bookmarks.setOnClickListener(v -> {});
         return view;
     }
 

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
@@ -37,6 +38,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.glide.slider.library.SliderLayout;
@@ -68,6 +70,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.PolyUtil;
+import com.thundersharp.admin.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllAddressHolderAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapter;
@@ -92,6 +95,7 @@ import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 import com.thundersharp.bombaydine.user.core.location.DistanceFromCoordinates;
 import com.thundersharp.bombaydine.user.core.utils.LatLongConverter;
 import com.thundersharp.bombaydine.user.core.utils.Resturant;
+import com.thundersharp.bombaydine.user.ui.account.UpdateProfileActivity;
 import com.thundersharp.bombaydine.user.ui.dailyfood.DailyfoodActivity;
 import com.thundersharp.bombaydine.user.ui.location.HomeLocationChooser;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
@@ -180,6 +184,7 @@ public class HomeFragment extends Fragment implements
     private AppCompatButton pay;
     private EditText search_home;
     private RelativeLayout containermain;
+    private SharedPreferences sharedPreferences;
 
     private static List<Object> foodItemAdapterListStatic = new ArrayList<>();
 
@@ -236,6 +241,7 @@ public class HomeFragment extends Fragment implements
 
         refresh(view);
 
+
         swipe_refresh.setOnRefreshListener(() -> {
             refresh(view);
             swipe_refresh.setRefreshing(false);
@@ -249,6 +255,8 @@ public class HomeFragment extends Fragment implements
         sharedPrefHelper = new SharedPrefHelper(getContext(), this);
 
         homeDataProvider = new HomeDataProvider(getActivity(), this, this, this, this);
+
+        sharedPreferences = getActivity().getSharedPreferences(CONSTANTS.PROFILE_NODE_PROFILEPICURI, Context.MODE_PRIVATE);
 
         bottomnoti.setVisibility(View.INVISIBLE);
         isVisible = false;
@@ -289,13 +297,21 @@ public class HomeFragment extends Fragment implements
                 showcart(view);
         });
 
+        if (FirebaseAuth.getInstance().getCurrentUser() != null && sharedPreferences!=null) {
+            String profile_url = sharedPreferences.getString(CONSTANTS.DATABASE_NODE_PROFILEPICURI, null);
+            if (profile_url != null){
+                Glide.with(getActivity()).load(profile_url).into(profile);
+            }else Glide.with(getActivity()).load(R.mipmap.ic_launcher_round).into(profile);
+
+        }else Glide.with(getActivity()).load(R.mipmap.ic_launcher_round).into(profile);
+
         breakfast.setOnClickListener(view123 -> DailyfoodActivity.getInstance(getActivity(),0));
 
         lunch.setOnClickListener(view1 -> DailyfoodActivity.getInstance(getActivity(),1));
 
         dinner.setOnClickListener(view1r ->  DailyfoodActivity.getInstance(getActivity(),2));
 
-        topsellingallv.setOnClickListener(view12 -> startActivity(new Intent(getActivity(), TopSellingAll.class)));
+        topsellingallv.setOnClickListener(view12 -> startActivity(new Intent(getActivity(), TopSellingAll.class)));   ///TODO checkout with model
 
         allitemsview.setOnClickListener(view13 -> startActivity(new Intent(getActivity(), AllItemsActivity.class)));
 
@@ -348,7 +364,7 @@ public class HomeFragment extends Fragment implements
             });
 */
 
-/*
+            /*
             editText.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -365,7 +381,6 @@ public class HomeFragment extends Fragment implements
                 }
             });
 */
-
             /*mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(getContext());
             recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
             mAutoCompleteAdapter.setClickListener(this);
@@ -376,23 +391,18 @@ public class HomeFragment extends Fragment implements
             bottomSheetDialogloc.show();
         });
 
-        profile.setOnClickListener(viewclick -> {
-            navController.navigate(R.id.profile);
-        });
+        profile.setOnClickListener(viewclick -> navController.navigate(R.id.profile));
 
-        recentorders.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    startActivity(new Intent(getActivity(), RecentOrders.class));
-                } else {
-                    Toast.makeText(getContext(), "Kindly login to see your recent orders.", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
-                }
+        recentorders.setOnClickListener(view16 -> {
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                startActivity(new Intent(getActivity(), RecentOrders.class));
+            } else {
+                Toast.makeText(getContext(), "Kindly login to see your recent orders.", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), LoginActivity.class));
             }
         });
 
-        qrcode.setOnClickListener(view15 -> startActivity(new Intent(getActivity(), QrScanner.class)));
+        qrcode.setOnClickListener(view15 -> startActivity(new Intent(getActivity(), QrScanner.class)));  //TODO Complete Scanner
 
 
         categoryRecycler = view.findViewById(R.id.recentordcategoryholderer);
@@ -410,7 +420,7 @@ public class HomeFragment extends Fragment implements
 
         FirebaseDatabase
                 .getInstance()
-                .getReference("TOP_CAROUSEL")
+                .getReference(CONSTANTS.DATABASE_TOP_CAROUSEL)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -891,6 +901,9 @@ public class HomeFragment extends Fragment implements
 
 
     }
+
+
+    //TODO add for request 101 here to on database
 
     @SuppressLint("MissingPermission")
     @Override
