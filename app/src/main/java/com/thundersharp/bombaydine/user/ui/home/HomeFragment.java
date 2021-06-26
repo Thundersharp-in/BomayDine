@@ -904,8 +904,6 @@ public class HomeFragment extends Fragment implements
     }
 
 
-    //TODO add for request 101 here to on database
-
     @SuppressLint("MissingPermission")
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
