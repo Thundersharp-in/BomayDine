@@ -1,6 +1,8 @@
 package com.thundersharp.bombaydine.user.core.Model;
 
-public class OfferModel {
+import java.io.Serializable;
+
+public class OfferModel implements Serializable {
 
     public OfferModel(){}
 

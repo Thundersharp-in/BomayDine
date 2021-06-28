@@ -42,10 +42,13 @@ import com.thundersharp.bombaydine.user.core.Data.HomeDataContract;
 import com.thundersharp.bombaydine.user.core.Data.HomeDataProvider;
 import com.thundersharp.bombaydine.user.core.Data.OfferListner;
 import com.thundersharp.bombaydine.user.core.Data.OffersProvider;
+import com.thundersharp.bombaydine.user.core.Model.AddressData;
 import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
+import com.thundersharp.bombaydine.user.core.Model.OfferModel;
 import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
 import com.thundersharp.bombaydine.user.core.OfflineDataSync.OfflineDataProvider;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefHelper;
+import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
 import com.thundersharp.bombaydine.user.core.animation.Animator;
 import com.thundersharp.bombaydine.user.core.cart.CartEmptyUpdater;
 import com.thundersharp.bombaydine.user.core.cart.CartHandler;
@@ -57,6 +60,7 @@ import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.user.core.utils.LatLongConverter;
 import com.thundersharp.bombaydine.user.core.utils.Resturant;
 import com.thundersharp.bombaydine.user.core.utils.TimeUtils;
+import com.thundersharp.bombaydine.user.ui.location.AddAddressActivity;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
 import com.thundersharp.bombaydine.user.ui.offers.AllOffersActivity;
 import com.thundersharp.bombaydine.user.ui.orders.ConfirmPhoneName;
@@ -74,7 +78,7 @@ import java.util.Random;
 public class AllItemsActivity extends AppCompatActivity implements
         HomeDataContract.AllItems,
         HomeDataContract.DataLoadFailure,
-        PaymentResultWithDataListener {
+        PaymentResultWithDataListener{
 
     private SharedPrefHelper sharedPrefHelper;
     private RecyclerView recyclermain;
@@ -106,6 +110,11 @@ public class AllItemsActivity extends AppCompatActivity implements
 
     private OrederBasicDetails orederBasicDetails;
     String PromoCode = "";
+    Integer offerType;
+    Double wallet_amount;
+    OfferModel offerModel;
+    TextView delevering_to_address, est_time, name_phone ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -294,9 +303,10 @@ public class AllItemsActivity extends AppCompatActivity implements
         rec1.setAdapter(CartItemAdapter.initializeAdapter(offlineDataProvider.returnDataFromString(offlineDataProvider.fetchitemfromStorage()), this, 2));
 
         TextView shoe_offers = bottomview.findViewById(R.id.shoe_offers);
-        TextView delevering_to_address = bottomview.findViewById(R.id.delevering_to_address);
-        TextView name_phone = bottomview.findViewById(R.id.name_phone);
+        delevering_to_address = bottomview.findViewById(R.id.delevering_to_address);
+        name_phone = bottomview.findViewById(R.id.name_phone);
         TextView changeName = bottomview.findViewById(R.id.change_Name);
+        TextView change_address = bottomview.findViewById(R.id.ch_address);
 
         itemtotal = bottomview.findViewById(R.id.item_tot);
         delehevry = bottomview.findViewById(R.id.del_charges);
@@ -305,10 +315,17 @@ public class AllItemsActivity extends AppCompatActivity implements
         pay = bottomview.findViewById(R.id.paybtn);
         promo = bottomview.findViewById(R.id.promo);
         promo_line = bottomview.findViewById(R.id.promo_line);
+        est_time = bottomview.findViewById(R.id.est_time);
 
         promo_line.setVisibility(View.GONE);
 
         changeName.setOnClickListener(vv -> startActivityForResult(new Intent(AllItemsActivity.this, ConfirmPhoneName.class), 1008));
+
+        change_address.setOnClickListener(change->{
+            startActivityForResult(new Intent(AllItemsActivity.this, AddAddressActivity.class),200);
+            delevering_to_address.setText("Delivering to :" + sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1());
+
+        });
 
         if (sharedPrefHelper != null) {
             if (sharedPrefHelper.getNamePhoneData().getName().isEmpty() || sharedPrefHelper.getNamePhoneData().getPhone().isEmpty()) {
@@ -355,6 +372,10 @@ public class AllItemsActivity extends AppCompatActivity implements
                                 .append(", ");
                     }
                 }
+                String name_no = "";//FirebaseAuth.getInstance().getCurrentUser().getDisplayName()+"+91 XXXXXXXXXX"
+                if (name_phone.getText().toString().isEmpty()){
+                    name_no = "";//FirebaseAuth.getInstance().getCurrentUser().getDisplayName()+"+91 XXXXXXXXXX";
+                }else name_no = name_phone.getText().toString();
                 orederBasicDetails = new OrederBasicDetails(
                         sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1(),
                         sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG(),
@@ -362,7 +383,7 @@ public class AllItemsActivity extends AppCompatActivity implements
                         stringBuilder.toString(),
                         delehevry.getText().toString().replace("\u20B9", ""),
                         grandtot.getText().toString().replace("\u20B9", ""),
-                        "",
+                        name_no,
                         String.valueOf(System.currentTimeMillis()),
                         "");
 
@@ -428,19 +449,62 @@ public class AllItemsActivity extends AppCompatActivity implements
                     deleveryCharges = Resturant.maxDeliveryCharges;
                 }
 
+                est_time.setText("Delivery in : "+(int)Math.round(Resturant.averagePreperationTime+60*(DistanceFromCoordinates.getInstance().convertLatLongToDistance(Resturant.resturantLatLong, LatLongConverter.initialize().getlatlang(sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG())))/Resturant.averageSpaeed)+" minute");
 
                 itemtotal.setText("\u20B9 " + sum);
                 delehevry.setText("\u20B9 " + Math.round(deleveryCharges));
                 promo.setText("Promo - (" + code + ")");
-                Double amt ;
-                if (promo_line.getVisibility()==View.VISIBLE){
-                    if (((sum*promo_percent)/100) > upto){
-                        if (sum>upto) amt=upto; else amt = sum;
-                    }else amt = (sum*promo_percent)/100;
-                    promoamt.setText("-\u20B9 "+ amt);
-                    grandtot.setText("" + (sum + Math.round(deleveryCharges)-amt));
-                    pay.setText("PAY \u20B9" + (sum + Math.round(deleveryCharges)-amt));
+
+                if (offerModel!= null){
+                    if (sum >= offerModel.getMINCART()){
+                        if (offerType == 2){
+                            Double amt ;
+                            if (((sum*promo_percent)/100) > upto){
+                                if (sum>upto){
+                                    amt=upto;
+                                } else{
+                                    amt = sum;
+                                }
+                            }else amt = (sum*promo_percent)/100;
+                            promo.setText("Promo - (" + offerModel.getCODE() + ")");
+                            promoamt.setText("-\u20B9 "+ amt);
+                            grandtot.setText(""+(sum+Math.round(deleveryCharges)-Math.round(amt)));
+                            pay.setText("PAY \u20B9" +grandtot.getText().toString());
+                            promo_line.setVisibility(View.VISIBLE);
+                        }else {
+                            Double amt ;
+                            if (((sum*promo_percent)/100) > upto){
+                                if (sum>upto){
+                                    amt=upto;
+                                } else{
+                                    amt = sum;
+                                }
+                            }else amt = (sum*promo_percent)/100;
+                            wallet_amount = amt;
+                            promo_line.setVisibility(View.GONE);
+                            promoamt.setText("-\u20B9 "+ 0);
+                            grandtot.setText("" + (sum + Math.round(deleveryCharges)));
+                            pay.setText("PAY \u20B9" + (sum + Math.round(deleveryCharges)));
+                        }
+                    }else {
+                        offerModel = null;
+                        promo_line.setVisibility(View.GONE);
+                    }
+
+                    /*
+                     Double amt ;
+
+                        if (((sum*promo_percent)/100) > upto){
+                            if (sum>upto) amt=upto; else amt = sum;
+                        }else amt = (sum*promo_percent)/100;
+                        promoamt.setText("-\u20B9 "+ amt);
+                        grandtot.setText("" + (sum + Math.round(deleveryCharges)-amt));
+                        pay.setText("PAY \u20B9" + (sum + Math.round(deleveryCharges)-amt));
+                     */
+
+
                 }else {
+                    promo_line.setVisibility(View.GONE);
                     promoamt.setText("-\u20B9 "+ 0);
                     grandtot.setText("" + (sum + Math.round(deleveryCharges)));
                     pay.setText("PAY \u20B9" + (sum + Math.round(deleveryCharges)));
@@ -453,6 +517,7 @@ public class AllItemsActivity extends AppCompatActivity implements
                 grandtot.setText("\u20B9 0");
                 pay.setText("PAY \u20B9 0");
                 promoamt.setText("-\u20B9 "+ 0);
+                promo_line.setVisibility(View.GONE);
             }
         }
 
@@ -463,36 +528,132 @@ public class AllItemsActivity extends AppCompatActivity implements
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 001) {
-            promo_line.setVisibility(View.VISIBLE);
-            String codeAmount = data.getStringExtra("code_name");
-            code = codeAmount.substring(0, codeAmount.indexOf("#"));
+            offerModel = (OfferModel) data.getSerializableExtra("code_name");
+            if (offerModel != null){
+                promo_line.setVisibility(View.VISIBLE);
+
+                //String codeAmount = data.getStringExtra("code_name");
+                code = offerModel.getCODE();
+                Double total= 0.0;
+                try {
+                    promo_percent = Double.parseDouble(offerModel.getPERCENT().toString());
+                    upto = Double.parseDouble(offerModel.getUPTO().toString());
+                    total = Double.parseDouble(itemtotal.getText().toString().replace("\u20B9 ",""));
+                }catch (NumberFormatException e){
+                    Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+
+                updateOfferData(offerModel,total);
+
+            }
+
+        }else if (resultCode == 200){
+            delevering_to_address.setText("Delivering to :" + data.getData());
+
+            double deleveryCharges =
+                    (DistanceFromCoordinates
+                            .getInstance()
+                            .convertLatLongToDistance(Resturant.resturantLatLong,
+                                    LatLongConverter
+                                            .initialize()
+                                            .getlatlang(sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG()))) *
+                            Resturant.deliveryChargesPerKilometer;
+
+            if (deleveryCharges > Resturant.maxDeliveryCharges) {
+                deleveryCharges = Resturant.maxDeliveryCharges;
+            }
+            delehevry.setText("\u20B9 " + Math.round(deleveryCharges));
+
+            est_time.setText("Delivery in : "+(int)Math.round(Resturant.averagePreperationTime+60*(DistanceFromCoordinates.getInstance().convertLatLongToDistance(Resturant.resturantLatLong, LatLongConverter.initialize().getlatlang(sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG())))/Resturant.averageSpaeed)+" minute");
+
             Double total= 0.0;
             try {
-                promo_percent = Double.parseDouble(codeAmount.substring(codeAmount.indexOf("#") + 1, codeAmount.indexOf("$")));
-                upto = Double.parseDouble(codeAmount.substring(codeAmount.indexOf("$") + 1));
                 total = Double.parseDouble(itemtotal.getText().toString().replace("\u20B9 ",""));
             }catch (NumberFormatException e){
                 Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
-            Double amt ;
-            promo.setText("Promo - (" + code + ")");
-            if (((total*promo_percent)/100) > upto){
-                if (total>upto) amt=upto; else amt = total;
-            }else amt = (total*promo_percent)/100;
 
-            promoamt.setText("-\u20B9 "+ amt);
-            grandtot.setText(""+(total+Double.parseDouble(delehevry.getText().toString().replace("\u20B9 ",""))-amt));
-            pay.setText(grandtot.getText().toString());
+            updateOfferData(offerModel,total);
+            //grandtot.setText("" + (total + Math.round(deleveryCharges)));
+            //pay.setText("PAY \u20B9" + (total + Math.round(deleveryCharges)));
 
-        }else{
-            Double total = Double.parseDouble(itemtotal.getText().toString().replace("\u20B9 ",""));
-            code = null; promo_percent = 0.0; upto = 0.0;
-            grandtot.setText(""+(total+Double.parseDouble(delehevry.getText().toString().replace("\u20B9 ",""))));
-            pay.setText(grandtot.getText().toString());
-            promo_line.setVisibility(View.GONE);
-            Toast.makeText(this, "Code Not found", Toast.LENGTH_SHORT).show();
+        }else if (resultCode == 1008){
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                if (data.getData()!=null){
+                    name_phone.setText(String.valueOf(data.getData()));
+                }else Toast.makeText(this, "Data fetch failure!", Toast.LENGTH_SHORT).show();//else name_phone.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName()+"+91 XXXXXXXXXX");
+            }else Toast.makeText(this, "Login First", Toast.LENGTH_SHORT).show();
+
+
+            // offerModel = null;
+
+           // Double total = Double.parseDouble(itemtotal.getText().toString().replace("\u20B9 ",""));
+           // updateOfferData(offerModel,total);
+            //Toast.makeText(this, "Code Not found", Toast.LENGTH_SHORT).show();
         }
 
+    }
+
+    private void updateOfferData(OfferModel offerModel, Double total) {
+        if (offerModel!= null){
+            if (total >= offerModel.getMINCART()){
+                promo.setText("Promo - (" + offerModel.getCODE() + ")");
+                offerType = offerModel.getTYPE();
+                /*
+                switch (offerModel.getTYPE()){
+                    case 0:
+                        Toast.makeText(this, "Hurrey ! after order placed coins will be transfered to your wallet", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 1:
+                        Toast.makeText(this, "Hurrey ! after order payment you can receive cashback ", Toast.LENGTH_SHORT).show();
+                        break;
+                    case 2:
+                        Toast.makeText(this, "Hurrey ! You received instant discount", Toast.LENGTH_SHORT).show();
+                        break;
+                }
+                 */
+                if (offerType == 2){
+                    promo_line.setVisibility(View.VISIBLE);
+                    Double amt ;
+                    if (((total*promo_percent)/100) > upto){
+                        if (total>upto){
+                            amt=upto;
+                        } else{
+                            amt = total;
+                        }
+                    }else amt = (total*promo_percent)/100;
+                    promoamt.setText("-\u20B9 "+ amt);
+                    grandtot.setText(""+(total+Double.parseDouble(delehevry.getText().toString().replace("\u20B9 ",""))-amt));
+                    pay.setText("PAY \u20B9" +grandtot.getText().toString());
+
+                }else {
+                    Double amt ;
+                    if (((total*promo_percent)/100) > upto){
+                        if (total>upto){
+                            amt=upto;
+                        } else{
+                            amt = total;
+                        }
+                    }else amt = (total*promo_percent)/100;
+                    wallet_amount = amt;
+                    promo_line.setVisibility(View.GONE);
+                    Toast.makeText(this, "wallet "+wallet_amount, Toast.LENGTH_SHORT).show();
+                    //TODO wallet and cashback data
+                }
+
+                Toast.makeText(this, "Code Applied!", Toast.LENGTH_SHORT).show();
+            }else {
+                promo_line.setVisibility(View.GONE);
+                Toast.makeText(this, "Code can't be applied add more items to avail offer", Toast.LENGTH_SHORT).show();
+            }
+
+        }else {
+            //code = null; promo_percent = 0.0; upto = 0.0;
+            //grandtot.setText(""+(total+Double.parseDouble(delehevry.getText().toString().replace("\u20B9 ",""))));
+            //pay.setText("PAY \u20B9" +grandtot.getText().toString());
+            //promo_line.setVisibility(View.GONE);
+
+        }
     }
 
     private void refreshAdapter() {

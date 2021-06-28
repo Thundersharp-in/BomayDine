@@ -2,6 +2,7 @@ package com.thundersharp.bombaydine.user.core.Adapters;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,18 +23,21 @@ import com.thundersharp.bombaydine.user.core.address.SharedPrefHelper;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
 import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.user.ui.home.HomeFragment;
+import com.thundersharp.bombaydine.user.ui.location.AddAddressActivity;
 import com.thundersharp.bombaydine.user.ui.location.AddressEdit;
 
 import java.util.List;
 
-public class AddressHolder extends RecyclerView.Adapter<AddressHolder.ViewHolder> {
+public class AddressHolder extends RecyclerView.Adapter<AddressHolder.ViewHolder> implements SharedPrefUpdater.OnSharedprefUpdated {
 
     private Context context;
     private List<AddressData> addressData;
+    private SharedPrefHelper sharedPrefHelper;
 
     public AddressHolder(Context context, List<AddressData> addressData) {
         this.context = context;
         this.addressData = addressData;
+        sharedPrefHelper = new SharedPrefHelper(context, this);
     }
 
     @NonNull
@@ -73,8 +77,17 @@ public class AddressHolder extends RecyclerView.Adapter<AddressHolder.ViewHolder
 
         @Override
         public void onClick(View view) {
-
+            sharedPrefHelper.SaveDataToSharedPref(addressData.get(getAdapterPosition()));
+            ((AddAddressActivity)context).setResult(200,((AddAddressActivity) context).getIntent().setData(Uri.parse(addressData.get(getAdapterPosition()).getADDRESS_LINE1())));
+            ((AddAddressActivity)context).finish();
         }
+    }
+
+    @Override
+    public void onSharedPrefUpdate(AddressData addressData) {
+        //setResult(1356,getIntent().putExtra("data",uri));
+       // HomeFragment.bottomSheetDialog.cancel();
+        //HomeFragment.textcurrloc.setText(addressData.getADDRESS_NICKNAME()+": "+addressData.getADDRESS_LINE1());
     }
 }
 

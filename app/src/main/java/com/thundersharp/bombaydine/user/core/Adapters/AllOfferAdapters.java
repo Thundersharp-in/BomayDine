@@ -88,10 +88,10 @@ public class AllOfferAdapters extends RecyclerView.Adapter<AllOfferAdapters.View
                 ShowOfferCart(offerModel);
             });
             holder.offer_apply.setOnClickListener(view ->{
-                offerCode.getOfferCode(offerModel.getCODE()+"#"+offerModel.getPERCENT()+"$"+offerModel.getUPTO());
+                offerCode.getOfferCode(offerModel);
             });
             holder.offer_desc.setText(offerModel.getDESC());
-            holder.offer_text_amt.setText("Get instant discount of "+offerModel.getPERCENT() +"% Off upto Rs. "+offerModel.getUPTO()+" on your delisious orders."+ context.getString(com.thundersharp.admin.R.string.offer_view_detail));
+            holder.offer_text_amt.setText("Get "+offerModel.getPERCENT() +"% Off on minimum expenditure of Rs. "+offerModel.getMINCART()+" of upto Rs. "+offerModel.getUPTO()+" on your delisious orders."+ context.getString(com.thundersharp.admin.R.string.offer_view_detail));
             holder.offer_code.setText(offerModel.getCODE());
 
 

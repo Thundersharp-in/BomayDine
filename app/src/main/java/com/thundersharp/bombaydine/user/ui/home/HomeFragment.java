@@ -318,78 +318,7 @@ public class HomeFragment extends Fragment implements
         allcategory.setOnClickListener(view14 -> startActivity(new Intent(getActivity(), AllCategoryActivity.class)));
 
 
-        current_loc.setOnClickListener(viewlocation -> {
-
-            bottomSheetDialogloc = new BottomSheetDialog(getContext(), R.style.BottomSheetDialogTheme);
-            View bottomview = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout, view.findViewById(R.id.botomcontainer));
-            addressHelper.loaduseraddress();
-            //recyclerView = bottomview.findViewById(R.id.places_recycler_view);
-            shimmerFrameLayout = bottomview.findViewById(R.id.shimmerlayout);
-            recyclerView = bottomview.findViewById(R.id.addressholder);
-            TextView currentloc = bottomview.findViewById(R.id.current_loc);
-            LinearLayout linearLayout = bottomview.findViewById(R.id.searchedit);
-            linearLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivityForResult(new Intent(getActivity(), HomeLocationChooser.class), 101);
-                }
-            });
-            CordinatesInteractor cordinatesInteractor = new CordinatesInteractor(HomeFragment.this);
-
-            currentloc.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    cordinatesInteractor.fetchAllCoordinates();
-                }
-            });
-
-/*
-            editText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().length() == 6){
-                        pinCodeInteractor.getdetailsfromPincode(charSequence.toString());
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                }
-            });
-*/
-
-            /*
-            editText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    // Set the fields to specify which types of place data to
-                    // return after the user has made a selection.
-                    List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
-
-                    // Start the autocomplete intent.
-                    Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
-                            .build(getActivity());
-                    startActivityForResult(intent, 1);
-
-                }
-            });
-*/
-            /*mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(getContext());
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            mAutoCompleteAdapter.setClickListener(this);
-            recyclerView.setAdapter(mAutoCompleteAdapter);
-            mAutoCompleteAdapter.notifyDataSetChanged();*/
-
-            bottomSheetDialogloc.setContentView(bottomview);
-            bottomSheetDialogloc.show();
-        });
+        current_loc.setOnClickListener(viewlocation -> currentLocation(view));
 
         profile.setOnClickListener(viewclick -> navController.navigate(R.id.profile));
 
@@ -547,6 +476,78 @@ public class HomeFragment extends Fragment implements
 
     }
 
+    private void currentLocation(View view) {
+
+        bottomSheetDialogloc = new BottomSheetDialog(getContext(), R.style.BottomSheetDialogTheme);
+        View bottomview = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout, view.findViewById(R.id.botomcontainer));
+        addressHelper.loaduseraddress();
+        //recyclerView = bottomview.findViewById(R.id.places_recycler_view);
+        shimmerFrameLayout = bottomview.findViewById(R.id.shimmerlayout);
+        recyclerView = bottomview.findViewById(R.id.addressholder);
+        TextView currentloc = bottomview.findViewById(R.id.current_loc);
+        LinearLayout linearLayout = bottomview.findViewById(R.id.searchedit);
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(getActivity(), HomeLocationChooser.class), 101);
+            }
+        });
+        CordinatesInteractor cordinatesInteractor = new CordinatesInteractor(HomeFragment.this);
+
+        currentloc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cordinatesInteractor.fetchAllCoordinates();
+            }
+        });
+
+            /*
+            editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (charSequence.toString().length() == 6){
+                        pinCodeInteractor.getdetailsfromPincode(charSequence.toString());
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
+*/
+            /*
+            editText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // Set the fields to specify which types of place data to
+                    // return after the user has made a selection.
+                    List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+
+                    // Start the autocomplete intent.
+                    Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                            .build(getActivity());
+                    startActivityForResult(intent, 1);
+
+                }
+            });
+*/
+            /*mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(getContext());
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            mAutoCompleteAdapter.setClickListener(this);
+            recyclerView.setAdapter(mAutoCompleteAdapter);
+            mAutoCompleteAdapter.notifyDataSetChanged();*/
+
+        bottomSheetDialogloc.setContentView(bottomview);
+        bottomSheetDialogloc.show();
+    }
+
 
     private void showcart(View view) {
 
@@ -559,6 +560,8 @@ public class HomeFragment extends Fragment implements
         TextView shoe_offers = bottomview.findViewById(R.id.shoe_offers);
         TextView delevering_to_address = bottomview.findViewById(R.id.delevering_to_address);
         TextView est_time = bottomview.findViewById(R.id.est_time);
+        TextView ch_address = bottomview.findViewById(R.id.ch_address);
+        TextView change_Name = bottomview.findViewById(R.id.change_Name);
         itemtotal = bottomview.findViewById(R.id.item_tot);
         delehevry = bottomview.findViewById(R.id.del_charges);
         promoamt = bottomview.findViewById(R.id.promotot);
@@ -578,7 +581,8 @@ public class HomeFragment extends Fragment implements
         shoe_offers.setOnClickListener(viewk -> startActivityForResult(new Intent(getActivity(), AllOffersActivity.class),001));
         bottomSheetDialog.show();
 
-
+        ch_address.setOnClickListener(viewadd -> currentLocation(view));
+        change_Name.setOnClickListener(addName ->{ });//TODO NAme and phone no
     }
 
 
@@ -606,7 +610,6 @@ public class HomeFragment extends Fragment implements
 
                 itemtotal.setText("\u20B9 " + sum);
                 delehevry.setText("\u20B9 " + Math.round(deleveryCharges));
-
                 grandtot.setText("" + (sum + Math.round(deleveryCharges))); //TODO SUBTRACT DISCOUNT LATER
                 pay.setText("PAY \u20B9"+(sum+Math.round(deleveryCharges)));
 

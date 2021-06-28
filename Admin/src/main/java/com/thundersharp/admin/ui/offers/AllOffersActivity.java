@@ -5,6 +5,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thundersharp.admin.R;
@@ -44,6 +45,6 @@ public class AllOffersActivity extends AppCompatActivity  implements OfferListne
 
     @Override
     public void OnOfferFetchFailure(Exception e) {
-
+        Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 }

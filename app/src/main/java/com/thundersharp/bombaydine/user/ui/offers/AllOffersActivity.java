@@ -12,6 +12,7 @@ import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllOfferAdapters;
 import com.thundersharp.bombaydine.user.core.Data.OfferListner;
 import com.thundersharp.bombaydine.user.core.Data.OffersProvider;
+import com.thundersharp.bombaydine.user.core.Model.OfferModel;
 import com.thundersharp.bombaydine.user.core.aligantnumber.ElegentNumberHelper;
 import com.thundersharp.bombaydine.user.core.offer.OfferCode;
 
@@ -51,7 +52,7 @@ public class AllOffersActivity extends AppCompatActivity implements OfferListner
     }
 
     @Override
-    public void getOfferCode(String code) {
+    public void getOfferCode(OfferModel code) {
         setResult(001,getIntent().putExtra("code_name",code));
         finish();
     }
