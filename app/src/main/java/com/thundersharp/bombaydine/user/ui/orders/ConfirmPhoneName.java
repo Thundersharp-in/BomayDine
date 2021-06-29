@@ -35,14 +35,14 @@ public class ConfirmPhoneName extends AppCompatActivity {
             if (name.getEditText().getText().toString().isEmpty()){
                 name.getEditText().setError("Required!");
                 name.getEditText().requestFocus();
-            }else if (phone_no.getEditText().getText().toString().isEmpty()){
+            }else if (phone_no.getEditText().getText().toString().isEmpty() || phone_no.getEditText().getText().toString().length()!=10){
                 phone_no.getEditText().setError("Required!");
                 phone_no.getEditText().requestFocus();
             }else if (name.getEditText().getText().toString().contains(",")||phone_no.getEditText().getText().toString().contains(",")){
                 name.getEditText().setError("Check format!");
                 phone_no.getEditText().setError("Check format!");
             }else{
-                setResult(1008,getIntent().setData(Uri.parse(name.getEditText().getText().toString()+", "+phone_no.getEditText().getText().toString())));
+                setResult(1008,getIntent().setData(Uri.parse(name.getEditText().getText().toString()+", +91"+phone_no.getEditText().getText().toString())));
                 finish();
                 //Toast.makeText(this, "Procced to buy", Toast.LENGTH_SHORT).show();
             }

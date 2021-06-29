@@ -62,7 +62,7 @@ public class AddAddressActivity extends AppCompatActivity implements
         SharedPrefUpdater.OnSharedprefUpdated,
         Cordinateslistner.fetchSuccessListener {
 
-    TextView add_new_location, view_detail, location_type, address_full;
+    TextView location_type, address_full;
     RecyclerView rv_location_history;
     ImageView home;
     private List<LatLng> latLngs;
@@ -71,6 +71,7 @@ public class AddAddressActivity extends AppCompatActivity implements
     private static final int REQUEST_CHECK_SETTINGS = 140;
     private SharedPrefHelper sharedPrefHelper;
     private AddressHelper addressHelper;
+    private Boolean edit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,13 +84,18 @@ public class AddAddressActivity extends AppCompatActivity implements
         sharedPrefHelper = new SharedPrefHelper(this, this);
         CordinatesInteractor cordinatesInteractor = new CordinatesInteractor(this);
 
-        addressHelper.loaduseraddress();
-
+        if (getIntent().getBooleanExtra("fetch",false)){
+            edit = true;
+        }else edit = false;
 
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             SharedPrefHelper sharedPrefHelper = new SharedPrefHelper(this);
             ((TextView)findViewById(R.id.location_type)).setText(sharedPrefHelper.getSavedHomeLocationData().getADDRESS_NICKNAME());
             ((TextView)findViewById(R.id.address_full)).setText(sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1()+" "+sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE2());
+            addressHelper.loaduseraddress();
+        }else {
+            Toast.makeText(this, "Login First!", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
         ((AppCompatButton)findViewById(R.id.drop_choose)).setOnClickListener(v -> startActivityForResult(new Intent(this, HomeLocationChooser.class), 101));
@@ -98,17 +104,14 @@ public class AddAddressActivity extends AppCompatActivity implements
 
         ((AppCompatButton)findViewById(R.id.current_location)).setOnClickListener(v -> cordinatesInteractor.fetchAllCoordinates());
 
-        view_detail.setOnClickListener(view->{
-            //TODO DETAIL Activity
-        });
-        add_new_location.setOnClickListener(view->{
-            //TODO detail activity with editable to a filed true
-        });
+        // another_loc.setOnClickListener(view->{
+        //            //startActivity(new Intent(AddAddressActivity.this, LocationDetail.class).putExtra("edit",false));
+        //        });
     }
 
+
     private void loadViews() {
-        add_new_location = findViewById(R.id.add_new_location);
-        view_detail = findViewById(R.id.view_detail);
+       // another_loc = findViewById(R.id.another_loc);
         rv_location_history = findViewById(R.id.rv_location_history);
         location_type = findViewById(R.id.location_type);
         home = findViewById(R.id.home);
@@ -119,7 +122,12 @@ public class AddAddressActivity extends AppCompatActivity implements
     public void onAddressLoaded(List<AddressData> addressData) {
         //shimmerFrameLayout.stopShimmer();
         //shimmerFrameLayout.setVisibility(View.GONE);
-        AddressHolder allAddressHolderAdapter = new AddressHolder(this, addressData);
+        AddressHolder allAddressHolderAdapter;
+        if (edit!= null){
+            allAddressHolderAdapter = new AddressHolder(this, addressData, edit);
+        }else {
+            allAddressHolderAdapter = new AddressHolder(this, addressData, true);
+        }
         rv_location_history.setAdapter(allAddressHolderAdapter);
         rv_location_history.setVisibility(View.VISIBLE);
     }
@@ -140,7 +148,6 @@ public class AddAddressActivity extends AppCompatActivity implements
         Toast.makeText(this, exception.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
-
     @SuppressLint("MissingPermission")
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -153,7 +160,6 @@ public class AddAddressActivity extends AppCompatActivity implements
                         .requestLocationUpdates(locationRequest, new LocationCallback() {
                                     @Override
                                     public void onLocationResult(LocationResult locationResult) {
-                                        // do work here
 
                                         boolean iSoutsidepolyline = PolyUtil.containsLocation(new LatLng(locationResult.getLastLocation().getLatitude(), locationResult.getLastLocation().getLongitude()), latLngs, true);
                                         if (!iSoutsidepolyline) {

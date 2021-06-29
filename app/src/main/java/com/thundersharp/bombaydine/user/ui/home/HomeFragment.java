@@ -104,6 +104,7 @@ import com.thundersharp.bombaydine.user.ui.menu.AllItemsActivity;
 import com.thundersharp.bombaydine.user.ui.menu.TopSellingAll;
 import com.thundersharp.bombaydine.user.ui.offers.AllOffersActivity;
 import com.thundersharp.bombaydine.user.ui.offers.CustomOfferActivity;
+import com.thundersharp.bombaydine.user.ui.orders.ConfirmPhoneName;
 import com.thundersharp.bombaydine.user.ui.orders.RecentOrders;
 import com.thundersharp.bombaydine.user.ui.scanner.QrScanner;
 
@@ -163,7 +164,7 @@ public class HomeFragment extends Fragment implements
     private ShimmerFrameLayout shimmerFrameLayout,shimmerplace_allitem;
     private RecyclerView addressholder;
     private Address address;
-    private TextView itemtotal,grandtot,promoamt,delehevry;
+    private TextView itemtotal,grandtot,promoamt,delehevry, name_phone;
 
     /**
      * Address Listeners and helpers
@@ -567,6 +568,7 @@ public class HomeFragment extends Fragment implements
         promoamt = bottomview.findViewById(R.id.promotot);
         grandtot = bottomview.findViewById(R.id.grand_tot);
         pay = bottomview.findViewById(R.id.paybtn);
+        name_phone = bottomview.findViewById(R.id.name_phone);
         delevering_to_address.setText("Delivering to :"+sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1());
 
         long distance = Math.round(DistanceFromCoordinates.getInstance().convertLatLongToDistance(Resturant.resturantLatLong,LatLongConverter.initialize().getlatlang(sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG())));
@@ -582,7 +584,7 @@ public class HomeFragment extends Fragment implements
         bottomSheetDialog.show();
 
         ch_address.setOnClickListener(viewadd -> currentLocation(view));
-        change_Name.setOnClickListener(addName ->{ });//TODO NAme and phone no
+        change_Name.setOnClickListener(addName ->startActivityForResult(new Intent(getActivity(), ConfirmPhoneName.class), 1008));
     }
 
 
@@ -959,6 +961,13 @@ public class HomeFragment extends Fragment implements
                 Toast.makeText(getContext(), "Location is required to get current location", Toast.LENGTH_SHORT).show();
 
             }
+        } else if (resultCode == 1008) {
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                if (data.getData() != null) {
+                    name_phone.setText(String.valueOf(data.getData()));
+                } else
+                    Toast.makeText(getActivity(), "Data fetch failure!", Toast.LENGTH_SHORT).show();//else name_phone.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName()+"+91 XXXXXXXXXX");
+            } else Toast.makeText(getActivity(), "Login First", Toast.LENGTH_SHORT).show();
         }
     }
 

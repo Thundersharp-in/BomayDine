@@ -111,7 +111,7 @@ public class AllItemsActivity extends AppCompatActivity implements
     private OrederBasicDetails orederBasicDetails;
     String PromoCode = "";
     Integer offerType;
-    Double wallet_amount;
+    Double wallet_amount, codeAmount;
     OfferModel offerModel;
     TextView delevering_to_address, est_time, name_phone ;
 
@@ -322,14 +322,16 @@ public class AllItemsActivity extends AppCompatActivity implements
         changeName.setOnClickListener(vv -> startActivityForResult(new Intent(AllItemsActivity.this, ConfirmPhoneName.class), 1008));
 
         change_address.setOnClickListener(change->{
-            startActivityForResult(new Intent(AllItemsActivity.this, AddAddressActivity.class),200);
+            Intent intent = new Intent(AllItemsActivity.this, AddAddressActivity.class);
+            intent.putExtra("fetch",true);
+            startActivityForResult(intent,200);
             delevering_to_address.setText("Delivering to :" + sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1());
 
         });
 
         if (sharedPrefHelper != null) {
             if (sharedPrefHelper.getNamePhoneData().getName().isEmpty() || sharedPrefHelper.getNamePhoneData().getPhone().isEmpty()) {
-                if (FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() != null || !FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber().isEmpty()) {
+                if (FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() != null || !FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber().isEmpty() || FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() != null) {
                     name_phone.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + "," + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
                     sharedPrefHelper.saveNamePhoneData(FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
                 } else {
@@ -348,12 +350,6 @@ public class AllItemsActivity extends AppCompatActivity implements
 
         shoe_offers.setOnClickListener(viewk -> startActivityForResult(new Intent(this, AllOffersActivity.class), 001));
 
-
-        if (promo_line.getVisibility()==View.VISIBLE){
-            PromoCode = code+"#"+promoamt.getText().toString().replace("-\u20B9 ","");
-        }else {
-            PromoCode = "";
-        }
         pay.setOnClickListener(view -> {
             if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                 StringBuilder stringBuilder = new StringBuilder();
@@ -372,10 +368,18 @@ public class AllItemsActivity extends AppCompatActivity implements
                                 .append(", ");
                     }
                 }
-                String name_no = "";//FirebaseAuth.getInstance().getCurrentUser().getDisplayName()+"+91 XXXXXXXXXX"
+
+                if (offerModel!=null){
+                    PromoCode = offerModel.getCODE()+"$"+offerModel.getTYPE()+"#"+codeAmount;
+                }else {
+                    PromoCode = "";
+                }
+
+                String name_no = FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + "," + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
                 if (name_phone.getText().toString().isEmpty()){
-                    name_no = "";//FirebaseAuth.getInstance().getCurrentUser().getDisplayName()+"+91 XXXXXXXXXX";
+                    name_no = FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + "," + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
                 }else name_no = name_phone.getText().toString();
+
                 orederBasicDetails = new OrederBasicDetails(
                         sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1(),
                         sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG(),
@@ -467,6 +471,7 @@ public class AllItemsActivity extends AppCompatActivity implements
                                 }
                             }else amt = (sum*promo_percent)/100;
                             promo.setText("Promo - (" + offerModel.getCODE() + ")");
+                            codeAmount = amt;
                             promoamt.setText("-\u20B9 "+ amt);
                             grandtot.setText(""+(sum+Math.round(deleveryCharges)-Math.round(amt)));
                             pay.setText("PAY \u20B9" +grandtot.getText().toString());
@@ -513,6 +518,7 @@ public class AllItemsActivity extends AppCompatActivity implements
             } else {
                 itemtotal.setText("\u20B9 0");
                 delehevry.setText("\u20B9 0");
+                codeAmount = 0.0;
                 promoamt.setText("\u20B9 0");
                 grandtot.setText("\u20B9 0");
                 pay.setText("PAY \u20B9 0");
@@ -623,6 +629,7 @@ public class AllItemsActivity extends AppCompatActivity implements
                         }
                     }else amt = (total*promo_percent)/100;
                     promoamt.setText("-\u20B9 "+ amt);
+                    codeAmount = amt;
                     grandtot.setText(""+(total+Double.parseDouble(delehevry.getText().toString().replace("\u20B9 ",""))-amt));
                     pay.setText("PAY \u20B9" +grandtot.getText().toString());
 
@@ -636,13 +643,17 @@ public class AllItemsActivity extends AppCompatActivity implements
                         }
                     }else amt = (total*promo_percent)/100;
                     wallet_amount = amt;
+                    codeAmount = amt;
                     promo_line.setVisibility(View.GONE);
+
+                    grandtot.setText(""+(total+Double.parseDouble(delehevry.getText().toString().replace("\u20B9 ",""))));
+                    pay.setText("PAY \u20B9" +grandtot.getText().toString());
                     Toast.makeText(this, "wallet "+wallet_amount, Toast.LENGTH_SHORT).show();
-                    //TODO wallet and cashback data
                 }
 
                 Toast.makeText(this, "Code Applied!", Toast.LENGTH_SHORT).show();
             }else {
+                this.offerModel = null;
                 promo_line.setVisibility(View.GONE);
                 Toast.makeText(this, "Code can't be applied add more items to avail offer", Toast.LENGTH_SHORT).show();
             }

@@ -92,6 +92,8 @@
                     android:drawableStart="@drawable/ic_outline_badge_24"
                     android:drawablePadding="10dp"
                     android:inputType="textEmailAddress"
+                    android:textColor="#252525"
+                    android:drawableTint="#6C6C6C"
                     android:maxLines="1"
                     android:singleLine="true"
                     android:textColorHint="#b7b7b7" />
@@ -121,6 +123,8 @@
                     android:inputType="textEmailAddress"
                     android:maxLines="1"
                     android:singleLine="true"
+                    android:textColor="#252525"
+                    android:drawableTint="#6C6C6C"
                     android:textColorHint="#b7b7b7" />
             </LinearLayout>
 
@@ -148,6 +152,8 @@
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true"
+                    android:textColor="#252525"
+                    android:drawableTint="#6C6C6C"
                     android:textColorHint="#b7b7b7" />
 
 
@@ -179,6 +185,8 @@
                     android:inputType="textPassword"
                     android:maxLines="1"
                     android:singleLine="true"
+                    android:textColor="#252525"
+                    android:drawableTint="#6C6C6C"
                     android:textColorHint="#b7b7b7" />
 
 
@@ -247,6 +255,7 @@
                     android:gravity="center"
                     android:text="Have a account ? Login"
                     android:textColor="#252525"
+                    android:drawableTint="#6C6C6C"
                     android:textSize="18sp" />
 
 
