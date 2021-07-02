@@ -33,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.thundersharp.admin.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.TokenVerification;
+import com.thundersharp.bombaydine.user.core.address.SharedPrefHelper;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
 import com.thundersharp.bombaydine.user.core.animation.Animator;
 import com.thundersharp.bombaydine.user.core.login.AccountHelper;
@@ -62,14 +63,11 @@ public class Profile extends Fragment {
     private TextView profile_name,profile_email;
     private CircleImageView profilepic;
     private TextView wallet_balance,orderNo,foodie_level, email_status;
-    SharedPreferences sharedPreferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_profile_main, container, false);
-
-        sharedPreferences = getActivity().getSharedPreferences(CONSTANTS.PROFILE_NODE_PROFILEPICURI, Context.MODE_PRIVATE);
 
         bottomHolderprofile = view.findViewById(R.id.bottomHolderprofile);
         your_orders = view.findViewById(R.id.your_orders);
@@ -95,13 +93,6 @@ public class Profile extends Fragment {
 
             if (!FirebaseAuth.getInstance().getCurrentUser().isEmailVerified()){
                 email_status.setText("Email id is not verified yet to verify navigate to your provided email id or , details in your profile click on Update data above.");
-            }
-
-            if (sharedPreferences!=null){
-                String profile_url = sharedPreferences.getString(CONSTANTS.DATABASE_NODE_PROFILEPICURI, null);
-                if (profile_url != null){
-                    Glide.with(getActivity()).load(profile_url).into(profilepic);
-                }else Glide.with(getActivity()).load(R.mipmap.ic_launcher_round).into(profilepic);
             }
 
             if (FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()!=null){
@@ -195,6 +186,7 @@ public class Profile extends Fragment {
                     .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            new SharedPrefHelper(getActivity()).clearSavedHomeLocationData();
                             Logout.logout();
                             startActivity(new Intent(getActivity(),LoginActivity.class));
                             getActivity().finish();

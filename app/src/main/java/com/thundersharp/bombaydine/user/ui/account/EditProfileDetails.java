@@ -157,38 +157,6 @@ public class EditProfileDetails extends AppCompatActivity {
                        startFlow();
                     }
                 }
-
-                /*
-                if (s_name!=null){
-                    if (s_name.equals(name.getEditText().getText().toString())){
-                        if (profile_uri != null){
-                            StoreOnStorage(profile_uri);
-                        }else {
-                            if (model!=null){
-                                changeNumber(model);
-                            }else {
-                                Toast.makeText(this, "No changes found to update!", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
-                            //startFlow(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
-                        }
-                    }else {
-                        if (profile_uri != null){
-                            StoreOnStorage(profile_uri);
-                        }else {
-                            if (model!=null){
-                                changeNumber(model);
-                            }else {
-                                Toast.makeText(this, "No changes found to update!", Toast.LENGTH_SHORT).show();
-                                finish();
-                            }
-                            //startFlow(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString());
-                        }
-                    }
-                }else Toast.makeText(this, "Close the app . Again open it again for performing desired operation", Toast.LENGTH_SHORT).show();
-
-                 */
-                //sharedPrefHelper.saveNamePhoneData();
             }
         });
 
@@ -221,11 +189,8 @@ public class EditProfileDetails extends AppCompatActivity {
                 .updateChildren(data)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()){
-
-
-                       UserProfileChangeRequest profileChangeRequest = builder.build();
-
-
+                        new SharedPrefHelper(this).saveNamePhoneData(name.getEditText().getText().toString(), model.getNumber());
+                        UserProfileChangeRequest profileChangeRequest = builder.build();
                         UpdateUserProfile(profileChangeRequest);
                     }else {
                         Toast.makeText(EditProfileDetails.this, ""+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
@@ -277,7 +242,9 @@ public class EditProfileDetails extends AppCompatActivity {
             }
         }
         if (requestCode == 300){
-            address.getEditText().setText(String.valueOf(data.getData()));
+            if (sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1() !=null)
+            address.getEditText().setText(sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1());
+            else address.getEditText().setText("");
         }
         if (requestCode == 1009){
             if (data != null) {
@@ -302,32 +269,6 @@ public class EditProfileDetails extends AppCompatActivity {
                             if (task.isSuccessful()) {
                                 data.put("PHONE", model.getNumber());
                                 startFlow();
-                                /*
-                                HashMap<String , Object> data = new HashMap<>();
-                                data.put("PHONE", model.getNumber());
-                                data.put("NAME", name);
-
-                                FirebaseDatabase
-                                        .getInstance()
-                                        .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
-                                        .child(FirebaseAuth.getInstance().getUid())
-                                        .child(CONSTANTS.DATABASE_NODE_PERSONAL_DATA)
-                                        .updateChildren(data)
-                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<Void> task) {
-                                                if (task.isSuccessful()){
-                                                    UserProfileChangeRequest builder= new UserProfileChangeRequest
-                                                            .Builder()
-                                                            .setDisplayName(name)
-                                                            .build();
-                                                    UpdateUserProfile(builder);
-                                                }else {
-
-                                                }
-                                            }
-                                        });
-                                 */
                             } else {
                                 Toast.makeText(EditProfileDetails.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
@@ -344,70 +285,6 @@ public class EditProfileDetails extends AppCompatActivity {
             Toast.makeText(this, "Verification Failed!", Toast.LENGTH_SHORT).show();
         }
 
-        /*
-        FirebaseAuth
-                .getInstance()
-                .signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {//(Activity) context
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = task.getResult().getUser();
-                            //setLoginSucessListner(task,true,true);
-
-                            FirebaseDatabase
-                                    .getInstance()
-                                    .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
-                                    .child(FirebaseAuth.getInstance().getUid())
-                                    .child(CONSTANTS.DATABASE_NODE_PERSONAL_DATA)
-                                    .child("UID")
-                                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            if (snapshot.exists()){
-                                                //setLoginSucessListner(task,true,true);
-                                            }else {
-                                                HashMap<String,Object> data = new HashMap<>();
-                                                data.put("NAME",null);
-                                                data.put("EMAIL",null);
-                                                data.put("PHONE",FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-                                                data.put("PROFILEPICURI",null);
-                                                data.put("CREATEDON",System.currentTimeMillis());
-                                                data.put("UID",FirebaseAuth.getInstance().getUid());
-
-                                                FirebaseDatabase
-                                                        .getInstance()
-                                                        .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
-                                                        .child(FirebaseAuth.getInstance().getUid())
-                                                        .child(CONSTANTS.DATABASE_NODE_PERSONAL_DATA)
-                                                        .setValue(data)
-                                                        .addOnCompleteListener(task1 -> {
-
-                                                            if (task1.isSuccessful()){
-                                                                //setLoginSucessListner(task,true,true);
-                                                            }
-
-                                                        }).addOnFailureListener(e -> {
-                                                    Toast.makeText(AddNumber.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-                                                });
-                                            }
-                                        }
-
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-
-                                        }
-                                    });
-
-                        } else {
-                            // Sign in failed, display a message and update the UI
-                            throwfailure(task.getException(),1);
-
-                        }
-                    }
-                });
-
-         */
     }
 
     private void StoreOnStorage(Uri profile_url) {
@@ -437,11 +314,9 @@ public class EditProfileDetails extends AppCompatActivity {
                                 }else {
                                     if (FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()!=null){
                                         data.put("PROFILEPICURI", FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl());
-                                        //data.put("/"+FirebaseAuth.getInstance().getUid()+"/"+ CONSTANTS.DATABASE_NODE_PERSONAL_DATA+"/PROFILEPICURI",profile_uri);
                                         startFlow();
                                     }else {
                                         data.put("PROFILEPICURI", null);
-                                        //data.put("/"+FirebaseAuth.getInstance().getUid()+"/"+ CONSTANTS.DATABASE_NODE_PERSONAL_DATA+"/PROFILEPICURI",profile_uri);
                                         startFlow();
                                     }
                                 }

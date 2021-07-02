@@ -43,14 +43,14 @@ public class SharedPrefHelper implements SharedPrefUpdater{
     public void updatehomelocationData() {
         if (sharedPreferences != null){
             AddressData addressData = new AddressData();
-            addressData.setADDRESS_LINE1(sharedPreferences.getString("Address","Soldevahanalli"));
+            addressData.setADDRESS_LINE1(sharedPreferences.getString("Address","Choose Location"));//Soldevahanalli
             addressData.setADDRESS_NICKNAME(sharedPreferences.getString("Nickname","Home"));
             addressData.setLAT_LONG(sharedPreferences.getString("lat_long",""));
 
             onSharedprefUpdated.onSharedPrefUpdate(addressData);
         }else {
             AddressData addressData = new AddressData();
-            addressData.setADDRESS_LINE1(sharedPreferences.getString("Address","Soldevahanalli"));
+            addressData.setADDRESS_LINE1(sharedPreferences.getString("Address","Choose Location"));
             addressData.setADDRESS_NICKNAME(sharedPreferences.getString("Nickname","Home"));
             addressData.setLAT_LONG(sharedPreferences.getString("lat_long", Resturant.resturantLatLong.latitude+","+ Resturant.resturantLatLong.longitude));
             onSharedprefUpdated.onSharedPrefUpdate(addressData);
@@ -60,7 +60,7 @@ public class SharedPrefHelper implements SharedPrefUpdater{
     @Override
     public AddressData getSavedHomeLocationData() {
         AddressData addressData = new AddressData();
-        addressData.setADDRESS_LINE1(sharedPreferences.getString("Address","Soldevahanalli"));
+        addressData.setADDRESS_LINE1(sharedPreferences.getString("Address","Choose Location"));
         addressData.setADDRESS_NICKNAME(sharedPreferences.getString("Nickname","Home"));
         addressData.setLAT_LONG(sharedPreferences.getString("lat_long", Resturant.resturantLatLong.latitude+","+ Resturant.resturantLatLong.longitude));
         return addressData;

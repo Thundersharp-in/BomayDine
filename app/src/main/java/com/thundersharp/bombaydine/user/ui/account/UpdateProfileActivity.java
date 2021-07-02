@@ -74,14 +74,6 @@ public class UpdateProfileActivity extends AppCompatActivity {
                 Glide.with(this).load(R.mipmap.ic_launcher_round).into(profile_img);
                 profile_uri = null;
             }
-            /*
-             if (sharedPreferences!=null){
-                String profile_url = sharedPreferences.getString(CONSTANTS.DATABASE_NODE_PROFILEPICURI, null);
-                if (profile_url != null){
-                    Glide.with(this).load(profile_url).into(profile_img);
-                }else Glide.with(this).load(R.mipmap.ic_launcher_round).into(profile_img);
-            }else Toast.makeText(this, "Profile image not found", Toast.LENGTH_SHORT).show();
-             */
             
             sharedPrefHelper = new SharedPrefHelper(this);
             location_type.setText(sharedPrefHelper.getSavedHomeLocationData().getADDRESS_NICKNAME());
