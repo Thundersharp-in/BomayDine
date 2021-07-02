@@ -91,9 +91,10 @@
             />
 
         <TextView
+            android:id="@+id/desc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Some random description which is mentioned on the profile of the user at the time of account creation or at the time of upadte "
+            android:text="If you want to edit your details or to verify email if not verified yet then jump to the edit details page gateway through the card mentioned just below at right side of this page."
             android:gravity="center"
             android:layout_gravity="center"
             android:layout_marginTop="5dp"
@@ -224,13 +225,15 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:background="@drawable/end_round"
+                android:backgroundTint="#22242c"
                 >
                 <ImageView
+                    android:id="@+id/location_img"
                     android:layout_width="30dp"
                     android:layout_height="30dp"
                     android:layout_gravity="center"
                     android:src="@drawable/ic_outline_home_24"
-                    android:padding="3dp"
+                    android:padding="7dp"
                     android:background="@drawable/ic_baseline_circle_24"
                     android:backgroundTint="#146AFF"
                     app:tint="#C2E2FF"

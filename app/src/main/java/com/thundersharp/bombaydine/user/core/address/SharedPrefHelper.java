@@ -89,4 +89,12 @@ public class SharedPrefHelper implements SharedPrefUpdater{
 
         return namePhone;
     }
+
+    public void clearSavedHomeLocationData() {
+        if (sharedPreferences != null) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+        }
+    }
 }

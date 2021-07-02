@@ -297,14 +297,21 @@ public class HomeFragment extends Fragment implements
             if (bottomnoti.getVisibility() == View.VISIBLE)
                 showcart(view);
         });
-
-        if (FirebaseAuth.getInstance().getCurrentUser() != null && sharedPreferences!=null) {
+        /*
+         if (FirebaseAuth.getInstance().getCurrentUser() != null && sharedPreferences!=null) {
             String profile_url = sharedPreferences.getString(CONSTANTS.DATABASE_NODE_PROFILEPICURI, null);
             if (profile_url != null){
                 Glide.with(getActivity()).load(profile_url).into(profile);
             }else Glide.with(getActivity()).load(R.mipmap.ic_launcher_round).into(profile);
 
         }else Glide.with(getActivity()).load(R.mipmap.ic_launcher_round).into(profile);
+
+         */
+        if (FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()!=null){
+            Glide.with(getActivity()).load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString()).into(profile);
+        }else {
+            Glide.with(getActivity()).load(R.mipmap.ic_launcher_round).into(profile);
+        }
 
         breakfast.setOnClickListener(view123 -> DailyfoodActivity.getInstance(getActivity(),0));
 

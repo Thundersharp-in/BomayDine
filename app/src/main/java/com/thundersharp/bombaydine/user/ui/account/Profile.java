@@ -104,6 +104,12 @@ public class Profile extends Fragment {
                 }else Glide.with(getActivity()).load(R.mipmap.ic_launcher_round).into(profilepic);
             }
 
+            if (FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()!=null){
+                Glide.with(getActivity()).load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString()).into(profilepic);
+            }else {
+                Glide.with(getActivity()).load(R.mipmap.ic_launcher_round).into(profilepic);
+            }
+
             fetchOrderNo();
 
             ((TextView)view.findViewById(R.id.updatedata)).setOnClickListener(b->{
@@ -166,6 +172,8 @@ public class Profile extends Fragment {
         ((MaterialCardView)view.findViewById(R.id.refunds)).setOnClickListener(V ->{
             startActivity(new Intent(getActivity(), Refunds.class));
         });
+
+        wallet_balance.setOnClickListener(View-> Toast.makeText(getActivity(), "Comming soon", Toast.LENGTH_SHORT).show());
 
         helpNfeedback.setOnClickListener(view1 -> {
             ChatStarter chatStarter = ChatStarter.initializeChat(getActivity());

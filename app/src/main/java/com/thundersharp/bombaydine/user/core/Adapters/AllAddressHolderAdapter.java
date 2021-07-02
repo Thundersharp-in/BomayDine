@@ -52,6 +52,14 @@ public class AllAddressHolderAdapter extends RecyclerView.Adapter<AllAddressHold
         holder.tittle.setText(addressDatainst.getADDRESS_NICKNAME());
         holder.recentorders.setText(addressDatainst.getADDRESS_LINE1());//+","+addressDatainst.getADDRESS_LINE2()+","+addressDatainst.getCITY()+",Pin : "+addressDatainst.getZIP()
 
+        if (addressDatainst.getADDRESS_NICKNAME().equalsIgnoreCase("Home")){
+            holder.homeicon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_outline_home_24));
+        }else if (addressDatainst.getADDRESS_NICKNAME().equalsIgnoreCase("Office")) {
+            holder.homeicon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_outline_home_work_24));
+        }else if (addressDatainst.getADDRESS_NICKNAME().equalsIgnoreCase("Others")){
+            holder.homeicon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_outline_share_location_24));
+        }
+
         holder.endicon.setOnClickListener(view -> {
             PopupMenu popup = new PopupMenu(context, holder.endicon);
             //inflating menu from xml resource
