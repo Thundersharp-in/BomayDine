@@ -174,9 +174,6 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
                     try {
                         address = getLocationfromLat(latLng.latitude, latLng.longitude);
                         addressline1.setText(address.getAddressLine(0));
-                        addressline2.setText(address.getAddressLine(1));
-                        city.setText(address.getLocality());
-                        zip.setText(address.getPostalCode());
 
 
                     } catch (IOException e) {
@@ -250,6 +247,10 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
         String postalCode = addresses.get(0).getPostalCode();
         String knownName = addresses.get(0).getFeatureName();
 
+        addressline2.setText("State: $"+state+"# Country: %"+country+"* Address: @"+address+"^ KnownName: !"+knownName);
+        this.city.setText(city);
+        zip.setText(postalCode);
+
         return addresses.get(0);
     }
 
@@ -313,6 +314,7 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onAddressUpdate(Task<Void> task, boolean isTaskSucessful) {
         Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     @Override

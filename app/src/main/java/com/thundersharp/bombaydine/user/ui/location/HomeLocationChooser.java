@@ -47,10 +47,13 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.ChipGroup;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.maps.android.PolyUtil;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Model.AddressData;
@@ -60,6 +63,7 @@ import com.thundersharp.bombaydine.user.core.address.CordinatesInteractor;
 import com.thundersharp.bombaydine.user.core.address.Cordinateslistner;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefHelper;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
+import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.user.core.utils.Resturant;
 
 import java.io.IOException;
@@ -84,7 +88,9 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
     private LocationRequest locationRequest;
 
     private AppCompatButton savencontinue;
-    private EditText addressline1,addressline2,city,zip;
+    private EditText addressline1;
+    private String addressline2,city;
+    private Integer zip;
     private ChipGroup worktype;
 
     List<LatLng> latLngs = new ArrayList<>();
@@ -120,9 +126,9 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
         relativeLayout = findViewById(R.id.mapholder);
         savencontinue = findViewById(R.id.savenproceed);
         addressline1 = findViewById(R.id.addressline1);
-        addressline2 = findViewById(R.id.addressline2);
-        city = findViewById(R.id.city);
-        zip = findViewById(R.id.pin);
+        //addressline2 = findViewById(R.id.addressline2);
+        //city = findViewById(R.id.city);
+       // zip = findViewById(R.id.pin);
         worktype = findViewById(R.id.worktype);
         bottomholder = findViewById(R.id.data1);
         worktype.check(R.id.home);
@@ -143,15 +149,38 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
                     } else nickname = "Others";
                     //Toedo {Go with update flow}
                     String lat_long = marker.getPosition().latitude + "," + marker.getPosition().longitude;
+                    if (addressline2.isEmpty()|| addressline2==null){
+                        addressline2="";
+                    }
+                    if (zip==null){
+                        zip=0;
+                    }
+                    if (city.isEmpty()||city == null){
+                        city="";
+                    }
+                    AddressData addressDataf = new AddressData(addressline1.getText().toString(), addressline2, nickname, city, System.currentTimeMillis(), lat_long, zip);
 
-
-                    AddressData addressDataf = new AddressData(addressline1.getText().toString(), "null", nickname, "null", 0, lat_long, 0);
                     sharedPrefHelper.SaveDataToSharedPref(addressDataf);
+                    if (FirebaseAuth.getInstance().getCurrentUser() != null ) {
+                        FirebaseDatabase
+                                .getInstance()
+                                .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
+                                .child(FirebaseAuth.getInstance().getUid())
+                                .child(CONSTANTS.DATABASE_NODE_ADDRESS)
+                                .child(String.valueOf(addressDataf.getID()))
+                                .setValue(addressDataf)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if (task.isSuccessful()) {
+                                            Toast.makeText(HomeLocationChooser.this, "", Toast.LENGTH_SHORT).show();
+                                        } else
+                                            Toast.makeText(HomeLocationChooser.this, "" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                    }
 
                 }
-
-
-
             }
         });
 
@@ -217,10 +246,6 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
                     try {
                         address = getLocationfromLat(latLng.latitude, latLng.longitude);
                         addressline1.setText(address.getAddressLine(0));
-                        //addressline2.setText(address.getAddressLine(1));
-                        //city.setText(address.getLocality());
-                        //zip.setText(address.getPostalCode());
-
 
                     } catch (IOException e) {
                         e.printStackTrace();
@@ -309,6 +334,11 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
         String country = addresses.get(0).getCountryName();
         String postalCode = addresses.get(0).getPostalCode();
         String knownName = addresses.get(0).getFeatureName();
+
+        addressline2 = "State: $"+state+"# Country: %"+country+"* Address: @"+address+"^ KnownName: !"+knownName;
+        this.city = city;
+        zip = Integer.valueOf(postalCode);
+
 
         return addresses.get(0);
     }

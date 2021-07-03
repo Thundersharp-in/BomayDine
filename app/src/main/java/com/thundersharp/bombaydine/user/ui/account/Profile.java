@@ -16,6 +16,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.coordinatorlayout.widget.CoordinatorLayout;
@@ -25,9 +26,14 @@ import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.thundersharp.admin.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.TokenVerification;
+import com.thundersharp.bombaydine.user.core.address.SharedPrefHelper;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
 import com.thundersharp.bombaydine.user.core.animation.Animator;
 import com.thundersharp.bombaydine.user.core.login.AccountHelper;
@@ -57,14 +63,11 @@ public class Profile extends Fragment {
     private TextView profile_name,profile_email;
     private CircleImageView profilepic;
     private TextView wallet_balance,orderNo,foodie_level, email_status;
-    SharedPreferences sharedPreferences;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.activity_profile_main, container, false);
-
-        sharedPreferences = getActivity().getSharedPreferences(CONSTANTS.PROFILE_NODE_PROFILEPICURI, Context.MODE_PRIVATE);
 
         bottomHolderprofile = view.findViewById(R.id.bottomHolderprofile);
         your_orders = view.findViewById(R.id.your_orders);
@@ -81,6 +84,8 @@ public class Profile extends Fragment {
         foodie_level = view.findViewById(R.id.foodie_level);
         email_status = view.findViewById(R.id.email_status);
 
+        orderNo.setText("0");
+
         if (FirebaseAuth.getInstance().getCurrentUser() != null) {
             profile_email.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
 
@@ -90,12 +95,14 @@ public class Profile extends Fragment {
                 email_status.setText("Email id is not verified yet to verify navigate to your provided email id or , details in your profile click on Update data above.");
             }
 
-            if (sharedPreferences!=null){
-                String profile_url = sharedPreferences.getString(CONSTANTS.DATABASE_NODE_PROFILEPICURI, null);
-                if (profile_url != null){
-                    Glide.with(getActivity()).load(profile_url).into(profilepic);
-                }else Glide.with(getActivity()).load(R.mipmap.ic_launcher_round).into(profilepic);
+            if (FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()!=null){
+                Glide.with(getActivity()).load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString()).into(profilepic);
+            }else {
+                Glide.with(getActivity()).load(R.mipmap.ic_launcher_round).into(profilepic);
             }
+
+            fetchOrderNo();
+
             ((TextView)view.findViewById(R.id.updatedata)).setOnClickListener(b->{
                 startActivity(new Intent(getActivity(),UpdateProfileActivity.class));
             });
@@ -137,7 +144,7 @@ public class Profile extends Fragment {
         });
 
         ((LinearLayout)view.findViewById(R.id.addAddress)).setOnClickListener(vir ->{
-            startActivity(new Intent(getActivity(), AddAddressActivity.class));
+            startActivity(new Intent(getActivity(), AddAddressActivity.class).putExtra("fetch",false));
         });
 
 
@@ -156,6 +163,8 @@ public class Profile extends Fragment {
         ((MaterialCardView)view.findViewById(R.id.refunds)).setOnClickListener(V ->{
             startActivity(new Intent(getActivity(), Refunds.class));
         });
+
+        wallet_balance.setOnClickListener(View-> Toast.makeText(getActivity(), "Comming soon", Toast.LENGTH_SHORT).show());
 
         helpNfeedback.setOnClickListener(view1 -> {
             ChatStarter chatStarter = ChatStarter.initializeChat(getActivity());
@@ -177,6 +186,7 @@ public class Profile extends Fragment {
                     .setPositiveButton("YES", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+                            new SharedPrefHelper(getActivity()).clearSavedHomeLocationData();
                             Logout.logout();
                             startActivity(new Intent(getActivity(),LoginActivity.class));
                             getActivity().finish();
@@ -274,6 +284,30 @@ public class Profile extends Fragment {
 
         return view;
 
+    }
+
+    private void fetchOrderNo() {
+        FirebaseDatabase
+                .getInstance()
+                .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
+                .child(FirebaseAuth.getInstance().getUid())
+                .child(CONSTANTS.DATABASE_NODE_ORDERS)
+                .child(CONSTANTS.DATABASE_NODE_OVERVIEW)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            orderNo.setText(String.valueOf(snapshot.getChildrenCount()));
+                        }else {
+                            orderNo.setText("0");
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(getActivity(), ""+error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
     }
 
     @Override

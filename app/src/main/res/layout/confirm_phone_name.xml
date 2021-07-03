@@ -78,7 +78,7 @@
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
-                    android:id="@+id/email"
+                    android:id="@+id/phone_no"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:elevation="7dp"
@@ -132,7 +132,6 @@
 
                                 </LinearLayout>
                 -->
-
 
                 <ProgressBar
                     android:id="@+id/loginprogress"

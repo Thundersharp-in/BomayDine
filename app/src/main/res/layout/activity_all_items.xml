@@ -97,6 +97,7 @@
                             android:orientation="horizontal">
 
                             <CheckBox
+                                android:id="@+id/veg"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="5dp"
@@ -106,6 +107,7 @@
                                 android:textColor="#4CAF50" />
 
                             <CheckBox
+                                android:id="@+id/egg"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="5dp"
@@ -115,6 +117,7 @@
                                 android:textColor="#FFEB3B" />
 
                             <CheckBox
+                                android:id="@+id/non_veg"
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_marginHorizontal="5dp"

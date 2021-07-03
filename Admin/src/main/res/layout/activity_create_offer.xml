@@ -108,7 +108,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/offercode"
                         android:layout_width="0dp"
-                        android:layout_weight="2"
+                        android:layout_weight="3"
                         android:layout_height="wrap_content"
                         app:endIconMode="clear_text"
                         app:endIconTint="#fff"
@@ -137,7 +137,7 @@
                         android:id="@+id/offer_type"
                         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:layout_height="wrap_content"
                         android:hint="Type"
                         app:boxStrokeColor="#ACACAC"
@@ -155,6 +155,9 @@
                             android:focusable="false"
                             tools:ignore="KeyboardInaccessibleWidget"
                             android:inputType="none"
+                            android:singleLine="true"
+                            android:maxLines="1"
+                            android:ellipsize="end"
                             />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -197,7 +200,7 @@
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/offer_percent"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:layout_height="wrap_content"
                         app:endIconMode="clear_text"
                         app:endIconTint="#fff"
@@ -220,9 +223,35 @@
                             />
                     </com.google.android.material.textfield.TextInputLayout>
                     <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/offer_mincart"
+                        android:layout_width="0dp"
+                        android:layout_weight="3"
+                        android:layout_height="wrap_content"
+                        app:endIconMode="clear_text"
+                        app:endIconTint="#fff"
+                        app:boxStrokeColor="#ACACAC"
+                        app:hintTextColor="#ACACAC"
+                        android:textColorHint="#ACACAC"
+                        android:layout_marginEnd="5dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:hintEnabled="true"
+                            android:textColorHint="#E1E1E1"
+                            android:textColor="#ffff"
+                            android:singleLine="true"
+                            android:hint="Min Amount *"
+                            android:inputType="number"
+                            />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/offer_off_upto"
                         android:layout_width="0dp"
-                        android:layout_weight="1"
+                        android:layout_weight="2"
                         android:layout_height="wrap_content"
                         app:endIconMode="clear_text"
                         app:endIconTint="#fff"

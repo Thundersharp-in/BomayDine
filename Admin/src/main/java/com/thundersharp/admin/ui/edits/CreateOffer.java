@@ -5,6 +5,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
@@ -26,9 +28,10 @@ import java.util.List;
 public class CreateOffer extends AppCompatActivity {
 
     AppCompatButton upload_btn;
-    TextInputLayout offer_t_c, offer_off_upto, offer_percent, offerdesc, offer_type, offercode;
-    List<Integer> types;
+    TextInputLayout offer_t_c, offer_off_upto, offer_percent, offerdesc, offer_type, offercode, offer_mincart;
+    List<String> types;
     AutoCompleteTextView offer_text;
+    Integer type = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,8 +47,19 @@ public class CreateOffer extends AppCompatActivity {
                 offer_off_upto.getEditText().setText(String.valueOf(offerModel.UPTO));
                 offer_percent.getEditText().setText(String.valueOf(offerModel.PERCENT));
                 offerdesc.getEditText().setText(offerModel.DESC);
-                offer_type.getEditText().setText(String.valueOf(offerModel.TYPE));
+                offer_mincart.getEditText().setText(String.valueOf(offerModel.MINCART));
                 offercode.getEditText().setText(offerModel.CODE);
+                type = offerModel.TYPE;
+                switch (offerModel.TYPE){
+                    case 0 :
+                        offer_text.setText("Wallet");
+                        break;
+                    case 1 :
+                        offer_text.setText("Cash Back");break;
+                    case 2 :
+                        offer_text.setText("Instant Discount");break;
+                }
+
                 upload_btn.setText("UPDATE");
             }
         }else {
@@ -53,8 +67,15 @@ public class CreateOffer extends AppCompatActivity {
         }
 
         types = getCustomerList();
-        ArrayAdapter<Integer> adapter = new ArrayAdapter<>(CreateOffer.this, android.R.layout.simple_spinner_item, types);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(CreateOffer.this, android.R.layout.simple_spinner_item, types);
         offer_text.setAdapter(adapter);
+
+        offer_text.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                type = position;
+            }
+        });
 
 
         upload_btn.setOnClickListener(view ->{
@@ -70,17 +91,22 @@ public class CreateOffer extends AppCompatActivity {
             }else if (offer_off_upto.getEditText().getText().toString().isEmpty()){
                 offer_off_upto.getEditText().setError("Required!");
                 offer_off_upto.getEditText().requestFocus();
+            }else if (offer_mincart.getEditText().getText().toString().isEmpty()){
+                offer_mincart.getEditText().setError("Required!");
+                offer_mincart.getEditText().requestFocus();
 
             }else if (offer_text.getText().toString().isEmpty()){
                 Toast.makeText(this, "Select offer type", Toast.LENGTH_SHORT).show();
+            }else if (type == null){
+                offer_text.setError("Required!");
+                offer_percent.requestFocus();
             }else {
 
-                int type = 1;
                 String desc ,tc;
 
-                if (offer_t_c.getEditText().getText().toString().isEmpty() || offer_t_c.getEditText().getText().toString() ==null) tc = "";else tc=offer_t_c.getEditText().getText().toString();
-                if (offerdesc.getEditText().getText().toString().isEmpty() || offerdesc.getEditText().getText().toString() ==null) desc = "";else desc=offerdesc.getEditText().getText().toString();
-                if (offer_text.getText().toString().isEmpty() || offer_text.getText().toString()==null)type=1;else type= Integer.parseInt(offer_text.getText().toString());
+                if ( offer_t_c.getEditText().getText().toString() ==null  || offer_t_c.getEditText().getText().toString().isEmpty()) tc = "";else tc=offer_t_c.getEditText().getText().toString();
+                if ( offerdesc.getEditText().getText().toString() ==null || offerdesc.getEditText().getText().toString().isEmpty() ) desc = "";else desc=offerdesc.getEditText().getText().toString();
+                //if (offer_text.getText().toString()==null || offer_text.getText().toString().isEmpty())type=1;else type= Integer.parseInt(offer_text.getText().toString());
 
                 String code = offercode.getEditText().getText().toString();
                 if ( code.contains(" ")
@@ -103,7 +129,8 @@ public class CreateOffer extends AppCompatActivity {
                         Integer.valueOf(offer_percent.getEditText().getText().toString()),
                         type,
                         Integer.valueOf(offer_off_upto.getEditText().getText().toString()),
-                        150);
+                        Integer.valueOf(offer_mincart.getEditText().getText().toString())
+                );
 
                 FirebaseDatabase
                         .getInstance()
@@ -118,6 +145,8 @@ public class CreateOffer extends AppCompatActivity {
                                 offer_percent.getEditText().setText("");
                                 offer_off_upto.getEditText().setText("");
                                 offer_text.setText("");
+                                offer_mincart.getEditText().setText("");
+                                type = null;
                                 Toast.makeText(this, "Updated Successfully", Toast.LENGTH_SHORT).show();
 
                             }else
@@ -133,11 +162,12 @@ public class CreateOffer extends AppCompatActivity {
 
     }
 
-    private List<Integer> getCustomerList() {
-        List<Integer> typ = new ArrayList<>();
-        typ.add(1);
-        typ.add(2);
-        typ.add(3);
+    private List<String> getCustomerList() {
+        List<String> typ = new ArrayList<>();
+        typ.add("Wallet");
+        typ.add("Cash Back");
+        typ.add("Instant Discount");
+        //typ.add("Pay with wallet");
         return typ;
     }
 
@@ -150,5 +180,6 @@ public class CreateOffer extends AppCompatActivity {
         offer_type = findViewById(R.id.offer_type);
         offercode = findViewById(R.id.offercode);
         offer_text = findViewById(R.id.offer_text);
+        offer_mincart = findViewById(R.id.offer_mincart);
     }
 }

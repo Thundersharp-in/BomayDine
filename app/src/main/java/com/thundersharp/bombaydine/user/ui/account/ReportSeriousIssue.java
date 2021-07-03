@@ -1,27 +1,23 @@
 package com.thundersharp.bombaydine.user.ui.account;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
-import com.thundersharp.admin.ui.edits.EditItemActivity;
 import com.thundersharp.bombaydine.R;
-import com.thundersharp.bombaydine.user.core.Model.ReportModel;
 import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class ReportSeriousIssue extends AppCompatActivity {
 
@@ -59,14 +55,23 @@ public class ReportSeriousIssue extends AppCompatActivity {
 
             }else if (reportType.getText().toString().isEmpty()){
                 Toast.makeText(this, "Mention Report type !", Toast.LENGTH_SHORT).show();
+            }else if (!isValidEmail(emailAddress.getEditText().getText().toString())){
+                Toast.makeText(this, "Provided email is not valid!", Toast.LENGTH_SHORT).show();
             }else {
 
-                ReportModel model = new ReportModel(fullName.getEditText().getText().toString(),emailAddress.getEditText().getText().toString(), FirebaseAuth.getInstance().getUid(),ph_no,typeText.getEditText().getText().toString(),String.valueOf(System.currentTimeMillis()),reportType.getText().toString(),0);
-                //TODO UPdate to user module to
+                HashMap<String, Object> model = new HashMap<>();
+                model.put("NAME", fullName.getEditText().getText().toString());
+                model.put("EMAIL", emailAddress.getEditText().getText().toString());
+                model.put("UID", FirebaseAuth.getInstance().getUid());
+                model.put("PHONE", ph_no);
+                model.put("MESSAGE", typeText.getEditText().getText().toString());
+                model.put("ID", String.valueOf(System.currentTimeMillis()));
+                model.put("TYPE", reportType.getText().toString());
+
                 FirebaseDatabase
                         .getInstance()
                         .getReference(CONSTANTS.DATABASE_NODE_REPORT)
-                        .child(model.ID)
+                        .child(model.get("ID").toString())
                         .setValue(model)
                         .addOnCompleteListener(task -> {
                             if (task.isSuccessful()){
@@ -79,12 +84,24 @@ public class ReportSeriousIssue extends AppCompatActivity {
 
                             }
                             else
-                                Toast.makeText(ReportSeriousIssue.this, "Sorry you can't report", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(ReportSeriousIssue.this, "Sorry you can't report right now", Toast.LENGTH_SHORT).show();
                         });
             }
         });
 
     }
+
+    private static boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9_+&*-]+(?:\\.[a-zA-Z0-9_+&*-]+)*@" +  //part before @
+                "(?:[a-zA-Z0-9-]+\\.)+[a-zA-Z]{2,7}$";
+
+        Pattern pat = Pattern.compile(emailRegex);
+        if (email == null)
+            return false;
+        return pat.matcher(email).matches();
+    }
+
+
 
     private List<String> detData() {
         List<String> da = new ArrayList<>();

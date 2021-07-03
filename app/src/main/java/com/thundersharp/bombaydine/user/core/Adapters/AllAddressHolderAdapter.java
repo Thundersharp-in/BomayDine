@@ -9,14 +9,20 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Model.AddressData;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefHelper;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
+import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.user.ui.home.HomeFragment;
 import com.thundersharp.bombaydine.user.ui.location.AddressEdit;
 
@@ -44,7 +50,15 @@ public class AllAddressHolderAdapter extends RecyclerView.Adapter<AllAddressHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AddressData addressDatainst = addressData.get(position);
         holder.tittle.setText(addressDatainst.getADDRESS_NICKNAME());
-        holder.recentorders.setText(addressDatainst.getADDRESS_LINE1()+","+addressDatainst.getADDRESS_LINE2()+","+addressDatainst.getCITY()+",Pin : "+addressDatainst.getZIP());
+        holder.recentorders.setText(addressDatainst.getADDRESS_LINE1());//+","+addressDatainst.getADDRESS_LINE2()+","+addressDatainst.getCITY()+",Pin : "+addressDatainst.getZIP()
+
+        if (addressDatainst.getADDRESS_NICKNAME().equalsIgnoreCase("Home")){
+            holder.homeicon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_outline_home_24));
+        }else if (addressDatainst.getADDRESS_NICKNAME().equalsIgnoreCase("Office")) {
+            holder.homeicon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_outline_home_work_24));
+        }else if (addressDatainst.getADDRESS_NICKNAME().equalsIgnoreCase("Others")){
+            holder.homeicon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_outline_share_location_24));
+        }
 
         holder.endicon.setOnClickListener(view -> {
             PopupMenu popup = new PopupMenu(context, holder.endicon);
@@ -59,6 +73,22 @@ public class AllAddressHolderAdapter extends RecyclerView.Adapter<AllAddressHold
                             context.startActivity(new Intent(context, AddressEdit.class).putExtra("data",addressDatainst));
                             break;
                         case R.id.del :
+                            FirebaseDatabase
+                                    .getInstance()
+                                    .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
+                                    .child(FirebaseAuth.getInstance().getUid())
+                                    .child(CONSTANTS.DATABASE_NODE_ADDRESS)
+                                    .child(String.valueOf(addressDatainst.getID()))
+                                    .removeValue()
+                                    .addOnCompleteListener(task -> { //TODO UPdate to shared pref if bydefult contains
+                                        if (task.isSuccessful()){
+                                            Toast.makeText(context, "Deleted!", Toast.LENGTH_SHORT).show();
+                                            addressData.remove(position);
+                                            notifyDataSetChanged();
+                                        }else
+                                            Toast.makeText(context, ""+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                    });
+
                             break;
                     }
                     return false;

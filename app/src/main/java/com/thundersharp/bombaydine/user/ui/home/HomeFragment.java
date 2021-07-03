@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.ColorDrawable;
@@ -37,6 +38,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.glide.slider.library.SliderLayout;
@@ -68,6 +70,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.PolyUtil;
+import com.thundersharp.admin.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllAddressHolderAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapter;
@@ -92,6 +95,7 @@ import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 import com.thundersharp.bombaydine.user.core.location.DistanceFromCoordinates;
 import com.thundersharp.bombaydine.user.core.utils.LatLongConverter;
 import com.thundersharp.bombaydine.user.core.utils.Resturant;
+import com.thundersharp.bombaydine.user.ui.account.UpdateProfileActivity;
 import com.thundersharp.bombaydine.user.ui.dailyfood.DailyfoodActivity;
 import com.thundersharp.bombaydine.user.ui.location.HomeLocationChooser;
 import com.thundersharp.bombaydine.user.ui.login.LoginActivity;
@@ -100,6 +104,7 @@ import com.thundersharp.bombaydine.user.ui.menu.AllItemsActivity;
 import com.thundersharp.bombaydine.user.ui.menu.TopSellingAll;
 import com.thundersharp.bombaydine.user.ui.offers.AllOffersActivity;
 import com.thundersharp.bombaydine.user.ui.offers.CustomOfferActivity;
+import com.thundersharp.bombaydine.user.ui.orders.ConfirmPhoneName;
 import com.thundersharp.bombaydine.user.ui.orders.RecentOrders;
 import com.thundersharp.bombaydine.user.ui.scanner.QrScanner;
 
@@ -159,7 +164,7 @@ public class HomeFragment extends Fragment implements
     private ShimmerFrameLayout shimmerFrameLayout,shimmerplace_allitem;
     private RecyclerView addressholder;
     private Address address;
-    private TextView itemtotal,grandtot,promoamt,delehevry;
+    private TextView itemtotal,grandtot,promoamt,delehevry, name_phone;
 
     /**
      * Address Listeners and helpers
@@ -180,6 +185,7 @@ public class HomeFragment extends Fragment implements
     private AppCompatButton pay;
     private EditText search_home;
     private RelativeLayout containermain;
+    private SharedPreferences sharedPreferences;
 
     private static List<Object> foodItemAdapterListStatic = new ArrayList<>();
 
@@ -236,6 +242,7 @@ public class HomeFragment extends Fragment implements
 
         refresh(view);
 
+
         swipe_refresh.setOnRefreshListener(() -> {
             refresh(view);
             swipe_refresh.setRefreshing(false);
@@ -249,6 +256,8 @@ public class HomeFragment extends Fragment implements
         sharedPrefHelper = new SharedPrefHelper(getContext(), this);
 
         homeDataProvider = new HomeDataProvider(getActivity(), this, this, this, this);
+
+        sharedPreferences = getActivity().getSharedPreferences(CONSTANTS.PROFILE_NODE_PROFILEPICURI, Context.MODE_PRIVATE);
 
         bottomnoti.setVisibility(View.INVISIBLE);
         isVisible = false;
@@ -288,6 +297,21 @@ public class HomeFragment extends Fragment implements
             if (bottomnoti.getVisibility() == View.VISIBLE)
                 showcart(view);
         });
+        /*
+         if (FirebaseAuth.getInstance().getCurrentUser() != null && sharedPreferences!=null) {
+            String profile_url = sharedPreferences.getString(CONSTANTS.DATABASE_NODE_PROFILEPICURI, null);
+            if (profile_url != null){
+                Glide.with(getActivity()).load(profile_url).into(profile);
+            }else Glide.with(getActivity()).load(R.mipmap.ic_launcher_round).into(profile);
+
+        }else Glide.with(getActivity()).load(R.mipmap.ic_launcher_round).into(profile);
+
+         */
+        if (FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()!=null){
+            Glide.with(getActivity()).load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString()).into(profile);
+        }else {
+            Glide.with(getActivity()).load(R.mipmap.ic_launcher_round).into(profile);
+        }
 
         breakfast.setOnClickListener(view123 -> DailyfoodActivity.getInstance(getActivity(),0));
 
@@ -295,104 +319,27 @@ public class HomeFragment extends Fragment implements
 
         dinner.setOnClickListener(view1r ->  DailyfoodActivity.getInstance(getActivity(),2));
 
-        topsellingallv.setOnClickListener(view12 -> startActivity(new Intent(getActivity(), TopSellingAll.class)));
+        topsellingallv.setOnClickListener(view12 -> startActivity(new Intent(getActivity(), TopSellingAll.class)));   ///TODO checkout with model
 
         allitemsview.setOnClickListener(view13 -> startActivity(new Intent(getActivity(), AllItemsActivity.class)));
 
         allcategory.setOnClickListener(view14 -> startActivity(new Intent(getActivity(), AllCategoryActivity.class)));
 
 
-        current_loc.setOnClickListener(viewlocation -> {
+        current_loc.setOnClickListener(viewlocation -> currentLocation(view));
 
-            bottomSheetDialogloc = new BottomSheetDialog(getContext(), R.style.BottomSheetDialogTheme);
-            View bottomview = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout, view.findViewById(R.id.botomcontainer));
-            addressHelper.loaduseraddress();
-            //recyclerView = bottomview.findViewById(R.id.places_recycler_view);
-            shimmerFrameLayout = bottomview.findViewById(R.id.shimmerlayout);
-            recyclerView = bottomview.findViewById(R.id.addressholder);
-            TextView currentloc = bottomview.findViewById(R.id.current_loc);
-            LinearLayout linearLayout = bottomview.findViewById(R.id.searchedit);
-            linearLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    startActivityForResult(new Intent(getActivity(), HomeLocationChooser.class), 101);
-                }
-            });
-            CordinatesInteractor cordinatesInteractor = new CordinatesInteractor(HomeFragment.this);
+        profile.setOnClickListener(viewclick -> navController.navigate(R.id.profile));
 
-            currentloc.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    cordinatesInteractor.fetchAllCoordinates();
-                }
-            });
-
-/*
-            editText.addTextChangedListener(new TextWatcher() {
-                @Override
-                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
-                }
-
-                @Override
-                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                    if (charSequence.toString().length() == 6){
-                        pinCodeInteractor.getdetailsfromPincode(charSequence.toString());
-                    }
-                }
-
-                @Override
-                public void afterTextChanged(Editable editable) {
-
-                }
-            });
-*/
-
-/*
-            editText.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-
-                    // Set the fields to specify which types of place data to
-                    // return after the user has made a selection.
-                    List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
-
-                    // Start the autocomplete intent.
-                    Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
-                            .build(getActivity());
-                    startActivityForResult(intent, 1);
-
-                }
-            });
-*/
-
-            /*mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(getContext());
-            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-            mAutoCompleteAdapter.setClickListener(this);
-            recyclerView.setAdapter(mAutoCompleteAdapter);
-            mAutoCompleteAdapter.notifyDataSetChanged();*/
-
-            bottomSheetDialogloc.setContentView(bottomview);
-            bottomSheetDialogloc.show();
-        });
-
-        profile.setOnClickListener(viewclick -> {
-            navController.navigate(R.id.profile);
-        });
-
-        recentorders.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-                    startActivity(new Intent(getActivity(), RecentOrders.class));
-                } else {
-                    Toast.makeText(getContext(), "Kindly login to see your recent orders.", Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getActivity(), LoginActivity.class));
-                }
+        recentorders.setOnClickListener(view16 -> {
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                startActivity(new Intent(getActivity(), RecentOrders.class));
+            } else {
+                Toast.makeText(getContext(), "Kindly login to see your recent orders.", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getActivity(), LoginActivity.class));
             }
         });
 
-        qrcode.setOnClickListener(view15 -> startActivity(new Intent(getActivity(), QrScanner.class)));
+        qrcode.setOnClickListener(view15 -> startActivity(new Intent(getActivity(), QrScanner.class)));  //TODO Complete Scanner
 
 
         categoryRecycler = view.findViewById(R.id.recentordcategoryholderer);
@@ -410,7 +357,7 @@ public class HomeFragment extends Fragment implements
 
         FirebaseDatabase
                 .getInstance()
-                .getReference("TOP_CAROUSEL")
+                .getReference(CONSTANTS.DATABASE_TOP_CAROUSEL)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -537,6 +484,78 @@ public class HomeFragment extends Fragment implements
 
     }
 
+    private void currentLocation(View view) {
+
+        bottomSheetDialogloc = new BottomSheetDialog(getContext(), R.style.BottomSheetDialogTheme);
+        View bottomview = LayoutInflater.from(getContext()).inflate(R.layout.bottom_sheet_layout, view.findViewById(R.id.botomcontainer));
+        addressHelper.loaduseraddress();
+        //recyclerView = bottomview.findViewById(R.id.places_recycler_view);
+        shimmerFrameLayout = bottomview.findViewById(R.id.shimmerlayout);
+        recyclerView = bottomview.findViewById(R.id.addressholder);
+        TextView currentloc = bottomview.findViewById(R.id.current_loc);
+        LinearLayout linearLayout = bottomview.findViewById(R.id.searchedit);
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivityForResult(new Intent(getActivity(), HomeLocationChooser.class), 101);
+            }
+        });
+        CordinatesInteractor cordinatesInteractor = new CordinatesInteractor(HomeFragment.this);
+
+        currentloc.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cordinatesInteractor.fetchAllCoordinates();
+            }
+        });
+
+            /*
+            editText.addTextChangedListener(new TextWatcher() {
+                @Override
+                public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+                }
+
+                @Override
+                public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                    if (charSequence.toString().length() == 6){
+                        pinCodeInteractor.getdetailsfromPincode(charSequence.toString());
+                    }
+                }
+
+                @Override
+                public void afterTextChanged(Editable editable) {
+
+                }
+            });
+*/
+            /*
+            editText.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                    // Set the fields to specify which types of place data to
+                    // return after the user has made a selection.
+                    List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
+
+                    // Start the autocomplete intent.
+                    Intent intent = new Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+                            .build(getActivity());
+                    startActivityForResult(intent, 1);
+
+                }
+            });
+*/
+            /*mAutoCompleteAdapter = new PlacesAutoCompleteAdapter(getContext());
+            recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+            mAutoCompleteAdapter.setClickListener(this);
+            recyclerView.setAdapter(mAutoCompleteAdapter);
+            mAutoCompleteAdapter.notifyDataSetChanged();*/
+
+        bottomSheetDialogloc.setContentView(bottomview);
+        bottomSheetDialogloc.show();
+    }
+
 
     private void showcart(View view) {
 
@@ -549,11 +568,14 @@ public class HomeFragment extends Fragment implements
         TextView shoe_offers = bottomview.findViewById(R.id.shoe_offers);
         TextView delevering_to_address = bottomview.findViewById(R.id.delevering_to_address);
         TextView est_time = bottomview.findViewById(R.id.est_time);
+        TextView ch_address = bottomview.findViewById(R.id.ch_address);
+        TextView change_Name = bottomview.findViewById(R.id.change_Name);
         itemtotal = bottomview.findViewById(R.id.item_tot);
         delehevry = bottomview.findViewById(R.id.del_charges);
         promoamt = bottomview.findViewById(R.id.promotot);
         grandtot = bottomview.findViewById(R.id.grand_tot);
         pay = bottomview.findViewById(R.id.paybtn);
+        name_phone = bottomview.findViewById(R.id.name_phone);
         delevering_to_address.setText("Delivering to :"+sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1());
 
         long distance = Math.round(DistanceFromCoordinates.getInstance().convertLatLongToDistance(Resturant.resturantLatLong,LatLongConverter.initialize().getlatlang(sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG())));
@@ -568,7 +590,8 @@ public class HomeFragment extends Fragment implements
         shoe_offers.setOnClickListener(viewk -> startActivityForResult(new Intent(getActivity(), AllOffersActivity.class),001));
         bottomSheetDialog.show();
 
-
+        ch_address.setOnClickListener(viewadd -> currentLocation(view));
+        change_Name.setOnClickListener(addName ->startActivityForResult(new Intent(getActivity(), ConfirmPhoneName.class), 1008));
     }
 
 
@@ -596,7 +619,6 @@ public class HomeFragment extends Fragment implements
 
                 itemtotal.setText("\u20B9 " + sum);
                 delehevry.setText("\u20B9 " + Math.round(deleveryCharges));
-
                 grandtot.setText("" + (sum + Math.round(deleveryCharges))); //TODO SUBTRACT DISCOUNT LATER
                 pay.setText("PAY \u20B9"+(sum+Math.round(deleveryCharges)));
 
@@ -759,6 +781,7 @@ public class HomeFragment extends Fragment implements
 
     @Override
     public void onAddressLoadFailure(Exception e) {
+        shimmerFrameLayout.stopShimmer();
         Toast.makeText(getActivity(), "" + e.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
@@ -892,6 +915,7 @@ public class HomeFragment extends Fragment implements
 
     }
 
+
     @SuppressLint("MissingPermission")
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -944,6 +968,13 @@ public class HomeFragment extends Fragment implements
                 Toast.makeText(getContext(), "Location is required to get current location", Toast.LENGTH_SHORT).show();
 
             }
+        } else if (resultCode == 1008) {
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                if (data.getData() != null) {
+                    name_phone.setText(String.valueOf(data.getData()));
+                } else
+                    Toast.makeText(getActivity(), "Data fetch failure!", Toast.LENGTH_SHORT).show();//else name_phone.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName()+"+91 XXXXXXXXXX");
+            } else Toast.makeText(getActivity(), "Login First", Toast.LENGTH_SHORT).show();
         }
     }
 

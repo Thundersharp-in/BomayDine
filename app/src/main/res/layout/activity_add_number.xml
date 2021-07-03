@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:gravity="center"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    tools:context=".user.ui.account.AddNumber"
+    android:background="#151515">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:background="@drawable/edittext_curved"
+        android:elevation="7dp"
+        android:minHeight="52dp"
+        android:orientation="horizontal">
+
+        <com.hbb20.CountryCodePicker
+            android:id="@+id/pkr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginStart="5dp"
+            app:ccp_defaultLanguage="ENGLISH"
+            app:ccp_defaultNameCode="IND"
+            app:ccp_defaultPhoneCode="91"
+            app:ccp_showArrow="true"
+            app:ccp_showFlag="true"
+            app:ccp_showNameCode="true" />
+
+        <EditText
+            android:id="@+id/editText_carrierNumber"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginEnd="10dp"
+            android:background="@null"
+            android:hint="Phone Number"
+            android:inputType="phone"
+            android:textColor="#100E0E"
+            android:maxLines="1"
+            android:singleLine="true"
+            android:textColorHint="#b7b7b7" />
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/sendotp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="15dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/button_curved_round"
+        android:minHeight="52dp"
+        android:text="Send OTP"
+        android:textAllCaps="false"
+        android:textColor="#dddddd"
+        android:textSize="16sp" />
+
+
+</LinearLayout>

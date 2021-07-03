@@ -46,13 +46,13 @@
                     android:textStyle="italic"
                     android:text="Last Located position"
                     android:textColor="#FFEB3B"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     />
 
                 <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginStart="15dp"
                     android:layout_marginEnd="15dp"
                     app:cardUseCompatPadding="true"
@@ -98,6 +98,7 @@
                                     android:orientation="horizontal"
                                     >
                                     <ImageView
+                                        android:id="@+id/home"
                                         android:layout_width="30dp"
                                         android:layout_height="30dp"
                                         android:layout_gravity="center"
@@ -156,20 +157,17 @@
                                 </LinearLayout>
 
                                 <TextView
-                                    android:id="@+id/add_new_location"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:text="Near some area at some place near a town "
+                                    android:text="Last localised place of your's shared with us."
                                     android:drawablePadding="10dp"
                                     android:paddingStart="10dp"
                                     android:fontFamily="sans-serif-condensed"
                                     android:textColor="#FFB896"
                                     android:layout_marginTop="5dp"
                                     android:textSize="13sp"
-                                    android:gravity="center_vertical"
+                                    android:gravity="center"
                                     android:layout_marginBottom="5dp"
-                                    android:drawableStart="@drawable/ic_baseline_add_24"
-                                    android:drawableTint="#FFB896"
                                     />
 
                             </LinearLayout>
@@ -195,10 +193,10 @@
                             />
 
                         <androidx.appcompat.widget.AppCompatButton
-                            android:id="@+id/edit_location"
+                            android:id="@+id/current_location"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="Add details to the address "
+                            android:text="Choose current location "
                             android:textAllCaps="false"
                             android:padding="5dp"
                             android:textSize="16sp"
@@ -214,16 +212,18 @@
                 </com.google.android.material.card.MaterialCardView>
 
                 <TextView
-                    android:id="@+id/view_detail"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/another_loc"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
-                    android:text="View Details"
-                    android:drawableEnd="@drawable/ccp_ic_arrow_drop_down"
+                    android:textSize="11sp"
+                    android:text="Below mentioned list is of past locations click to edit location or if you want to add more then click on add more"
                     android:textColor="#FFB790"
                     android:gravity="center"
-                    android:layout_marginTop="15sp"
-                    android:drawableTint="#FFB790"
+                    android:layout_marginTop="7sp"
+                    android:layout_marginHorizontal="@dimen/dimen_60dp"
+                    android:drawableStart="@drawable/ic_outline_info_24"
+                    android:drawableTint="#FFB896"
                     />
 
 
@@ -272,7 +272,7 @@
             android:layout_marginTop="10dp"
             android:layout_marginBottom="@dimen/dimen_10dp"
             />
-        <androidx.cardview.widget.CardView
+<!--         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="5dp"
@@ -338,7 +338,7 @@
             </LinearLayout>
 
         </androidx.cardview.widget.CardView>
-
+  -->
 
     </LinearLayout>
 
