@@ -33,76 +33,155 @@
                 android:textStyle="bold"
                 android:textSize="16sp"/>
 
-            <TextView
-                android:id="@+id/addline1"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
+                android:orientation="horizontal"
                 android:layout_marginTop="@dimen/dimen_5dp"
-                android:layout_marginBottom="5dp"
-                android:textColor="#D6D6D6"
-                android:maxLines="3"
-                android:ellipsize="end"
-                android:fontFamily="@font/calibri"
-                android:text="Address line 1: "
-                android:textSize="13sp"/>
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textColor="#D6D6D6"
+                    android:maxLines="3"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/calibri"
+                    android:text="Address line 1 : "
+                    android:textSize="12sp"/>
+                <TextView
+                    android:id="@+id/addline1"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content"
+                    android:textColor="#D6D6D6"
+                    android:maxLines="3"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/calibri"
+                    android:text="Full Address"
+                    android:textSize="13sp"/>
 
-            <TextView
-                android:id="@+id/addline2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                android:textColor="#D6D6D6"
-                android:maxLines="2"
-                android:ellipsize="end"
-                android:fontFamily="@font/calibri"
-                android:text="Address line 2: "
-                android:textSize="13sp"/>
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/city"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                android:textColor="#D6D6D6"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:text="City: "
-                android:fontFamily="@font/calibri"
-                android:textSize="13sp"/>
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/dimen_5dp"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textColor="#D6D6D6"
+                    android:maxLines="3"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/calibri"
+                    android:text="Address line 2 : "
+                    android:textSize="12sp"/>
+                <TextView
+                    android:id="@+id/addline2"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content"
+                    android:textColor="#D6D6D6"
+                    android:maxLines="3"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/calibri"
+                    android:text="Address line 2 is here"
+                    android:textSize="13sp"/>
 
-            <TextView
-                android:id="@+id/pincode"
-                android:layout_width="wrap_content"
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                android:textColor="#D6D6D6"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:text="Zip: "
-                android:fontFamily="@font/calibri"
-                android:textSize="13sp"/>
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/dimen_5dp"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textColor="#D6D6D6"
+                    android:maxLines="3"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/calibri"
+                    android:text="City : "
+                    android:textSize="12sp"/>
+                <TextView
+                    android:id="@+id/city"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content"
+                    android:textColor="#D6D6D6"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/calibri"
+                    android:text="City name"
+                    android:textSize="13sp"/>
 
-            <TextView
-                android:id="@+id/recentorders"
-                android:layout_width="wrap_content"
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:layout_marginBottom="5dp"
-                android:textColor="#D6D6D6"
-                android:maxLines="1"
-                android:ellipsize="end"
-                android:textIsSelectable="true"
-                android:text="Co-ordinate: "
-                android:textSize="13sp"/>
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/dimen_5dp"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textColor="#D6D6D6"
+                    android:maxLines="3"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/calibri"
+                    android:text="Zip : "
+                    android:textSize="12sp"/>
+                <TextView
+                    android:id="@+id/pincode"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content"
+                    android:textColor="#D6D6D6"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/calibri"
+                    android:text="123456"
+                    android:textSize="13sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/dimen_5dp"
+                >
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:textColor="#D6D6D6"
+                    android:maxLines="3"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/calibri"
+                    android:text="Co-ordinate : "
+                    android:textSize="12sp"/>
+                <TextView
+                    android:id="@+id/recentorders"
+                    android:layout_width="0dp"
+                    android:layout_weight="3"
+                    android:layout_height="wrap_content"
+                    android:textColor="#D6D6D6"
+                    android:maxLines="1"
+                    android:ellipsize="end"
+                    android:fontFamily="@font/calibri"
+                    android:text="12.234595845 , 123.74923875982356928"
+                    android:textSize="13sp"
+                    android:textIsSelectable="true"
+                    />
+
+            </LinearLayout>
 
         </LinearLayout>
 
