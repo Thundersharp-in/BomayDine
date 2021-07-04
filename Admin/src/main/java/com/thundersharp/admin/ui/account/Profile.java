@@ -20,6 +20,7 @@ import com.google.android.material.card.MaterialCardView;
 import com.thundersharp.admin.AdminModule;
 import com.thundersharp.admin.R;
 import com.thundersharp.admin.core.AdminHelpers;
+import com.thundersharp.admin.ui.edits.EditTopSelling;
 import com.thundersharp.admin.ui.offers.AllOffersActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -62,7 +63,7 @@ public class Profile extends Fragment {
             getActivity().finish();
         });
         bookmarks =  view.findViewById(R.id.bookmarks);
-        bookmarks.setOnClickListener(v -> {});
+        bookmarks.setOnClickListener(v -> startActivity(new Intent(getContext(), EditTopSelling.class)));
         return view;
     }
 

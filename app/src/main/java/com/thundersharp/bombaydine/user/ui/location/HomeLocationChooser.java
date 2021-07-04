@@ -161,6 +161,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
                     AddressData addressDataf = new AddressData(addressline1.getText().toString(), addressline2, nickname, city, System.currentTimeMillis(), lat_long, zip);
 
                     sharedPrefHelper.SaveDataToSharedPref(addressDataf);
+                    /*
                     if (FirebaseAuth.getInstance().getCurrentUser() != null ) {
                         FirebaseDatabase
                                 .getInstance()
@@ -179,6 +180,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
                                     }
                                 });
                     }
+                     */
 
                 }
             }
