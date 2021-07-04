@@ -37,12 +37,14 @@ import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.chip.ChipGroup;
 import com.google.maps.android.PolyUtil;
+import com.thundersharp.admin.core.utils.ResturantCoordinates;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Model.AddressData;
 import com.thundersharp.bombaydine.user.core.address.AddressHelper;
 import com.thundersharp.bombaydine.user.core.address.AddressUpdater;
 import com.thundersharp.bombaydine.user.core.address.CordinatesInteractor;
 import com.thundersharp.bombaydine.user.core.address.Cordinateslistner;
+import com.thundersharp.bombaydine.user.core.location.StorageFailure;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,10 +65,12 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
     private AppCompatButton savencontinue;
     private EditText addressline1,addressline2,city,zip;
     private ChipGroup worktype;
+    private AddressData addressDatan;
 
 
     List<LatLng> latLngs = new ArrayList<>();
     private LinearLayout bottomholder,data2;
+    private boolean isadded = false;
 
     /**
      * Calling this activity requires searilized data
@@ -78,11 +82,12 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
         setContentView(R.layout.activity_address_edit);
 
         addressData = (AddressData) getIntent().getSerializableExtra("data");
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
         addressHelper = new AddressHelper(AddressEdit.this,this,"");
-        cordinatesInteractor = new CordinatesInteractor(this);
+        cordinatesInteractor = new CordinatesInteractor(this,this);
 
 
         savencontinue = findViewById(R.id.savenproceed);
@@ -95,46 +100,85 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
         data2 = findViewById(R.id.data2);
 
 
-        if (addressData.getADDRESS_NICKNAME().equalsIgnoreCase("Home")){
-            worktype.check(R.id.home);
-        }else if (addressData.getADDRESS_NICKNAME().equalsIgnoreCase("Office")){
-            worktype.check(R.id.office);
-        }else worktype.check(R.id.other);
-
-        addressline1.setText(addressData.getADDRESS_LINE1());
-        addressline2.setText(addressData.getADDRESS_LINE2());
-        city.setText(addressData.getCITY());
-        zip.setText(addressData.getZIP()+"");
-
-        savencontinue.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (bottomholder.getVisibility() == View.GONE){
-                    String nickname=null;
-                    if (worktype.getCheckedChipId() == R.id.home){
-                        nickname= "Home";
-                    }else if (worktype.getCheckedChipId() == R.id.office){
-                        nickname = "Office";
-                    }else nickname = "Others";
-                    //Toedo {Go with update flow}
-                    String lat_long = marker.getPosition().latitude+","+marker.getPosition().longitude;
-                    AddressData addressDataf = new AddressData(
-                            addressline1.getText().toString(),
-                            addressline2.getText().toString(),
-                            nickname,
-                            city.getText().toString(),
-                            addressData.getID(),
-                            lat_long,
-                            Integer.parseInt(zip.getText().toString()));
-                    addressHelper.dataUpdate(addressDataf);
+        if (addressData != null) {
+            if (addressData.getADDRESS_NICKNAME().equalsIgnoreCase("Home")) {
+                worktype.check(R.id.home);
+            } else if (addressData.getADDRESS_NICKNAME().equalsIgnoreCase("Office")) {
+                worktype.check(R.id.office);
+            } else worktype.check(R.id.other);
 
 
-                }else {
-                    bottomholder.setVisibility(View.GONE);
-                    data2.setVisibility(View.VISIBLE);
+            addressline1.setText(addressData.getADDRESS_LINE1());
+            addressline2.setText(addressData.getADDRESS_LINE2());
+            city.setText(addressData.getCITY());
+            zip.setText(addressData.getZIP() + "");
+
+            savencontinue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (bottomholder.getVisibility() == View.GONE) {
+                        String nickname = null;
+                        if (worktype.getCheckedChipId() == R.id.home) {
+                            nickname = "Home";
+                        } else if (worktype.getCheckedChipId() == R.id.office) {
+                            nickname = "Office";
+                        } else nickname = "Others";
+                        //Toedo {Go with update flow}
+                        String lat_long = marker.getPosition().latitude + "," + marker.getPosition().longitude;
+                        AddressData addressDataf = new AddressData(
+                                addressline1.getText().toString(),
+                                addressline2.getText().toString(),
+                                nickname,
+                                city.getText().toString(),
+                                addressData.getID(),
+                                lat_long,
+                                Integer.parseInt(zip.getText().toString()));
+                        addressHelper.dataUpdate(addressDataf);
+
+
+                    } else {
+                        bottomholder.setVisibility(View.GONE);
+                        data2.setVisibility(View.VISIBLE);
+                    }
                 }
-            }
-        });
+            });
+
+
+        }else {
+            savencontinue.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (bottomholder.getVisibility() == View.GONE) {
+                        String nickname = null;
+                        if (worktype.getCheckedChipId() == R.id.home) {
+                            nickname = "Home";
+                        } else if (worktype.getCheckedChipId() == R.id.office) {
+                            nickname = "Office";
+                        } else nickname = "Others";
+                        //Toedo {Go with update flow}
+                        if (isadded ) {
+                            String lat_long = marker.getPosition().latitude + "," + marker.getPosition().longitude;
+                             addressDatan = new AddressData(
+                                    addressline1.getText().toString(),
+                                    addressline2.getText().toString(),
+                                    nickname,
+                                    city.getText().toString(),
+                                    System.currentTimeMillis(),
+                                    lat_long,
+                                    Integer.parseInt(zip.getText().toString()));
+                            addressHelper.dataUpdate(addressDatan);
+                        }else
+                            Toast.makeText(AddressEdit.this, "Select a locatioon on the map", Toast.LENGTH_SHORT).show();
+
+
+                    } else {
+                        bottomholder.setVisibility(View.GONE);
+                        data2.setVisibility(View.VISIBLE);
+                    }
+                }
+            });
+
+        }
 
     }
 
@@ -151,7 +195,9 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
         markerOptions.title("Your Marked Address");
         //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.marker));
         //Toast.makeText(this, ""+getlatlang(addressData.getLAT_LONG()).latitude+","+getlatlang(addressData.getLAT_LONG()).longitude, Toast.LENGTH_SHORT).show();
-        markerOptions.position(getlatlang(addressData.getLAT_LONG()));
+        if (addressData!= null) {
+            markerOptions.position(getlatlang(addressData.getLAT_LONG()));
+        }else markerOptions.position(ResturantCoordinates.resturantLatLong);
         markerOptions.draggable(true);
 
         mMap.setMinZoomPreference(10f);
@@ -174,12 +220,15 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
                     try {
                         address = getLocationfromLat(latLng.latitude, latLng.longitude);
                         addressline1.setText(address.getAddressLine(0));
-
+                        isadded = true;
 
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-                }else Toast.makeText(AddressEdit.this,"Sorry we are not yet serving to your location.",Toast.LENGTH_SHORT).show();
+                }else{
+                    Toast.makeText(AddressEdit.this,"Sorry we are not yet serving to your location.",Toast.LENGTH_SHORT).show();
+
+                }
             }
         });
 
@@ -202,7 +251,6 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
                     try {
                         address = getLocationfromLat(marker.getPosition().latitude, marker.getPosition().longitude);
                         addressline1.setText(address.getAddressLine(0));
-                        addressline2.setText(address.getAddressLine(1));
                         city.setText(address.getLocality());
                         zip.setText(address.getPostalCode());
                     } catch (IOException e) {
@@ -223,8 +271,10 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
                 .geodesic(true));
 */
 
-        cordinatesInteractor.fetchAllCoordinates();
+        cordinatesInteractor.fetchAllCoordinatesFromStorage();
+        if (addressData != null)
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(getlatlang(addressData.getLAT_LONG()), 18));
+        else mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(ResturantCoordinates.resturantLatLong, 18));
 
 
 
@@ -247,7 +297,7 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
         String postalCode = addresses.get(0).getPostalCode();
         String knownName = addresses.get(0).getFeatureName();
 
-        addressline2.setText("State: $"+state+"# Country: %"+country+"* Address: @"+address+"^ KnownName: !"+knownName);
+        //addressline2.setText("State: $"+state+"# Country: %"+country+"* Address: @"+address+"^ KnownName: !"+knownName);
         this.city.setText(city);
         zip.setText(postalCode);
 
@@ -313,8 +363,15 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onAddressUpdate(Task<Void> task, boolean isTaskSucessful) {
-        Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
-        finish();
+        if (addressData != null) {
+            Toast.makeText(this, "Updated", Toast.LENGTH_SHORT).show();
+            finish();
+        }else {
+            Intent intent = new Intent();
+            intent.putExtra("data",addressDatan);
+            setResult(1078,intent);
+            finish();
+        }
     }
 
     @Override
@@ -345,6 +402,10 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
 
     @Override
     public void onCordinatesFailure(Exception exception) {
-        Toast.makeText(this,exception.getMessage(),Toast.LENGTH_SHORT).show();
+        if (exception instanceof StorageFailure){
+            cordinatesInteractor.fetchAllCoordinates();
+            Toast.makeText(this,"Storage failure",Toast.LENGTH_LONG).show();
+        }else
+            Toast.makeText(this, ""+exception.getMessage(), Toast.LENGTH_SHORT).show();
     }
 }

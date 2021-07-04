@@ -144,7 +144,7 @@ public class Profile extends Fragment {
         });
 
         ((LinearLayout)view.findViewById(R.id.addAddress)).setOnClickListener(vir ->{
-            startActivity(new Intent(getActivity(), AddAddressActivity.class).putExtra("fetch",false));
+            startActivity(new Intent(getActivity(), AddUpdateAddress.class).putExtra("fetch",false));
         });
 
 

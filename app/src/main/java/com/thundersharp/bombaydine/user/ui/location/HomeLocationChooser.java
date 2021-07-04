@@ -63,6 +63,7 @@ import com.thundersharp.bombaydine.user.core.address.CordinatesInteractor;
 import com.thundersharp.bombaydine.user.core.address.Cordinateslistner;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefHelper;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
+import com.thundersharp.bombaydine.user.core.location.StorageFailure;
 import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.user.core.utils.Resturant;
 
@@ -114,7 +115,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
         mapFragment.getMapAsync(this);
 
         addressHelper = new AddressHelper(this,this,"");
-        cordinatesInteractor = new CordinatesInteractor(this);
+        cordinatesInteractor = new CordinatesInteractor(this,this);
         sharedPrefHelper = new SharedPrefHelper(this, new SharedPrefUpdater.OnSharedprefUpdated() {
             @Override
             public void onSharedPrefUpdate(AddressData addressData) {
@@ -314,7 +315,7 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
                 .geodesic(true));
 */
 
-        cordinatesInteractor.fetchAllCoordinates();
+        cordinatesInteractor.fetchAllCoordinatesFromStorage();
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Resturant.resturantLatLong, 18));
 
 
@@ -426,7 +427,11 @@ public class HomeLocationChooser extends AppCompatActivity implements OnMapReady
 
     @Override
     public void onCordinatesFailure(Exception exception) {
-
+        if (exception instanceof StorageFailure){
+            cordinatesInteractor.fetchAllCoordinates();
+            Toast.makeText(this,"Storage failure",Toast.LENGTH_LONG).show();
+        }else
+            Toast.makeText(this, ""+exception.getMessage(), Toast.LENGTH_SHORT).show();
     }
 
     protected void createLocationRequest() {

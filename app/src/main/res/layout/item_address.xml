@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:cardBackgroundColor="#22242c"
+    android:layout_marginHorizontal="10dp"
+    app:cardElevation="5dp"
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="7dp"
+    android:minHeight="70dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/dimen_10dp"
+        android:minHeight="70dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            android:layout_toStartOf="@+id/endicon"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tittle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#B8BABD"
+                android:text="Home"
+                android:textStyle="bold"
+                android:textSize="16sp"/>
+
+            <TextView
+                android:id="@+id/addline1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginTop="@dimen/dimen_5dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="#D6D6D6"
+                android:maxLines="3"
+                android:ellipsize="end"
+                android:fontFamily="@font/calibri"
+                android:text="Address line 1: "
+                android:textSize="13sp"/>
+
+            <TextView
+                android:id="@+id/addline2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="#D6D6D6"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:fontFamily="@font/calibri"
+                android:text="Address line 2: "
+                android:textSize="13sp"/>
+
+            <TextView
+                android:id="@+id/city"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="#D6D6D6"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="City: "
+                android:fontFamily="@font/calibri"
+                android:textSize="13sp"/>
+
+            <TextView
+                android:id="@+id/pincode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="#D6D6D6"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:text="Zip: "
+                android:fontFamily="@font/calibri"
+                android:textSize="13sp"/>
+
+            <TextView
+                android:id="@+id/recentorders"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="5dp"
+                android:textColor="#D6D6D6"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textIsSelectable="true"
+                android:text="Co-ordinate: "
+                android:textSize="13sp"/>
+
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/endicon"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:src="@drawable/ic_baseline_more_vert_24"
+            app:tint="#E8E8E8"
+            android:layout_alignParentEnd="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="10dp"/>
+
+    </RelativeLayout>
+
+
+
+
+</androidx.cardview.widget.CardView>

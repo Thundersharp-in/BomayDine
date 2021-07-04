@@ -16,8 +16,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.maps.android.PolyUtil;
@@ -36,7 +34,7 @@ import com.thundersharp.bombaydine.user.ui.location.AddressEdit;
 import java.util.Arrays;
 import java.util.List;
 
-public class AllAddressHolderAdapter extends RecyclerView.Adapter<AllAddressHolderAdapter.ViewHolder> implements
+public class AllPreviousAdapter extends RecyclerView.Adapter<AllPreviousAdapter.ViewHolder> implements
         SharedPrefUpdater.OnSharedprefUpdated, Cordinateslistner.fetchSuccessListener {
 
     private Context context;
@@ -45,7 +43,7 @@ public class AllAddressHolderAdapter extends RecyclerView.Adapter<AllAddressHold
     private CordinatesInteractor cordinatesInteractor;
     List<LatLng> latLngList;
 
-    public AllAddressHolderAdapter(Context context, List<AddressData> addressData) {
+    public AllPreviousAdapter(Context context, List<AddressData> addressData) {
         this.context = context;
         this.addressData = addressData;
         cordinatesInteractor = new CordinatesInteractor(this,context);
@@ -56,7 +54,7 @@ public class AllAddressHolderAdapter extends RecyclerView.Adapter<AllAddressHold
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.addressholder,parent,false));
+        return new ViewHolder(LayoutInflater.from(context).inflate(R.layout.item_address,parent,false));
     }
 
     @Override
@@ -64,14 +62,6 @@ public class AllAddressHolderAdapter extends RecyclerView.Adapter<AllAddressHold
         AddressData addressDatainst = addressData.get(position);
         holder.tittle.setText(addressDatainst.getADDRESS_NICKNAME());
         holder.recentorders.setText(addressDatainst.getADDRESS_LINE1());//+","+addressDatainst.getADDRESS_LINE2()+","+addressDatainst.getCITY()+",Pin : "+addressDatainst.getZIP()
-
-        if (addressDatainst.getADDRESS_NICKNAME().equalsIgnoreCase("Home")){
-            holder.homeicon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_outline_home_24));
-        }else if (addressDatainst.getADDRESS_NICKNAME().equalsIgnoreCase("Office")) {
-            holder.homeicon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_outline_home_work_24));
-        }else if (addressDatainst.getADDRESS_NICKNAME().equalsIgnoreCase("Others")){
-            holder.homeicon.setImageDrawable(context.getResources().getDrawable(R.drawable.ic_outline_share_location_24));
-        }
 
         boolean isInBounds = PolyUtil.containsLocation(LatLongConverter.initialize().getlatlang(addressDatainst.getLAT_LONG()),latLngList,false);
         if (!isInBounds){
@@ -146,15 +136,15 @@ public class AllAddressHolderAdapter extends RecyclerView.Adapter<AllAddressHold
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private ImageView homeicon,endicon;
+        private ImageView endicon;
         private TextView tittle,recentorders;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            homeicon = itemView.findViewById(R.id.homeicon);
+
             tittle = itemView.findViewById(R.id.tittle);
-            recentorders = itemView.findViewById(R.id.recentorders);
+            recentorders = itemView.findViewById(R.id.addline1);
             endicon = itemView.findViewById(R.id.endicon);
 
             itemView.setOnClickListener(this);
@@ -163,9 +153,7 @@ public class AllAddressHolderAdapter extends RecyclerView.Adapter<AllAddressHold
         @Override
         public void onClick(View view) {
             boolean isInBounds = PolyUtil.containsLocation(LatLongConverter.initialize().getlatlang(addressData.get(getAdapterPosition()).getLAT_LONG()),latLngList,false);
-            if (isInBounds)
-            sharedPrefHelper.SaveDataToSharedPref(addressData.get(getAdapterPosition()));
-            else Toast.makeText(context, "Not serviceable", Toast.LENGTH_SHORT).show();
+
         }
     }
 }

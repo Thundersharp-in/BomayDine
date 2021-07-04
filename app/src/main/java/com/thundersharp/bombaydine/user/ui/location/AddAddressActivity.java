@@ -82,7 +82,7 @@ public class AddAddressActivity extends AppCompatActivity implements
         Places.initialize(this, getResources().getString(R.string.google_maps_key));
         addressHelper = new AddressHelper(this, this);
         sharedPrefHelper = new SharedPrefHelper(this, this);
-        CordinatesInteractor cordinatesInteractor = new CordinatesInteractor(this);
+        CordinatesInteractor cordinatesInteractor = new CordinatesInteractor(this,this);
 
         if (getIntent().getBooleanExtra("fetch",false)){
             edit = true;

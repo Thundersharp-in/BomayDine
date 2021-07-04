@@ -6,6 +6,10 @@ public interface Cordinateslistner {
 
     void fetchAllCoordinates();
 
+    void fetchAllCoordinatesFromStorage();
+
+    void saveCoordinatesToStorage(LatLng... coOrdinates);
+
     interface fetchSuccessListener{
         void onCordinatesSuccess(LatLng... coOrdinates);
         void onCordinatesFailure(Exception exception);

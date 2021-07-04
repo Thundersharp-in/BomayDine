@@ -93,6 +93,7 @@ import com.thundersharp.bombaydine.user.core.animation.Animator;
 import com.thundersharp.bombaydine.user.core.cart.CartHandler;
 import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 import com.thundersharp.bombaydine.user.core.location.DistanceFromCoordinates;
+import com.thundersharp.bombaydine.user.core.location.StorageFailure;
 import com.thundersharp.bombaydine.user.core.utils.LatLongConverter;
 import com.thundersharp.bombaydine.user.core.utils.Resturant;
 import com.thundersharp.bombaydine.user.ui.account.UpdateProfileActivity;
@@ -152,7 +153,7 @@ public class HomeFragment extends Fragment implements
     private PlacesAutoCompleteAdapter mAutoCompleteAdapter;
     private RecyclerView recyclerView;
     public static BottomSheetDialog bottomSheetDialog;
-    BottomSheetDialog bottomSheetDialogloc;
+    public static BottomSheetDialog bottomSheetDialogloc;
     /**
      * Pin code details from API
      */
@@ -185,6 +186,7 @@ public class HomeFragment extends Fragment implements
     private AppCompatButton pay;
     private EditText search_home;
     private RelativeLayout containermain;
+    private CordinatesInteractor cordinatesInteractor;
     private SharedPreferences sharedPreferences;
 
     private static List<Object> foodItemAdapterListStatic = new ArrayList<>();
@@ -500,12 +502,12 @@ public class HomeFragment extends Fragment implements
                 startActivityForResult(new Intent(getActivity(), HomeLocationChooser.class), 101);
             }
         });
-        CordinatesInteractor cordinatesInteractor = new CordinatesInteractor(HomeFragment.this);
+        cordinatesInteractor = new CordinatesInteractor(HomeFragment.this,getActivity());
 
         currentloc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                cordinatesInteractor.fetchAllCoordinates();
+                cordinatesInteractor.fetchAllCoordinatesFromStorage();
             }
         });
 
@@ -852,6 +854,7 @@ public class HomeFragment extends Fragment implements
                                                             0);
 
                                                     sharedPrefHelper.SaveDataToSharedPref(addressData);
+                                                    bottomSheetDialogloc.dismiss();
 
                                                 } catch (IOException e) {
                                                     e.printStackTrace();
@@ -1007,7 +1010,11 @@ public class HomeFragment extends Fragment implements
 
     @Override
     public void onCordinatesFailure(Exception exception) {
-        Toast.makeText(getActivity(), exception.getMessage(), Toast.LENGTH_SHORT).show();
+        if (exception instanceof StorageFailure){
+            cordinatesInteractor.fetchAllCoordinates();
+            Toast.makeText(getActivity(),"Storage failure",Toast.LENGTH_LONG).show();
+        }else
+            Toast.makeText(getActivity(), ""+exception.getMessage(), Toast.LENGTH_SHORT).show();
 
     }
 

@@ -38,6 +38,7 @@ import com.thundersharp.bombaydine.user.core.address.Cordinateslistner;
 import com.thundersharp.bombaydine.user.core.animation.Animator;
 import com.thundersharp.bombaydine.user.core.location.DirectionsJSONParser;
 import com.thundersharp.bombaydine.user.core.location.DistanceFromCoordinates;
+import com.thundersharp.bombaydine.user.core.location.StorageFailure;
 import com.thundersharp.bombaydine.user.core.utils.Resturant;
 
 import org.json.JSONObject;
@@ -61,6 +62,7 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
     private ShimmerFrameLayout shimmerFrameLayout;
     private RelativeLayout relativeLayout;
 
+    private CordinatesInteractor cordinatesInteractor;
     private Marker restmark,markedmarker;
     private RecyclerView recyclerView;
     private List<LatLng> coordinatesVal = new ArrayList<>();
@@ -114,8 +116,9 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
         restmark = mMap.addMarker(markerOptions);
 
 
-        CordinatesInteractor cordinatesInteractor = new CordinatesInteractor(this);
-        cordinatesInteractor.fetchAllCoordinates();
+        cordinatesInteractor = new CordinatesInteractor(this,getActivity());
+        cordinatesInteractor.fetchAllCoordinatesFromStorage();
+
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
             @Override
             public void onMapClick(LatLng latLng) {
@@ -215,7 +218,12 @@ public class Service_areas extends Fragment implements OnMapReadyCallback, Cordi
 
     @Override
     public void onCordinatesFailure(Exception exception) {
+        if (exception instanceof StorageFailure){
+            cordinatesInteractor.fetchAllCoordinates();
+            Toast.makeText(getActivity(),"Storage failure",Toast.LENGTH_LONG).show();
+        }else
         Toast.makeText(getActivity(), ""+exception.getMessage(), Toast.LENGTH_SHORT).show();
+
     }
 
     @NonNull
