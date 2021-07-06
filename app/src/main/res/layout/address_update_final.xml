@@ -1,36 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="#1e2026">
+    android:orientation="vertical"
+    android:background="#242f3e"
+    android:id="@+id/laya">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/toolbar"
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/mAppBarContainer"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:elevation="10dp"
-        android:background="#22242B"
-        app:navigationIcon="@drawable/quantum_ic_arrow_back_grey600_24"
-        app:title="Your addresses"
-        app:titleTextColor="#B8BABD"
-        android:theme="@style/ToolbarTheme"/>
+        android:layout_height="400dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerview"
+        <com.google.android.material.appbar.CollapsingToolbarLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="enterAlways|scroll|exitUntilCollapsed"
+            app:scrimAnimationDuration="100"
+            android:elevation="@dimen/dimen_4dp"
+            android:clipChildren="false"
+            app:titleEnabled="false">
+
+            <androidx.appcompat.widget.Toolbar
+                android:layout_width="match_parent"
+                android:layout_height="180dp"
+                android:elevation="0dp"
+                app:layout_collapseMode="pin" />
+
+
+                <fragment
+                    android:id="@+id/maps"
+                    android:name="com.google.android.gms.maps.SupportMapFragment"
+                    android:layout_width="match_parent"
+                    android:layout_marginBottom="-29dp"
+                    android:layout_height="425dp"/>
+
+
+
+        </com.google.android.material.appbar.CollapsingToolbarLayout>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/toolbar"
-        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+        android:background="@drawable/curved_darkone"
+        android:backgroundTint="@null"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"
+        android:overScrollMode="ifContentScrolls"
+        >
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addAddress"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/dimen_10dp"
-        android:src="@drawable/ic_outline_add_location_alt_24"
-        app:backgroundTint="#fff"
-        app:fabSize="normal"/>
-</RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+        >
+            <View
+                android:id="@+id/vwe"
+                android:layout_width="match_parent"
+                android:layout_alignParentTop="true"
+                android:layout_height="@dimen/dimen_20dp"/>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:orientation="vertical"
+                android:layout_below="@id/vwe"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginHorizontal="@dimen/dimen_5dp"
+                android:nestedScrollingEnabled="false"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+        </RelativeLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/addAddress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dimen_10dp"
+            app:backgroundTint="#fff"
+            app:iconTint="#221D1D"
+            android:elevation="9dp"
+            app:icon="@drawable/ic_outline_add_location_alt_24"
+            app:layout_anchorGravity="bottom|center_horizontal"
+            android:layout_gravity="bottom|center_horizontal"
+            app:fabSize="normal"/>
+
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

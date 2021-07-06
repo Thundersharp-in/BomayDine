@@ -145,6 +145,8 @@ public class AddressEdit extends AppCompatActivity implements OnMapReadyCallback
 
 
         }else {
+            worktype.check(R.id.home);
+
             savencontinue.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

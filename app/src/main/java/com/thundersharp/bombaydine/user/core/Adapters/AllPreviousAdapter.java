@@ -1,6 +1,7 @@
 package com.thundersharp.bombaydine.user.core.Adapters;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.view.LayoutInflater;
@@ -9,10 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -60,8 +64,14 @@ public class AllPreviousAdapter extends RecyclerView.Adapter<AllPreviousAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         AddressData addressDatainst = addressData.get(position);
+        if (sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG().equalsIgnoreCase(addressDatainst.getLAT_LONG())){
+            holder.tick.setVisibility(View.VISIBLE);
+            holder.setok.setVisibility(View.GONE);
+        }
         holder.tittle.setText(addressDatainst.getADDRESS_NICKNAME());
         holder.recentorders.setText(addressDatainst.getADDRESS_LINE1());//+","+addressDatainst.getADDRESS_LINE2()+","+addressDatainst.getCITY()+",Pin : "+addressDatainst.getZIP()
+
+        holder.city.setText(addressDatainst.getCITY());
 
         boolean isInBounds = PolyUtil.containsLocation(LatLongConverter.initialize().getlatlang(addressDatainst.getLAT_LONG()),latLngList,false);
         if (!isInBounds){
@@ -75,26 +85,31 @@ public class AllPreviousAdapter extends RecyclerView.Adapter<AllPreviousAdapter.
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem menuItem) {
-                        switch (menuItem.getItemId()){
-                            case R.id.edit :
-                                context.startActivity(new Intent(context, AddressEdit.class).putExtra("data",addressDatainst));
+                        switch (menuItem.getItemId()) {
+                            case R.id.edit:
+                                context.startActivity(new Intent(context, AddressEdit.class).putExtra("data", addressDatainst));
                                 break;
-                            case R.id.del :
-                                FirebaseDatabase
-                                        .getInstance()
-                                        .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
-                                        .child(FirebaseAuth.getInstance().getUid())
-                                        .child(CONSTANTS.DATABASE_NODE_ADDRESS)
-                                        .child(String.valueOf(addressDatainst.getID()))
-                                        .removeValue()
-                                        .addOnCompleteListener(task -> { //TODO UPdate to shared pref if bydefult contains
-                                            if (task.isSuccessful()){
-                                                Toast.makeText(context, "Deleted!", Toast.LENGTH_SHORT).show();
-                                                addressData.remove(position);
-                                                notifyDataSetChanged();
-                                            }else
-                                                Toast.makeText(context, ""+task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                                        });
+                            case R.id.del:
+                                if (sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG().equalsIgnoreCase(addressDatainst.getLAT_LONG())) {
+                                    Toast.makeText(context, "Cannot delete a primary location.", Toast.LENGTH_SHORT).show();
+                                } else{
+                                    FirebaseDatabase
+                                            .getInstance()
+                                            .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
+                                            .child(FirebaseAuth.getInstance().getUid())
+                                            .child(CONSTANTS.DATABASE_NODE_ADDRESS)
+                                            .child(String.valueOf(addressDatainst.getID()))
+                                            .removeValue()
+                                            .addOnCompleteListener(task -> { //TODO UPdate to shared pref if bydefult contains
+                                                if (task.isSuccessful()) {
+                                                    Toast.makeText(context, "Deleted!", Toast.LENGTH_SHORT).show();
+                                                    addressData.remove(position);
+                                                    notifyDataSetChanged();
+                                                } else
+                                                    Toast.makeText(context, "" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                            });
+                        }
+
 
                                 break;
                         }
@@ -114,8 +129,8 @@ public class AllPreviousAdapter extends RecyclerView.Adapter<AllPreviousAdapter.
 
     @Override
     public void onSharedPrefUpdate(AddressData addressData) {
-        HomeFragment.bottomSheetDialogloc.dismiss();
-        HomeFragment.textcurrloc.setText(addressData.getADDRESS_NICKNAME()+": "+addressData.getADDRESS_LINE1());
+        //AllPreviousAdapter.this.notifyDataSetChanged();
+        context.sendBroadcast(new Intent("full"));
     }
 
     @Override
@@ -136,24 +151,46 @@ public class AllPreviousAdapter extends RecyclerView.Adapter<AllPreviousAdapter.
 
     class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
-        private ImageView endicon;
-        private TextView tittle,recentorders;
+        private ImageView endicon,tick;
+        RelativeLayout update;
+        private TextView tittle,recentorders,city,setok;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
 
+            city = itemView.findViewById(R.id.city);
+
             tittle = itemView.findViewById(R.id.tittle);
             recentorders = itemView.findViewById(R.id.addline1);
             endicon = itemView.findViewById(R.id.endicon);
+            update = itemView.findViewById(R.id.update);
+            tick = itemView.findViewById(R.id.tick);
+            setok=itemView.findViewById(R.id.setok);
 
-            itemView.setOnClickListener(this);
+            update.setOnClickListener(this);
         }
 
         @Override
         public void onClick(View view) {
             boolean isInBounds = PolyUtil.containsLocation(LatLongConverter.initialize().getlatlang(addressData.get(getAdapterPosition()).getLAT_LONG()),latLngList,false);
+            if (isInBounds) {
+                if (sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG().equalsIgnoreCase(addressData.get(getAdapterPosition()).getLAT_LONG())) {
+                    Toast.makeText(context, "Already a primary location.", Toast.LENGTH_SHORT).show();
+                } else {
+                    new AlertDialog.Builder(context).setMessage("Set this address as your default address ?").setPositiveButton("OK", (dialogInterface, i) -> {
 
+                        sharedPrefHelper.SaveDataToSharedPref(addressData.get(getAdapterPosition()));
+
+
+
+                    }).setNegativeButton("CANCEL", (dialogInterface, i) -> {
+
+                    }).setCancelable(false).show();
+                }
+            }else {
+                Toast.makeText(context, "Unserviceable location", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 }

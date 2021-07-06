@@ -4,9 +4,8 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardBackgroundColor="#22242c"
-    android:layout_marginHorizontal="10dp"
-    app:cardElevation="5dp"
-    android:layout_marginBottom="10dp"
+    app:cardElevation="7dp"
+    android:layout_margin="@dimen/dimen_5dp"
     app:cardCornerRadius="7dp"
     android:minHeight="70dp">
 
@@ -17,9 +16,9 @@
         android:minHeight="70dp">
 
         <LinearLayout
+            android:id="@+id/nipata"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
             android:layout_toStartOf="@+id/endicon"
             android:orientation="vertical">
@@ -43,23 +42,32 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:textColor="#D6D6D6"
+                    android:textColor="#E0EA83"
                     android:maxLines="3"
                     android:ellipsize="end"
                     android:fontFamily="@font/calibri"
-                    android:text="Address line 1 : "
-                    android:textSize="12sp"/>
+                    android:text="Address "
+                    android:textSize="13sp"/>
+
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="2dp"
+                >
                 <TextView
                     android:id="@+id/addline1"
                     android:layout_width="0dp"
                     android:layout_weight="3"
                     android:layout_height="wrap_content"
-                    android:textColor="#D6D6D6"
-                    android:maxLines="3"
+                    android:textColor="#BABABA"
+                    android:maxLines="5"
                     android:ellipsize="end"
                     android:fontFamily="@font/calibri"
-                    android:text="Full Address"
-                    android:textSize="13sp"/>
+                    android:text="Full Address" />
 
             </LinearLayout>
 
@@ -73,115 +81,35 @@
                     android:layout_width="0dp"
                     android:layout_weight="1"
                     android:layout_height="wrap_content"
-                    android:textColor="#D6D6D6"
-                    android:maxLines="3"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/calibri"
-                    android:text="Address line 2 : "
-                    android:textSize="12sp"/>
-                <TextView
-                    android:id="@+id/addline2"
-                    android:layout_width="0dp"
-                    android:layout_weight="3"
-                    android:layout_height="wrap_content"
-                    android:textColor="#D6D6D6"
-                    android:maxLines="3"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/calibri"
-                    android:text="Address line 2 is here"
-                    android:textSize="13sp"/>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/dimen_5dp"
-                >
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:textColor="#D6D6D6"
+                    android:textColor="#E0EA83"
                     android:maxLines="3"
                     android:ellipsize="end"
                     android:fontFamily="@font/calibri"
                     android:text="City : "
-                    android:textSize="12sp"/>
+                    android:textSize="13sp"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="2dp"
+                >
                 <TextView
                     android:id="@+id/city"
                     android:layout_width="0dp"
                     android:layout_weight="3"
                     android:layout_height="wrap_content"
-                    android:textColor="#D6D6D6"
+                    android:textColor="#BABABA"
                     android:maxLines="1"
                     android:ellipsize="end"
                     android:fontFamily="@font/calibri"
                     android:text="City name"
-                    android:textSize="13sp"/>
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/dimen_5dp"
-                >
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:textColor="#D6D6D6"
-                    android:maxLines="3"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/calibri"
-                    android:text="Zip : "
-                    android:textSize="12sp"/>
-                <TextView
-                    android:id="@+id/pincode"
-                    android:layout_width="0dp"
-                    android:layout_weight="3"
-                    android:layout_height="wrap_content"
-                    android:textColor="#D6D6D6"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/calibri"
-                    android:text="123456"
-                    android:textSize="13sp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="@dimen/dimen_5dp"
-                >
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_weight="1"
-                    android:layout_height="wrap_content"
-                    android:textColor="#D6D6D6"
-                    android:maxLines="3"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/calibri"
-                    android:text="Co-ordinate : "
-                    android:textSize="12sp"/>
-                <TextView
-                    android:id="@+id/recentorders"
-                    android:layout_width="0dp"
-                    android:layout_weight="3"
-                    android:layout_height="wrap_content"
-                    android:textColor="#D6D6D6"
-                    android:maxLines="1"
-                    android:ellipsize="end"
-                    android:fontFamily="@font/calibri"
-                    android:text="12.234595845 , 123.74923875982356928"
-                    android:textSize="13sp"
-                    android:textIsSelectable="true"
                     />
 
             </LinearLayout>
+
 
         </LinearLayout>
 
@@ -192,10 +120,40 @@
             android:src="@drawable/ic_baseline_more_vert_24"
             app:tint="#E8E8E8"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_alignParentTop="true"
-            android:layout_marginTop="10dp"/>
+            android:layout_alignParentTop="true"/>
+
+        <RelativeLayout
+            android:id="@+id/update"
+            android:layout_below="@+id/nipata"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dimen_35dp"
+            android:layout_marginTop="@dimen/dimen_10dp"
+            android:layout_marginHorizontal="@dimen/dimen_10dp"
+            android:background="@drawable/corner_rect_blue"
+            android:layout_alignParentEnd="true">
+            <TextView
+                android:id="@+id/setok"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="SET PRIMARY"
+                android:textColor="#D3D3D3"
+                android:textSize="@dimen/dimen_12sp"
+                android:fontFamily="@font/calibrib"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_centerHorizontal="true"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_baseline_check_24"
+                android:layout_centerInParent="true"
+                android:visibility="gone"
+                android:id="@+id/tick"/>
+
+
+        </RelativeLayout>
+
 
     </RelativeLayout>
 
