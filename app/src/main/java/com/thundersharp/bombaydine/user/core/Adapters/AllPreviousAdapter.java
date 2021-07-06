@@ -100,7 +100,7 @@ public class AllPreviousAdapter extends RecyclerView.Adapter<AllPreviousAdapter.
                                             .child(CONSTANTS.DATABASE_NODE_ADDRESS)
                                             .child(String.valueOf(addressDatainst.getID()))
                                             .removeValue()
-                                            .addOnCompleteListener(task -> { //TODO UPdate to shared pref if bydefult contains
+                                            .addOnCompleteListener(task -> {
                                                 if (task.isSuccessful()) {
                                                     Toast.makeText(context, "Deleted!", Toast.LENGTH_SHORT).show();
                                                     addressData.remove(position);

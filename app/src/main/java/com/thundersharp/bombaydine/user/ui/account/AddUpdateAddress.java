@@ -2,17 +2,21 @@ package com.thundersharp.bombaydine.user.ui.account;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Toast;
 
@@ -56,11 +60,22 @@ public class AddUpdateAddress extends AppCompatActivity implements OnMapReadyCal
     private List<LatLng> coordinatesVal;
     private HashMap<String, Marker> markerHashMap;
 
+    private AlertDialog.Builder builder;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.address_update_final);
+
+        builder = new AlertDialog.Builder(this);
+        View dialogview = LayoutInflater.from(this).inflate(R.layout.progress_dialog,null,false);
+        builder.setView(dialogview);
+        builder.setCancelable(false);
+
+        dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
         markerHashMap = new HashMap<>();
         cordinatesInteractor = new CordinatesInteractor(this,this);
         SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager()
@@ -68,7 +83,11 @@ public class AddUpdateAddress extends AppCompatActivity implements OnMapReadyCal
         mapFragment.getMapAsync(this);
         dataList = new ArrayList<>();
         ((ExtendedFloatingActionButton)findViewById(R.id.addAddress))
-                .setOnClickListener(c->startActivityForResult(new Intent(this, AddressEdit.class),1078));
+                .setOnClickListener(c->{
+                    dialog.show();
+                    startActivityForResult(new Intent(this, AddressEdit.class),1078);
+
+                });
 
         addressHelper = new AddressHelper(this, new AddressLoader.onAddresLoadListner() {
             @Override
@@ -104,8 +123,9 @@ public class AddUpdateAddress extends AppCompatActivity implements OnMapReadyCal
                 Marker marker = mMap.addMarker(markerOptions);
                 markerHashMap.put(addressData.getLAT_LONG(),marker);
             }
-
+            dialog.dismiss();
         }else {
+            dialog.dismiss();
             Toast.makeText(this, "Map not yet ready waiting", Toast.LENGTH_SHORT).show();
 
         }
@@ -115,6 +135,7 @@ public class AddUpdateAddress extends AppCompatActivity implements OnMapReadyCal
     @Override
     protected void onPause() {
         super.onPause();
+        dialog.dismiss();
         unregisterReceiver(broadcastReceiver);
     }
 
@@ -128,6 +149,7 @@ public class AddUpdateAddress extends AppCompatActivity implements OnMapReadyCal
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 1078){
+            dialog.show();
             AddressData addressData = (AddressData) data.getSerializableExtra("data");
             if (addressDatamain == null){
                 List<AddressData> data1 = new ArrayList<>();
@@ -170,6 +192,7 @@ public class AddUpdateAddress extends AppCompatActivity implements OnMapReadyCal
         mMap = googleMap;
         mMap.setMapStyle(style);
         mMap.setMyLocationEnabled(false);
+        dialog.show();
         cordinatesInteractor.fetchAllCoordinatesFromStorage();
     }
 
@@ -183,7 +206,7 @@ public class AddUpdateAddress extends AppCompatActivity implements OnMapReadyCal
                 .geodesic(true));
         // on below line we will be starting the drawing of polyline.
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(Resturant.resturantLatLong, 13));
-
+        dialog.dismiss();
 
     }
 
@@ -191,8 +214,11 @@ public class AddUpdateAddress extends AppCompatActivity implements OnMapReadyCal
     public void onCordinatesFailure(Exception exception) {
         if (exception instanceof StorageFailure){
             cordinatesInteractor.fetchAllCoordinates();
+            dialog.dismiss();
             Toast.makeText(this,"Storage failure "+exception.getMessage(),Toast.LENGTH_LONG).show();
-        }else
-            Toast.makeText(this, ""+exception.getMessage(), Toast.LENGTH_SHORT).show();
+        }else {
+            dialog.dismiss();
+            Toast.makeText(this, "" + exception.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 }
