@@ -66,8 +66,11 @@
         <activity android:name=".user.ui.startup.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:host="bombaydine124.page.link" android:scheme="http"/>
+
             </intent-filter>
         </activity>
 
