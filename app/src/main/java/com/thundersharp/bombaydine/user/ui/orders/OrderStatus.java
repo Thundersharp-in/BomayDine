@@ -26,6 +26,9 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.dynamiclinks.DynamicLink;
+import com.google.firebase.dynamiclinks.FirebaseDynamicLinks;
+import com.google.firebase.dynamiclinks.ShortDynamicLink;
 import com.razorpay.PaymentResultListener;
 import com.thundersharp.billgenerator.Billing;
 import com.thundersharp.billgenerator.InfoData;
@@ -295,8 +298,40 @@ public class OrderStatus extends AppCompatActivity implements
             } catch (ParametersMissingException e) {
                 e.printStackTrace();
             }
+        }else if (item.getItemId() == R.id.share){
+            generateShareLink(orederBasicDetails.getOrderID(),orederBasicDetails.getUid());
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    protected synchronized void generateShareLink(String orderID, String uid) {
+        String url = "https://bombaydine.thundersharp.in/order/?uid="+uid+"#orderid%"+orderID;
+        FirebaseDynamicLinks.getInstance().createDynamicLink()
+                .setLink(Uri.parse(url))
+                .setDomainUriPrefix("https://bombaydine.thundersharp.in/")
+                .setAndroidParameters(new DynamicLink.AndroidParameters.Builder().build())
+                .buildShortDynamicLink()
+                .addOnCompleteListener(this, new OnCompleteListener<ShortDynamicLink>() {
+                    @Override
+                    public void onComplete(@NonNull Task<ShortDynamicLink> task) {
+                        if (task.isSuccessful()) {
+                            // Short link created
+                            Uri shortLink = task.getResult().getShortLink();
+                            Uri flowchartLink = task.getResult().getPreviewLink();
+
+                            Intent sendIntent = new Intent();
+                            sendIntent.setAction(Intent.ACTION_SEND);
+                            sendIntent.putExtra(Intent.EXTRA_TEXT,"Hi track the order from bombaydine with orderId "+orederBasicDetails.getOrderID()+"\nDownload the app now.\n\n"+shortLink.toString());
+                            sendIntent.setType("text/plain");
+                            startActivity(sendIntent);
+                        } else {
+                            Toast.makeText(OrderStatus.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            // Error
+                            // ...
+                        }
+                    }
+                });
+
     }
 
 

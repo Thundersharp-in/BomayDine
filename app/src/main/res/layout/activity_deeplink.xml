@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".DeeplinkActivity">
+
+
+    <RelativeLayout
+        android:id="@+id/dfgh"
+        android:layout_width="130dp"
+        android:layout_height="130dp"
+        android:layout_centerInParent="true"
+        android:background="@null">
+
+        <ProgressBar
+            android:id="@+id/progress_stepspoint"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/circle_shape"
+            android:indeterminateTint="#E91E63" />
+
+        <ImageView
+            android:layout_width="55dp"
+            android:layout_height="55dp"
+            android:padding="@dimen/dimen_10dp"
+            android:src="@drawable/hamburger"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+    <TextView
+        android:layout_below="@id/dfgh"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginHorizontal="@dimen/dimen_15dp"
+        android:textColor="#E91E63"
+        android:layout_marginTop="@dimen/dimen_15dp"
+        android:textAlignment="center"
+        android:text="Please wait while we take you \nto your food destination..."/>
+
+
+</RelativeLayout>

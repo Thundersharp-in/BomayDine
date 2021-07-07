@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.thundersharp.admin.AdminModule;
+import com.thundersharp.bombaydine.DeeplinkActivity;
 import com.thundersharp.bombaydine.Delevery.main.HomeDelevery;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.kitchen.main.HomeKitchen;
@@ -31,7 +32,6 @@ public class MainActivity extends AppCompatActivity implements Cordinateslistner
         accountHelper = AccountHelper.getInstance(this);
         cordinatesInteractor = new CordinatesInteractor(this,this);
         cordinatesInteractor.fetchAllCoordinates();
-
 
 
 
