@@ -10,6 +10,7 @@ import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -164,7 +165,23 @@ public class DealOfTheDayAdapter extends RecyclerView.Adapter<DealOfTheDayAdapte
         @Override
         public int OnTextChangeListner(int val) {
             FoodItemAdapter foodItemAdapter = (FoodItemAdapter) itemObjectlist.get(getAdapterPosition());
-            cartProvider.AddItemToCart(CartItemModel.initializeValues(foodItemAdapter.getAMOUNT(),foodItemAdapter.getDESC(),foodItemAdapter.getFOOD_TYPE(),foodItemAdapter.getICON_URL(),foodItemAdapter.getNAME(),foodItemAdapter.getID(),val),val);
+
+            if (foodItemAdapter.isAVAILABLE()){
+                cartProvider.AddItemToCart(CartItemModel.initializeValues(foodItemAdapter.getAMOUNT(),foodItemAdapter.getDESC(),foodItemAdapter.getFOOD_TYPE(),foodItemAdapter.getICON_URL(),foodItemAdapter.getNAME(),foodItemAdapter.getID(),val),val);
+            }else {
+                Toast.makeText(context, "Not available right now", Toast.LENGTH_SHORT).show();
+                cartProvider.AddItemToCart(
+                        CartItemModel.initializeValues(
+                                foodItemAdapter.getAMOUNT(),
+                                foodItemAdapter.getDESC(),
+                                foodItemAdapter.getFOOD_TYPE(),
+                                foodItemAdapter.getICON_URL(),
+                                foodItemAdapter.getNAME(),
+                                foodItemAdapter.getID(),
+                                0), 0);
+
+                elegentNumberHelper.updateNo(0);
+            }
             currentpos = getAdapterPosition();
             return 0;
         }

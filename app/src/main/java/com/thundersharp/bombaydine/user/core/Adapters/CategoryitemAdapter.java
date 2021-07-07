@@ -112,16 +112,32 @@ public class CategoryitemAdapter extends RecyclerView.Adapter<CategoryitemAdapte
                 Toast.makeText(context, "Missing parameters : Can't add to cart try adding from all items.", Toast.LENGTH_SHORT).show();
                 elegentNumberHelper.updateNo(val-1);
             }else {
-                cartProvider.AddItemToCart(
-                        CartItemModel.initializeValues(
-                                foodItemAdapter.getAMOUNT(),
-                                foodItemAdapter.getDESC(),
-                                foodItemAdapter.getFOOD_TYPE(),
-                                foodItemAdapter.getICON_URL(),
-                                foodItemAdapter.getNAME(),
-                                foodItemAdapter.getID(),
-                                val),
-                        val);
+                if (foodItemAdapter.isAVAILABLE()){
+                    cartProvider.AddItemToCart(
+                            CartItemModel.initializeValues(
+                                    foodItemAdapter.getAMOUNT(),
+                                    foodItemAdapter.getDESC(),
+                                    foodItemAdapter.getFOOD_TYPE(),
+                                    foodItemAdapter.getICON_URL(),
+                                    foodItemAdapter.getNAME(),
+                                    foodItemAdapter.getID(),
+                                    val),
+                            val);
+                    //elegentNumberHelper.updateNo(cartItemModels.get(i).getQUANTITY());
+                }else {
+                    Toast.makeText(context, "Not available right now", Toast.LENGTH_SHORT).show();
+                    cartProvider.AddItemToCart(
+                            CartItemModel.initializeValues(
+                                    foodItemAdapter.getAMOUNT(),
+                                    foodItemAdapter.getDESC(),
+                                    foodItemAdapter.getFOOD_TYPE(),
+                                    foodItemAdapter.getICON_URL(),
+                                    foodItemAdapter.getNAME(),
+                                    foodItemAdapter.getID(),
+                                    0), 0);
+
+                    elegentNumberHelper.updateNo(0);//cartItemModels.get(i).getQUANTITY()
+                }
             }
             return 0;
         }

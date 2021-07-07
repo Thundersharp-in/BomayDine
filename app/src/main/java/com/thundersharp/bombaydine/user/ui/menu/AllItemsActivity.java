@@ -162,6 +162,7 @@ public class AllItemsActivity extends AppCompatActivity implements
         dialog = builder.create();
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
+        recomended.setHasFixedSize(true);
         /*
          veg.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked)
