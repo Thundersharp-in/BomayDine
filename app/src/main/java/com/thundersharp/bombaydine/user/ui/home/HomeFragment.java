@@ -18,6 +18,7 @@ import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -67,10 +68,13 @@ import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.PolyUtil;
-import com.thundersharp.admin.core.utils.CONSTANTS;
+import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
+import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllAddressHolderAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.AllItemAdapter;
@@ -106,6 +110,7 @@ import com.thundersharp.bombaydine.user.ui.menu.TopSellingAll;
 import com.thundersharp.bombaydine.user.ui.offers.AllOffersActivity;
 import com.thundersharp.bombaydine.user.ui.offers.CustomOfferActivity;
 import com.thundersharp.bombaydine.user.ui.orders.ConfirmPhoneName;
+import com.thundersharp.bombaydine.user.ui.orders.OrderStatus;
 import com.thundersharp.bombaydine.user.ui.orders.RecentOrders;
 import com.thundersharp.bombaydine.user.ui.scanner.QrScanner;
 
@@ -147,8 +152,7 @@ public class HomeFragment extends Fragment implements
     private AllItemAdapter allItemAdapter;
     private RecyclerView horizontalScrollView, categoryRecycler, topsellingholder;
     private MaterialCardView breakfast,lunch,dinner;
-    private RelativeLayout bottomnoti;
-
+    private RelativeLayout bottomnoti_order;
 
     private PlacesAutoCompleteAdapter mAutoCompleteAdapter;
     private RecyclerView recyclerView;
@@ -180,19 +184,26 @@ public class HomeFragment extends Fragment implements
 
     private TextView version;
     private boolean isVisible;
-    private ImageView clearcompleate;
-    private LinearLayout bottom_clickable_linear;
+    private LinearLayout bottom_clickable_linear, bottom_clickable_linear_order;
     private TextView view_action;
+    private RelativeLayout bottomnoti;
+    private ImageView clearcompleate;
+
+    private TextView view_action_order;
+    private ImageView clearcompleate_order;
     private AppCompatButton pay;
     private EditText search_home;
     private RelativeLayout containermain;
     private CordinatesInteractor cordinatesInteractor;
     private SharedPreferences sharedPreferences;
-
+    private float x1,x2;
+    static final int MIN_DISTANCE = 150;
     private static List<Object> foodItemAdapterListStatic = new ArrayList<>();
 
     OfflineDataProvider offlineDataProvider;
     SwipeRefreshLayout swipe_refresh;
+
+    OrederBasicDetails last_order;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -230,9 +241,13 @@ public class HomeFragment extends Fragment implements
         lunch = view.findViewById(R.id.lunch);
         dinner = view.findViewById(R.id.dinner);
         bottomnoti = view.findViewById(R.id.bottomnoti);
+        bottomnoti_order = view.findViewById(R.id.bottomnoti_order);
         clearcompleate = view.findViewById(R.id.clearcompleate);
+        clearcompleate_order = view.findViewById(R.id.clearcompleate_order);
         bottom_clickable_linear = view.findViewById(R.id.bottom_clickable_linear);
+        bottom_clickable_linear_order = view.findViewById(R.id.bottom_clickable_linear_order);
         view_action = view.findViewById(R.id.view_action);
+        view_action_order = view.findViewById(R.id.view_action_order);
         search_home=view.findViewById(R.id.search_home);
 
         Animator
@@ -262,6 +277,7 @@ public class HomeFragment extends Fragment implements
         sharedPreferences = getActivity().getSharedPreferences(CONSTANTS.PROFILE_NODE_PROFILEPICURI, Context.MODE_PRIVATE);
 
         bottomnoti.setVisibility(View.INVISIBLE);
+        bottomnoti_order.setVisibility(View.GONE);
         isVisible = false;
 
         mRequestQueue = Volley.newRequestQueue(getContext());
@@ -271,7 +287,6 @@ public class HomeFragment extends Fragment implements
         addressHelper = new AddressHelper(getActivity(), this);
 
         //recyclerView = (RecyclerView) view.findViewById(R.id.places_recycler_view);
-
 
 
         if (offlineDataProvider.doSharedPrefExists()){
@@ -285,30 +300,54 @@ public class HomeFragment extends Fragment implements
         }
 
         clearcompleate.setOnClickListener(view1 -> {
+            Toast.makeText(getActivity(), "Clicked ", Toast.LENGTH_SHORT).show();
             offlineDataProvider.clearSharedPref();
             Animator.initializeAnimator().slideDown(bottomnoti);
             refreshAdapter();
         });
 
+        clearcompleate_order.setOnClickListener(view1 -> {
+            Animator.initializeAnimator().slideDown(bottomnoti_order);
+            bottomnoti_order.setVisibility(View.GONE);
+        });
+
+
+        /*
         bottom_clickable_linear.setOnClickListener(view1 -> {
             if (bottomnoti.getVisibility() == View.VISIBLE)
-                showcart(view);
+                startActivity(new Intent(getActivity(), AllItemsActivity.class));
+            //showcart(view);
         });
+
+        bottom_clickable_linear_order.setOnClickListener(view1 -> {
+            if (bottomnoti_order.getVisibility() == View.VISIBLE) {
+                if (last_order !=null) OrderStatus.showOrderStatus(getActivity(),last_order);
+            }
+        });
+         */
+
 
         view_action.setOnClickListener(view1 -> {
             if (bottomnoti.getVisibility() == View.VISIBLE)
-                showcart(view);
+                startActivity(new Intent(getActivity(), AllItemsActivity.class));
+            //showcart(view);
         });
-        /*
-         if (FirebaseAuth.getInstance().getCurrentUser() != null && sharedPreferences!=null) {
-            String profile_url = sharedPreferences.getString(CONSTANTS.DATABASE_NODE_PROFILEPICURI, null);
-            if (profile_url != null){
-                Glide.with(getActivity()).load(profile_url).into(profile);
-            }else Glide.with(getActivity()).load(R.mipmap.ic_launcher_round).into(profile);
 
-        }else Glide.with(getActivity()).load(R.mipmap.ic_launcher_round).into(profile);
+        view_action_order.setOnClickListener(view1 -> {
+            if (bottomnoti_order.getVisibility() == View.VISIBLE) {
+                if (last_order !=null){
+                    OrderStatus.showOrderStatus(getActivity(),last_order);
+                }else {
+                    bottomnoti_order.setVisibility(View.GONE);
+                }
+            }else {
+                bottomnoti_order.setVisibility(View.GONE);
+            }
+            //showcart(view);
+        });
 
-         */
+
+
         if (FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()!=null){
             Glide.with(getActivity()).load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString()).into(profile);
         }else {
@@ -451,7 +490,6 @@ public class HomeFragment extends Fragment implements
         });
 
 
-
         BroadcastReceiver broadcastReceiver =new BroadcastReceiver() {
             @Override
             public void onReceive(Context context, Intent intent) {
@@ -462,6 +500,8 @@ public class HomeFragment extends Fragment implements
             }
 
         };
+
+        LoadOrderData();
 
         search_home.addTextChangedListener(new TextWatcher() {
             @Override
@@ -484,6 +524,59 @@ public class HomeFragment extends Fragment implements
         getActivity().registerReceiver(broadcastReceiver,new IntentFilter("updated"));
         swipe_refresh.setRefreshing(false);
 
+    }
+
+    private void LoadOrderData() {
+        if (FirebaseAuth.getInstance().getCurrentUser()!=null) {
+            DatabaseReference reference = FirebaseDatabase
+                    .getInstance()
+                    .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
+                    .child(FirebaseAuth.getInstance().getUid())
+                    .child(CONSTANTS.DATABASE_NODE_ORDERS)
+                    .child(CONSTANTS.DATABASE_NODE_OVERVIEW);
+
+            Query query = reference.orderByKey().limitToFirst(1);
+
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    if (snapshot.exists()){
+                        for (DataSnapshot snapshot1 : snapshot.getChildren()){
+                            last_order = snapshot1.getValue(OrederBasicDetails.class);
+                        }
+                        switch (last_order.getStatus()){
+                            case "0" :
+                            case "1" :
+                            case "10":
+                            case "2":
+                            case "4":
+                            case "5":
+                            case "6":
+                            case "8":
+                            case "9":
+                                Animator.initializeAnimator().slideUp(bottomnoti_order);
+                                bottomnoti_order.setVisibility(View.VISIBLE);
+                                break;
+                            default:
+                                bottomnoti_order.setVisibility(View.GONE);
+                                break;
+
+
+
+                        }
+
+                    }else {
+                        last_order = null;
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    Toast.makeText(getActivity(), ""+error.toException().getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }
     }
 
     private void currentLocation(View view) {
@@ -559,6 +652,7 @@ public class HomeFragment extends Fragment implements
     }
 
 
+    /*
     private void showcart(View view) {
 
         View bottomview = LayoutInflater.from(getActivity()).inflate(R.layout.botomsheet_cart,view.findViewById(R.id.botomcontainer));
@@ -595,6 +689,7 @@ public class HomeFragment extends Fragment implements
         ch_address.setOnClickListener(viewadd -> currentLocation(view));
         change_Name.setOnClickListener(addName ->startActivityForResult(new Intent(getActivity(), ConfirmPhoneName.class), 1008));
     }
+     */
 
 
     private void updateCartData(){
@@ -971,7 +1066,8 @@ public class HomeFragment extends Fragment implements
                 Toast.makeText(getContext(), "Location is required to get current location", Toast.LENGTH_SHORT).show();
 
             }
-        } else if (resultCode == 1008) {
+        }/*
+         else if (resultCode == 1008) {
             if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                 if (data.getData() != null) {
                     name_phone.setText(String.valueOf(data.getData()));
@@ -979,6 +1075,7 @@ public class HomeFragment extends Fragment implements
                     Toast.makeText(getActivity(), "Data fetch failure!", Toast.LENGTH_SHORT).show();//else name_phone.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName()+"+91 XXXXXXXXXX");
             } else Toast.makeText(getActivity(), "Login First", Toast.LENGTH_SHORT).show();
         }
+        */
     }
 
 

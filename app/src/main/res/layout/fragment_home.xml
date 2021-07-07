@@ -655,7 +655,8 @@
 
     </androidx.core.widget.NestedScrollView>
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
-    <RelativeLayout
+
+        <RelativeLayout
         android:id="@+id/bottomnoti"
         android:layout_width="match_parent"
         android:layout_height="50dp"
@@ -743,6 +744,105 @@
                 android:layout_marginEnd="15dp"
                 android:textColor="#9F9F9F"
                 android:text="You have saved items in your cart"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textSize="13sp"/>
+
+
+        </LinearLayout>
+
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/bottomnoti_order"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@drawable/curve_top"
+        android:layout_alignParentBottom="true"
+        android:elevation="7dp">
+
+        <LinearLayout
+            android:id="@+id/end_con_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:elevation="4dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/view_action_order"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="15dp"
+                android:textColor="#ff975d"
+                android:text="VIEW"
+                android:textSize="11sp"/>
+
+
+            <ImageView
+                android:id="@+id/clearcompleate_order"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                app:tint="#B11F51"
+                android:src="@drawable/ic_baseline_close_24"/>
+        </LinearLayout>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/card_order"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            app:cardCornerRadius="7dp"
+            app:cardElevation="4dp"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="10dp"
+            app:cardBackgroundColor="#1e2026">
+
+            <ImageView
+                android:src="@drawable/lunch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/demoimg_order"
+                android:scaleType="centerCrop"/>
+        </androidx.cardview.widget.CardView>
+
+        <LinearLayout
+            android:id="@+id/bottom_clickable_linear_order"
+            android:layout_toEndOf="@id/card_order"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="13dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="10dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/view_headding_order"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="sans-serif-smallcaps"
+                android:layout_marginEnd="15dp"
+                android:textColor="#D5D5D5"
+                android:text="Order In Progress"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:textSize="13sp"/>
+
+            <TextView
+                android:id="@+id/view_desc_order"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:fontFamily="@font/calibri"
+                android:layout_marginEnd="15dp"
+                android:textColor="#9F9F9F"
+                android:text="You have some orders in progress..."
                 android:maxLines="1"
                 android:ellipsize="end"
                 android:textSize="13sp"/>

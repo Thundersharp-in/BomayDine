@@ -32,4 +32,6 @@ public class CONSTANTS {
     public static final String PROFILE_NODE_PROFILEPICURI = "PROFILEURL";
     public static final String DATABASE_NODE_PROFILEPICURI = "PROFILEURL";
 
+    public static final String DATABASE_TOP_CAROUSEL = "TOP_CAROUSEL";
+
 }
