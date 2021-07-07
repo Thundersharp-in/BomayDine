@@ -1,9 +1,13 @@
 package com.thundersharp.bombaydine.user.ui.orders;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.RecyclerView;
@@ -79,7 +84,10 @@ public class OrderStatus extends AppCompatActivity implements
     private List<OrderModel> model;
     private Toolbar toolbar;
     OrderDetailHelper helper;
-    private LinearLayout button;
+    private LinearLayout button, promo_line;
+
+    private AlertDialog.Builder builder;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +103,14 @@ public class OrderStatus extends AppCompatActivity implements
             Toast.makeText(this, "Error in getting details", Toast.LENGTH_SHORT).show();
             finish();
         }
+        //processing dilog
+        builder = new AlertDialog.Builder(this);
+        View dialogview = LayoutInflater.from(this).inflate(R.layout.progress_dialog,null,false);
+        builder.setView(dialogview);
+        builder.setCancelable(false);
+
+        dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         initializeViews();
 
@@ -142,23 +158,37 @@ public class OrderStatus extends AppCompatActivity implements
         grand_total.setText("\u20B9 " + orederBasicDetails.getTotalamt());
         order_no.setText("#" + orederBasicDetails.getOrderID());
         order_date.setText(TimeUtils.getTimeFromTimeStamp(orederBasicDetails.getOrderID()));
+        order_phone_no.setText(orederBasicDetails.getDeliveryNameData().substring(orederBasicDetails.getDeliveryNameData().indexOf(",+91")+4));
         delevery_charge.setText("\u20B9" + orederBasicDetails.getDelivery_charge());
-        promo_code.setText(orederBasicDetails.getPromocodeNameNdiscount());
+        if (orederBasicDetails.getPromocodeNameNdiscount().equals("")){
+            promo_line.setVisibility(View.GONE);
+        }else {
+            promo_line.setVisibility(View.VISIBLE);
+            promo_code.setText(orederBasicDetails.getPromocodeNameNdiscount().substring(0,orederBasicDetails.getPromocodeNameNdiscount().indexOf("$")));
+            promo_amount.setText("-\u20B9 " + orederBasicDetails.getPromocodeNameNdiscount().substring(orederBasicDetails.getPromocodeNameNdiscount().indexOf("#")+1));
+        }
         order_caller_no.setText("Call Resturant on : " + Resturant.resturantcontact);
         helper.FetchOrder(orederBasicDetails.getOrderID());
 
         if (orederBasicDetails.getStatus().equalsIgnoreCase("0")){
             textupdate.setText("Current order status is Payment pending, Click here to retry payment within 10 minutes.");
             textupdate.setOnClickListener(v -> {
+                dialog.show();
                 Resturant.isOpen(new com.thundersharp.conversation.utils.Resturant.Resturantopen() {
                     @Override
                     public void isOpen(boolean isOpen) {
                         if (isOpen) {
-                            if (FirebaseAuth.getInstance().getCurrentUser().getEmail() != null && FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() != null)
+                            if (FirebaseAuth.getInstance().getCurrentUser().getEmail() != null && FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() != null){
                                 Payments.initialize(OrderStatus.this).startPayment("Order #" + orederBasicDetails.getOrderID(), orederBasicDetails.getOrderID(), Double.parseDouble(orederBasicDetails.getTotalamt()), FirebaseAuth.getInstance().getCurrentUser().getEmail(), FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-                            else
+                            }
+                            else{
                                 Toast.makeText(OrderStatus.this, "Update phone no and email in profile", Toast.LENGTH_SHORT).show();
-                        }else Toast.makeText(OrderStatus.this,"Resturant not accepting orders",Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
+                            }
+                        }else {
+                            dialog.dismiss();
+                            Toast.makeText(OrderStatus.this,"Resturant not accepting orders",Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
             });
@@ -201,6 +231,7 @@ public class OrderStatus extends AppCompatActivity implements
         lllb = findViewById(R.id.lllb);
         unfav = findViewById(R.id.unfav);
         textupdate = findViewById(R.id.textupdate);
+        promo_line = findViewById(R.id.promo_line);
     }
 
 
@@ -294,9 +325,11 @@ public class OrderStatus extends AppCompatActivity implements
                                 orederBasicDetails.setPaymentid(s);
                                 textupdate.setText("Your order is being prepared click here to chat with the cook for customisations.");
                                 recreate();
+                                dialog.dismiss();
                             }else {
                                 //TODO UPDATE AUTO REFUND LOGIC
                                 Toast.makeText(OrderStatus.this,"Could not update order contact support for your refund if not generated automatically",Toast.LENGTH_LONG).show();
+                                dialog.dismiss();
                             }
                         }
                     });
@@ -336,15 +369,20 @@ public class OrderStatus extends AppCompatActivity implements
                                     orederBasicDetails.setPaymentid(payId);
                                     textupdate.setText("Payment Failed please re order !!");
                                     recreate();
+                                    dialog.dismiss();
+                                }else {
+                                    dialog.dismiss();
                                 }
                             }
                         });
             }
             else {
                 Toast.makeText(this, "Payment failed : "+jsonObject.getJSONObject("error").getString("code"), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
             }
 
         } catch (JSONException e) {
+            dialog.dismiss();
             e.printStackTrace();
         }
     }

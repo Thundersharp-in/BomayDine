@@ -1,9 +1,11 @@
 package com.thundersharp.bombaydine.user.ui.menu;
 
+import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
@@ -21,6 +23,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.recyclerview.widget.RecyclerView;
@@ -115,6 +118,9 @@ public class AllItemsActivity extends AppCompatActivity implements
     OfferModel offerModel;
     TextView delevering_to_address, est_time, name_phone ;
 
+    private AlertDialog.Builder builder;
+    private Dialog dialog;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,7 +152,18 @@ public class AllItemsActivity extends AppCompatActivity implements
         egg = findViewById(R.id.egg);
 
         bottomholder.setVisibility(View.INVISIBLE);
-        veg.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+        //processing dilog
+        builder = new AlertDialog.Builder(this);
+        View dialogview = LayoutInflater.from(this).inflate(R.layout.progress_dialog,null,false);
+        builder.setView(dialogview);
+        builder.setCancelable(false);
+
+        dialog = builder.create();
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        /*
+         veg.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked)
             allItemAdapterMailAdapter.getFilter().filter("0");
         });
@@ -160,6 +177,7 @@ public class AllItemsActivity extends AppCompatActivity implements
         });
 
 
+         */
 
         bottomholder.setOnClickListener(view -> {
             if (FirebaseAuth.getInstance().getCurrentUser() != null)
@@ -351,6 +369,7 @@ public class AllItemsActivity extends AppCompatActivity implements
         shoe_offers.setOnClickListener(viewk -> startActivityForResult(new Intent(this, AllOffersActivity.class), 001));
 
         pay.setOnClickListener(view -> {
+            dialog.show();
             if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                 StringBuilder stringBuilder = new StringBuilder();
                 for (int q = 0; q < data.size(); q++) {
@@ -407,17 +426,21 @@ public class AllItemsActivity extends AppCompatActivity implements
 
                                         @Override
                                         public void addFailure(Exception exception) {
+                                            dialog.dismiss();
                                             Toast.makeText(AllItemsActivity.this, "Payment cannot be initialized cause :" + exception.getMessage(), Toast.LENGTH_SHORT).show();
                                         }
                                     }).setOrderToDatabase(data, orederBasicDetails);
 
-                        } else
+                        } else {
+                            dialog.dismiss();
                             Toast.makeText(AllItemsActivity.this, "Resturant not open", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
 
 
             } else {
+                dialog.dismiss();
                 Toast.makeText(AllItemsActivity.this, "Log in first", Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(AllItemsActivity.this, LoginActivity.class));
             }
@@ -735,6 +758,7 @@ public class AllItemsActivity extends AppCompatActivity implements
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        dialog.dismiss();
         unregisterReceiver(broadcastReceiver);
     }
 
@@ -743,7 +767,7 @@ public class AllItemsActivity extends AppCompatActivity implements
     public void onPaymentSuccess(String s, PaymentData paymentData) {
 
         if (s.contains("pay_")) {
-            Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
             HashMap<String, Object> updateDataRequest = new HashMap<>();
             updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS + "/" + TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID()) + "/" + orederBasicDetails.getOrderID() + "/status", "1");
             updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS + "/" + TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID()) + "/" + orederBasicDetails.getOrderID() + "/paymentid", s);
@@ -759,6 +783,7 @@ public class AllItemsActivity extends AppCompatActivity implements
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
                             if (task.isSuccessful()) {
+                                dialog.dismiss();
                                 //TODO UPDATE DIALOG BOX LOGIC AND CART EMPTY LOGIC
                                 cartProvider.clearCart();
 
@@ -770,11 +795,14 @@ public class AllItemsActivity extends AppCompatActivity implements
                                 finish();
                             } else {
                                 //TODO UPDATE AUTO REFUND LOGIC
+                                dialog.dismiss();
                                 Toast.makeText(AllItemsActivity.this, "Could not update order contact support for your refund if not generated automatically", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
 
+        }else {
+            dialog.dismiss();
         }
     }
 
@@ -808,6 +836,7 @@ public class AllItemsActivity extends AppCompatActivity implements
                                     cartProvider.clearCart();
                                     orederBasicDetails.setStatus("4");
                                     orederBasicDetails.setPaymentid(payId);
+                                    dialog.dismiss();
                                     OrderStatus.showOrderStatus(AllItemsActivity.this, orederBasicDetails);
                                     //textupdate.setText("Payment Failed please re order !!");
                                     finish();
@@ -816,6 +845,7 @@ public class AllItemsActivity extends AppCompatActivity implements
                         });
             } else {
                 cartProvider.clearCart();
+                dialog.dismiss();
                 sendBroadcast(new Intent("updated"));
                 OrderStatus.showOrderStatus(AllItemsActivity.this, orederBasicDetails);
                 Toast.makeText(this, "Payment failed : " + jsonObject.getJSONObject("error").getString("code"), Toast.LENGTH_SHORT).show();
@@ -823,6 +853,7 @@ public class AllItemsActivity extends AppCompatActivity implements
             }
 
         } catch (JSONException e) {
+            dialog.dismiss();
             e.printStackTrace();
         }
     }
