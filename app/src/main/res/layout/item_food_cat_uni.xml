@@ -18,6 +18,7 @@
             android:layout_height="70dp"
             >
             <ImageView
+                android:id="@+id/food_img"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:src="@drawable/download"
@@ -25,6 +26,7 @@
                 android:scaleType="centerCrop"
                 />
             <ImageView
+                android:id="@+id/food_type"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:src="@drawable/ic_baseline_circle_24"
@@ -62,6 +64,7 @@
                 >
 
                 <TextView
+                    android:id="@+id/cat_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Royal Chicken Rice Bowl (Serves 1)"
@@ -73,6 +76,7 @@
                     />
 
                 <TextView
+                    android:id="@+id/sub_title"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="In Rice Bowl"
@@ -226,6 +230,7 @@
         </LinearLayout>
 
         <TextView
+            android:id="@+id/price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Rs. 312"
@@ -234,6 +239,7 @@
             android:textSize="15sp"
             />
         <TextView
+            android:id="@+id/desc"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Breaking out of the norm doesn't get more louis ipson trufr esds lour "
