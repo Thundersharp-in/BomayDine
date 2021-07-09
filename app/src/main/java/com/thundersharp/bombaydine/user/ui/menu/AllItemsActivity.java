@@ -32,6 +32,8 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.razorpay.PaymentData;
@@ -47,6 +49,7 @@ import com.thundersharp.bombaydine.user.core.Data.OfferListner;
 import com.thundersharp.bombaydine.user.core.Data.OffersProvider;
 import com.thundersharp.bombaydine.user.core.Model.AddressData;
 import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
+import com.thundersharp.bombaydine.user.core.Model.FoodItemAdapter;
 import com.thundersharp.bombaydine.user.core.Model.OfferModel;
 import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
 import com.thundersharp.bombaydine.user.core.OfflineDataSync.OfflineDataProvider;
@@ -74,7 +77,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -106,7 +111,8 @@ public class AllItemsActivity extends AppCompatActivity implements
     Double upto, promo_percent;
     RelativeLayout promo_line;
     private AppCompatButton pay;
-    CheckBox veg, non_veg, egg;
+    Chip veg, non_veg, egg;
+    ChipGroup chip_group;
 
     public static List<Object> staticAllItemsData = new ArrayList<>();
     public static List<Object> staticAllItemsRecomended = new ArrayList<>();
@@ -121,6 +127,8 @@ public class AllItemsActivity extends AppCompatActivity implements
     private AlertDialog.Builder builder;
     private Dialog dialog;
 
+    HashMap<String,Boolean> checkeditem ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -128,6 +136,11 @@ public class AllItemsActivity extends AppCompatActivity implements
         homeDataProvider = new HomeDataProvider(this, this, this);
         bottomSheetDialog = new BottomSheetDialog(this, R.style.BottomSheetDialogTheme);
         sharedPrefHelper = new SharedPrefHelper(this, null);
+
+        checkeditem = new HashMap<>();
+        checkeditem.put("0",false);
+        checkeditem.put("1",false);
+        checkeditem.put("2",false);
 
         offlineDataProvider = OfflineDataProvider.getInstance(this);
         recyclermain = findViewById(R.id.recyclermain);
@@ -151,6 +164,23 @@ public class AllItemsActivity extends AppCompatActivity implements
         non_veg = findViewById(R.id.non_veg);
         egg = findViewById(R.id.egg);
 
+        veg.setOnCheckedChangeListener((compoundButton, b) -> {
+            checkeditem.put("0",b);
+            sortCurrentData(checkeditem);
+        });
+
+
+        egg.setOnCheckedChangeListener((compoundButton, b) -> {
+            checkeditem.put("2",b);
+            sortCurrentData(checkeditem);
+        });
+
+        non_veg.setOnCheckedChangeListener((compoundButton, b) -> {
+            checkeditem.put("1",b);
+            sortCurrentData(checkeditem);
+        });
+
+
         bottomholder.setVisibility(View.INVISIBLE);
 
         //processing dilog
@@ -163,22 +193,6 @@ public class AllItemsActivity extends AppCompatActivity implements
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
         recomended.setHasFixedSize(true);
-        /*
-         veg.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked)
-            allItemAdapterMailAdapter.getFilter().filter("0");
-        });
-        non_veg.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked)
-                allItemAdapterMailAdapter.getFilter().filter("1");
-        });
-        egg.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (isChecked)
-                allItemAdapterMailAdapter.getFilter().filter("2");
-        });
-
-
-         */
 
         bottomholder.setOnClickListener(view -> {
             if (FirebaseAuth.getInstance().getCurrentUser() != null)
@@ -299,7 +313,8 @@ public class AllItemsActivity extends AppCompatActivity implements
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                allItemAdapterMailAdapter.getFilter().filter(s);
+                if (allItemAdapterMailAdapter != null)
+                    allItemAdapterMailAdapter.getFilter().filter(s);
             }
 
             @Override
@@ -309,6 +324,105 @@ public class AllItemsActivity extends AppCompatActivity implements
         });
 
         registerReceiver(broadcastReceiver, new IntentFilter("updated"));
+    }
+
+
+    private synchronized void sortCurrentData(HashMap<String, Boolean> checkeditem) {
+
+        if (checkeditem.get("0") && checkeditem.get("1") && checkeditem.get("2")){
+            refreshAdapter();
+            recomended.setVisibility(View.GONE);
+
+        }else if (checkeditem.get("0") && checkeditem.get("1")){
+
+            List<Object> data = new ArrayList<>();
+
+            for (Object o : staticAllItemsData){
+
+                if (((FoodItemAdapter)o).getFOOD_TYPE() == 0 ||((FoodItemAdapter)o).getFOOD_TYPE() == 1){
+                    data.add(o);
+                }
+            }
+
+            recomended.setVisibility(View.GONE);
+            refreshAdapter(data);
+
+
+        }else if (checkeditem.get("1") && checkeditem.get("2")){
+
+            List<Object> data = new ArrayList<>();
+
+            for (Object o : staticAllItemsData){
+
+                if (((FoodItemAdapter)o).getFOOD_TYPE() == 1 ||((FoodItemAdapter)o).getFOOD_TYPE() == 2){
+                    data.add(o);
+                }
+            }
+
+            recomended.setVisibility(View.GONE);
+            refreshAdapter(data);
+
+        }else if (checkeditem.get("0") && checkeditem.get("2")){
+
+            List<Object> data = new ArrayList<>();
+
+            for (Object o : staticAllItemsData){
+
+                if (((FoodItemAdapter)o).getFOOD_TYPE() == 0 ||((FoodItemAdapter)o).getFOOD_TYPE() == 2){
+                    data.add(o);
+                }
+            }
+
+            recomended.setVisibility(View.GONE);
+            refreshAdapter(data);
+
+        } else if (checkeditem.get("0")){
+
+            List<Object> data = new ArrayList<>();
+
+            for (Object o : staticAllItemsData){
+
+                if (((FoodItemAdapter)o).getFOOD_TYPE() == 0){
+                    data.add(o);
+                }
+            }
+
+            recomended.setVisibility(View.GONE);
+            refreshAdapter(data);
+
+        }else if (checkeditem.get("1")){
+
+            List<Object> data = new ArrayList<>();
+
+            for (Object o : staticAllItemsData){
+
+                if (((FoodItemAdapter)o).getFOOD_TYPE() == 1){
+                    data.add(o);
+                }
+            }
+
+            recomended.setVisibility(View.GONE);
+            refreshAdapter(data);
+
+        }else if (checkeditem.get("2")){
+
+            List<Object> data = new ArrayList<>();
+
+            for (Object o : staticAllItemsData){
+
+                if (((FoodItemAdapter)o).getFOOD_TYPE() == 2){
+                    data.add(o);
+                }
+            }
+
+            recomended.setVisibility(View.GONE);
+            refreshAdapter(data);
+
+        }else {
+            refreshAdapter();
+            recomended.setVisibility(View.VISIBLE);
+        }
+
     }
 
     private void showCart() {
@@ -689,6 +803,14 @@ public class AllItemsActivity extends AppCompatActivity implements
             //promo_line.setVisibility(View.GONE);
 
         }
+    }
+
+    private void refreshAdapter(List<Object> data) {
+        allItemAdapterMailAdapter = new AllItemAdapterMailAdapter(data, this);
+        recyclermain.setHasFixedSize(true);
+        recyclermain.setAdapter(allItemAdapterMailAdapter);
+
+        recyclermain.setVisibility(View.VISIBLE);
     }
 
     private void refreshAdapter() {

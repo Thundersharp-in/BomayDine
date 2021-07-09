@@ -32,6 +32,21 @@
 
     </style>
 
+    <style name="CustomChipChoic_vege" parent="@style/Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/chip_bg_sel_veg</item>
+
+    </style>
+
+    <style name="CustomChipChoice_egg" parent="@style/Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/chip_bg_sel_egg</item>
+
+    </style>
+
+    <style name="CustomChipChoice_non_veg" parent="@style/Widget.MaterialComponents.Chip.Choice">
+        <item name="chipBackgroundColor">@color/chip_bg_sel_non_veg</item>
+
+    </style>
+
     <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Light">
         <item name="android:fontFamily">sans-serif-light</item>
     </style>

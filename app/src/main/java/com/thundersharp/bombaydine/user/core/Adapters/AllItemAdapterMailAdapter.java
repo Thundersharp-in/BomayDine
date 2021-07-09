@@ -108,10 +108,32 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
             List<CartItemModel> cartItemModels = returnDataFromString(fetchitemfromStorage());
             for (int i = 0;i<cartItemModels.size();i++){
                 if (cartItemModels.get(i).getID().equalsIgnoreCase(foodItemAdapter.getID())){
-                    elegentNumberHelper.updateNo(cartItemModels.get(i).getQUANTITY());
+                    if (foodItemAdapter.isAVAILABLE()) {
+                        elegentNumberHelper.updateNo(cartItemModels.get(i).getQUANTITY());
+                        holder.counter_end.setVisibility(View.VISIBLE);
+                        holder.visiblity.setVisibility(View.GONE);
+                    }else {
+                        cartProvider.AddItemToCart(
+                                CartItemModel.initializeValues(
+                                        foodItemAdapter.getAMOUNT(),
+                                        foodItemAdapter.getDESC(),
+                                        foodItemAdapter.getFOOD_TYPE(),
+                                        foodItemAdapter.getICON_URL(),
+                                        foodItemAdapter.getNAME(),
+                                        foodItemAdapter.getID(),
+                                        0), 0);
+                        holder.counter_end.setVisibility(View.INVISIBLE);
+                        holder.visiblity.setVisibility(View.VISIBLE);
+
+                    }
                     break;
                 }
             }
+        }
+
+        if (!foodItemAdapter.isAVAILABLE()){
+            holder.counter_end.setVisibility(View.INVISIBLE);
+            holder.visiblity.setVisibility(View.VISIBLE);
         }
 
     }
@@ -165,10 +187,10 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
     class ViewHolder extends RecyclerView.ViewHolder implements
             ElegantNumberInteractor.setOnTextChangeListner{
 
-        public TextView cat_name;
+        public TextView cat_name,visiblity;
         private ImageView icon_main,veg_nonveg;
         private TextView name,description,amount,category;
-        private LinearLayout initial,finalview,cathol;
+        private LinearLayout initial,finalview,cathol,counter_end;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -184,6 +206,8 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
             amount = itemView.findViewById(R.id.amount);
             category = itemView.findViewById(R.id.category);
             cathol = itemView.findViewById(R.id.cathol);
+            visiblity = itemView.findViewById(R.id.visiblity);
+            counter_end = itemView.findViewById(R.id.counter_end);
             elegentNumberHelper = new ElegentNumberHelper(context,this,itemView);
         }
 
@@ -192,19 +216,6 @@ public class AllItemAdapterMailAdapter extends RecyclerView.Adapter<AllItemAdapt
             FoodItemAdapter foodItemAdapter = (FoodItemAdapter) itemObjectlist.get(getAdapterPosition());
             if (foodItemAdapter.isAVAILABLE()){
                 cartProvider.AddItemToCart(CartItemModel.initializeValues(foodItemAdapter.getAMOUNT(),foodItemAdapter.getDESC(),foodItemAdapter.getFOOD_TYPE(),foodItemAdapter.getICON_URL(),foodItemAdapter.getNAME(),foodItemAdapter.getID(),val),val);
-            }else {
-                Toast.makeText(context, "Not available right now", Toast.LENGTH_SHORT).show();
-                cartProvider.AddItemToCart(
-                        CartItemModel.initializeValues(
-                                foodItemAdapter.getAMOUNT(),
-                                foodItemAdapter.getDESC(),
-                                foodItemAdapter.getFOOD_TYPE(),
-                                foodItemAdapter.getICON_URL(),
-                                foodItemAdapter.getNAME(),
-                                foodItemAdapter.getID(),
-                                0), 0);
-
-                elegentNumberHelper.updateNo(0);
             }
             return 0;
         }

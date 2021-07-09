@@ -49,7 +49,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
+                        android:layout_marginBottom="13dp"
                         android:orientation="horizontal"
                         android:weightSum="6">
                         <EditText
@@ -91,43 +91,68 @@
                         android:orientation="horizontal"
                         android:visibility="visible">
 
-                        <RadioGroup
+                        <com.google.android.material.chip.ChipGroup
+                            android:id="@+id/chip_group"
                             android:layout_width="match_parent"
                             android:layout_height="35dp"
+                            app:singleSelection="false"
                             android:orientation="horizontal">
 
-                            <CheckBox
+                            <com.google.android.material.chip.Chip
                                 android:id="@+id/veg"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="5dp"
-                                android:buttonTint="#4CAF50"
-                                android:lines="1"
+                                app:chipIconEnabled="true"
+                                app:chipIcon="@drawable/ic_outline_local_pizza_24"
                                 android:text="Veg"
-                                android:textColor="#4CAF50" />
+                                style="@style/CustomChipChoic_vege"
+                                android:focusable="true"
+                                android:clickable="true"
+                                app:chipStartPadding="@dimen/dimen_10dp"
+                                app:chipEndPadding="@dimen/dimen_10dp"
+                                app:chipMinHeight="@dimen/dimen_50dp"
+                                app:chipIconTint="#C5C5C5"
+                                app:chipStrokeWidth="@dimen/dimen_1dp"
+                                app:chipStrokeColor="#AEAEAE"
+                                android:textColor="#C5C5C5" />
 
-                            <CheckBox
+                            <com.google.android.material.chip.Chip
                                 android:id="@+id/egg"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="5dp"
-                                android:buttonTint="#FFEB3B"
-                                android:lines="1"
+                                app:chipIconEnabled="true"
+                                app:chipIcon="@drawable/ic_outline_outdoor_grill_24"
                                 android:text="Eggs"
-                                android:textColor="#FFEB3B" />
+                                style="@style/CustomChipChoice_egg"
+                                android:focusable="true"
+                                android:clickable="true"
+                                app:chipStartPadding="@dimen/dimen_10dp"
+                                app:chipEndPadding="@dimen/dimen_10dp"
+                                app:chipMinHeight="@dimen/dimen_50dp"
+                                app:chipIconTint="#C5C5C5"
+                                app:chipStrokeWidth="@dimen/dimen_1dp"
+                                app:chipStrokeColor="#AEAEAE"
+                                android:textColor="#C5C5C5" />
 
-                            <CheckBox
+                            <com.google.android.material.chip.Chip
                                 android:id="@+id/non_veg"
-                                android:layout_width="0dp"
+                                android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginHorizontal="5dp"
-                                android:layout_weight="1"
-                                android:buttonTint="#E91E63"
-                                android:lines="1"
+                                app:chipIconEnabled="true"
+                                app:chipIcon="@drawable/ic_outline_set_meal_24"
                                 android:text="Non-veg"
-                                android:textColor="#E91E63" />
+                                style="@style/CustomChipChoice_non_veg"
+                                android:focusable="true"
+                                android:clickable="true"
+                                app:chipStartPadding="@dimen/dimen_10dp"
+                                app:chipEndPadding="@dimen/dimen_10dp"
+                                app:chipMinHeight="@dimen/dimen_50dp"
+                                app:chipIconTint="#C5C5C5"
+                                app:chipStrokeWidth="@dimen/dimen_1dp"
+                                app:chipStrokeColor="#AEAEAE"
+                                android:textColor="#C5C5C5" />
 
-                        </RadioGroup>
+                        </com.google.android.material.chip.ChipGroup>
 
                     </LinearLayout>
 
