@@ -88,10 +88,33 @@ public class DealOfTheDayAdapter extends RecyclerView.Adapter<DealOfTheDayAdapte
             List<CartItemModel> cartItemModels = returnDataFromString(fetchitemfromStorage());
             for (int i = 0;i<cartItemModels.size();i++){
                 if (cartItemModels.get(i).getID().equalsIgnoreCase(foodItemAdapter.getID())){
-                    elegentNumberHelper.updateNo(cartItemModels.get(i).getQUANTITY());
+                    if (foodItemAdapter.isAVAILABLE()) {
+                        elegentNumberHelper.updateNo(cartItemModels.get(i).getQUANTITY());
+                        holder.counter_end.setVisibility(View.VISIBLE);
+                        holder.visiblity.setVisibility(View.GONE);
+                    }else {
+                        cartProvider.AddItemToCart(
+                                CartItemModel.initializeValues(
+                                        foodItemAdapter.getAMOUNT(),
+                                        foodItemAdapter.getDESC(),
+                                        foodItemAdapter.getFOOD_TYPE(),
+                                        foodItemAdapter.getICON_URL(),
+                                        foodItemAdapter.getNAME(),
+                                        foodItemAdapter.getID(),
+                                        0), 0);
+                        holder.counter_end.setVisibility(View.INVISIBLE);
+                        holder.visiblity.setVisibility(View.VISIBLE);
+
+                    }
+                    //elegentNumberHelper.updateNo(cartItemModels.get(i).getQUANTITY());
                     break;
                 }
             }
+        }
+
+        if (!foodItemAdapter.isAVAILABLE()){
+            holder.counter_end.setVisibility(View.INVISIBLE);
+            holder.visiblity.setVisibility(View.VISIBLE);
         }
 
     }
@@ -146,7 +169,8 @@ public class DealOfTheDayAdapter extends RecyclerView.Adapter<DealOfTheDayAdapte
 
         private ImageView icon_main,veg_nonveg;
         private TextView name,description,amount;
-        private LinearLayout initial,finalview;
+        private LinearLayout initial,finalview,counter_end;
+        private TextView visiblity;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -159,6 +183,10 @@ public class DealOfTheDayAdapter extends RecyclerView.Adapter<DealOfTheDayAdapte
             name = itemView.findViewById(R.id.name);
             description = itemView.findViewById(R.id.desc);
             amount = itemView.findViewById(R.id.price);
+            counter_end = itemView.findViewById(R.id.counter_end);
+
+            visiblity = itemView.findViewById(R.id.visiblity);
+
             elegentNumberHelper = new ElegentNumberHelper(context,this,itemView);
         }
 
@@ -168,21 +196,7 @@ public class DealOfTheDayAdapter extends RecyclerView.Adapter<DealOfTheDayAdapte
 
             if (foodItemAdapter.isAVAILABLE()){
                 cartProvider.AddItemToCart(CartItemModel.initializeValues(foodItemAdapter.getAMOUNT(),foodItemAdapter.getDESC(),foodItemAdapter.getFOOD_TYPE(),foodItemAdapter.getICON_URL(),foodItemAdapter.getNAME(),foodItemAdapter.getID(),val),val);
-            }else {
-                Toast.makeText(context, "Not available right now", Toast.LENGTH_SHORT).show();
-                cartProvider.AddItemToCart(
-                        CartItemModel.initializeValues(
-                                foodItemAdapter.getAMOUNT(),
-                                foodItemAdapter.getDESC(),
-                                foodItemAdapter.getFOOD_TYPE(),
-                                foodItemAdapter.getICON_URL(),
-                                foodItemAdapter.getNAME(),
-                                foodItemAdapter.getID(),
-                                0), 0);
-
-                elegentNumberHelper.updateNo(0);
             }
-            currentpos = getAdapterPosition();
             return 0;
         }
     }
