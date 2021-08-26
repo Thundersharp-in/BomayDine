@@ -114,6 +114,7 @@ public class EditItemActivity extends AppCompatActivity {
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(EditItemActivity.this, android.R.layout.simple_spinner_dropdown_item, getFoodTypeList());
         foodType.setAdapter(adapter);
+
         customerAutoTV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

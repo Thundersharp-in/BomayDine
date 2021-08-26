@@ -19,8 +19,8 @@ public class CartProvider implements CartHandler {
     /**
      * Creates a new istance of the cart provider with fetchCartData listener.
      *
-     * @param fetchCartData
-     * @return
+     * @param fetchCartData Requires CartHandler.cart
+     * @return returns instance Object of CartProvider
      */
     public static CartProvider initialize(cart fetchCartData) {
         return new CartProvider(fetchCartData);
@@ -31,7 +31,7 @@ public class CartProvider implements CartHandler {
     }
 
     /**
-     * Creates a new istance of the cart provider with <>Cartholder.cart</> listener.
+     * Creates a new instance of the cart provider with <>Cartholder.cart</> listener.
      *
      * @param context
      * @param cartlistners
