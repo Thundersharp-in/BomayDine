@@ -34,6 +34,7 @@ public class CategoryitemAdapter extends RecyclerView.Adapter<CategoryitemAdapte
     private Context context;
     private List<Object> objectList;
     private ElegentNumberHelper elegentNumberHelper;
+    private CartProvider cartProvider;
 
     public CategoryitemAdapter(Context context, List<Object> objectList) {
         this.context = context;
@@ -44,7 +45,7 @@ public class CategoryitemAdapter extends RecyclerView.Adapter<CategoryitemAdapte
     @Override
     public holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(context).inflate(R.layout.item_food_cat_uni,parent,false);
-
+        cartProvider = CartProvider.initialize(context);
         return new holder(view);
     }
 
@@ -66,15 +67,39 @@ public class CategoryitemAdapter extends RecyclerView.Adapter<CategoryitemAdapte
             holder.food_type.setColorFilter(ContextCompat.getColor(context, R.color.green), android.graphics.PorterDuff.Mode.MULTIPLY);
 
         }
+
         if (doSharedPrefExists()){
             List<CartItemModel> cartItemModels = returnDataFromString(fetchitemfromStorage());
             for (int i = 0;i<cartItemModels.size();i++){
                 if (cartItemModels.get(i).getID().equalsIgnoreCase(foodItemModel.getID())){
-                    elegentNumberHelper.updateNo(cartItemModels.get(i).getQUANTITY());
+                    if (foodItemModel.isAVAILABLE()) {
+                        elegentNumberHelper.updateNo(cartItemModels.get(i).getQUANTITY());
+                        holder.counter_end.setVisibility(View.VISIBLE);
+                        holder.visiblity.setVisibility(View.GONE);
+                    }else {
+                        cartProvider.AddItemToCart(
+                                CartItemModel.initializeValues(
+                                        foodItemModel.getAMOUNT(),
+                                        foodItemModel.getDESC(),
+                                        foodItemModel.getFOOD_TYPE(),
+                                        foodItemModel.getICON_URL(),
+                                        foodItemModel.getNAME(),
+                                        foodItemModel.getID(),
+                                        0), 0);
+                        holder.counter_end.setVisibility(View.INVISIBLE);
+                        holder.visiblity.setVisibility(View.VISIBLE);
+
+                    }
                     break;
                 }
             }
         }
+
+        if (!foodItemModel.isAVAILABLE()){
+            holder.counter_end.setVisibility(View.INVISIBLE);
+            holder.visiblity.setVisibility(View.VISIBLE);
+        }
+
     }
 
     @Override
@@ -85,8 +110,8 @@ public class CategoryitemAdapter extends RecyclerView.Adapter<CategoryitemAdapte
 
     public class holder extends RecyclerView.ViewHolder implements ElegantNumberInteractor.setOnTextChangeListner  {
         ImageView food_img, food_type;
-        TextView cat_name, sub_title, price, desc;
-        LinearLayout initial,finalview;
+        TextView cat_name, sub_title, price, desc, visiblity;
+        LinearLayout initial,finalview, counter_end;
         CartProvider cartProvider;
 
         public holder(@NonNull View itemView) {
@@ -97,6 +122,8 @@ public class CategoryitemAdapter extends RecyclerView.Adapter<CategoryitemAdapte
             desc = itemView.findViewById(R.id.desc);
             food_img = itemView.findViewById(R.id.food_img);
             food_type = itemView.findViewById(R.id.food_type);
+            visiblity = itemView.findViewById(R.id.visiblity);
+            counter_end = itemView.findViewById(R.id.counter_end);
 
             initial = itemView.findViewById(R.id.initial);
             finalview = itemView.findViewById(R.id.finl);
@@ -108,36 +135,8 @@ public class CategoryitemAdapter extends RecyclerView.Adapter<CategoryitemAdapte
         @Override
         public int OnTextChangeListner(int val) {
             FoodItemAdapter foodItemAdapter = ((DataSnapshot)objectList.get(getAdapterPosition())).getValue(FoodItemAdapter.class);
-            if ((Integer)foodItemAdapter.getFOOD_TYPE() ==null || foodItemAdapter.getDESC() == null || foodItemAdapter.getCAT_NAME_ID() == null ||(Double)foodItemAdapter.getAMOUNT() ==null|| foodItemAdapter.getID() == null){
-                Toast.makeText(context, "Missing parameters : Can't add to cart try adding from all items.", Toast.LENGTH_SHORT).show();
-                elegentNumberHelper.updateNo(val-1);
-            }else {
-                if (foodItemAdapter.isAVAILABLE()){
-                    cartProvider.AddItemToCart(
-                            CartItemModel.initializeValues(
-                                    foodItemAdapter.getAMOUNT(),
-                                    foodItemAdapter.getDESC(),
-                                    foodItemAdapter.getFOOD_TYPE(),
-                                    foodItemAdapter.getICON_URL(),
-                                    foodItemAdapter.getNAME(),
-                                    foodItemAdapter.getID(),
-                                    val),
-                            val);
-                    //elegentNumberHelper.updateNo(cartItemModels.get(i).getQUANTITY());
-                }else {
-                    Toast.makeText(context, "Not available right now", Toast.LENGTH_SHORT).show();
-                    cartProvider.AddItemToCart(
-                            CartItemModel.initializeValues(
-                                    foodItemAdapter.getAMOUNT(),
-                                    foodItemAdapter.getDESC(),
-                                    foodItemAdapter.getFOOD_TYPE(),
-                                    foodItemAdapter.getICON_URL(),
-                                    foodItemAdapter.getNAME(),
-                                    foodItemAdapter.getID(),
-                                    0), 0);
-
-                    elegentNumberHelper.updateNo(0);//cartItemModels.get(i).getQUANTITY()
-                }
+            if (foodItemAdapter.isAVAILABLE()){
+                cartProvider.AddItemToCart(CartItemModel.initializeValues(foodItemAdapter.getAMOUNT(),foodItemAdapter.getDESC(),foodItemAdapter.getFOOD_TYPE(),foodItemAdapter.getICON_URL(),foodItemAdapter.getNAME(),foodItemAdapter.getID(),val),val);
             }
             return 0;
         }

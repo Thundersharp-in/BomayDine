@@ -188,7 +188,7 @@
                                 android:paddingEnd="7dp"
                                 android:paddingStart="7dp"
                                 android:src="@drawable/ic_baseline_add_24"
-                                android:tint="#959698"/>
+                                app:tint="#959698"/>
 
                         </LinearLayout>
 

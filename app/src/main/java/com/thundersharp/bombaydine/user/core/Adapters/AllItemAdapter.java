@@ -71,7 +71,38 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
         holder.description.setText(foodItemModel.getDESC());
         Glide.with(context).load(foodItemModel.getICON_URL()).into(holder.imageView);
 
-        //TODO UPDATE IS NOT HAPPENING LIVE Adapter.notifyDataSetChanged();
+        if (doSharedPrefExists()){
+            List<CartItemModel> cartItemModels = returnDataFromString(fetchitemfromStorage());
+            for (int i = 0;i<cartItemModels.size();i++){
+                if (cartItemModels.get(i).getID().equalsIgnoreCase(foodItemModel.getID())){
+                    if (foodItemModel.isAVAILABLE()) {
+                        elegentNumberHelper.updateNo(cartItemModels.get(i).getQUANTITY());
+                        holder.counter_end.setVisibility(View.VISIBLE);
+                        holder.visiblity.setVisibility(View.GONE);
+                    }else {
+                        cartProvider.AddItemToCart(
+                                CartItemModel.initializeValues(
+                                        foodItemModel.getAMOUNT(),
+                                        foodItemModel.getDESC(),
+                                        foodItemModel.getFOOD_TYPE(),
+                                        foodItemModel.getICON_URL(),
+                                        foodItemModel.getNAME(),
+                                        foodItemModel.getID(),
+                                        0), 0);
+                        holder.counter_end.setVisibility(View.INVISIBLE);
+                        holder.visiblity.setVisibility(View.VISIBLE);
+
+                    }
+                    break;
+                }
+            }
+        }
+
+        if (!foodItemModel.isAVAILABLE()){
+            holder.counter_end.setVisibility(View.INVISIBLE);
+            holder.visiblity.setVisibility(View.VISIBLE);
+        }
+        /*
         if (doSharedPrefExists()){
             List<CartItemModel> cartItemModels = returnDataFromString(fetchitemfromStorage());
             for (int i = 0;i<cartItemModels.size();i++){
@@ -81,6 +112,7 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
                 }
             }
         }
+         */
 
     }
 
@@ -139,8 +171,8 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
     class ViewHolder extends RecyclerView.ViewHolder implements ElegantNumberInteractor.setOnTextChangeListner{
 
         ImageView imageView;
-        TextView name,description,amount;
-        LinearLayout initial,finalview;
+        TextView name,description,amount, visiblity;
+        LinearLayout initial,finalview,counter_end;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -149,7 +181,8 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
             name = itemView.findViewById(R.id.name);
             description =  itemView.findViewById(R.id.description);
             amount = itemView.findViewById(R.id.amount);
-
+            visiblity = itemView.findViewById(R.id.visiblity);
+            counter_end = itemView.findViewById(R.id.counter_end);
             initial = itemView.findViewById(R.id.initial);
             finalview = itemView.findViewById(R.id.finl);
             cartProvider = CartProvider.initialize(context);
@@ -159,32 +192,8 @@ public class AllItemAdapter extends RecyclerView.Adapter<AllItemAdapter.ViewHold
         @Override
         public int OnTextChangeListner(int val) {
             FoodItemAdapter foodItemAdapter = (FoodItemAdapter) itemObjectlist.get(getAdapterPosition());
-
-
             if (foodItemAdapter.isAVAILABLE()){
-                cartProvider.AddItemToCart(
-                        CartItemModel.initializeValues(
-                                foodItemAdapter.getAMOUNT(),
-                                foodItemAdapter.getDESC(),
-                                foodItemAdapter.getFOOD_TYPE(),
-                                foodItemAdapter.getICON_URL(),
-                                foodItemAdapter.getNAME(),
-                                foodItemAdapter.getID(),
-                                val),
-                        val);
-            }else {
-                Toast.makeText(context, "Not available right now", Toast.LENGTH_SHORT).show();
-                cartProvider.AddItemToCart(
-                        CartItemModel.initializeValues(
-                                foodItemAdapter.getAMOUNT(),
-                                foodItemAdapter.getDESC(),
-                                foodItemAdapter.getFOOD_TYPE(),
-                                foodItemAdapter.getICON_URL(),
-                                foodItemAdapter.getNAME(),
-                                foodItemAdapter.getID(),
-                                0), 0);
-
-                elegentNumberHelper.updateNo(0);
+                cartProvider.AddItemToCart(CartItemModel.initializeValues(foodItemAdapter.getAMOUNT(),foodItemAdapter.getDESC(),foodItemAdapter.getFOOD_TYPE(),foodItemAdapter.getICON_URL(),foodItemAdapter.getNAME(),foodItemAdapter.getID(),val),val);
             }
             return 0;
         }
