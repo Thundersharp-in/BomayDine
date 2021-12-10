@@ -11,11 +11,16 @@
         android:iconTint="#ff975d"
         android:icon="@drawable/ic_outline_map_24"/>
 
+    <item
+        android:id="@+id/nav_table_booking"
+        android:title="Table booking"
+        android:iconTint="#ff975d"
+        android:icon="@drawable/ic_outline_table_bar_24"/>
+
     <item android:id="@+id/discover"
         android:title="Discover"
         android:iconTint="#ff975d"
         android:icon="@drawable/ic_outline_fastfood_24"/>
-
 
     <item android:id="@+id/profile"
         android:title="Profile"

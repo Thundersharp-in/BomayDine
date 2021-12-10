@@ -10,7 +10,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public final class Resturant {
 
-    public static final LatLng resturantLatLong = new LatLng(23.659914, 86.158865);
+    public static final LatLng resturantLatLong = new LatLng(13.083059, 77.482913);
 
     public static final double deliveryChargesPerKilometer = 10.0;
     public static final double maxDeliveryCharges = 100.0;
@@ -19,6 +19,8 @@ public final class Resturant {
     public static final double averageSpaeed = 30.0;
     public static final int averagePreperationTime = 30;
     public static final String resturantcontact = "+91 7301694135";
+
+    public static final String resturant ="Bombaydine";
 
 
     public static void isOpen(com.thundersharp.conversation.utils.Resturant.Resturantopen resturantopen) {

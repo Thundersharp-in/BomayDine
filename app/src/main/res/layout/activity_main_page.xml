@@ -12,7 +12,7 @@
         android:id="@+id/nav_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#1e2026"
+        android:background="#16171C"
         android:layout_alignParentBottom="true"
         app:itemIconTint="@drawable/tabcolor"
         app:itemTextColor="@drawable/tabcolor"

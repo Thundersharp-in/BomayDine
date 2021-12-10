@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="#1e2026"
+    tools:context=".user.ui.tableBooking.TableBookingMain">
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="230dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:elevation="4dp">
+
+                    <RelativeLayout
+                        android:id="@+id/top"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginEnd="10dp"
+                        android:gravity="end"
+                        android:orientation="horizontal">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_toStartOf="@id/profilepic"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/profile_name"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/allerta"
+                                android:maxLines="1"
+                                android:text="Reserve A Table"
+                                android:textAllCaps="false"
+                                android:textColor="#FFFFFF"
+                                android:textSize="24sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/profile_email"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="7dp"
+                                android:fontFamily="@font/calibri"
+                                android:text="Indian, Italian,  Thai, Chinese\n, Bangalore"
+                                android:textAlignment="viewStart"
+                                android:textColor="#FA528B"
+                                android:textSize="15sp" />
+
+
+
+                        </LinearLayout>
+
+                        <de.hdodenhof.circleimageview.CircleImageView
+                            android:id="@+id/profilepic"
+                            android:layout_width="70dp"
+                            android:layout_height="70dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:src="@drawable/reservation"
+                            app:civ_border_color="#E91E63"
+                            app:civ_border_overlay="false"
+                            app:civ_border_width="5dp"
+                            app:civ_circle_background_color="#FF9800" />
+
+                    </RelativeLayout>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_60dp"
+                        android:layout_below="@id/top"
+                        android:layout_marginTop="@dimen/dimen_25dp"
+                        android:layout_marginHorizontal="15dp"
+                        app:cardBackgroundColor="#22242c"
+                        app:cardElevation="5dp"
+                        app:cardCornerRadius="25dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:gravity="center_vertical"
+                            android:weightSum="6">
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="@dimen/dimen_30dp"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_outline_local_parking_24"
+                                app:tint="#E6E6E6" />
+
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="@dimen/dimen_30dp"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_outline_wine_bar_24"
+                                app:tint="#E6E6E6"/>
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="@dimen/dimen_30dp"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_outline_smoking_rooms_24"
+                                app:tint="#E6E6E6"/>
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="@dimen/dimen_30dp"
+                                android:layout_weight="1"
+                                android:padding="2dp"
+                                android:src="@drawable/wedding"
+                                app:tint="#E6E6E6"/>
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="30dp"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_baseline_roofing_24"
+                                app:tint="#E6E6E6"/>
+
+                            <ImageView
+                                android:layout_width="0dp"
+                                android:layout_height="@dimen/dimen_30dp"
+                                android:layout_weight="1"
+                                android:src="@drawable/ic_outline_router_24"
+                                app:tint="#E6E6E6"/>
+
+                        </LinearLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:id="@+id/email_status"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:drawableStart="@drawable/ic_outline_info_24"
+                        android:drawablePadding="10dp"
+                        android:fontFamily="@font/calibri"
+                        android:gravity="center_vertical"
+                        android:text="Quickly book a table by selecting number of guests, data and time of arrival, Reservation will be for max three hours."
+                        android:textColor="#DFDAAE"
+                        app:drawableTint="#F4E880" />
+
+                </RelativeLayout>
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/table_bg" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="130dp"
+                        android:layout_gravity="bottom"
+                        android:background="@drawable/custom_gradient_bottom"
+                        android:elevation="4dp" />
+
+                </FrameLayout>
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+</RelativeLayout>
