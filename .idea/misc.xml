@@ -1,5 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="Admin/src/main/res/layout/activity_carousel.xml" value="0.10625" />
+        <entry key="Admin/src/main/res/layout/activity_category_add_edit.xml" value="0.10208333333333333" />
+        <entry key="Admin/src/main/res/layout/activity_create_offer.xml" value="0.14" />
+        <entry key="Admin/src/main/res/layout/activity_edit_item.xml" value="0.18" />
+        <entry key="Admin/src/main/res/layout/activity_firebase_gallary.xml" value="0.1" />
+        <entry key="Admin/src/main/res/layout/add_new_cat.xml" value="0.17467105263157895" />
+        <entry key="Admin/src/main/res/layout/add_new_cat_sized.xml" value="0.17467105263157895" />
+        <entry key="Admin/src/main/res/layout/add_new_item_bottom.xml" value="0.17467105263157895" />
+        <entry key="Admin/src/main/res/layout/addressholder_admin.xml" value="0.17467105263157895" />
+        <entry key="Admin/src/main/res/layout/fragment_home_admin.xml" value="0.17532894736842106" />
+        <entry key="Admin/src/main/res/layout/galary.xml" value="0.1" />
+        <entry key="Admin/src/main/res/layout/item_food_admin.xml" value="0.16944444444444445" />
+        <entry key="app/src/main/res/layout/activity_edit_profile_details.xml" value="0.1076388888888889" />
+        <entry key="app/src/main/res/layout/activity_profile_main.xml" value="0.15902777777777777" />
+        <entry key="app/src/main/res/layout/activity_report_serious_issue.xml" value="0.16111111111111112" />
+        <entry key="app/src/main/res/layout/fragment_home.xml" value="0.10138888888888889" />
+        <entry key="app/src/main/res/layout/offer_t_and_c.xml" value="0.13" />
+        <entry key="app/src/main/res/layout/settings_activity.xml" value="0.1076388888888889" />
+        <entry key="app/src/main/res/xml/header_preferences.xml" value="0.1076388888888889" />
+        <entry key="app/src/main/res/xml/messages_preferences.xml" value="0.25" />
+        <entry key="app/src/main/res/xml/sync_preferences.xml" value="0.1076388888888889" />
+        <entry key="conversation/src/main/res/layout/activity_chat_starter.xml" value="0.17532894736842106" />
+      </map>
+    </option>
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
