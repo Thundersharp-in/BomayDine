@@ -33,4 +33,9 @@
         tools:layout="@layout/activity_profile_main">
     </fragment>
 
+    <fragment android:name="com.thundersharp.bombaydine.user.ui.tableBooking.TableBookingMain"
+        android:id="@+id/nav_table_booking"
+        tools:layout="@layout/fragment_table_booking_main"
+        android:label="Table booking"/>
+
 </navigation>

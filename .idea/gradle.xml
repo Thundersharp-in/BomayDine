@@ -12,6 +12,7 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/Admin" />
+            <option value="$PROJECT_DIR$/TableActions" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/billgenerator" />
             <option value="$PROJECT_DIR$/conversation" />
