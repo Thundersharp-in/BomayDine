@@ -4,7 +4,8 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.22" />
-        <entry key="TableActions/src/main/res/layout/guest_counter_view.xml" value="0.4619718309859155" />
+        <entry key="../../../../layout/custom_preview.xml" value="0.1787037037037037" />
+        <entry key="TableActions/src/main/res/layout/guest_counter_view.xml" value="0.1686420664502683" />
         <entry key="app/src/main/res/drawable/curve_top.xml" value="0.2916666666666667" />
         <entry key="app/src/main/res/layout/activity_all_items.xml" value="0.1712962962962963" />
         <entry key="app/src/main/res/layout/activity_email_account_create.xml" value="0.28229166666666666" />
