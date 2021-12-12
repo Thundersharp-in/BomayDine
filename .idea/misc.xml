@@ -3,7 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="../../../../../layout/custom_preview.xml" value="0.2916666666666667" />
+        <entry key="../../../../../layout/custom_preview.xml" value="0.22" />
+        <entry key="TableActions/src/main/res/layout/guest_counter_view.xml" value="0.4619718309859155" />
         <entry key="app/src/main/res/drawable/curve_top.xml" value="0.2916666666666667" />
         <entry key="app/src/main/res/layout/activity_all_items.xml" value="0.1712962962962963" />
         <entry key="app/src/main/res/layout/activity_email_account_create.xml" value="0.28229166666666666" />
@@ -11,6 +12,7 @@
         <entry key="app/src/main/res/layout/activity_login.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/activity_main_page.xml" value="0.25092592592592594" />
+        <entry key="app/src/main/res/layout/activity_order_details.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_profile_main.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/activity_recent_orders.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.37604166666666666" />

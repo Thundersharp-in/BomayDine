@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.App" parent="Theme.MaterialComponents">
+        ...
+        <item name="colorPrimary">#FEDBD0</item>
+        <item name="colorOnPrimary">#442C2E</item>
+        <item name="colorOnSurface">#FEDBD0</item>
+    </style>
+
+</resources>

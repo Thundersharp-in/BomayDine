@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TableGuestCounter">
+        <attr name="maxNoOfChairs" format="enum">
+            <enum name="one" value="1"/>
+            <enum name="two" value="2"/>
+            <enum name="three" value="3"/>
+            <enum name="four" value="4"/>
+            <enum name="five" value="5"/>
+            <enum name="six" value="6"/>
+            <enum name="seven" value="7"/>
+            <enum name="eight" value="8"/>
+            <enum name="nine" value="9"/>
+            <enum name="ten" value="10"/>
+
+        </attr>
+
+        <attr name="animateChairs" format="boolean"/>
+        <attr name="backgroundColor" format="color"/>
+        <attr name="chairColor" format="color"/>
+
+
+    </declare-styleable>
+</resources>

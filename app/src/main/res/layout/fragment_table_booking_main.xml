@@ -7,12 +7,23 @@
     android:background="#1e2026"
     tools:context=".user.ui.tableBooking.TableBookingMain">
 
+    <com.thundersharp.tableactions.view.TableGuestCounter
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        app:backgroundColor="#1e2026"
+        app:maxNoOfChairs="six"
+        android:elevation="@dimen/dimen_5dp"
+        />
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
+
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="230dp">
@@ -65,7 +76,6 @@
                                 android:textSize="15sp" />
 
 
-
                         </LinearLayout>
 
                         <de.hdodenhof.circleimageview.CircleImageView
@@ -87,17 +97,17 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/dimen_60dp"
                         android:layout_below="@id/top"
-                        android:layout_marginTop="@dimen/dimen_25dp"
                         android:layout_marginHorizontal="15dp"
+                        android:layout_marginTop="@dimen/dimen_25dp"
                         app:cardBackgroundColor="#22242c"
-                        app:cardElevation="5dp"
-                        app:cardCornerRadius="25dp">
+                        app:cardCornerRadius="25dp"
+                        app:cardElevation="5dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:orientation="horizontal"
                             android:gravity="center_vertical"
+                            android:orientation="horizontal"
                             android:weightSum="6">
 
                             <ImageView
@@ -113,14 +123,14 @@
                                 android:layout_height="@dimen/dimen_30dp"
                                 android:layout_weight="1"
                                 android:src="@drawable/ic_outline_wine_bar_24"
-                                app:tint="#E6E6E6"/>
+                                app:tint="#E6E6E6" />
 
                             <ImageView
                                 android:layout_width="0dp"
                                 android:layout_height="@dimen/dimen_30dp"
                                 android:layout_weight="1"
                                 android:src="@drawable/ic_outline_smoking_rooms_24"
-                                app:tint="#E6E6E6"/>
+                                app:tint="#E6E6E6" />
 
                             <ImageView
                                 android:layout_width="0dp"
@@ -128,21 +138,21 @@
                                 android:layout_weight="1"
                                 android:padding="2dp"
                                 android:src="@drawable/wedding"
-                                app:tint="#E6E6E6"/>
+                                app:tint="#E6E6E6" />
 
                             <ImageView
                                 android:layout_width="0dp"
                                 android:layout_height="30dp"
                                 android:layout_weight="1"
                                 android:src="@drawable/ic_baseline_roofing_24"
-                                app:tint="#E6E6E6"/>
+                                app:tint="#E6E6E6" />
 
                             <ImageView
                                 android:layout_width="0dp"
                                 android:layout_height="@dimen/dimen_30dp"
                                 android:layout_weight="1"
                                 android:src="@drawable/ic_outline_router_24"
-                                app:tint="#E6E6E6"/>
+                                app:tint="#E6E6E6" />
 
                         </LinearLayout>
 
