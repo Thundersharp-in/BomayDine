@@ -35,6 +35,7 @@ public class TableGuestCounter extends RelativeLayout {
     private Boolean animateChairs = true;
     private int backGroundColor;
     private View view;
+    private Integer counter = 1;
 
     /**
      * Ui variables
@@ -139,7 +140,69 @@ public class TableGuestCounter extends RelativeLayout {
             @Override
             public void onValueChange(@NonNull RangeSlider slider, float value, boolean fromUser) {
                 table.setText(""+(int) value);
+                if (counter>value){
+                    counter = (int) value;
+                    //backward
+                    switch ((int) value){
+                        case 1:
+                            animateChairs(false,chair_two);
+                            break;
+                        case 2:
+                            animateChairs(false,chair_three);
+                            break;
+                        case 3:
+                            animateChairs(false,chair_four);
+                            break;
+                        case 4:
+                            animateChairs(false,chair_five);
+                            break;
+                        case 5:
+                            animateChairs(false,chair_six);
+                            break;
+                        case 6:
+                            animateChairs(false,chair_seven);
+                            break;
+                        case 7:
+                            animateChairs(false,chair_eight);
+                            break;
+                        default:
+                            break;
+                    }
+                }else {
+                    //forward
+                    counter = (int) value;
+                    switch ((int) value){
+                    case 1:
+                        animateChairs(true,chair_one);
+                        break;
+                    case 2:
+                        animateChairs(true,chair_two);
+                        break;
+                    case 3:
+                        animateChairs(true,chair_three);
+                        break;
+                    case 4:
+                        animateChairs(true,chair_four);
+                        break;
+                    case 5:
+                        animateChairs(true,chair_five);
+                        break;
+                    case 6:
+                        animateChairs(true,chair_six);
+                        break;
+                    case 7:
+                        animateChairs(true,chair_seven);
+                        break;
+                    case 8:
+                        animateChairs(true,chair_eight);
+                        break;
+                        default:
+                            break;
+                    }
+                }
+                /*
                 switch ((int) value){
+
                     case 1:
                         animateChairs(true,chair_one);
                         animateChairs(false,chair_two,chair_three,chair_four,chair_five,chair_six,chair_seven,chair_eight);
@@ -172,9 +235,11 @@ public class TableGuestCounter extends RelativeLayout {
 
                         animateChairs(true,chair_one,chair_two,chair_three,chair_four,chair_five,chair_six,chair_seven,chair_eight);
                         break;
-                    default:
-                        break;
-                }
+
+                default:
+                break;
+            }
+                 */
             }
         });
     }
