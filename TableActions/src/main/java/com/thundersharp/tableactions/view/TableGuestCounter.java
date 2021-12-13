@@ -17,7 +17,15 @@ import androidx.annotation.Nullable;
 
 import com.google.android.material.slider.RangeSlider;
 import com.thundersharp.tableactions.R;
+import com.thundersharp.tableactions.listeners.GuestChangeListener;
 
+/**
+ * @author hrishikeshprateek
+ * @see android.graphics.drawable.Drawable.Callback
+ * @see android.view.View
+ * @see android.view.ViewGroup
+ * @see android.widget.RelativeLayout
+ */
 public class TableGuestCounter extends RelativeLayout {
 
     /**
@@ -45,21 +53,46 @@ public class TableGuestCounter extends RelativeLayout {
     private RangeSlider slider;
 
 
+    private GuestChangeListener guestChangeListener;
+
+
+    /**
+     * Constructor for TableGuestCounter
+     * @param context
+     */
     public TableGuestCounter(Context context) {
         super(context);
         initViews(context,null);
     }
 
+    /**
+     * Constructor for TableGuestCounter
+     * @param context
+     * @param attrs
+     */
     public TableGuestCounter(Context context, AttributeSet attrs) {
         super(context, attrs);
         initViews(context,attrs);
     }
 
+    /**
+     * Constructor for TableGuestCounter
+     * @param context
+     * @param attrs
+     * @param defStyleAttr
+     */
     public TableGuestCounter(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initViews(context,attrs);
     }
 
+    /**
+     * Constructor for TableGuestCounter
+     * @param context
+     * @param attrs
+     * @param defStyleAttr
+     * @param defStyleRes
+     */
     public TableGuestCounter(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initViews(context,attrs);
@@ -69,6 +102,10 @@ public class TableGuestCounter extends RelativeLayout {
         table.setText("1");
         animateChairs(true,chair_one);
         animateChairs(false,chair_two,chair_three,chair_four,chair_five,chair_six,chair_seven,chair_eight);
+    }
+
+    public void setNoOfGuestChangeListener(GuestChangeListener guestChangeListener){
+        this.guestChangeListener = guestChangeListener;
     }
 
     public void initViews(@NonNull Context context, @Nullable AttributeSet attributeSet){
