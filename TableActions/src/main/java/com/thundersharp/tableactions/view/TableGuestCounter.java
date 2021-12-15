@@ -10,13 +10,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.google.android.material.slider.RangeSlider;
 import com.thundersharp.tableactions.R;
+import com.thundersharp.tableactions.listeners.ChairInteraction;
 import com.thundersharp.tableactions.listeners.GuestChangeListener;
 
 /**
@@ -36,6 +36,7 @@ public class TableGuestCounter extends RelativeLayout {
     private int backGroundColor;
     private View view;
     private Integer counter = 1;
+    private int previousNoOfGuests = 1;
 
     /**
      * Ui variables
@@ -55,6 +56,7 @@ public class TableGuestCounter extends RelativeLayout {
 
 
     private GuestChangeListener guestChangeListener;
+    private ChairInteraction chairInteraction;
 
 
     /**
@@ -99,17 +101,27 @@ public class TableGuestCounter extends RelativeLayout {
         initViews(context,attrs);
     }
 
-    public void initialize(){
+    private void initialize(){
         table.setText("1");
         animateChairs(true,chair_one);
         animateChairs(false,chair_two,chair_three,chair_four,chair_five,chair_six,chair_seven,chair_eight);
+        instantiateListener();
     }
 
     public void setNoOfGuestChangeListener(GuestChangeListener guestChangeListener){
         this.guestChangeListener = guestChangeListener;
+        instantiateListener();
     }
 
-    public void initViews(@NonNull Context context, @Nullable AttributeSet attributeSet){
+    private void instantiateListener() {
+        if (guestChangeListener != null) guestChangeListener.onGuestAdded(previousNoOfGuests,previousNoOfGuests);
+    }
+
+    public void setChairInteractionListener(ChairInteraction chairInteractionListener){
+        this.chairInteraction = chairInteractionListener;
+    }
+
+    private void initViews(@NonNull Context context, @Nullable AttributeSet attributeSet){
         view = inflate(context, R.layout.guest_counter_view,this);
 
         background = view.findViewById(R.id.container);
@@ -131,16 +143,98 @@ public class TableGuestCounter extends RelativeLayout {
         animateChairs = typedArray.getBoolean(R.styleable.TableGuestCounter_animateChairs,true);
         backGroundColor = typedArray.getColor(R.styleable.TableGuestCounter_backgroundColor,getResources().getColor(R.color.mainBg));
 
+
+
         background.setBackgroundColor(backGroundColor);
         initialize();
 
 
-        chair_one.setOnClickListener(e-> Toast.makeText(context,"One",Toast.LENGTH_SHORT).show());
+        chair_one.setOnClickListener(e-> {
+            if (chairInteraction!=null) chairInteraction.onChairClicked(1);
+        });
+
+        chair_two.setOnClickListener(e-> {
+            if (chairInteraction!=null) chairInteraction.onChairClicked(2);
+        });
+
+        chair_three.setOnClickListener(e-> {
+            if (chairInteraction!=null) chairInteraction.onChairClicked(3);
+        });
+
+        chair_four.setOnClickListener(e-> {
+            if (chairInteraction!=null) chairInteraction.onChairClicked(4);
+        });
+
+        chair_five.setOnClickListener(e-> {
+            if (chairInteraction!=null) chairInteraction.onChairClicked(5);
+        });
+
+        chair_six.setOnClickListener(e-> {
+            if (chairInteraction!=null) chairInteraction.onChairClicked(6);
+        });
+
+        chair_seven.setOnClickListener(e-> {
+            if (chairInteraction!=null) chairInteraction.onChairClicked(7);
+        });
+
+        chair_eight.setOnClickListener(e-> {
+            if (chairInteraction!=null) chairInteraction.onChairClicked(8);
+        });
+
+
+
+        chair_one.setOnLongClickListener(e-> {
+            if (chairInteraction!=null) chairInteraction.onChairsLongPressed(1);
+            return true;
+        });
+
+        chair_two.setOnLongClickListener(e-> {
+            if (chairInteraction!=null) chairInteraction.onChairsLongPressed(2);
+            return true;
+        });
+
+        chair_three.setOnLongClickListener(e-> {
+            if (chairInteraction!=null) chairInteraction.onChairsLongPressed(3);
+            return true;
+        });
+
+        chair_four.setOnLongClickListener(e-> {
+            if (chairInteraction!=null) chairInteraction.onChairsLongPressed(4);
+            return true;
+        });
+
+        chair_five.setOnLongClickListener(e-> {
+            if (chairInteraction!=null) chairInteraction.onChairsLongPressed(5);
+            return true;
+        });
+
+        chair_six.setOnLongClickListener(e-> {
+            if (chairInteraction!=null) chairInteraction.onChairsLongPressed(6);
+            return true;
+        });
+
+        chair_seven.setOnLongClickListener(e-> {
+            if (chairInteraction!=null) chairInteraction.onChairsLongPressed(7);
+            return true;
+        });
+
+        chair_eight.setOnLongClickListener(e-> {
+            if (chairInteraction!=null) chairInteraction.onChairsLongPressed(8);
+            return true;
+        });
+
+
         slider.addOnChangeListener(new RangeSlider.OnChangeListener() {
             @Override
             public void onValueChange(@NonNull RangeSlider slider, float value, boolean fromUser) {
                 table.setText(""+(int) value);
-                if (counter>value){
+
+                if (guestChangeListener != null) {
+                    if ((previousNoOfGuests - (int) value) > 0)
+                        guestChangeListener.onGuestRemoved(previousNoOfGuests - (int) value,(int) value);
+                    else guestChangeListener.onGuestAdded(Math.abs((previousNoOfGuests - (int) value)),(int) value);
+                }
+                /*if (counter>value){
                     counter = (int) value;
                     //backward
                     switch ((int) value){
@@ -199,8 +293,10 @@ public class TableGuestCounter extends RelativeLayout {
                         default:
                             break;
                     }
-                }
-                /*
+                }*/
+
+                previousNoOfGuests = (int) value;
+
                 switch ((int) value){
 
                     case 1:
@@ -239,7 +335,7 @@ public class TableGuestCounter extends RelativeLayout {
                 default:
                 break;
             }
-                 */
+
             }
         });
     }
@@ -251,8 +347,9 @@ public class TableGuestCounter extends RelativeLayout {
                 chair.setVisibility(VISIBLE);
             }
         }else {
-            for (ImageView c : chairs)
+            for (ImageView c : chairs) {
                 c.setVisibility(GONE);
+            }
         }
 
     }
