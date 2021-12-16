@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,13 +19,16 @@ import android.widget.TextView;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.thundersharp.bombaydine.R;
+import com.thundersharp.bombaydine.user.core.Adapters.SlotTimeHolderAdapter;
 import com.thundersharp.bombaydine.user.core.utils.Resturant;
 import com.thundersharp.bombaydine.user.core.utils.TimeUtils;
 import com.thundersharp.tableactions.listeners.GuestChangeListener;
 import com.thundersharp.tableactions.view.TableGuestCounter;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 public class TableBookingMain extends Fragment {
 
@@ -32,10 +37,11 @@ public class TableBookingMain extends Fragment {
     private LinearLayout cal_container;
     private RelativeLayout guest_container;
     private CompactCalendarView compactCalendar_view;
-    private ImageView calendar_toggle,drop_icon;
+    private ImageView calendar_toggle,drop_icon,slot_Icon;
     private Date bookingDate;
     private ImageView parking,bar, cigarette,couple,roof,wifi;
-    private boolean toggle_cal,toggle_no_of_guest;
+    private boolean toggle_cal,toggle_no_of_guest, toggle_time_slot;
+    private RecyclerView time_slots;
 
 
     @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
@@ -132,6 +138,27 @@ public class TableBookingMain extends Fragment {
             }
         });
 
+        slot_Icon.setOnClickListener(n->{
+            if (toggle_time_slot){
+                time_slots.setVisibility(View.VISIBLE);
+                toggle_time_slot = false;
+            }else {
+                time_slots.setVisibility(View.GONE);
+                toggle_time_slot = true;
+            }
+        });
+
+        view.findViewById(R.id.time_container).setOnClickListener(n->{
+            if (toggle_time_slot){
+                time_slots.setVisibility(View.VISIBLE);
+                toggle_time_slot = false;
+            }else {
+                time_slots.setVisibility(View.GONE);
+                toggle_time_slot = true;
+            }
+        });
+
+
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
             @Override
@@ -178,7 +205,8 @@ public class TableBookingMain extends Fragment {
             builder.show();
         });
 
-
+        time_slots.setLayoutManager(new GridLayoutManager(getActivity(),3));
+        time_slots.setAdapter(new SlotTimeHolderAdapter(getData()));
 
         return view;
     }
@@ -193,6 +221,8 @@ public class TableBookingMain extends Fragment {
         drop_icon = view.findViewById(R.id.drop_icon);
         calendar_toggle = view.findViewById(R.id.calendar_toggle);
         guest_container = view.findViewById(R.id.guest_container);
+        time_slots = view.findViewById(R.id.time_slots);
+        slot_Icon = view.findViewById(R.id.slot_icon);
 
         parking = view.findViewById(R.id.parking);
         bar = view.findViewById(R.id.bar);
@@ -206,5 +236,14 @@ public class TableBookingMain extends Fragment {
         guest_container.setVisibility(View.GONE);
         compactCalendar_view.setFirstDayOfWeek(Calendar.MONDAY);
         compactCalendar_view.hideCalendar();
+    }
+
+    private List<String> getData(){
+        List<String> data = new ArrayList<>();
+        for (int i= 0; i<8;i++){
+            data.add(i+1+" AM - "+i+3+" PM");
+        }
+
+        return data;
     }
 }

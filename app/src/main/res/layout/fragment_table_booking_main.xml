@@ -235,7 +235,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="15dp"
                             android:src="@drawable/ic_outline_calendar_month_24"
-                            app:tint="#fff" />
+                            app:tint="#FFEB3B" />
 
                     </RelativeLayout>
 
@@ -331,7 +331,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="15dp"
                             android:src="@drawable/ccp_ic_arrow_drop_down"
-                            app:tint="#fff" />
+                            app:tint="#FFEB3B" />
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -405,7 +405,7 @@
                             android:layout_centerVertical="true"
                             android:layout_marginEnd="15dp"
                             android:src="@drawable/ic_baseline_access_time_24"
-                            app:tint="#fff" />
+                            app:tint="#FFEB3B" />
 
                     </RelativeLayout>
 
@@ -422,6 +422,8 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
+                            android:layout_marginVertical="@dimen/dimen_10dp"
+                            android:layout_marginHorizontal="@dimen/dimen_5dp"
                             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
 
                     </RelativeLayout>
@@ -430,6 +432,17 @@
                 </RelativeLayout>
 
             </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/content_Bottom"
+                android:textColor="#B6B6B6"
+                android:textSize="15sp"
+                android:text="@string/f"
+                android:fontFamily="@font/calibri"
+                android:layout_margin="@dimen/dimen_10dp"
+                android:layout_below="@+id/timeSlot"/>
 
 
         </RelativeLayout>
