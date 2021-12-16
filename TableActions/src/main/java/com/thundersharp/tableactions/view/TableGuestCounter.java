@@ -4,6 +4,7 @@ package com.thundersharp.tableactions.view;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.ImageView;
@@ -39,11 +40,15 @@ public class TableGuestCounter extends RelativeLayout {
     private int previousNoOfGuests = 1;
     private boolean tableRotationEnabled = false;
     private Integer rotationSpeed = 200;
+    private boolean infoTextEnabled = false;
+    private String infoText;
+    private int infoTextColor;
 
     /**
      * Ui variables
      */
     private LinearLayout background;
+    private TextView seekText;
     private ImageView chair_one;
     private ImageView chair_two;
     private ImageView chair_three;
@@ -133,6 +138,7 @@ public class TableGuestCounter extends RelativeLayout {
         view = inflate(context, R.layout.guest_counter_view,this);
 
         background = view.findViewById(R.id.container);
+        seekText = view.findViewById(R.id.seekText);
         chair_one = view.findViewById(R.id.chair_one);
         chair_two = view.findViewById(R.id.chair_two);
         chair_three = view.findViewById(R.id.chair_three);
@@ -152,6 +158,17 @@ public class TableGuestCounter extends RelativeLayout {
         backGroundColor = typedArray.getColor(R.styleable.TableGuestCounter_backgroundColor,getResources().getColor(R.color.mainBg));
         tableRotationEnabled = typedArray.getBoolean(R.styleable.TableGuestCounter_rotationEnabled,false);
         rotationSpeed = typedArray.getInteger(R.styleable.TableGuestCounter_rotationSpeed,200);
+        infoTextEnabled = typedArray.getBoolean(R.styleable.TableGuestCounter_infoTextEnabled,false);
+        infoText = typedArray.getString(R.styleable.TableGuestCounter_infoText);
+        infoTextColor = typedArray.getColor(R.styleable.TableGuestCounter_infoTextColor, Color.WHITE);
+
+        if (!infoTextEnabled) seekText.setVisibility(GONE);
+        else {
+            seekText.setVisibility(VISIBLE);
+            seekText.setText(infoText);
+            seekText.setTextColor(infoTextColor);
+        }
+
 
         background.setBackgroundColor(backGroundColor);
         initialize();

@@ -1,31 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="#1e2026"
     tools:context=".user.ui.tableBooking.TableBookingMain">
 
-    <com.thundersharp.tableactions.view.TableGuestCounter
-        android:id="@+id/tableGuestCounter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
-        app:backgroundColor="#1e2026"
-        app:maxNoOfChairs="six"
-        android:elevation="@dimen/dimen_5dp"
-        />
 
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:layout_above="@id/book_button">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
             <RelativeLayout
+                android:id="@+id/topHolder"
                 android:layout_width="match_parent"
                 android:layout_height="230dp">
 
@@ -112,48 +105,53 @@
                             android:weightSum="6">
 
                             <ImageView
+                                android:id="@+id/parking"
                                 android:layout_width="0dp"
                                 android:layout_height="@dimen/dimen_30dp"
                                 android:layout_weight="1"
                                 android:src="@drawable/ic_outline_local_parking_24"
-                                app:tint="#E6E6E6" />
-
+                                app:tint="#D6D6D6" />
 
                             <ImageView
+                                android:id="@+id/bar"
                                 android:layout_width="0dp"
                                 android:layout_height="@dimen/dimen_30dp"
                                 android:layout_weight="1"
                                 android:src="@drawable/ic_outline_wine_bar_24"
-                                app:tint="#E6E6E6" />
+                                app:tint="#D6D6D6" />
 
                             <ImageView
+                                android:id="@+id/cigreete_bar"
                                 android:layout_width="0dp"
                                 android:layout_height="@dimen/dimen_30dp"
                                 android:layout_weight="1"
                                 android:src="@drawable/ic_outline_smoking_rooms_24"
-                                app:tint="#E6E6E6" />
+                                app:tint="#D6D6D6" />
 
                             <ImageView
+                                android:id="@+id/romantic"
                                 android:layout_width="0dp"
                                 android:layout_height="@dimen/dimen_30dp"
                                 android:layout_weight="1"
                                 android:padding="2dp"
                                 android:src="@drawable/wedding"
-                                app:tint="#E6E6E6" />
+                                app:tint="#D6D6D6" />
 
                             <ImageView
+                                android:id="@+id/terrace"
                                 android:layout_width="0dp"
                                 android:layout_height="30dp"
                                 android:layout_weight="1"
                                 android:src="@drawable/ic_baseline_roofing_24"
-                                app:tint="#E6E6E6" />
+                                app:tint="#D6D6D6" />
 
                             <ImageView
+                                android:id="@+id/free_wifi"
                                 android:layout_width="0dp"
                                 android:layout_height="@dimen/dimen_30dp"
                                 android:layout_weight="1"
                                 android:src="@drawable/ic_outline_router_24"
-                                app:tint="#E6E6E6" />
+                                app:tint="#D6D6D6" />
 
                         </LinearLayout>
 
@@ -171,8 +169,8 @@
                         android:fontFamily="@font/calibri"
                         android:gravity="center_vertical"
                         android:text="Quickly book a table by selecting number of guests, data and time of arrival, Reservation will be for max three hours."
-                        android:textColor="#DFDAAE"
-                        app:drawableTint="#F4E880" />
+                        android:textColor="#BCB99C"
+                        app:drawableTint="#BCB99C" />
 
                 </RelativeLayout>
 
@@ -196,9 +194,256 @@
                 </FrameLayout>
             </RelativeLayout>
 
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/dateHolder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/topHolder"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="25dp"
+                android:minHeight="60dp"
+                app:cardBackgroundColor="#23252e"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="7dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <RelativeLayout
+                        android:id="@+id/relative_container_cal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp">
+
+                        <TextView
+                            android:id="@+id/display_data"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="15dp"
+                            android:fontFamily="@font/calibri"
+                            android:text="I want a reservation on  DD/MM/YYYY"
+                            android:textColor="#D5D5D5"
+                            android:textSize="18sp" />
+
+                        <ImageView
+                            android:id="@+id/calendar_toggle"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="15dp"
+                            android:src="@drawable/ic_outline_calendar_month_24"
+                            app:tint="#fff" />
+
+                    </RelativeLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/cal_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/relative_container_cal"
+                        android:layout_marginTop="10dp"
+                        android:background="#121315"
+                        android:orientation="vertical"
+                        android:visibility="visible">
+
+                        <TextView
+                            android:id="@+id/months_display"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="15dp"
+                            android:fontFamily="@font/roboto_medium"
+                            android:text="January, 2021"
+                            android:textColor="#BCB99C"
+                            android:textSize="18sp"
+                            android:visibility="gone" />
+
+                        <com.github.sundeepk.compactcalendarview.CompactCalendarView
+                            android:id="@+id/compactcalendar_view"
+                            android:layout_width="wrap_content"
+                            android:layout_height="250dp"
+                            android:elevation="7dp"
+                            android:paddingLeft="15dp"
+                            android:paddingRight="15dp"
+                            android:paddingBottom="10dp"
+                            android:visibility="visible"
+                            app:compactCalendarBackgroundColor="#121315"
+                            app:compactCalendarCurrentDayBackgroundColor="#B71C1C"
+                            app:compactCalendarCurrentSelectedDayBackgroundColor="#E57373"
+                            app:compactCalendarDisplayOtherMonthDays="true"
+                            app:compactCalendarMultiEventIndicatorColor="#D5D5D5"
+                            app:compactCalendarShouldSelectFirstDayOfMonthOnScroll="false"
+                            app:compactCalendarTargetHeight="250dp"
+                            app:compactCalendarTextColor="#D5D5D5"
+                            app:compactCalendarTextSize="13sp" />
+
+                    </LinearLayout>
+
+
+                </RelativeLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/noOfGuest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/dateHolder"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="13dp"
+                android:minHeight="60dp"
+                app:cardBackgroundColor="#23252e"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="7dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:id="@+id/relative_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp">
+
+                        <TextView
+                            android:id="@+id/display_total_guest"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="15dp"
+                            android:fontFamily="@font/calibri"
+                            android:text="I/We will be in total -- guests"
+                            android:textColor="#D5D5D5"
+                            android:textSize="18sp" />
+
+                        <ImageView
+                            android:id="@+id/drop_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="15dp"
+                            android:src="@drawable/ccp_ic_arrow_drop_down"
+                            app:tint="#fff" />
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/guest_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/relative_container"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:background="#121315">
+
+                        <com.thundersharp.tableactions.view.TableGuestCounter
+                            android:id="@+id/tableGuestCounter"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginTop="@dimen/dimen_10dp"
+                            android:visibility="visible"
+                            app:backgroundColor="#121315"
+                            app:maxNoOfChairs="eight"
+                            app:infoTextEnabled="true"
+                            app:infoText="Slide to select number of guests"
+                            app:infoTextColor="#D1D1D1"/>
+
+                    </RelativeLayout>
+
+
+                </RelativeLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/timeSlot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/noOfGuest"
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="13dp"
+                android:layout_marginBottom="13dp"
+                android:minHeight="60dp"
+                app:cardBackgroundColor="#23252e"
+                app:cardCornerRadius="15dp"
+                app:cardElevation="7dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:id="@+id/time_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp">
+
+                        <TextView
+                            android:id="@+id/text_info_time_slot"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="15dp"
+                            android:fontFamily="@font/calibri"
+                            android:text="Select a time slot for your booking"
+                            android:textColor="#D5D5D5"
+                            android:textSize="18sp" />
+
+                        <ImageView
+                            android:id="@+id/slot_icon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="15dp"
+                            android:src="@drawable/ic_baseline_access_time_24"
+                            app:tint="#fff" />
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/slot_container"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/time_container"
+                        android:layout_marginTop="@dimen/dimen_10dp"
+                        android:background="#121315">
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/time_slots"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
+
+                    </RelativeLayout>
+
+
+                </RelativeLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
 
         </RelativeLayout>
+
     </androidx.core.widget.NestedScrollView>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/book_button"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="BOOK TABLE NOW ->"
+        android:layout_alignParentBottom="true"
+        android:background="#0E0E0E"
+        android:textColor="#DDDDDD"/>
 
 
 </RelativeLayout>

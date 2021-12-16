@@ -20,10 +20,12 @@
         <attr name="backgroundColor" format="color"/>
         <attr name="chairColor" format="color"/>
 
-        <attr name="rotationEnabled" format="enum">
-            <enum value="true" name="enable"/>
-            <enum name="disable" value="true"/>
+        <attr name="rotationEnabled" format="boolean">
         </attr>
+
+        <attr name="infoTextEnabled" format="boolean"/>
+        <attr name="infoText" format="string"/>
+        <attr name="infoTextColor" format="color"/>
 
     </declare-styleable>
 </resources>

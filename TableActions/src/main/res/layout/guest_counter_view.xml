@@ -4,7 +4,6 @@
     android:id="@+id/container"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
     android:background="#1e2026"
     android:gravity="center"
     android:minHeight="150dp"
@@ -118,8 +117,16 @@
         android:valueFrom="1.0"
         android:valueTo="8.0"
         android:saveEnabled="true"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="10dp"
         style="@style/Theme.App"
          />
+
+    <TextView
+        android:id="@+id/seekText"
+        android:layout_marginTop="0dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>
