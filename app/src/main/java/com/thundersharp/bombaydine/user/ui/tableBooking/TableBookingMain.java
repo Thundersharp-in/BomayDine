@@ -20,11 +20,15 @@ public class TableBookingMain extends Fragment {
 
     TableGuestCounter tableGuestCounter;
 
+    public void abc(){}
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=  inflater.inflate(R.layout.fragment_table_booking_main, container, false);
+
+
 
         ((TextView)view.findViewById(R.id.profile_email)).setText("Indian, Italian,  Thai, Chinese\n"+ Resturant.resturant+", Bangalore");
         tableGuestCounter = view.findViewById(R.id.tableGuestCounter);

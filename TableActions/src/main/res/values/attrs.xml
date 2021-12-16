@@ -15,10 +15,15 @@
 
         </attr>
 
+        <attr name="rotationSpeed" format="integer"/>
         <attr name="animateChairs" format="boolean"/>
         <attr name="backgroundColor" format="color"/>
         <attr name="chairColor" format="color"/>
 
+        <attr name="rotationEnabled" format="enum">
+            <enum value="true" name="enable"/>
+            <enum name="disable" value="true"/>
+        </attr>
 
     </declare-styleable>
 </resources>

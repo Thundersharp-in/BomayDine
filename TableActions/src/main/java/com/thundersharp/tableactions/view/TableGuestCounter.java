@@ -37,6 +37,8 @@ public class TableGuestCounter extends RelativeLayout {
     private View view;
     private Integer counter = 1;
     private int previousNoOfGuests = 1;
+    private boolean tableRotationEnabled = false;
+    private Integer rotationSpeed = 200;
 
     /**
      * Ui variables
@@ -101,11 +103,17 @@ public class TableGuestCounter extends RelativeLayout {
         initViews(context,attrs);
     }
 
+    public void viewRotator(int idOfView,int r){
+
+
+    }
+
     private void initialize(){
         table.setText("1");
         animateChairs(true,chair_one);
         animateChairs(false,chair_two,chair_three,chair_four,chair_five,chair_six,chair_seven,chair_eight);
         instantiateListener();
+        if (tableRotationEnabled) viewRotator(R.id.tableContainer,rotationSpeed);
     }
 
     public void setNoOfGuestChangeListener(GuestChangeListener guestChangeListener){
@@ -142,8 +150,8 @@ public class TableGuestCounter extends RelativeLayout {
         noOfChairs = typedArray.getInteger(R.styleable.TableGuestCounter_maxNoOfChairs,4);
         animateChairs = typedArray.getBoolean(R.styleable.TableGuestCounter_animateChairs,true);
         backGroundColor = typedArray.getColor(R.styleable.TableGuestCounter_backgroundColor,getResources().getColor(R.color.mainBg));
-
-
+        tableRotationEnabled = typedArray.getBoolean(R.styleable.TableGuestCounter_rotationEnabled,false);
+        rotationSpeed = typedArray.getInteger(R.styleable.TableGuestCounter_rotationSpeed,200);
 
         background.setBackgroundColor(backGroundColor);
         initialize();
@@ -234,6 +242,7 @@ public class TableGuestCounter extends RelativeLayout {
                         guestChangeListener.onGuestRemoved(previousNoOfGuests - (int) value,(int) value);
                     else guestChangeListener.onGuestAdded(Math.abs((previousNoOfGuests - (int) value)),(int) value);
                 }
+
                 /*if (counter>value){
                     counter = (int) value;
                     //backward
