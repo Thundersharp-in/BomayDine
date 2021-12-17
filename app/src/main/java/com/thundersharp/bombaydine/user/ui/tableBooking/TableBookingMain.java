@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.thundersharp.bombaydine.R;
@@ -43,6 +44,7 @@ public class TableBookingMain extends Fragment {
     private boolean toggle_cal,toggle_no_of_guest, toggle_time_slot;
     private RecyclerView time_slots;
 
+    private int tablesCount,guestCount;
 
     @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
     @Override
@@ -60,13 +62,20 @@ public class TableBookingMain extends Fragment {
             @SuppressLint("SetTextI18n")
             @Override
             public void onGuestAdded(int numberOfNewGuests, int totalNumberOfGuests) {
-                display_total_guest.setText("I/We will be in total "+totalNumberOfGuests+" guest/s");
+                guestCount = totalNumberOfGuests;
+                display_total_guest.setText("I/We will be in total "+totalNumberOfGuests+" guest/s, "+tablesCount +" tables required.");
             }
 
             @Override
             public void onGuestRemoved(int numberOfRemovedGuests, int totalNumberOfGuests) {
-                display_total_guest.setText("I/We will be in total "+totalNumberOfGuests+" guest/s");
+                guestCount = totalNumberOfGuests;
+                display_total_guest.setText("I/We will be in total "+totalNumberOfGuests+" guest/s, "+tablesCount +" tables required.");
             }
+        });
+
+        tableGuestCounter.setOnTableChangeListener(noOfTables -> {
+            tablesCount = noOfTables;
+            display_total_guest.setText("I/We will be in total "+guestCount+" guest/s, "+tablesCount +" tables required.");
         });
 
         compactCalendar_view.setListener(new CompactCalendarView.CompactCalendarViewListener() {
@@ -241,7 +250,7 @@ public class TableBookingMain extends Fragment {
     private List<String> getData(){
         List<String> data = new ArrayList<>();
         for (int i= 0; i<8;i++){
-            data.add(i+1+" AM - "+i+3+" PM");
+            data.add(i+1+" AM - "+(i+3)+" PM");
         }
 
         return data;

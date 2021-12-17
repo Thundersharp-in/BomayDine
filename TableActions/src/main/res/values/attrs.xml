@@ -27,5 +27,9 @@
         <attr name="infoText" format="string"/>
         <attr name="infoTextColor" format="color"/>
 
+        <attr name="secondInfoTextEnabled" format="boolean"/>
+        <attr name="secondInfoText" format="string"/>
+        <attr name="secondInfoTextColor" format="color"/>
+
     </declare-styleable>
 </resources>

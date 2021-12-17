@@ -19,6 +19,7 @@ import com.google.android.material.slider.RangeSlider;
 import com.thundersharp.tableactions.R;
 import com.thundersharp.tableactions.listeners.ChairInteraction;
 import com.thundersharp.tableactions.listeners.GuestChangeListener;
+import com.thundersharp.tableactions.listeners.OnTableChangeListener;
 
 /**
  * @author hrishikeshprateek
@@ -44,11 +45,16 @@ public class TableGuestCounter extends RelativeLayout {
     private String infoText;
     private int infoTextColor;
 
+    private boolean secondInfoTextEnabled = false;
+    private String secondInfoText;
+    private int secondInfoTextColor;
+
+
     /**
      * Ui variables
      */
     private LinearLayout background;
-    private TextView seekText;
+    private TextView seekText,seekTextTable;
     private ImageView chair_one;
     private ImageView chair_two;
     private ImageView chair_three;
@@ -59,10 +65,11 @@ public class TableGuestCounter extends RelativeLayout {
     private ImageView chair_eight;
 
     private TextView table;
-    private RangeSlider slider;
+    private RangeSlider slider,sliderTable;
 
 
     private GuestChangeListener guestChangeListener;
+    private OnTableChangeListener tableChangeListener;
     private ChairInteraction chairInteraction;
 
 
@@ -117,6 +124,7 @@ public class TableGuestCounter extends RelativeLayout {
         table.setText("1");
         animateChairs(true,chair_one);
         animateChairs(false,chair_two,chair_three,chair_four,chair_five,chair_six,chair_seven,chair_eight);
+
         instantiateListener();
         if (tableRotationEnabled) viewRotator(R.id.tableContainer,rotationSpeed);
     }
@@ -124,6 +132,15 @@ public class TableGuestCounter extends RelativeLayout {
     public void setNoOfGuestChangeListener(GuestChangeListener guestChangeListener){
         this.guestChangeListener = guestChangeListener;
         instantiateListener();
+    }
+
+    public void setOnTableChangeListener(OnTableChangeListener tableChangeListener){
+        this.tableChangeListener = tableChangeListener;
+        initlizeTableListner();
+    }
+
+    private void initlizeTableListner() {
+        if (tableChangeListener != null) tableChangeListener.onTableValuesChanged(1);
     }
 
     private void instantiateListener() {
@@ -149,6 +166,8 @@ public class TableGuestCounter extends RelativeLayout {
         chair_eight = view.findViewById(R.id.chair_eight);
         table = view.findViewById(R.id.table);
         slider = view.findViewById(R.id.slider);
+        seekTextTable = view.findViewById(R.id.seekTextTable);
+        sliderTable = view.findViewById(R.id.sliderTable);
 
 
         @SuppressLint("Recycle") TypedArray typedArray = context.obtainStyledAttributes(attributeSet,R.styleable.TableGuestCounter);
@@ -158,17 +177,32 @@ public class TableGuestCounter extends RelativeLayout {
         backGroundColor = typedArray.getColor(R.styleable.TableGuestCounter_backgroundColor,getResources().getColor(R.color.mainBg));
         tableRotationEnabled = typedArray.getBoolean(R.styleable.TableGuestCounter_rotationEnabled,false);
         rotationSpeed = typedArray.getInteger(R.styleable.TableGuestCounter_rotationSpeed,200);
+
+
         infoTextEnabled = typedArray.getBoolean(R.styleable.TableGuestCounter_infoTextEnabled,false);
         infoText = typedArray.getString(R.styleable.TableGuestCounter_infoText);
         infoTextColor = typedArray.getColor(R.styleable.TableGuestCounter_infoTextColor, Color.WHITE);
 
+
+        secondInfoTextEnabled = typedArray.getBoolean(R.styleable.TableGuestCounter_secondInfoTextEnabled,false);
+        secondInfoText = typedArray.getString(R.styleable.TableGuestCounter_secondInfoText);
+        infoTextColor = typedArray.getColor(R.styleable.TableGuestCounter_secondInfoTextEnabled, Color.WHITE);
+
         if (!infoTextEnabled) seekText.setVisibility(GONE);
+
         else {
             seekText.setVisibility(VISIBLE);
             seekText.setText(infoText);
             seekText.setTextColor(infoTextColor);
         }
 
+        if (!secondInfoTextEnabled) seekTextTable.setVisibility(GONE);
+
+        else {
+            seekTextTable.setVisibility(VISIBLE);
+            seekTextTable.setText(secondInfoText);
+            seekTextTable.setTextColor(infoTextColor);
+        }
 
         background.setBackgroundColor(backGroundColor);
         initialize();
@@ -248,121 +282,121 @@ public class TableGuestCounter extends RelativeLayout {
             return true;
         });
 
+        sliderTable.addOnChangeListener((slider, value, fromUser) -> {
+            if (tableChangeListener != null) tableChangeListener.onTableValuesChanged((int) value);
+        });
 
-        slider.addOnChangeListener(new RangeSlider.OnChangeListener() {
-            @Override
-            public void onValueChange(@NonNull RangeSlider slider, float value, boolean fromUser) {
-                table.setText(""+(int) value);
+        slider.addOnChangeListener((slider, value, fromUser) -> {
+            table.setText(""+(int) value);
 
-                if (guestChangeListener != null) {
-                    if ((previousNoOfGuests - (int) value) > 0)
-                        guestChangeListener.onGuestRemoved(previousNoOfGuests - (int) value,(int) value);
-                    else guestChangeListener.onGuestAdded(Math.abs((previousNoOfGuests - (int) value)),(int) value);
-                }
+            if (guestChangeListener != null) {
+                if ((previousNoOfGuests - (int) value) > 0)
+                    guestChangeListener.onGuestRemoved(previousNoOfGuests - (int) value,(int) value);
+                else guestChangeListener.onGuestAdded(Math.abs((previousNoOfGuests - (int) value)),(int) value);
+            }
 
-                /*if (counter>value){
-                    counter = (int) value;
-                    //backward
-                    switch ((int) value){
-                        case 1:
-                            animateChairs(false,chair_two);
-                            break;
-                        case 2:
-                            animateChairs(false,chair_three);
-                            break;
-                        case 3:
-                            animateChairs(false,chair_four);
-                            break;
-                        case 4:
-                            animateChairs(false,chair_five);
-                            break;
-                        case 5:
-                            animateChairs(false,chair_six);
-                            break;
-                        case 6:
-                            animateChairs(false,chair_seven);
-                            break;
-                        case 7:
-                            animateChairs(false,chair_eight);
-                            break;
-                        default:
-                            break;
-                    }
-                }else {
-                    //forward
-                    counter = (int) value;
-                    switch ((int) value){
-                    case 1:
-                        animateChairs(true,chair_one);
-                        break;
-                    case 2:
-                        animateChairs(true,chair_two);
-                        break;
-                    case 3:
-                        animateChairs(true,chair_three);
-                        break;
-                    case 4:
-                        animateChairs(true,chair_four);
-                        break;
-                    case 5:
-                        animateChairs(true,chair_five);
-                        break;
-                    case 6:
-                        animateChairs(true,chair_six);
-                        break;
-                    case 7:
-                        animateChairs(true,chair_seven);
-                        break;
-                    case 8:
-                        animateChairs(true,chair_eight);
-                        break;
-                        default:
-                            break;
-                    }
-                }*/
-
-                previousNoOfGuests = (int) value;
-
+            /*if (counter>value){
+                counter = (int) value;
+                //backward
                 switch ((int) value){
-
                     case 1:
-                        animateChairs(true,chair_one);
-                        animateChairs(false,chair_two,chair_three,chair_four,chair_five,chair_six,chair_seven,chair_eight);
+                        animateChairs(false,chair_two);
                         break;
                     case 2:
-                        animateChairs(true,chair_one,chair_two);
-                        animateChairs(false,chair_three,chair_four,chair_five,chair_six,chair_seven,chair_eight);
+                        animateChairs(false,chair_three);
                         break;
                     case 3:
-                        animateChairs(true,chair_one,chair_two,chair_three);
-                        animateChairs(false,chair_four,chair_five,chair_six,chair_seven,chair_eight);
+                        animateChairs(false,chair_four);
                         break;
                     case 4:
-                        animateChairs(true,chair_one,chair_two,chair_three,chair_four);
-                        animateChairs(false,chair_five,chair_six,chair_seven,chair_eight);
+                        animateChairs(false,chair_five);
                         break;
                     case 5:
-                        animateChairs(true,chair_one,chair_two,chair_three,chair_four,chair_five);
-                        animateChairs(false,chair_six,chair_seven,chair_eight);
+                        animateChairs(false,chair_six);
                         break;
                     case 6:
-                        animateChairs(true,chair_one,chair_two,chair_three,chair_four,chair_five,chair_six);
-                        animateChairs(false,chair_seven,chair_eight);
+                        animateChairs(false,chair_seven);
                         break;
                     case 7:
-                        animateChairs(true,chair_one,chair_two,chair_three,chair_four,chair_five,chair_six,chair_seven);
                         animateChairs(false,chair_eight);
                         break;
-                    case 8:
-
-                        animateChairs(true,chair_one,chair_two,chair_three,chair_four,chair_five,chair_six,chair_seven,chair_eight);
+                    default:
                         break;
+                }
+            }else {
+                //forward
+                counter = (int) value;
+                switch ((int) value){
+                case 1:
+                    animateChairs(true,chair_one);
+                    break;
+                case 2:
+                    animateChairs(true,chair_two);
+                    break;
+                case 3:
+                    animateChairs(true,chair_three);
+                    break;
+                case 4:
+                    animateChairs(true,chair_four);
+                    break;
+                case 5:
+                    animateChairs(true,chair_five);
+                    break;
+                case 6:
+                    animateChairs(true,chair_six);
+                    break;
+                case 7:
+                    animateChairs(true,chair_seven);
+                    break;
+                case 8:
+                    animateChairs(true,chair_eight);
+                    break;
+                    default:
+                        break;
+                }
+            }*/
 
-                default:
-                break;
-            }
+            previousNoOfGuests = (int) value;
 
-            }
+            switch ((int) value){
+
+                case 1:
+                    animateChairs(true,chair_one);
+                    animateChairs(false,chair_two,chair_three,chair_four,chair_five,chair_six,chair_seven,chair_eight);
+                    break;
+                case 2:
+                    animateChairs(true,chair_one,chair_two);
+                    animateChairs(false,chair_three,chair_four,chair_five,chair_six,chair_seven,chair_eight);
+                    break;
+                case 3:
+                    animateChairs(true,chair_one,chair_two,chair_three);
+                    animateChairs(false,chair_four,chair_five,chair_six,chair_seven,chair_eight);
+                    break;
+                case 4:
+                    animateChairs(true,chair_one,chair_two,chair_three,chair_four);
+                    animateChairs(false,chair_five,chair_six,chair_seven,chair_eight);
+                    break;
+                case 5:
+                    animateChairs(true,chair_one,chair_two,chair_three,chair_four,chair_five);
+                    animateChairs(false,chair_six,chair_seven,chair_eight);
+                    break;
+                case 6:
+                    animateChairs(true,chair_one,chair_two,chair_three,chair_four,chair_five,chair_six);
+                    animateChairs(false,chair_seven,chair_eight);
+                    break;
+                case 7:
+                    animateChairs(true,chair_one,chair_two,chair_three,chair_four,chair_five,chair_six,chair_seven);
+                    animateChairs(false,chair_eight);
+                    break;
+                case 8:
+
+                    animateChairs(true,chair_one,chair_two,chair_three,chair_four,chair_five,chair_six,chair_seven,chair_eight);
+                    break;
+
+            default:
+            break;
+        }
+
         });
     }
 

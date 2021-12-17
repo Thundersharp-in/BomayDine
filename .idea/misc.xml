@@ -3,8 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="../../../../../layout/custom_preview.xml" value="0.16" />
-        <entry key="TableActions/src/main/res/layout/guest_counter_view.xml" value="0.25" />
+        <entry key="../../../../../layout/custom_preview.xml" value="0.22" />
+        <entry key="TableActions/src/main/res/layout/guest_counter_view.xml" value="0.2" />
         <entry key="app/src/main/res/drawable/curve_top.xml" value="0.2916666666666667" />
         <entry key="app/src/main/res/drawable/curved_dark.xml" value="0.22685185185185186" />
         <entry key="app/src/main/res/drawable/time_slot_bprder.xml" value="0.20069444444444445" />
@@ -22,7 +22,7 @@
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25092592592592594" />
-        <entry key="app/src/main/res/layout/fragment_table_booking_main.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/fragment_table_booking_main.xml" value="0.14" />
         <entry key="app/src/main/res/layout/item_food_cart.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/item_offer_desc.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/item_order_holder.xml" value="0.25092592592592594" />
