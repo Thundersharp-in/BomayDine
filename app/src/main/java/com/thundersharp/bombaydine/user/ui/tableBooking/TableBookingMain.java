@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -19,8 +20,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.thundersharp.bombaydine.R;
+import com.thundersharp.bombaydine.user.core.Adapters.ExtraServiceRequestAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.SlotTimeHolderAdapter;
+import com.thundersharp.bombaydine.user.core.Model.CartOptionsModel;
 import com.thundersharp.bombaydine.user.core.utils.Resturant;
 import com.thundersharp.bombaydine.user.core.utils.TimeUtils;
 import com.thundersharp.tableactions.listeners.GuestChangeListener;
@@ -39,12 +43,17 @@ public class TableBookingMain extends Fragment {
     private RelativeLayout guest_container;
     private CompactCalendarView compactCalendar_view;
     private ImageView calendar_toggle,drop_icon,slot_Icon;
-    private Date bookingDate;
     private ImageView parking,bar, cigarette,couple,roof,wifi;
     private boolean toggle_cal,toggle_no_of_guest, toggle_time_slot;
     private RecyclerView time_slots;
+    private AppCompatButton book_button;
 
+    /**
+     * Variables to be passed to the bottom sheet
+     */
+    private Date bookingDate;
     private int tablesCount,guestCount;
+
 
     @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
     @Override
@@ -167,6 +176,19 @@ public class TableBookingMain extends Fragment {
             }
         });
 
+        book_button.setOnClickListener(t->{
+            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
+
+            View bottomView = LayoutInflater.from(getContext()).inflate(R.layout.botomsheet_table_booking_cart,null,false);
+            RecyclerView recyclerView = bottomView.findViewById(R.id.rec1);
+            recyclerView.setAdapter(new ExtraServiceRequestAdapter(getTableData()));
+
+            bottomSheetDialog.setContentView(bottomView);
+            bottomSheetDialog.setCanceledOnTouchOutside(true);
+            bottomSheetDialog.show();
+
+        });
+
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
@@ -214,6 +236,8 @@ public class TableBookingMain extends Fragment {
             builder.show();
         });
 
+
+
         time_slots.setLayoutManager(new GridLayoutManager(getActivity(),3));
         time_slots.setAdapter(new SlotTimeHolderAdapter(getData()));
 
@@ -232,6 +256,7 @@ public class TableBookingMain extends Fragment {
         guest_container = view.findViewById(R.id.guest_container);
         time_slots = view.findViewById(R.id.time_slots);
         slot_Icon = view.findViewById(R.id.slot_icon);
+        book_button = view.findViewById(R.id.book_button);
 
         parking = view.findViewById(R.id.parking);
         bar = view.findViewById(R.id.bar);
@@ -253,6 +278,15 @@ public class TableBookingMain extends Fragment {
             data.add(i+1+" AM - "+(i+3)+" PM");
         }
 
+        return data;
+    }
+
+    private List<CartOptionsModel> getTableData(){
+        List<CartOptionsModel> data = new ArrayList<>();
+        data.add(new CartOptionsModel("Request separate smoking room for guests (Subjects to availability)",0));
+        data.add(new CartOptionsModel("Request Rooftop table setup (Rooftop table charges of Rs. 245 will be levied)",245));
+        data.add(new CartOptionsModel("Want romantic environment setup (Extra decoration charges of Rs. 385/- will be applied)",385));
+        data.add(new CartOptionsModel("Want free wifi access",0));
         return data;
     }
 }

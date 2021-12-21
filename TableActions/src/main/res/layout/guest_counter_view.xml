@@ -118,7 +118,7 @@
         android:valueTo="8.0"
         android:saveEnabled="true"
         android:layout_marginTop="5dp"
-        style="@style/Theme.App"
+        style="@style/Theme.AppCompat"
          />
 
     <TextView
@@ -137,7 +137,7 @@
         android:valueTo="3.0"
         android:saveEnabled="true"
         android:layout_marginTop="0dp"
-        style="@style/Theme.App"
+        style="@style/Theme.AppCompat"
         />
 
     <TextView

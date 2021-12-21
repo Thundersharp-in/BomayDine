@@ -7,7 +7,6 @@
     android:background="#1e2026"
     tools:context=".user.ui.tableBooking.TableBookingMain">
 
-
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -335,6 +334,7 @@
                             android:layout_marginEnd="15dp"
                             android:src="@drawable/ccp_ic_arrow_drop_down"
                             app:tint="#FFEB3B" />
+
                     </RelativeLayout>
 
                     <RelativeLayout
@@ -353,13 +353,13 @@
                             android:layout_marginTop="@dimen/dimen_10dp"
                             android:visibility="visible"
                             app:backgroundColor="#121315"
-                            app:maxNoOfChairs="eight"
-                            app:infoTextEnabled="true"
                             app:infoText="Slide to select number of guests"
                             app:infoTextColor="#D1D1D1"
-                            app:secondInfoTextEnabled="true"
+                            app:infoTextEnabled="true"
+                            app:maxNoOfChairs="eight"
                             app:secondInfoText="No. of tables"
-                            app:secondInfoTextColor="#D1D1D1"/>
+                            app:secondInfoTextColor="#D1D1D1"
+                            app:secondInfoTextEnabled="true" />
 
                     </RelativeLayout>
 

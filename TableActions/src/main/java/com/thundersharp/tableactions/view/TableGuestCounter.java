@@ -117,7 +117,6 @@ public class TableGuestCounter extends RelativeLayout {
 
     public void viewRotator(int idOfView,int r){
 
-
     }
 
     private void initialize(){

@@ -20,9 +20,12 @@
         <entry key="app/src/main/res/layout/activity_recent_orders.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/activity_refunds.xml" value="0.22" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/botomsheet_cart.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/botomsheet_table_booking_cart.xml" value="0.18" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/extra_service_request_adapter.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25092592592592594" />
-        <entry key="app/src/main/res/layout/fragment_table_booking_main.xml" value="0.14" />
+        <entry key="app/src/main/res/layout/fragment_table_booking_main.xml" value="0.12" />
         <entry key="app/src/main/res/layout/item_food_cart.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/item_offer_desc.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/item_order_holder.xml" value="0.25092592592592594" />
