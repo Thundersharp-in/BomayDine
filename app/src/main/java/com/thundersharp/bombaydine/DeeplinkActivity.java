@@ -20,6 +20,7 @@ import com.google.firebase.dynamiclinks.PendingDynamicLinkData;
 import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
 import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.user.ui.orders.OrderStatus;
+import com.thundersharp.bombaydine.user.ui.tableBooking.TableBookingMain;
 
 public class DeeplinkActivity extends AppCompatActivity {
 
@@ -27,6 +28,7 @@ public class DeeplinkActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deeplink);
+
 
 
         FirebaseDynamicLinks.getInstance()

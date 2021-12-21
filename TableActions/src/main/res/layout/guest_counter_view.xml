@@ -4,13 +4,13 @@
     android:id="@+id/container"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
     android:background="#1e2026"
     android:gravity="center"
     android:minHeight="150dp"
     android:orientation="vertical">
 
     <RelativeLayout
+        android:id="@+id/tableContainer"
         android:layout_width="180dp"
         android:layout_height="180dp">
 
@@ -117,8 +117,35 @@
         android:valueFrom="1.0"
         android:valueTo="8.0"
         android:saveEnabled="true"
-        android:layout_marginTop="15dp"
-        style="@style/Theme.App"
+        android:layout_marginTop="5dp"
+        style="@style/Theme.AppCompat"
          />
+
+    <TextView
+        android:id="@+id/seekText"
+        android:layout_marginTop="-5dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"/>
+
+    <com.google.android.material.slider.RangeSlider
+        android:id="@+id/sliderTable"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:stepSize="1.0"
+        android:valueFrom="1.0"
+        android:valueTo="3.0"
+        android:saveEnabled="true"
+        android:layout_marginTop="0dp"
+        style="@style/Theme.AppCompat"
+        />
+
+    <TextView
+        android:id="@+id/seekTextTable"
+        android:layout_marginTop="-5dp"
+        android:layout_marginBottom="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"/>
 
 </LinearLayout>

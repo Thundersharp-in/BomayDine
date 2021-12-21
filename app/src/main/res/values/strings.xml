@@ -19,4 +19,17 @@
     </string>
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="offer_view_detail"><b> View Details </b></string>
+
+    <string name="f">Persons above 65 years of age, persons with comorbidities, pregnant women and children
+below the age of 10 years are advised to stay at home, except for essential and health
+purposes. Restaurant management to advise accordingly.
+The generic measures include simple public health measures that are to be followed to
+reduce the risk of COVID-19. These measures need to be observed by all (staff and patrons)
+in these places at all times.
+These include:\n\ni. Physical distancing of at least 6 feet to be followed as far as feasible.\nii. Use of face covers/masks to be made mandatory.\niii. Practice frequent hand washing with soap (for at least 40-60 seconds) even when
+hands are not visibly dirty. Use of alcohol-based hand sanitizers (for at least 20
+seconds) can be made wherever feasible.\niv. Respiratory etiquettes to be strictly followed. This involves strict practice of covering
+one’s mouth and nose while coughing/sneezing with a tissue/handkerchief/flexed
+elbow and disposing off used tissues properly.\nv. Self-monitoring of health by all and reporting any illness at the earliest to state and
+district helpline.\nvi. Spitting shall be strictly prohibited.\nvii. Installation &amp; use of Aarogya Setu App shall be advised to all.</string>
 </resources>

@@ -4,16 +4,11 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="../../../../../layout/custom_preview.xml" value="0.22" />
-        <entry key="../../../../layout/custom_preview.xml" value="0.1787037037037037" />
-        <entry key="TableActions/src/main/res/layout/guest_counter_view.xml" value="0.1686420664502683" />
+        <entry key="TableActions/src/main/res/layout/guest_counter_view.xml" value="0.2" />
         <entry key="app/src/main/res/drawable/curve_top.xml" value="0.2916666666666667" />
-        <entry key="app/src/main/res/font/acme.xml" value="0.1111111111111111" />
-        <entry key="app/src/main/res/font/allerta.xml" value="0.1668824446232542" />
-        <entry key="app/src/main/res/font/amaranth_bold_italic.xml" value="0.1111111111111111" />
-        <entry key="app/src/main/res/font/amita_bold.xml" value="0.1111111111111111" />
-        <entry key="app/src/main/res/font/arizonia.xml" value="0.1111111111111111" />
-        <entry key="app/src/main/res/font/coiny.xml" value="0.1111111111111111" />
-        <entry key="app/src/main/res/font/roboto_medium.xml" value="0.1111111111111111" />
+        <entry key="app/src/main/res/drawable/curved_dark.xml" value="0.22685185185185186" />
+        <entry key="app/src/main/res/drawable/time_slot_bprder.xml" value="0.20069444444444445" />
+        <entry key="app/src/main/res/drawable/time_slot_bprder_selected.xml" value="0.20069444444444445" />
         <entry key="app/src/main/res/layout/activity_all_items.xml" value="0.1712962962962963" />
         <entry key="app/src/main/res/layout/activity_email_account_create.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_email_login.xml" value="0.28229166666666666" />
@@ -23,13 +18,18 @@
         <entry key="app/src/main/res/layout/activity_order_details.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_profile_main.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/activity_recent_orders.xml" value="0.25092592592592594" />
+        <entry key="app/src/main/res/layout/activity_refunds.xml" value="0.22" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/botomsheet_cart.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/botomsheet_table_booking_cart.xml" value="0.18" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.37604166666666666" />
+        <entry key="app/src/main/res/layout/extra_service_request_adapter.xml" value="0.22" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25092592592592594" />
-        <entry key="app/src/main/res/layout/fragment_table_booking_main.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/fragment_table_booking_main.xml" value="0.12" />
         <entry key="app/src/main/res/layout/item_food_cart.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/item_offer_desc.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/item_order_holder.xml" value="0.25092592592592594" />
+        <entry key="app/src/main/res/layout/item_time_slots.xml" value="0.18" />
         <entry key="app/src/main/res/layout/profile.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.28229166666666666" />
       </map>
