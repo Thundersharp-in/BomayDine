@@ -7,6 +7,13 @@
         <entry key="../../../../layout/custom_preview.xml" value="0.1787037037037037" />
         <entry key="TableActions/src/main/res/layout/guest_counter_view.xml" value="0.1686420664502683" />
         <entry key="app/src/main/res/drawable/curve_top.xml" value="0.2916666666666667" />
+        <entry key="app/src/main/res/font/acme.xml" value="0.1111111111111111" />
+        <entry key="app/src/main/res/font/allerta.xml" value="0.1668824446232542" />
+        <entry key="app/src/main/res/font/amaranth_bold_italic.xml" value="0.1111111111111111" />
+        <entry key="app/src/main/res/font/amita_bold.xml" value="0.1111111111111111" />
+        <entry key="app/src/main/res/font/arizonia.xml" value="0.1111111111111111" />
+        <entry key="app/src/main/res/font/coiny.xml" value="0.1111111111111111" />
+        <entry key="app/src/main/res/font/roboto_medium.xml" value="0.1111111111111111" />
         <entry key="app/src/main/res/layout/activity_all_items.xml" value="0.1712962962962963" />
         <entry key="app/src/main/res/layout/activity_email_account_create.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_email_login.xml" value="0.28229166666666666" />
