@@ -1,8 +1,11 @@
 package com.thundersharp.bombaydine.user.ui.tableBooking;
 
+import static android.widget.Toast.LENGTH_LONG;
+
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.appcompat.widget.AppCompatButton;
@@ -21,6 +24,7 @@ import android.widget.Toast;
 
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
+import com.google.android.material.snackbar.Snackbar;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.ExtraServiceRequestAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.SlotTimeHolderAdapter;
@@ -53,6 +57,8 @@ public class TableBookingMain extends Fragment {
      */
     private Date bookingDate;
     private int tablesCount,guestCount;
+
+    public static Object time_slot;
 
 
     @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
@@ -166,6 +172,7 @@ public class TableBookingMain extends Fragment {
             }
         });
 
+
         view.findViewById(R.id.time_container).setOnClickListener(n->{
             if (toggle_time_slot){
                 time_slots.setVisibility(View.VISIBLE);
@@ -176,16 +183,49 @@ public class TableBookingMain extends Fragment {
             }
         });
 
-        book_button.setOnClickListener(t->{
-            BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
+        book_button.setOnClickListener((t) -> {
 
-            View bottomView = LayoutInflater.from(getContext()).inflate(R.layout.botomsheet_table_booking_cart,null,false);
-            RecyclerView recyclerView = bottomView.findViewById(R.id.rec1);
-            recyclerView.setAdapter(new ExtraServiceRequestAdapter(getTableData()));
+            if (bookingDate == null){
 
-            bottomSheetDialog.setContentView(bottomView);
-            bottomSheetDialog.setCanceledOnTouchOutside(true);
-            bottomSheetDialog.show();
+                Snackbar snackbar = Snackbar.make(getContext(),book_button,"Please select date of your booking !!",Snackbar.LENGTH_LONG);
+                snackbar.setTextColor(Color.WHITE);
+                snackbar.setBackgroundTint(Color.RED);
+                snackbar.show();
+
+            }else if (time_slot == null){
+
+                Snackbar snackbar = Snackbar.make(getContext(),book_button,"Please select a time slot among the available ones !!",Snackbar.LENGTH_LONG);
+                snackbar.setTextColor(Color.WHITE);
+                snackbar.setBackgroundTint(Color.RED);
+                snackbar.show();
+
+            }else {
+                BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
+
+                View bottomView = LayoutInflater.from(getContext()).inflate(R.layout.botomsheet_table_booking_cart, null, false);
+                RecyclerView recyclerView = bottomView.findViewById(R.id.rec1);
+                TextView guest_and_table_view = bottomView.findViewById(R.id.delevering_to_address);
+                TextView booking_date = bottomView.findViewById(R.id.booking_date);
+
+                recyclerView.setAdapter(new ExtraServiceRequestAdapter(getTableData()));
+                booking_date.setText("Date of Booking "+TimeUtils.getDateFromTimeStamp(bookingDate.getTime()));
+                guest_and_table_view.setText("Total number of guests "+guestCount+" Total number of Tables "+tablesCount);
+
+                bottomView.findViewById(R.id.ch_date).setOnClickListener((V) -> {
+                    bottomSheetDialog.dismiss();
+                    if (!compactCalendar_view.isAnimating() && month_display.getVisibility() == View.GONE) {
+                        compactCalendar_view.showCalendarWithAnimation();
+                        month_display.setVisibility(View.VISIBLE);
+                        toggle_cal = false;
+                    }
+                });
+
+                bottomView.findViewById(R.id.ch_address).setOnClickListener((ClickListener) -> bottomSheetDialog.dismiss());
+
+                bottomSheetDialog.setContentView(bottomView);
+                bottomSheetDialog.setCanceledOnTouchOutside(true);
+                bottomSheetDialog.show();
+            }
 
         });
 

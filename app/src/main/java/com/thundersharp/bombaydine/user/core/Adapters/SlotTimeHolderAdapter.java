@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thundersharp.bombaydine.R;
+import com.thundersharp.bombaydine.user.ui.tableBooking.TableBookingMain;
 
 import java.util.List;
 
@@ -59,6 +60,7 @@ public class SlotTimeHolderAdapter extends RecyclerView.Adapter<SlotTimeHolderAd
                     selectedPos = intent.getIntExtra("pos",0);
                     if (selectedPos == getAdapterPosition()){
                         container.setBackground(itemView.getResources().getDrawable(R.drawable.time_slot_bprder_selected));
+                        TableBookingMain.time_slot = time.get(getAdapterPosition());
                     }else container.setBackground(itemView.getResources().getDrawable(R.drawable.time_slot_bprder));
                 }
             };
