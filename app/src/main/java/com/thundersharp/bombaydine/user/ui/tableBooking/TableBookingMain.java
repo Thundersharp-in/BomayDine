@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -32,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.razorpay.PaymentData;
 import com.razorpay.PaymentResultListener;
 import com.thundersharp.bombaydine.R;
+import com.thundersharp.bombaydine.user.core.Adapters.ExtraChargesAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.ExtraServiceRequestAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.SlotTimeHolderAdapter;
 import com.thundersharp.bombaydine.user.core.Model.CartOptionsModel;
@@ -69,6 +71,7 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
      */
     private Date bookingDate;
     private int tablesCount,guestCount;
+    private double totalCartAmount = 0;
 
     public static Object time_slot;
 
@@ -215,7 +218,9 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
                 snackbar.show();
 
             }else {
+                totalCartAmount = 0;
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
+                ExtraChargesAdapter extraChargesAdapter = new ExtraChargesAdapter(new ArrayList<CartOptionsModel>());
 
                 View bottomView = LayoutInflater.from(getContext()).inflate(R.layout.botomsheet_table_booking_cart, null, false);
                 RecyclerView recyclerView = bottomView.findViewById(R.id.rec1);
@@ -225,12 +230,38 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
                 TextView unit_price = bottomView.findViewById(R.id.item_tot);
                 TextView total_price = bottomView.findViewById(R.id.del_charges);
                 TextView grand_total = bottomView.findViewById(R.id.grand_tot);
+                RecyclerView recycler_view_extra_charges = bottomView.findViewById(R.id.recycler_view_extra_charges);
                 AppCompatButton pay = bottomView.findViewById(R.id.paybtn);
 
-                recyclerView.setAdapter(new ExtraServiceRequestAdapter(getTableData()));
+                ExtraServiceRequestAdapter extraServiceRequestAdapter = new ExtraServiceRequestAdapter(getTableData());
+
+                recyclerView.setAdapter(extraServiceRequestAdapter);
+                recycler_view_extra_charges.setAdapter(extraChargesAdapter);
+
                 booking_date.setText("Date of Booking "+TimeUtils.getDateFromTimeStamp(bookingDate.getTime()));
                 guest_and_table_view.setText("Total number of guests "+guestCount+" Total number of Tables "+tablesCount);
                 booking_time_slot.setText("Selected Time Slot : "+time_slot.toString());
+
+                extraServiceRequestAdapter.setItemInteractionListener(new ExtraServiceRequestAdapter.ItemInteractionListener() {
+                    @Override
+                    public void onServiceItemAdded(CompoundButton compoundButton, double cartValueOut) {
+                        totalCartAmount += cartValueOut;
+                        grand_total.setText("\u20B9 "+totalCartAmount);
+                        pay.setText("Pay \u20B9 "+totalCartAmount);
+                        extraChargesAdapter.addItem(new CartOptionsModel(compoundButton.getText().toString(),cartValueOut));
+                        Toast.makeText(getActivity(), "Item Added : "+compoundButton.getText(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onServiceItemRemoved(CompoundButton compoundButton, double cartValue) {
+                        totalCartAmount -= cartValue;
+                        grand_total.setText("\u20B9 "+totalCartAmount);
+                        pay.setText("Pay \u20B9 "+totalCartAmount);
+                        extraChargesAdapter.removeItem(new CartOptionsModel(compoundButton.getText().toString(),cartValue));
+                        Toast.makeText(getActivity(), "Item Removed : "+compoundButton.getText(), Toast.LENGTH_SHORT).show();
+
+                    }
+                });
 
                 FirebaseDatabase
                         .getInstance()
@@ -245,6 +276,7 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
                                     total_price.setText("\u20B9 "+(data * tablesCount)+" ("+tablesCount+" X "+data+")");
                                     grand_total.setText("\u20B9 "+(data * tablesCount));
                                     pay.setText("Pay \u20B9 "+(data * tablesCount));
+                                    totalCartAmount += (data*tablesCount);
 
                                 }else {
                                     bottomSheetDialog.dismiss();
@@ -275,7 +307,7 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
                             .initlizeBuilder()
                             .setCustomerEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail())
                             .setCustomerPhone(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber())
-                            .setTransactionAmount((data*tablesCount))
+                            .setTransactionAmount(totalCartAmount)
                             .setMerchantTittle("Table Booking")
                             .build();
 

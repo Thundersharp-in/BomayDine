@@ -17,10 +17,25 @@ import java.util.List;
 
 public class ExtraChargesAdapter extends RecyclerView.Adapter<ExtraChargesAdapter.ViewHolder>{
 
-    List<CartOptionsModel> dataList;
+    public List<CartOptionsModel> dataList;
 
     public ExtraChargesAdapter(List<CartOptionsModel> dataList) {
         this.dataList = dataList;
+    }
+
+    public boolean addItem(CartOptionsModel cartOptionsModel){
+        boolean a = dataList.add(cartOptionsModel);
+        notifyItemInserted(getItemCount()-1);
+        return a;
+    }
+
+    public void removeItem(CartOptionsModel cartOptionsModel){
+        for(int i =0; i<dataList.size();i++){
+            if (dataList.get(i).REQUEST_OPTION_NAME.equalsIgnoreCase(cartOptionsModel.REQUEST_OPTION_NAME)){
+                 dataList.remove(i);
+                notifyItemRemoved(i);
+            }
+        }
     }
 
     @NonNull
@@ -31,7 +46,7 @@ public class ExtraChargesAdapter extends RecyclerView.Adapter<ExtraChargesAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.descriptionText.setText(dataList.get(position).REQUEST_OPTION_NAME);
+        holder.descriptionText.setText(dataList.get(position).REQUEST_OPTION_NAME.substring(0,dataList.get(position).REQUEST_OPTION_NAME.indexOf("(")));
         holder.value.setText("\u20B9 "+dataList.get(position).CART_VALUE_CHANGE);
     }
 

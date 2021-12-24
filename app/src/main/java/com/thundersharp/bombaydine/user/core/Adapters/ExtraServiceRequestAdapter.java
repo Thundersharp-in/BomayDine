@@ -17,6 +17,11 @@ import java.util.List;
 public class ExtraServiceRequestAdapter extends RecyclerView.Adapter<ExtraServiceRequestAdapter.ViewHolder>{
 
     List<CartOptionsModel> dataList;
+    ItemInteractionListener itemInteractionListener;
+
+    public void setItemInteractionListener(ItemInteractionListener itemInteractionListener){
+        this.itemInteractionListener = itemInteractionListener;
+    }
 
     public ExtraServiceRequestAdapter(List<CartOptionsModel> dataList) {
         this.dataList = dataList;
@@ -51,10 +56,19 @@ public class ExtraServiceRequestAdapter extends RecyclerView.Adapter<ExtraServic
             checkBoxText.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
+                    if (itemInteractionListener != null)
+                        if (b) itemInteractionListener.onServiceItemAdded(compoundButton,dataList.get(getAdapterPosition()).CART_VALUE_CHANGE);
+                        else itemInteractionListener.onServiceItemRemoved(compoundButton,dataList.get(getAdapterPosition()).CART_VALUE_CHANGE);
                 }
             });
 
         }
+    }
+
+    public interface ItemInteractionListener{
+
+        void onServiceItemAdded(CompoundButton compoundButton,double cartValue);
+        void onServiceItemRemoved(CompoundButton compoundButton,double cartValue);
+
     }
 }
