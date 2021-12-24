@@ -1,13 +1,12 @@
 package com.thundersharp.bombaydine.user.ui.tableBooking;
 
-import static android.widget.Toast.LENGTH_LONG;
-
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -25,12 +24,23 @@ import android.widget.Toast;
 import com.github.sundeepk.compactcalendarview.CompactCalendarView;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.snackbar.Snackbar;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.razorpay.PaymentData;
+import com.razorpay.PaymentResultListener;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.ExtraServiceRequestAdapter;
 import com.thundersharp.bombaydine.user.core.Adapters.SlotTimeHolderAdapter;
 import com.thundersharp.bombaydine.user.core.Model.CartOptionsModel;
+import com.thundersharp.bombaydine.user.core.Model.PaymentsRequestOptions;
+import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.user.core.utils.Resturant;
 import com.thundersharp.bombaydine.user.core.utils.TimeUtils;
+import com.thundersharp.bombaydine.user.ui.account.Payments;
+import com.thundersharp.payments.payments.PaymentObserver;
 import com.thundersharp.tableactions.listeners.GuestChangeListener;
 import com.thundersharp.tableactions.view.TableGuestCounter;
 
@@ -39,7 +49,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class TableBookingMain extends Fragment {
+public class TableBookingMain extends Fragment implements PaymentObserver {
 
     private TableGuestCounter tableGuestCounter;
     private TextView display_data,month_display,display_total_guest;
@@ -51,6 +61,8 @@ public class TableBookingMain extends Fragment {
     private boolean toggle_cal,toggle_no_of_guest, toggle_time_slot;
     private RecyclerView time_slots;
     private AppCompatButton book_button;
+    private Integer data;
+
 
     /**
      * Variables to be passed to the bottom sheet
@@ -92,6 +104,9 @@ public class TableBookingMain extends Fragment {
             tablesCount = noOfTables;
             display_total_guest.setText("I/We will be in total "+guestCount+" guest/s, "+tablesCount +" tables required.");
         });
+
+        Date date = new Date();
+        month_display.setText(TimeUtils.getMonthName(date.getMonth())+", "+(date.getYear()+1900));
 
         compactCalendar_view.setListener(new CompactCalendarView.CompactCalendarViewListener() {
 
@@ -206,10 +221,44 @@ public class TableBookingMain extends Fragment {
                 RecyclerView recyclerView = bottomView.findViewById(R.id.rec1);
                 TextView guest_and_table_view = bottomView.findViewById(R.id.delevering_to_address);
                 TextView booking_date = bottomView.findViewById(R.id.booking_date);
+                TextView booking_time_slot = bottomView.findViewById(R.id.est_time);
+                TextView unit_price = bottomView.findViewById(R.id.item_tot);
+                TextView total_price = bottomView.findViewById(R.id.del_charges);
+                TextView grand_total = bottomView.findViewById(R.id.grand_tot);
+                AppCompatButton pay = bottomView.findViewById(R.id.paybtn);
 
                 recyclerView.setAdapter(new ExtraServiceRequestAdapter(getTableData()));
                 booking_date.setText("Date of Booking "+TimeUtils.getDateFromTimeStamp(bookingDate.getTime()));
                 guest_and_table_view.setText("Total number of guests "+guestCount+" Total number of Tables "+tablesCount);
+                booking_time_slot.setText("Selected Time Slot : "+time_slot.toString());
+
+                FirebaseDatabase
+                        .getInstance()
+                        .getReference(CONSTANTS.TABLES_DATA)
+                        .child("UNIT_PRICE")
+                        .addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if (snapshot.exists()){
+                                    data = snapshot.getValue(Integer.class);
+                                    unit_price.setText("\u20B9 "+data);
+                                    total_price.setText("\u20B9 "+(data * tablesCount)+" ("+tablesCount+" X "+data+")");
+                                    grand_total.setText("\u20B9 "+(data * tablesCount));
+                                    pay.setText("Pay \u20B9 "+(data * tablesCount));
+
+                                }else {
+                                    bottomSheetDialog.dismiss();
+                                    Toast.makeText(getActivity(), "Table booking not available for now.", Toast.LENGTH_SHORT).show();
+                                }
+
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Toast.makeText(getActivity(), "Cannot proceed further : "+error.toString(), Toast.LENGTH_SHORT).show();
+                                bottomSheetDialog.dismiss();
+                            }
+                        });
 
                 bottomView.findViewById(R.id.ch_date).setOnClickListener((V) -> {
                     bottomSheetDialog.dismiss();
@@ -218,6 +267,19 @@ public class TableBookingMain extends Fragment {
                         month_display.setVisibility(View.VISIBLE);
                         toggle_cal = false;
                     }
+                });
+
+                pay.setOnClickListener((V) -> {
+
+                    PaymentsRequestOptions.Builder paymentsRequestOptionsData = PaymentsRequestOptions
+                            .initlizeBuilder()
+                            .setCustomerEmail(FirebaseAuth.getInstance().getCurrentUser().getEmail())
+                            .setCustomerPhone(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber())
+                            .setTransactionAmount((data*tablesCount))
+                            .setMerchantTittle("Table Booking")
+                            .build();
+
+                    Payments.initialize(getActivity(),paymentsRequestOptionsData,this);
                 });
 
                 bottomView.findViewById(R.id.ch_address).setOnClickListener((ClickListener) -> bottomSheetDialog.dismiss());
@@ -329,4 +391,16 @@ public class TableBookingMain extends Fragment {
         data.add(new CartOptionsModel("Want free wifi access",0));
         return data;
     }
+
+
+    @Override
+    public void OnPaymentSuccess(String s, PaymentData paymentData) {
+        Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void OnPaymentFailed(int i, String s, PaymentData paymentData) {
+        Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+    }
+
 }

@@ -1,73 +1,37 @@
 package com.thundersharp.admin.ui.menu;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.AppCompatButton;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.facebook.shimmer.ShimmerFrameLayout;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.FirebaseDatabase;
-import com.razorpay.PaymentData;
-import com.razorpay.PaymentResultWithDataListener;
 import com.thundersharp.admin.R;
 import com.thundersharp.admin.core.Adapters.AllItemAdapterMailAdapter;
 import com.thundersharp.admin.core.Adapters.AllOfferAdapters;
-import com.thundersharp.admin.core.Adapters.CartItemAdapter;
-import com.thundersharp.admin.core.Adapters.DealOfTheDayAdapter;
 import com.thundersharp.admin.core.Data.HomeDataContract;
 import com.thundersharp.admin.core.Data.HomeDataProvider;
 import com.thundersharp.admin.core.Data.OfferListner;
 import com.thundersharp.admin.core.Data.OffersProvider;
-import com.thundersharp.admin.core.Model.CartItemModel;
 import com.thundersharp.admin.core.Model.OrederBasicDetails;
 import com.thundersharp.admin.core.OfflineDataSync.OfflineDataProvider;
 import com.thundersharp.admin.core.address.SharedPrefHelper;
-import com.thundersharp.admin.core.animation.Animator;
-import com.thundersharp.admin.core.cart.CartEmptyUpdater;
-import com.thundersharp.admin.core.cart.CartHandler;
 import com.thundersharp.admin.core.cart.CartProvider;
-import com.thundersharp.admin.core.location.DistanceFromCoordinates;
-import com.thundersharp.admin.core.payments.PrePayment;
-import com.thundersharp.admin.core.payments.parePayListener;
-import com.thundersharp.admin.core.utils.CONSTANTS;
-import com.thundersharp.admin.core.utils.LatLongConverter;
-import com.thundersharp.admin.core.utils.ResturantCoordinates;
-import com.thundersharp.admin.core.utils.TimeUtils;
 import com.thundersharp.admin.ui.edits.EditItemActivity;
-import com.thundersharp.admin.ui.offers.AllOffersActivity;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Random;
-
-import com.thundersharp.admin.ui.orders.OrderStatus;
-import com.thundersharp.payments.payments.Payments;
 
 public class AllItemsActivity extends AppCompatActivity implements
         HomeDataContract.AllItems,

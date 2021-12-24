@@ -34,4 +34,5 @@ public class CONSTANTS {
 
     public static final String DATABASE_TOP_CAROUSEL = "TOP_CAROUSEL";
 
+    public static final String TABLES_DATA = "TABLES_DATA";
 }
