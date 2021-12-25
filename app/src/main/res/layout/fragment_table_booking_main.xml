@@ -317,10 +317,10 @@
                             android:layout_height="wrap_content"
                             android:layout_centerVertical="true"
                             android:layout_marginStart="15dp"
+                            android:layout_toStartOf="@id/drop_icon"
+                            android:ellipsize="end"
                             android:fontFamily="@font/calibri"
                             android:maxLines="1"
-                            android:ellipsize="end"
-                            android:layout_toStartOf="@id/drop_icon"
                             android:text="I/We will be in total -- guests"
                             android:textColor="#D5D5D5"
                             android:textSize="18sp" />

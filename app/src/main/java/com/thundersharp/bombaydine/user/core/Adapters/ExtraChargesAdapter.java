@@ -46,7 +46,10 @@ public class ExtraChargesAdapter extends RecyclerView.Adapter<ExtraChargesAdapte
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.descriptionText.setText(dataList.get(position).REQUEST_OPTION_NAME.substring(0,dataList.get(position).REQUEST_OPTION_NAME.indexOf("(")));
+        if (dataList.get(position).REQUEST_OPTION_NAME.contains("("))
+            holder.descriptionText.setText(dataList.get(position).REQUEST_OPTION_NAME.substring(0,dataList.get(position).REQUEST_OPTION_NAME.indexOf("(")));
+        else holder.descriptionText.setText(dataList.get(position).REQUEST_OPTION_NAME);
+
         holder.value.setText("\u20B9 "+dataList.get(position).CART_VALUE_CHANGE);
     }
 

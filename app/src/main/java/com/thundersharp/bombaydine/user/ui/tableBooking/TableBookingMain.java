@@ -93,19 +93,18 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
             @Override
             public void onGuestAdded(int numberOfNewGuests, int totalNumberOfGuests) {
                 guestCount = totalNumberOfGuests;
-                display_total_guest.setText("I/We will be in total "+totalNumberOfGuests+" guest/s, "+tablesCount +" tables required.");
-            }
+                display_total_guest.setText("Guest/s "+guestCount+" Table/s : "+tablesCount );            }
 
             @Override
             public void onGuestRemoved(int numberOfRemovedGuests, int totalNumberOfGuests) {
                 guestCount = totalNumberOfGuests;
-                display_total_guest.setText("I/We will be in total "+totalNumberOfGuests+" guest/s, "+tablesCount +" tables required.");
-            }
+                display_total_guest.setText("Guest/s "+guestCount+" Table/s : "+tablesCount );            }
         });
+
 
         tableGuestCounter.setOnTableChangeListener(noOfTables -> {
             tablesCount = noOfTables;
-            display_total_guest.setText("I/We will be in total "+guestCount+" guest/s, "+tablesCount +" tables required.");
+            display_total_guest.setText("Guest/s "+guestCount+" Table/s : "+tablesCount );
         });
 
         Date date = new Date();
@@ -220,6 +219,7 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
             }else {
                 totalCartAmount = 0;
                 BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getContext());
+
                 ExtraChargesAdapter extraChargesAdapter = new ExtraChargesAdapter(new ArrayList<CartOptionsModel>());
 
                 View bottomView = LayoutInflater.from(getContext()).inflate(R.layout.botomsheet_table_booking_cart, null, false);
@@ -242,7 +242,9 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
                 guest_and_table_view.setText("Total number of guests "+guestCount+" Total number of Tables "+tablesCount);
                 booking_time_slot.setText("Selected Time Slot : "+time_slot.toString());
 
-                extraServiceRequestAdapter.setItemInteractionListener(new ExtraServiceRequestAdapter.ItemInteractionListener() {
+                extraServiceRequestAdapter
+                        .setItemInteractionListener(new ExtraServiceRequestAdapter.ItemInteractionListener() {
+
                     @Override
                     public void onServiceItemAdded(CompoundButton compoundButton, double cartValueOut) {
                         totalCartAmount += cartValueOut;
@@ -268,8 +270,10 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
                         .getReference(CONSTANTS.TABLES_DATA)
                         .child("UNIT_PRICE")
                         .addListenerForSingleValueEvent(new ValueEventListener() {
+
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                                 if (snapshot.exists()){
                                     data = snapshot.getValue(Integer.class);
                                     unit_price.setText("\u20B9 "+data);
@@ -281,6 +285,7 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
                                 }else {
                                     bottomSheetDialog.dismiss();
                                     Toast.makeText(getActivity(), "Table booking not available for now.", Toast.LENGTH_SHORT).show();
+
                                 }
 
                             }
@@ -312,8 +317,15 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
                             .build();
 
                     Payments.initialize(getActivity(),paymentsRequestOptionsData,this);
+
                 });
 
+                bottomView.findViewById(R.id.offersl).setOnClickListener((cc) -> {
+                    Snackbar snackbar = Snackbar.make(getContext(),bottomView.getRootView(),"Currently no coupons available for you :(",Snackbar.LENGTH_LONG);
+                    snackbar.setTextColor(Color.WHITE);
+                    snackbar.setBackgroundTint(Color.RED);
+                    snackbar.show();
+                });
                 bottomView.findViewById(R.id.ch_address).setOnClickListener((ClickListener) -> bottomSheetDialog.dismiss());
 
                 bottomSheetDialog.setContentView(bottomView);
@@ -322,7 +334,6 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
             }
 
         });
-
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
         builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {

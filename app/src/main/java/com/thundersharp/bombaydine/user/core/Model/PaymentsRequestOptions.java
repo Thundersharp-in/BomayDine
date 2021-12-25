@@ -21,6 +21,10 @@ public class PaymentsRequestOptions {
     private double transactionAmount;
 
 
+    /**
+     * @see PaymentsRequestOptions
+     * @return PaymentRequestOptions
+     */
     public static PaymentsRequestOptions initlizeBuilder(){
         return new PaymentsRequestOptions();
     }
