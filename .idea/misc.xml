@@ -7,6 +7,7 @@
         <entry key="TableActions/src/main/res/layout/guest_counter_view.xml" value="0.2" />
         <entry key="app/src/main/res/drawable/curve_top.xml" value="0.2916666666666667" />
         <entry key="app/src/main/res/drawable/curved_dark.xml" value="0.22685185185185186" />
+        <entry key="app/src/main/res/drawable/ic_baseline_access_time_24.xml" value="0.1675925925925926" />
         <entry key="app/src/main/res/drawable/time_slot_bprder.xml" value="0.20069444444444445" />
         <entry key="app/src/main/res/drawable/time_slot_bprder_selected.xml" value="0.20069444444444445" />
         <entry key="app/src/main/res/layout/activity_all_items.xml" value="0.1712962962962963" />
@@ -19,18 +20,21 @@
         <entry key="app/src/main/res/layout/activity_profile_main.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/activity_recent_orders.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/activity_refunds.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/activity_table_booking_history.xml" value="0.2" />
         <entry key="app/src/main/res/layout/app_bar_main.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/botomsheet_cart.xml" value="0.22" />
-        <entry key="app/src/main/res/layout/botomsheet_table_booking_cart.xml" value="0.22" />
+        <entry key="app/src/main/res/layout/botomsheet_table_booking_cart.xml" value="0.2" />
         <entry key="app/src/main/res/layout/content_main.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/extra_charges_layout.xml" value="0.22" />
         <entry key="app/src/main/res/layout/extra_service_request_adapter.xml" value="0.17299198079421782" />
         <entry key="app/src/main/res/layout/fragment_home.xml" value="0.25092592592592594" />
-        <entry key="app/src/main/res/layout/fragment_table_booking_main.xml" value="0.12" />
+        <entry key="app/src/main/res/layout/fragment_table_booking_main.xml" value="0.22" />
         <entry key="app/src/main/res/layout/item_food_cart.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/item_offer_desc.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/item_order_holder.xml" value="0.25092592592592594" />
+        <entry key="app/src/main/res/layout/item_table_order_holder.xml" value="0.5" />
         <entry key="app/src/main/res/layout/item_time_slots.xml" value="0.18" />
+        <entry key="app/src/main/res/layout/ordered_item.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/profile.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.28229166666666666" />
       </map>

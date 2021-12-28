@@ -3,10 +3,12 @@ package com.thundersharp.bombaydine.user.ui.tableBooking;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.widget.AppCompatButton;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -42,14 +44,20 @@ import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
 import com.thundersharp.bombaydine.user.core.utils.Resturant;
 import com.thundersharp.bombaydine.user.core.utils.TimeUtils;
 import com.thundersharp.bombaydine.user.ui.account.Payments;
+import com.thundersharp.bombaydine.user.ui.orders.ConfirmPhoneName;
 import com.thundersharp.payments.payments.PaymentObserver;
 import com.thundersharp.tableactions.listeners.GuestChangeListener;
 import com.thundersharp.tableactions.view.TableGuestCounter;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class TableBookingMain extends Fragment implements PaymentObserver {
 
@@ -64,6 +72,9 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
     private RecyclerView time_slots;
     private AppCompatButton book_button;
     private Integer data;
+
+    private TextView nameBott;
+    private String dataName_Phone = FirebaseAuth.getInstance().getCurrentUser().getDisplayName()+", "+FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
 
 
     /**
@@ -86,6 +97,7 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
         initializeViews(view);
 
         ((TextView)view.findViewById(R.id.profile_email)).setText("Indian, Italian,  Thai, Chinese\n"+ Resturant.resturant+", Bangalore");
+        view.findViewById(R.id.profilepic).setOnClickListener(h->startActivity(new Intent(getActivity(),TableBookingHistory.class)));
 
         tableGuestCounter.setNoOfGuestChangeListener(new GuestChangeListener() {
 
@@ -251,7 +263,11 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
                         grand_total.setText("\u20B9 "+totalCartAmount);
                         pay.setText("Pay \u20B9 "+totalCartAmount);
                         extraChargesAdapter.addItem(new CartOptionsModel(compoundButton.getText().toString(),cartValueOut));
-                        Toast.makeText(getActivity(), "Item Added : "+compoundButton.getText(), Toast.LENGTH_SHORT).show();
+
+                        Snackbar snackbar = Snackbar.make(getContext(),bottomView.getRootView(),"Added : "+compoundButton.getText(),Snackbar.LENGTH_LONG);
+                        snackbar.setTextColor(Color.BLACK);
+                        snackbar.setBackgroundTint(Color.WHITE);
+                        snackbar.show();
                     }
 
                     @Override
@@ -260,7 +276,11 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
                         grand_total.setText("\u20B9 "+totalCartAmount);
                         pay.setText("Pay \u20B9 "+totalCartAmount);
                         extraChargesAdapter.removeItem(new CartOptionsModel(compoundButton.getText().toString(),cartValue));
-                        Toast.makeText(getActivity(), "Item Removed : "+compoundButton.getText(), Toast.LENGTH_SHORT).show();
+
+                        Snackbar snackbar = Snackbar.make(getContext(),bottomView.getRootView(),"Removed : "+compoundButton.getText(),Snackbar.LENGTH_LONG);
+                        snackbar.setTextColor(Color.WHITE);
+                        snackbar.setBackgroundTint(Color.RED);
+                        snackbar.show();
 
                     }
                 });
@@ -326,6 +346,9 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
                     snackbar.setBackgroundTint(Color.RED);
                     snackbar.show();
                 });
+
+                nameBott = bottomView.findViewById(R.id.name_phone);nameBott.setText(dataName_Phone);
+                bottomView.findViewById(R.id.change_Name).setOnClickListener(j->startActivityForResult(new Intent(getActivity(),ConfirmPhoneName.class),1005));
                 bottomView.findViewById(R.id.ch_address).setOnClickListener((ClickListener) -> bottomSheetDialog.dismiss());
 
                 bottomSheetDialog.setContentView(bottomView);
@@ -384,6 +407,8 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
 
 
         time_slots.setLayoutManager(new GridLayoutManager(getActivity(),3));
+
+        //TODO: UPDATE FROM DATABASE
         time_slots.setAdapter(new SlotTimeHolderAdapter(getData()));
 
         return view;
@@ -430,20 +455,37 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
         List<CartOptionsModel> data = new ArrayList<>();
         data.add(new CartOptionsModel("Request separate smoking room for guests (Subjects to availability)",0));
         data.add(new CartOptionsModel("Request Rooftop table setup (Rooftop table charges of Rs. 245 will be levied)",245));
-        data.add(new CartOptionsModel("Want romantic environment setup (Extra decoration charges of Rs. 385/- will be applied)",385));
-        data.add(new CartOptionsModel("Want free wifi access",0));
+        data.add(new CartOptionsModel("Romantic environment setup (Extra decoration charges of Rs. 385/- will be applied)",385));
+        data.add(new CartOptionsModel("Free wifi access",0));
         return data;
     }
 
 
     @Override
     public void OnPaymentSuccess(String s, PaymentData paymentData) {
+        String payId = s;
         Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void OnPaymentFailed(int i, String s, PaymentData paymentData) {
-        Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
+        try {
+            JSONObject jsonObject = new JSONObject(s);
+            Toast.makeText(getActivity(), "Error code : "+jsonObject.getJSONObject("error").getString("code")+"\nDescription : "+jsonObject.getJSONObject("error").getString("description"), Toast.LENGTH_LONG).show();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+            Toast.makeText(getActivity(), "Internal error : "+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        //Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 1005 && resultCode == 1008){
+            dataName_Phone = data.getData().toString();
+            if (nameBott != null) nameBott.setText(dataName_Phone);
+        }
+    }
 }

@@ -448,7 +448,7 @@
                         <TextView
                             android:id="@+id/change_Name"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_height="match_parent"
                             android:layout_alignParentEnd="true"
                             android:layout_gravity="end"
                             android:layout_marginStart="15dp"

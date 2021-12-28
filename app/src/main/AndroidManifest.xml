@@ -19,14 +19,21 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BombayDine"
         tools:replace="android:theme,android:allowBackup">
-        <activity android:name=".DeeplinkActivity" android:theme="@style/Theme.AppCompat.Translucent">
+        <activity
+            android:name=".user.ui.tableBooking.TableBookingHistory"
+            android:exported="true" />
+        <activity
+            android:name=".DeeplinkActivity"
+            android:theme="@style/Theme.AppCompat.Translucent">
             <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
                 <data
                     android:host="bombaydine.thundersharp.in"
-                    android:scheme="https"/>
+                    android:scheme="https" />
             </intent-filter>
         </activity>
         <activity android:name=".user.ui.account.AddUpdateAddress" />
@@ -49,19 +56,25 @@
         <activity
             android:name=".user.ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings" />
-        <activity android:name=".user.ui.orders.OrderStatus"
+        <activity
+            android:name=".user.ui.orders.OrderStatus"
             android:screenOrientation="portrait"
             tools:ignore="LockedOrientationActivity" />
-        <activity android:name=".Delevery.main.HomeDelevery"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".kitchen.main.HomeKitchen"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".user.ui.offers.AllOffersActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".user.ui.dailyfood.DailyfoodActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".user.ui.menu.TopSellingAll"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".Delevery.main.HomeDelevery"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".kitchen.main.HomeKitchen"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.ui.offers.AllOffersActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.ui.dailyfood.DailyfoodActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.ui.menu.TopSellingAll"
+            android:screenOrientation="portrait" />
         <activity android:name=".user.ui.menu.AllCategoryActivity" />
         <activity android:name=".user.ui.menu.CategoryResults" />
         <activity android:name=".user.ui.location.HomeLocationChooser" />
@@ -70,31 +83,34 @@
         <activity
             android:name=".user.ui.menu.AllItemsActivity"
             android:configChanges="orientation|screenSize|keyboard"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".user.ui.orders.RecentOrders"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.ui.orders.RecentOrders"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".user.ui.home.MainPage"
             android:configChanges="orientation|screenSize|keyboard"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".user.ui.login.EmailAccountCreate"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".user.ui.login.EmailLoginActivity"
-            android:screenOrientation="portrait"/>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.ui.login.EmailAccountCreate"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.ui.login.EmailLoginActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".user.ui.login.OtpVerificationActivity"
             android:configChanges="keyboard|orientation|screenSize"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".user.ui.login.LoginActivity"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".user.ui.startup.MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.ui.login.LoginActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".user.ui.startup.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
-
-
             </intent-filter>
         </activity>
 
