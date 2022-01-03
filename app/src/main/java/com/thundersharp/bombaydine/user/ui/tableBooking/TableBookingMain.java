@@ -59,7 +59,7 @@ import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class TableBookingMain extends Fragment implements PaymentObserver {
+public class TableBookingMain extends Fragment implements PaymentObserver, DateSelectedListener {
 
     private TableGuestCounter tableGuestCounter;
     private TextView display_data,month_display,display_total_guest;
@@ -86,6 +86,126 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
 
     public static Object time_slot;
 
+    private DateSelectedListener dateSelectedListener;
+    private TableDataInteractior tableDataInteractior;
+
+    @Override
+    public void onDateSelected(Date date) {
+        fetchTimeSlotsAvailable(date);
+    }
+
+    private void fetchTimeSlotsAvailable(Date date) {
+        if (date != null) {
+            fetchData(date);
+            bindTableDataListener(new TableDataInteractior() {
+                @Override
+                public void onDataFetchSuccess(List<String> tablesList, List<String> timeSlots, List<Object> todayBookingData) {
+
+                    time_slots.setLayoutManager(new GridLayoutManager(getActivity(),3));
+                    time_slots.setAdapter(new SlotTimeHolderAdapter(timeSlots));
+                }
+            });
+        }
+    }
+
+
+    boolean isTableFetched = false ,
+            isTimeSlotFetched = false,
+            isBookingFetched = false;
+
+    private void fetchData(Date date) {
+        isTableFetched=false;
+        isBookingFetched = false;
+        isTimeSlotFetched = false;
+        List<String> tables,timeSlots;
+        List<Object> bookingData = new ArrayList<>();
+        tables = new ArrayList<>();
+        timeSlots = new ArrayList<>();
+
+
+        FirebaseDatabase
+                .getInstance()
+                .getReference("ALL_TABLES")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            for (DataSnapshot data : snapshot.getChildren()){
+                                tables.add(data.getValue(String.class));
+                            }
+                        }
+                        isTableFetched = true;
+                        if (tableDataInteractior != null && isBookingFetched && isTimeSlotFetched){
+                            tableDataInteractior.onDataFetchSuccess(tables,timeSlots,bookingData);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        FirebaseDatabase
+                .getInstance()
+                .getReference("ALL_TIME_SLOTS")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            for (DataSnapshot data : snapshot.getChildren()){
+                                timeSlots.add(data.getValue(String.class));
+                            }
+                        }
+                        isTimeSlotFetched = true;
+                        if (tableDataInteractior != null && isBookingFetched && isTableFetched){
+                            tableDataInteractior.onDataFetchSuccess(tables,timeSlots,bookingData);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+        FirebaseDatabase
+                .getInstance()
+                .getReference("BOOKED_TABLES")
+                .child(TimeUtils.getDateFromTimeStamp(date.getTime()))
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()){
+                            for (DataSnapshot data : snapshot.getChildren()){
+                                bookingData.add(data.getValue(Object.class));
+                            }
+                        }
+                        isBookingFetched = true;
+                        if (tableDataInteractior != null && isTableFetched && isTimeSlotFetched){
+                            tableDataInteractior.onDataFetchSuccess(tables,timeSlots,bookingData);
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+
+    }
+
+    private void bindTableDataListener(TableDataInteractior tableDataInteractior){
+        this.tableDataInteractior = tableDataInteractior;
+    }
+
+    private void bindListener(DateSelectedListener dateSelectedListener){
+        this.dateSelectedListener = dateSelectedListener;
+    }
 
     @SuppressLint({"SetTextI18n", "UseCompatLoadingForDrawables"})
     @Override
@@ -93,11 +213,11 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view=  inflater.inflate(R.layout.fragment_table_booking_main, container, false);
-
         initializeViews(view);
 
+
         ((TextView)view.findViewById(R.id.profile_email)).setText("Indian, Italian,  Thai, Chinese\n"+ Resturant.resturant+", Bangalore");
-        view.findViewById(R.id.profilepic).setOnClickListener(h->startActivity(new Intent(getActivity(),TableBookingHistory.class)));
+        view.findViewById(R.id.profilepic).setOnClickListener(h -> startActivity(new Intent(getActivity(),TableBookingHistory.class)));
 
         tableGuestCounter.setNoOfGuestChangeListener(new GuestChangeListener() {
 
@@ -126,11 +246,24 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
 
             @Override
             public void onDayClick(Date dateClicked) {
-                bookingDate = dateClicked;
-                display_data.setText("I want a reservation on  "+TimeUtils.getDateFromTimeStamp(dateClicked.getTime()));
-                compactCalendar_view.hideCalendarWithAnimation();
-                toggle_cal = true;
-                month_display.setVisibility(View.GONE);
+                if (dateClicked.getTime() < date.getTime() && dateClicked.getDate() != date.getDate()){
+                    Toast.makeText(getActivity(), "You cannot book for past dates select dates greater than or equal to today.", Toast.LENGTH_SHORT).show();
+                    compactCalendar_view.setCurrentDate(date);
+                    month_display.setText(TimeUtils.getMonthName(date.getMonth())+", "+(date.getYear()+1900));
+
+                }else if (dateClicked.getTime() > TimeUtils.getTimeStampOfOriginDaysBeforeAfter(7)){
+                    compactCalendar_view.setCurrentDate(date);
+                    Toast.makeText(getActivity(), "Booking cant be more than 7 days in advance.", Toast.LENGTH_SHORT).show();
+                    month_display.setText(TimeUtils.getMonthName(date.getMonth())+", "+(date.getYear()+1900));
+
+                }else {
+                    bookingDate = dateClicked;
+                    display_data.setText("I want a reservation on  " + TimeUtils.getDateFromTimeStamp(dateClicked.getTime()));
+                    compactCalendar_view.hideCalendarWithAnimation();
+                    toggle_cal = true;
+                    month_display.setVisibility(View.GONE);
+                    dateSelectedListener.onDateSelected(bookingDate);
+                }
             }
 
             @Override
@@ -406,15 +539,13 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
 
 
 
-        time_slots.setLayoutManager(new GridLayoutManager(getActivity(),3));
 
-        //TODO: UPDATE FROM DATABASE
-        time_slots.setAdapter(new SlotTimeHolderAdapter(getData()));
 
         return view;
     }
 
     private void initializeViews(View view) {
+        bindListener(this);
         tableGuestCounter = view.findViewById(R.id.tableGuestCounter);
         display_total_guest = view.findViewById(R.id.display_total_guest);
         month_display = view.findViewById(R.id.months_display);
@@ -442,15 +573,8 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
         compactCalendar_view.hideCalendar();
     }
 
-    private List<String> getData(){
-        List<String> data = new ArrayList<>();
-        for (int i= 0; i<8;i++){
-            data.add(i+1+" AM - "+(i+3)+" PM");
-        }
 
-        return data;
-    }
-
+    @NonNull
     private List<CartOptionsModel> getTableData(){
         List<CartOptionsModel> data = new ArrayList<>();
         data.add(new CartOptionsModel("Request separate smoking room for guests (Subjects to availability)",0));
@@ -488,4 +612,12 @@ public class TableBookingMain extends Fragment implements PaymentObserver {
             if (nameBott != null) nameBott.setText(dataName_Phone);
         }
     }
+}
+
+interface DateSelectedListener {
+    void onDateSelected(Date date);
+}
+
+interface TableDataInteractior{
+    void onDataFetchSuccess(List<String> tablesList, List<String> timeSlots, List<Object> todayBookingData);
 }

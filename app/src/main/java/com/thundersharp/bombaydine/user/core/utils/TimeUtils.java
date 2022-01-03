@@ -2,6 +2,8 @@ package com.thundersharp.bombaydine.user.core.utils;
 
 import android.text.format.DateFormat;
 
+import androidx.annotation.NonNull;
+
 import java.util.Calendar;
 import java.util.Locale;
 
@@ -39,6 +41,20 @@ public class TimeUtils {
         cal.setTimeInMillis(time);
         String date = DateFormat.format("dd-MM-yyyy", cal).toString();
         return date;
+    }
+
+    public static long getTimeStampOfOriginDaysBeforeAfter(@NonNull int noOfDays){
+        final Calendar c = Calendar.getInstance();
+        int mYear = c.get(Calendar.YEAR); // current year
+        int mMonth = c.get(Calendar.MONTH); // current month
+        int mDay = c.get(Calendar.DAY_OF_MONTH); // current day
+
+        c.set(mYear,mMonth,mDay,00,00,00);
+        c.set(Calendar.MILLISECOND,00);
+
+        c.add(Calendar.DAY_OF_MONTH,noOfDays);
+
+        return c.getTimeInMillis();
     }
 
     public static String getMonthName(int month){

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
@@ -37,7 +38,17 @@ public class SlotTimeHolderAdapter extends RecyclerView.Adapter<SlotTimeHolderAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHoldr holder, int position) {
-        holder.timeH.setText(time.get(position));
+        String startTime = time.get(position).substring(0,time.get(position).indexOf("-"));
+        String endTime = time.get(position).substring(time.get(position).indexOf("-")+1);
+
+        if (Integer.parseInt(startTime) > 12) {
+            holder.timeH.setText((Integer.parseInt(startTime) - 12) + "PM - " + (Integer.parseInt(endTime) - 12)+"PM");
+        }else if (Integer.parseInt(startTime) == 12){
+            holder.timeH.setText(startTime + "PM - " + (Integer.parseInt(endTime) - 12)+"PM");
+        }else {
+            holder.timeH.setText(startTime + "AM - " + endTime+"AM");
+        }
+
     }
 
     @Override

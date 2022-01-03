@@ -10,6 +10,7 @@
         <entry key="app/src/main/res/drawable/ic_baseline_access_time_24.xml" value="0.1675925925925926" />
         <entry key="app/src/main/res/drawable/time_slot_bprder.xml" value="0.20069444444444445" />
         <entry key="app/src/main/res/drawable/time_slot_bprder_selected.xml" value="0.20069444444444445" />
+        <entry key="app/src/main/res/layout/activity_acharaya_login.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_all_items.xml" value="0.1712962962962963" />
         <entry key="app/src/main/res/layout/activity_email_account_create.xml" value="0.28229166666666666" />
         <entry key="app/src/main/res/layout/activity_email_login.xml" value="0.28229166666666666" />
