@@ -20,6 +20,9 @@
         android:theme="@style/Theme.BombayDine"
         tools:replace="android:theme,android:allowBackup">
         <activity
+            android:name=".user.ui.tableBooking.TableBookingConfirmation"
+            android:exported="true" />
+        <activity
             android:name=".user.ui.AcharayaLogin"
             android:exported="true" />
         <activity
