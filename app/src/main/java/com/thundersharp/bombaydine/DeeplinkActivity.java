@@ -24,14 +24,15 @@ import com.thundersharp.bombaydine.user.ui.tableBooking.TableBookingMain;
 
 public class DeeplinkActivity extends AppCompatActivity {
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_deeplink);
 
 
-
-        FirebaseDynamicLinks.getInstance()
+        FirebaseDynamicLinks
+                .getInstance()
                 .getDynamicLink(getIntent())
                 .addOnSuccessListener(this, new OnSuccessListener<PendingDynamicLinkData>() {
                     @Override
