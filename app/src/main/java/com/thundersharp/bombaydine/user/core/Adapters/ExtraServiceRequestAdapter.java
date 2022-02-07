@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.card.MaterialCardView;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Model.CartOptionsModel;
 
@@ -17,6 +18,11 @@ import java.util.List;
 public class ExtraServiceRequestAdapter extends RecyclerView.Adapter<ExtraServiceRequestAdapter.ViewHolder>{
 
     List<CartOptionsModel> dataList;
+    ItemInteractionListener itemInteractionListener;
+
+    public void setItemInteractionListener(ItemInteractionListener itemInteractionListener){
+        this.itemInteractionListener = itemInteractionListener;
+    }
 
     public ExtraServiceRequestAdapter(List<CartOptionsModel> dataList) {
         this.dataList = dataList;
@@ -42,19 +48,34 @@ public class ExtraServiceRequestAdapter extends RecyclerView.Adapter<ExtraServic
     class ViewHolder extends RecyclerView.ViewHolder {
 
         private AppCompatCheckBox checkBoxText;
+        private MaterialCardView materialCardView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             checkBoxText = itemView.findViewById(R.id.checkBoxText);
+            materialCardView = itemView.findViewById(R.id.material);
 
-            checkBoxText.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-
-                }
+            checkBoxText.setOnCheckedChangeListener((compoundButton, b) -> {
+                if (itemInteractionListener != null)
+                    if (b) {
+                        itemInteractionListener.onServiceItemAdded(compoundButton,dataList.get(getAdapterPosition()).CART_VALUE_CHANGE);
+                        materialCardView.setBackgroundResource(R.color.card_attr);
+                        materialCardView.setRadius(10);
+                    } else {
+                        itemInteractionListener.onServiceItemRemoved(compoundButton,dataList.get(getAdapterPosition()).CART_VALUE_CHANGE);
+                        materialCardView.setBackgroundResource(R.color.card_norm);
+                        materialCardView.setRadius(10);
+                    }
             });
 
         }
+    }
+
+    public interface ItemInteractionListener{
+
+        void onServiceItemAdded(CompoundButton compoundButton,double cartValue);
+        void onServiceItemRemoved(CompoundButton compoundButton,double cartValue);
+
     }
 }

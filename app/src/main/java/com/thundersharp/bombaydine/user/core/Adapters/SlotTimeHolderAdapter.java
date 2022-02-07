@@ -9,11 +9,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.thundersharp.bombaydine.R;
+import com.thundersharp.bombaydine.user.ui.tableBooking.TableBookingMain;
 
 import java.util.List;
 
@@ -36,7 +38,17 @@ public class SlotTimeHolderAdapter extends RecyclerView.Adapter<SlotTimeHolderAd
 
     @Override
     public void onBindViewHolder(@NonNull ViewHoldr holder, int position) {
-        holder.timeH.setText(time.get(position));
+        String startTime = time.get(position).substring(0,time.get(position).indexOf("-"));
+        String endTime = time.get(position).substring(time.get(position).indexOf("-")+1);
+
+        if (Integer.parseInt(startTime) > 12) {
+            holder.timeH.setText((Integer.parseInt(startTime) - 12) + "PM - " + (Integer.parseInt(endTime) - 12)+"PM");
+        }else if (Integer.parseInt(startTime) == 12){
+            holder.timeH.setText(startTime + "PM - " + (Integer.parseInt(endTime) - 12)+"PM");
+        }else {
+            holder.timeH.setText(startTime + "AM - " + endTime+"AM");
+        }
+
     }
 
     @Override
@@ -59,6 +71,7 @@ public class SlotTimeHolderAdapter extends RecyclerView.Adapter<SlotTimeHolderAd
                     selectedPos = intent.getIntExtra("pos",0);
                     if (selectedPos == getAdapterPosition()){
                         container.setBackground(itemView.getResources().getDrawable(R.drawable.time_slot_bprder_selected));
+                        TableBookingMain.time_slot = time.get(getAdapterPosition());
                     }else container.setBackground(itemView.getResources().getDrawable(R.drawable.time_slot_bprder));
                 }
             };
@@ -70,7 +83,7 @@ public class SlotTimeHolderAdapter extends RecyclerView.Adapter<SlotTimeHolderAd
 
         @Override
         public void onClick(View view) {
-            view.getContext().sendBroadcast(new Intent("posSlot").putExtra("pos",getAdapterPosition()));
+            view.getContext().sendBroadcast(new Intent("posSlot").putExtra("timeSlot",time.get(getAdapterPosition())).putExtra("pos",getAdapterPosition()));
 
         }
     }

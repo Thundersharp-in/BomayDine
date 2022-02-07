@@ -1,11 +1,5 @@
 package com.thundersharp.admin.ui.orders;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.recyclerview.widget.RecyclerView;
-
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -16,6 +10,11 @@ import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.github.vipulasri.timelineview.TimelineView;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -37,18 +36,13 @@ import com.thundersharp.billgenerator.Billing;
 import com.thundersharp.billgenerator.InfoData;
 import com.thundersharp.billgenerator.InvoiceGenerateObserver;
 import com.thundersharp.billgenerator.InvoiceTableHolder;
-import com.thundersharp.billgenerator.Resturant;
 import com.thundersharp.conversation.ChatStarter;
 import com.thundersharp.conversation.ParametersMissingException;
-import com.thundersharp.payments.payments.Payments;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 

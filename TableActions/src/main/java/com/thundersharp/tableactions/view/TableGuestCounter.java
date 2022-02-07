@@ -1,6 +1,5 @@
 package com.thundersharp.tableactions.view;
 
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -48,7 +47,6 @@ public class TableGuestCounter extends RelativeLayout {
     private boolean secondInfoTextEnabled = false;
     private String secondInfoText;
     private int secondInfoTextColor;
-
 
     /**
      * Ui variables
@@ -293,67 +291,6 @@ public class TableGuestCounter extends RelativeLayout {
                     guestChangeListener.onGuestRemoved(previousNoOfGuests - (int) value,(int) value);
                 else guestChangeListener.onGuestAdded(Math.abs((previousNoOfGuests - (int) value)),(int) value);
             }
-
-            /*if (counter>value){
-                counter = (int) value;
-                //backward
-                switch ((int) value){
-                    case 1:
-                        animateChairs(false,chair_two);
-                        break;
-                    case 2:
-                        animateChairs(false,chair_three);
-                        break;
-                    case 3:
-                        animateChairs(false,chair_four);
-                        break;
-                    case 4:
-                        animateChairs(false,chair_five);
-                        break;
-                    case 5:
-                        animateChairs(false,chair_six);
-                        break;
-                    case 6:
-                        animateChairs(false,chair_seven);
-                        break;
-                    case 7:
-                        animateChairs(false,chair_eight);
-                        break;
-                    default:
-                        break;
-                }
-            }else {
-                //forward
-                counter = (int) value;
-                switch ((int) value){
-                case 1:
-                    animateChairs(true,chair_one);
-                    break;
-                case 2:
-                    animateChairs(true,chair_two);
-                    break;
-                case 3:
-                    animateChairs(true,chair_three);
-                    break;
-                case 4:
-                    animateChairs(true,chair_four);
-                    break;
-                case 5:
-                    animateChairs(true,chair_five);
-                    break;
-                case 6:
-                    animateChairs(true,chair_six);
-                    break;
-                case 7:
-                    animateChairs(true,chair_seven);
-                    break;
-                case 8:
-                    animateChairs(true,chair_eight);
-                    break;
-                    default:
-                        break;
-                }
-            }*/
 
             previousNoOfGuests = (int) value;
 

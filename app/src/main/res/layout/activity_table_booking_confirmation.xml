@@ -1,0 +1,488 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#1e2026"
+    tools:context=".user.ui.tableBooking.TableBookingConfirmation">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="#121111"
+        android:elevation="@dimen/dimen_8dp"
+        app:navigationIcon="@drawable/ic_baseline_close_24"
+        app:subtitleTextColor="#AEACAC"
+        app:title="Booking Confirmation"
+        app:titleTextColor="#E4E4E4" />
+
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_below="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <ImageView
+                android:id="@+id/greenTIck"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_below="@id/toolbar"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="40dp"
+                android:src="@drawable/checked" />
+
+            <LinearLayout
+                android:id="@+id/ll_top"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/greenTIck"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/dimen_20dp"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Table booking confirmed"
+                    android:fontFamily="@font/calibri"
+                    android:textColor="#ECECEC"
+                    android:textSize="21sp"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Booking id  #1345TH"
+                    android:fontFamily="@font/calibri"
+                    android:textColor="#FFEB3B"
+                    android:layout_marginTop="@dimen/dimen_5dp"
+                    />
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="220dp"
+                    android:layout_height="@dimen/dimen_70dp"
+                    android:layout_marginTop="20dp"
+                    app:cardCornerRadius="10dp"
+                    app:cardElevation="9dp"
+                    app:cardBackgroundColor="#111215">
+                    <TextView
+                        android:id="@+id/table_id"
+                        android:background="@drawable/dash_body"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="TH189"
+                        android:fontFamily="@font/calibri"
+                        android:textSize="23sp"
+                        android:textColor="#fff"
+                        android:layout_margin="12dp"/>
+                </androidx.cardview.widget.CardView>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Table id allocated to you"
+                    android:fontFamily="@font/calibri"
+                    android:textColor="#CDDC39"
+                    android:textSize="15sp"
+                    android:layout_marginTop="@dimen/dimen_5dp"
+                    />
+
+
+            </LinearLayout>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/map_Holder"
+                android:layout_width="match_parent"
+                android:layout_height="290dp"
+                android:layout_below="@id/ll_top"
+                android:layout_marginHorizontal="15dp"
+                app:cardBackgroundColor="#22242c"
+                android:layout_marginTop="@dimen/dimen_20dp"
+                app:cardElevation="@dimen/dimen_7dp"
+                app:cardCornerRadius="@dimen/dimen_10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+                    <fragment
+                        android:id="@+id/map"
+                        android:name="com.google.android.gms.maps.SupportMapFragment"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dimen_50dp"
+                        android:layout_alignParentBottom="true"
+                        android:gravity="center"
+                        android:text="Book a cab to the resturant   ->"
+                        android:textColor="#d3d3d3"
+                        android:background="@drawable/button_curved_round_blue"/>
+                </RelativeLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/textDesc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="120dp"
+                android:layout_below="@id/map_Holder"
+                android:layout_marginHorizontal="15dp"
+                app:cardBackgroundColor="#22242c"
+                android:layout_marginTop="@dimen/dimen_20dp"
+                app:cardElevation="@dimen/dimen_7dp"
+                app:cardCornerRadius="@dimen/dimen_10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <RelativeLayout
+                        android:id="@+id/rl1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:background="#3F2867"
+                        android:elevation="7dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/delevering_to_address"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:drawableStart="@drawable/ic_baseline_person_pin_24"
+                            android:drawablePadding="10dp"
+                            android:drawableTint="#E4D335"
+                            android:ellipsize="end"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:paddingVertical="3dp"
+                            android:text="Total number of guests 4, Total numer of tables 1"
+                            android:textColor="#B6B6B6"
+                            android:textSize="13sp" />
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl3"
+                        android:layout_below="@+id/rl1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#121010"
+                        android:elevation="7dp"
+                        android:layout_marginTop="3dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/booking_date"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:drawableStart="@drawable/ic_outline_calendar_month_24"
+                            android:drawablePadding="10dp"
+                            android:drawableTint="#E4D335"
+                            android:ellipsize="end"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:paddingVertical="3dp"
+                            android:text="Date of booking 24-04-2020"
+                            android:textColor="#B6B6B6"
+                            android:textSize="13sp" />
+
+
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/rl2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/rl3"
+                        android:layout_marginTop="3dp"
+                        android:background="#121010"
+                        android:elevation="7dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/est_time"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:drawableStart="@drawable/ic_outline_watch_later_24"
+                            android:drawablePadding="10dp"
+                            android:drawableTint="#E4D335"
+                            android:ellipsize="end"
+                            android:gravity="center_vertical"
+                            android:maxLines="1"
+                            android:paddingVertical="3dp"
+                            android:text="Selected Time Slot : 4AM - 7AM"
+                            android:textColor="#B6B6B6"
+                            android:textSize="13sp" />
+
+
+                    </RelativeLayout>
+                </RelativeLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="120dp"
+                android:layout_below="@id/textDesc"
+                android:layout_marginHorizontal="15dp"
+                app:cardBackgroundColor="#22242c"
+                android:layout_marginBottom="@dimen/dimen_20dp"
+                android:layout_marginTop="@dimen/dimen_20dp"
+                app:cardElevation="@dimen/dimen_7dp"
+                app:cardCornerRadius="@dimen/dimen_10dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:id="@+id/menut"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="#121010"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="10dp"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/calibri"
+                                android:maxLines="1"
+                                android:text="Booking charges (Unit) "
+                                android:textColor="#C3C2C2"
+                                android:textSize="13sp" />
+
+                            <TextView
+                                android:id="@+id/item_tot"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/calibri"
+                                android:maxLines="1"
+                                android:text="\u20B9 --"
+                                android:textColor="#C3C2C2"
+                                android:textSize="13sp" />
+
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="10dp"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/calibri"
+                                android:maxLines="1"
+                                android:text="Total Booking charges"
+                                android:textColor="#C3C2C2"
+                                android:textSize="13sp" />
+
+                            <TextView
+                                android:id="@+id/del_charges"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/calibri"
+                                android:maxLines="1"
+                                android:text="\u20B9 --"
+                                android:textColor="#C3C2C2"
+                                android:textSize="13sp" />
+
+
+                        </RelativeLayout>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/recycler_view_extra_charges"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:visibility="visible"
+                            android:layout_marginBottom="@dimen/dimen_10dp"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"/>
+
+                        <RelativeLayout
+                            android:id="@+id/promo_line"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="10dp"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/promo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="10dp"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/calibri"
+                                android:maxLines="1"
+                                android:text="Promo - (WELCOME50)"
+                                android:textColor="#2196F3"
+                                android:textSize="13sp" />
+
+                            <TextView
+                                android:id="@+id/promotot"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/calibri"
+                                android:maxLines="1"
+                                android:text="-\u20B9 --"
+                                android:textColor="#2196F3"
+                                android:textSize="13sp" />
+
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="5dp"
+                            android:layout_marginBottom="10dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentStart="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="10dp"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/calibri"
+                                android:maxLines="1"
+                                android:text="Grand Total (Incl. GST)"
+                                android:textColor="#E3E3E3"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+                            <TextView
+                                android:id="@+id/grand_tot"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_centerVertical="true"
+                                android:layout_marginStart="15dp"
+                                android:layout_marginEnd="15dp"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/calibri"
+                                android:maxLines="1"
+                                android:text="\u20B9 --"
+                                android:textColor="#E3E3E3"
+                                android:textSize="16sp"
+                                android:textStyle="bold" />
+
+
+                        </RelativeLayout>
+
+                    </LinearLayout>
+
+                    <RelativeLayout
+                        android:id="@+id/orderingfor"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/menut"
+                        android:layout_marginTop="5dp"
+                        android:background="#121010">
+
+                        <TextView
+                            android:id="@+id/offp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:fontFamily="sans-serif-smallcaps"
+                            android:text="BOOKING FOR"
+                            android:textColor="#B6B6B6" />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_below="@+id/offp"
+                            android:layout_marginHorizontal="10dp"
+                            android:layout_marginBottom="10dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/name_phone"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginEnd="10dp"
+                                android:ellipsize="end"
+                                android:fontFamily="@font/calibrib"
+                                android:maxLines="2"
+                                android:text="HRISHIKESH PRATEEK, 7301694135"
+                                android:textColor="#C3C2C2"
+                                android:textSize="13sp" />
+
+                        </RelativeLayout>
+
+                    </RelativeLayout>
+                </RelativeLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+
+
+</RelativeLayout>

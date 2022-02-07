@@ -50,7 +50,7 @@ public class Payments {
     private void pay(String description, double amount,String customerEmail,String customerPhone) {
 
         Checkout checkout = new Checkout();
-        checkout.setKeyID("rzp_test_0xZ2jDyzMKlGXj");
+        checkout.setKeyID("rzp_test_qhH5vsTc8VCjpr");
         /**
          * Instantiate Checkout
          */
@@ -83,7 +83,7 @@ public class Payments {
 
             options.put("theme.color", "#3399cc");
             options.put("currency", "INR");
-            options.put("amount", String.valueOf((amount * 100)));//pass amount in currency subunits
+            options.put("amount", String.valueOf((amount * 100))); //pass amount in currency subunits
             options.put("prefill.email", customerEmail);
             options.put("prefill.contact", customerPhone);
             options.put("send_sms_hash", true);

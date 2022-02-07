@@ -42,6 +42,7 @@ public class ChatStarter {
             MODE_CHAT_ADMIN})
     public @interface ChatMode {
     }
+
     public static final int MODE_CHAT_FROM_ORDERS = 0;
     public static final int MODE_CHAT_FROM_ORDERS_PRE_DELIVERY = 1;
     public static final int MODE_CHAT_FROM_SPECIFIC_ORDER = 2;
