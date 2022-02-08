@@ -75,6 +75,7 @@ import com.thundersharp.bombaydine.user.core.utils.TimeUtils;
 import com.thundersharp.bombaydine.user.ui.account.Payments;
 import com.thundersharp.bombaydine.user.ui.location.AddAddressActivity;
 import com.thundersharp.bombaydine.user.ui.orders.ConfirmPhoneName;
+import com.thundersharp.conversation.ChatStarter;
 import com.thundersharp.payments.payments.PaymentObserver;
 import com.thundersharp.tableactions.listeners.GuestChangeListener;
 import com.thundersharp.tableactions.view.TableGuestCounter;
@@ -88,6 +89,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
 import java.util.function.UnaryOperator;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -772,10 +774,6 @@ public class TableBookingMain extends Fragment implements PaymentObserver, DateS
             builder.show();
         });
 
-
-
-
-
         return view;
     }
 
@@ -807,7 +805,7 @@ public class TableBookingMain extends Fragment implements PaymentObserver, DateS
         compactCalendar_view.setFirstDayOfWeek(Calendar.MONDAY);
         compactCalendar_view.hideCalendar();
     }
-
+    
 
     @NonNull
     private List<CartOptionsModel> getTableData(){
@@ -835,7 +833,7 @@ public class TableBookingMain extends Fragment implements PaymentObserver, DateS
 
         } catch (JSONException e) {
             e.printStackTrace();
-            Toast.makeText(getActivity(), "Internal error : "+e.getMessage(), Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Internal error : "+s, Toast.LENGTH_SHORT).show();
         }
         //Toast.makeText(getActivity(), s, Toast.LENGTH_SHORT).show();
     }
