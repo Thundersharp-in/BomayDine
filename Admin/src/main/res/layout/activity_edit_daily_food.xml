@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#22242c"
+    tools:context=".ui.edits.EditDailyFoodActivity"
+    >
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:elevation="@dimen/dimen_7dp"
+        app:navigationIcon="@drawable/quantum_ic_arrow_back_grey600_24"
+        app:title="Select Category Items"
+        app:titleTextColor="#CACACA"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/curve_top"
+        android:layout_below="@id/toolbar"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/l"
+            android:layout_below="@+id/recyclerviewcategory"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="@dimen/dimen_10dp"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager" />
+
+        <RelativeLayout
+            android:id="@+id/recyclerviewcategory"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/dimen_10dp"
+            android:layout_marginTop="@dimen/dimen_10dp"
+            android:background="@drawable/curved_rectange_main">
+
+            <TextView
+                android:id="@+id/textupdate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="@dimen/dimen_10dp"
+                android:layout_marginBottom="@dimen/dimen_10dp"
+                android:drawableStart="@drawable/ic_outline_info_24"
+                android:drawablePadding="10dp"
+                android:fontFamily="@font/calibri"
+                android:gravity="center_vertical"
+                android:text="Check the items if want to add to the category or else un-check the item if want to remove from the category list."
+                android:textColor="#FFFFFF"
+                app:drawableTint="#000000" />
+
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/l"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
+            android:layout_marginHorizontal="-9dp"
+            >
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/update"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/dimen_50dp"
+                android:background="@drawable/corner_rect_blue"
+                android:gravity="center"
+                android:layout_marginStart="2dp"
+                android:text="UPDATE"
+                android:textColor="#fff" />
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</RelativeLayout>

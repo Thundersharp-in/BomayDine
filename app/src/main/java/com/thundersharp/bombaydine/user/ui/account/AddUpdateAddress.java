@@ -31,7 +31,6 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Adapters.AllPreviousAdapter;
 import com.thundersharp.bombaydine.user.core.Model.AddressData;
@@ -69,7 +68,7 @@ public class AddUpdateAddress extends AppCompatActivity implements OnMapReadyCal
         setContentView(R.layout.address_update_final);
 
         builder = new AlertDialog.Builder(this);
-        View dialogview = LayoutInflater.from(this).inflate(R.layout.progress_dialog,null,false);
+        View dialogview = LayoutInflater.from(this).inflate(R.layout.progress_dialog_admin,null,false);
         builder.setView(dialogview);
         builder.setCancelable(false);
 

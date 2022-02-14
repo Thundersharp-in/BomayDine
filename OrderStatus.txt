@@ -20,10 +20,22 @@
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        || Order status 08 : Payment successfully received waiting for admin   ::::   Delivery status : Not Delivered ||
-        || Order status 09 : Food started to prepare                           ::::   Delivery status : Not Delivered ||
+        || Order status  8 : Payment successfully received waiting for admin   ::::   Delivery status : Not Delivered || (not in use for now)
+        || Order status  9 : Food started to prepare                           ::::   Delivery status : Not Delivered ||
         || Order status 10 : Food prepared                                     ::::   Delivery status : Not picked up ||
         || Order status 11 : Payment partially refunded                        ::::   Delivery status : n/a           ||
         || Order status 12 : Payment fully refunded                            ::::   Delivery status : n/a           ||
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+//for kitchen and delivery
+sucessful: 0, 1,09, 10,2, 3
+unsucessful:
+
+//for admin
+7
+11
+12
+5
+
+//for user
+0,1,6,7

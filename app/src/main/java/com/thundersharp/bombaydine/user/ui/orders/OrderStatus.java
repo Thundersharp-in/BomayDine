@@ -108,7 +108,7 @@ public class OrderStatus extends AppCompatActivity implements
         }
         //processing dilog
         builder = new AlertDialog.Builder(this);
-        View dialogview = LayoutInflater.from(this).inflate(R.layout.progress_dialog,null,false);
+        View dialogview = LayoutInflater.from(this).inflate(R.layout.progress_dialog_admin,null,false);
         builder.setView(dialogview);
         builder.setCancelable(false);
 
@@ -161,7 +161,7 @@ public class OrderStatus extends AppCompatActivity implements
         grand_total.setText("\u20B9 " + orederBasicDetails.getTotalamt());
         order_no.setText("#" + orederBasicDetails.getOrderID());
         order_date.setText(TimeUtils.getTimeFromTimeStamp(orederBasicDetails.getOrderID()));
-        order_phone_no.setText(orederBasicDetails.getDeliveryNameData().substring(orederBasicDetails.getDeliveryNameData().indexOf(",+91")+4));
+        order_phone_no.setText(orederBasicDetails.getDeliveryNameData().substring(orederBasicDetails.getDeliveryNameData().indexOf("$&+91")+5));
         delevery_charge.setText("\u20B9" + orederBasicDetails.getDelivery_charge());
         if (orederBasicDetails.getPromocodeNameNdiscount().equals("")){
             promo_line.setVisibility(View.GONE);

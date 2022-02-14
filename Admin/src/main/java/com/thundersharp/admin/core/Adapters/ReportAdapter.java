@@ -46,10 +46,11 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
         ReportModel reportModel = reportModelList.get(position);
 
         holder.report_id.setText("#"+reportModel.ID);
-        holder.report_type.setText(reportModel.TYPE);
-        holder.reporter_email.setText(reportModel.EMAIL);
-        holder.reported_date.setText(TimeUtils.getTimeFromTimeStamp(reportModel.ID));
+        holder.report_type.setText(reportModel.EMAIL+"("+reportModel.TYPE+")");
+        holder.reporter_email.setText(reportModel.NAME);
+        holder.reported_date.setText("Reported On: "+TimeUtils.getTimeFromTimeStamp(reportModel.ID));
 
+        holder.message.setText(reportModel.MESSAGE);
         holder.btn_delete.setOnClickListener(view-> {
             delete(reportModel.ID, position);
 
@@ -83,66 +84,6 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
         //holder.phone_no.setText(reportModel.PHONE);
         //holder.report_status.setText(reportModel);
 
-        /*
-         ////////////////////////////////////////////////////////////////////////////
-        || Report status 0 : ReportPlaced                         ::::           ||
-        || Report status 1 : Report Reviewed by admin             ::::           ||
-        || Report status 2 : Reported cancelled by user           ::::           ||
-        || Report status 3 : Report cancelled by admin            ::::           ||
-        || Report status 4 : Report Approved by admin             ::::           ||
-        || Report status 5 : Problem Solved                       ::::           ||
-        || Report status 6 : User Satisfied with Solution         ::::           ||
-        || Report status 7 : User un-Satisfied with Solution      ::::           ||
-        || Report status 8 : Reported Again                       ::::           ||
-        ////////////////////////////////////////////////////////////////////////////
-         */
-
-        /*
-        switch (reportModel.STATUS){
-            case 0:
-                holder.report_status.setText("Report Placed");
-                holder.lower.setVisibility(View.VISIBLE);
-                break;
-            case 1:
-                holder.report_status.setText("Report Reviewed by admin");
-                holder.lower.setVisibility(View.VISIBLE);
-                break;
-            case 2:
-                holder.report_status.setText("Reported cancelled by user ");
-                holder.lower.setVisibility(View.VISIBLE);
-                break;
-            case 3:
-                holder.report_status.setText("Report cancelled by admin");
-                holder.lower.setVisibility(View.VISIBLE);
-                break;
-            case 4:
-                holder.report_status.setText("Report Approved by admin ");
-                holder.lower.setVisibility(View.VISIBLE);
-                break;
-            case 5:
-                holder.report_status.setText("Problem Solved ");
-                holder.lower.setVisibility(View.VISIBLE);
-                break;
-            case 6:
-                holder.report_status.setText("User Satisfied with Solution");
-                holder.lower.setVisibility(View.VISIBLE);
-                break;
-            case 7:
-                holder.report_status.setText("User un-Satisfied with Solution");
-                holder.lower.setVisibility(View.VISIBLE);
-                break;
-            case 8:
-                holder.report_status.setText("Reported Again");
-                holder.lower.setVisibility(View.VISIBLE);
-                break;
-            default:
-                holder.lower.setVisibility(View.GONE);
-                holder.report_status.setText("Status : Unknown");
-                //holder.status.setTextColor(0);
-                break;
-
-        }
-         */
 
     }
 
@@ -172,7 +113,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView report_id, report_type, reporter_email, reported_date, report_status;//, reporter_name, phone_no,
+        TextView report_id, report_type, reporter_email, reported_date, report_status, message;//, reporter_name, phone_no,
         LinearLayout lower;
         AppCompatButton verify, btn_delete;//, reply
 
@@ -189,6 +130,7 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
             lower = itemView.findViewById(R.id.lower);
             verify = itemView.findViewById(R.id.verify);
             //reply = itemView.findViewById(R.id.reply);
+            message = itemView.findViewById(R.id.message);
             btn_delete = itemView.findViewById(R.id.btn_delete);
 
         }

@@ -4,14 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.thundersharp.bombaydine.Delevery.core.DeliveryOrderContract;
 import com.thundersharp.bombaydine.Delevery.core.DeliveryOrderListner;
 import com.thundersharp.bombaydine.Delevery.core.ItemDeliverHolder;
 import com.thundersharp.bombaydine.R;
+import com.thundersharp.bombaydine.user.core.login.AccountHelper;
+import com.thundersharp.bombaydine.user.ui.startup.MainActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -30,16 +34,23 @@ public class HomeDelevery extends AppCompatActivity implements  DeliveryOrderCon
 
         rv_delivery_orders = findViewById(R.id.rv_delivery_orders);
 
-
-
-
-        findViewById(R.id.acccswitch).setOnClickListener(view -> {
+        findViewById(R.id.load).setOnClickListener(view -> {
             DeliveryOrderListner
                     .getKitchenOrderInstance()
                     .setDate(getDate())
                     .setOnOrderSuccessFailureListner(this)
                     .fetchRecentOrders();
         });
+
+        findViewById(R.id.logout).setOnClickListener(vi->
+                {
+                    AccountHelper
+                            .getInstance(HomeDelevery.this)
+                            .clearAllData();
+                    startActivity(new Intent(HomeDelevery.this, MainActivity.class));
+                    HomeDelevery.this.finish();
+                }
+        );
         /*
         AccountHelper
                     .getInstance(this)

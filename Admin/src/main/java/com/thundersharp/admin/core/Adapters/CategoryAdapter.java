@@ -108,7 +108,9 @@ public class CategoryAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHold
         public void onClick(View view) {
             HashMap<String,String> hashMap = (HashMap<String,String>)itemObjectlist.get(getAdapterPosition());
             CategoryData categoryData = new CategoryData(hashMap.get("NAME"),hashMap.get("ID"),hashMap.get("IMAGES"));
-            context.startActivity(new Intent(context, CategoryAddEdit.class).putExtra("data", categoryData));
+            context.startActivity(new Intent(context, CategoryAddEdit.class)
+                    .putExtra("data", categoryData)
+                    .putExtra("isEdit",true));
         }
     }
 
@@ -124,7 +126,9 @@ public class CategoryAdapter  extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         @Override
         public void onClick(View view) {
-            context.startActivity(new Intent(context, CategoryAddEdit.class));
+            context.startActivity(new Intent(context, CategoryAddEdit.class)
+                    .putExtra("isEdit",false));
+
         }
     }
 }

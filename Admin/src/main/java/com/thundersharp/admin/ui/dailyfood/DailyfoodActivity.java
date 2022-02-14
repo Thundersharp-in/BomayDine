@@ -12,10 +12,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.thundersharp.admin.R;
 import com.thundersharp.admin.core.Adapters.AllItemAdapterMailAdapter;
 import com.thundersharp.admin.core.DailyFoodListner.DailyFood;
 import com.thundersharp.admin.core.DailyFoodListner.DailyFoodProvider;
+import com.thundersharp.admin.ui.edits.EditDailyFoodActivity;
 
 import java.util.List;
 
@@ -25,6 +27,7 @@ public class DailyfoodActivity extends AppCompatActivity implements DailyFood.da
     private ImageView imagedaily;
     private TextView texttop;
     private ShimmerFrameLayout shimmerbr;
+    private FloatingActionButton add;
 
     public static void getInstance(Context context, int foodType){
         context.startActivity(new Intent(context,DailyfoodActivity.class).putExtra("foodType",foodType));
@@ -41,6 +44,7 @@ public class DailyfoodActivity extends AppCompatActivity implements DailyFood.da
         recyclerviewbrh = findViewById(R.id.recyclerviewbrh);
         imagedaily = findViewById(R.id.imagedaily);
         texttop = findViewById(R.id.txttop);
+        add = findViewById(R.id.add);
 
         switch (foodType){
             case 0:
@@ -60,6 +64,12 @@ public class DailyfoodActivity extends AppCompatActivity implements DailyFood.da
                 texttop.setText("Internal Error");
                 break;
         }
+
+        add.setOnClickListener(vi->{
+            startActivity(new Intent(DailyfoodActivity.this, EditDailyFoodActivity.class)
+                    .putExtra("foodType",foodType));
+            finish();
+        });
 
         DailyFoodProvider
                 .getReference(this)

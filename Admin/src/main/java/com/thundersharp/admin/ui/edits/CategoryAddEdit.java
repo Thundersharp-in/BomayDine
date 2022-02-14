@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.google.firebase.storage.UploadTask;
 import com.thundersharp.admin.R;
 import com.thundersharp.admin.core.Model.CategoryData;
 import com.thundersharp.admin.core.utils.CONSTANTS;
+import com.thundersharp.admin.ui.progress.ProgressDilog;
 
 import java.net.URI;
 import java.util.HashMap;
@@ -33,17 +35,23 @@ public class CategoryAddEdit extends AppCompatActivity {
 
     CategoryData categoryData;
     ImageView imagehome,edit;
-    AppCompatButton categoryUpdate;
+    AppCompatButton categoryUpdate, delete;
     String uploadedurl;
     TextInputLayout categoryName,url;
+    Boolean isEdit;
+
+    ProgressDilog progressDilog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_category_add_edit);
-        if (getIntent().getSerializableExtra("data") !=null){
-            categoryData = (CategoryData)getIntent().getSerializableExtra("data");
 
+        if (getIntent().getSerializableExtra("isEdit") != null){
+            isEdit = getIntent().getBooleanExtra("isEdit",false);
+            if (getIntent().getSerializableExtra("data") !=null){
+                categoryData = (CategoryData)getIntent().getSerializableExtra("data");
+            }
         }
 
         imagehome = findViewById(R.id.imagehome);
@@ -51,7 +59,17 @@ public class CategoryAddEdit extends AppCompatActivity {
         url = findViewById(R.id.url);
         categoryUpdate = findViewById(R.id.updatec);
         edit = findViewById(R.id.edit);
+        delete = findViewById(R.id.delete);
+        progressDilog = new ProgressDilog(CategoryAddEdit.this);
 
+        if (isEdit) {
+            delete.setVisibility(View.VISIBLE);
+            categoryUpdate.setText("Update");
+        }
+        else{
+            categoryUpdate.setText("Create");
+            delete.setVisibility(View.GONE);
+        }
         if (getIntent().getSerializableExtra("data") !=null) {
             Glide.with(this).load(categoryData.IMAGES).into(imagehome);
             categoryName.getEditText().setText(categoryData.NAME);
@@ -66,16 +84,38 @@ public class CategoryAddEdit extends AppCompatActivity {
 
         });
 
-        categoryUpdate.setOnClickListener(v->{
+        delete.setOnClickListener(vi ->{
+            progressDilog.show();
+            FirebaseDatabase
+                    .getInstance()
+                    .getReference(CONSTANTS.DATABASE_NODE_CATEGORY)
+                    .child(categoryData.ID)
+                    .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+                @Override
+                public void onComplete(@NonNull Task<Void> task) {
+                    if (task.isSuccessful()){
+                        Toast.makeText(CategoryAddEdit.this, "Deleted!", Toast.LENGTH_SHORT).show();
+                        progressDilog.stop();
+                        finish();
+                    }else{
+                        Toast.makeText(CategoryAddEdit.this, "OOPS! Something went wrong", Toast.LENGTH_SHORT).show();
+                        progressDilog.stop();
+                    }
+                }
+            });
+        });
 
+        categoryUpdate.setOnClickListener(v->{
+            progressDilog.show();
             if (categoryName.getEditText().getText().toString().isEmpty()){
 
                 categoryName.getEditText().setError("Name Cannot be empty !!");
                 categoryName.getEditText().requestFocus();
-
+                progressDilog.stop();
             }else if (url.getEditText().getText().toString().isEmpty() && uploadedurl == null){
                 url.getEditText().setError("Url Cannot be empty ! Either enter url or select a image from your device.");
                 url.getEditText().requestFocus();
+                progressDilog.stop();
             }else {
                 if (categoryData == null){
                     Random random = new Random();
@@ -95,6 +135,7 @@ public class CategoryAddEdit extends AppCompatActivity {
                                 finish();
                             }else Toast.makeText(this, ""+taskSnap.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         });
+                progressDilog.stop();
             }
         });
 

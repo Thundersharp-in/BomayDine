@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="150dp"
+    app:cardBackgroundColor="#22242c"
+    app:cardCornerRadius="7dp"
+    app:cardElevation="5dp"
+    app:cardUseCompatPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:id="@+id/imageview"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:adjustViewBounds="true"
+                android:scaleType="centerCrop"
+                android:src="@drawable/homestatic" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                android:layout_gravity="bottom"
+                android:background="@drawable/custom_gradient_bottom"/>
+        </FrameLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:minHeight="40dp">
+            <TextView
+                android:id="@+id/name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="sans-serif-smallcaps"
+                android:layout_alignParentTop="true"
+                android:text="Breakfast"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"
+                android:textColor="#B8BABD"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/amount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginBottom="7dp"
+                android:layout_below="@id/name"
+                android:fontFamily="sans-serif-smallcaps"
+                android:text="Rs. 138.0"
+                android:textAlignment="viewStart"
+                android:textAllCaps="false"
+                android:textColor="#959698"
+                android:textSize="12sp" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_below="@id/amount"
+                android:layout_toStartOf="@+id/eholder"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Breaking out of the norm doesn't get more louis ipson trufr esds lour "
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="10dp"
+                android:fontFamily="@font/calibri"
+                android:layout_marginBottom="10dp"
+                android:maxLines="2"
+                android:ellipsize="end"
+                android:textColor="#686868"
+                />
+
+
+            <LinearLayout
+                android:id="@+id/eholder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="20dp"
+                android:gravity="clip_horizontal"
+                android:orientation="vertical">
+
+                <CheckBox
+                    android:id="@+id/click"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="false"
+                    />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Edit"
+                    android:textColor="#FFEB3B"
+                    android:gravity="center"
+                    android:textSize="@dimen/dimen_12sp" />
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+
+</com.google.android.material.card.MaterialCardView>

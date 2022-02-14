@@ -13,6 +13,7 @@ import com.thundersharp.bombaydine.DeeplinkActivity;
 import com.thundersharp.bombaydine.Delevery.main.HomeDelevery;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.kitchen.main.HomeKitchen;
+import com.thundersharp.bombaydine.kitchen.main.Kitchen;
 import com.thundersharp.bombaydine.user.core.Model.SavedAccountData;
 import com.thundersharp.bombaydine.user.core.address.CordinatesInteractor;
 import com.thundersharp.bombaydine.user.core.address.Cordinateslistner;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements Cordinateslistner
                                 public void fetchSuccess(SavedAccountData accountData) {
                                     switch (accountData.getType()) {
                                         case "1":
-                                            startActivity(new Intent(MainActivity.this, HomeKitchen.class));
+                                            startActivity(new Intent(MainActivity.this, Kitchen.class));
                                             finish();
                                             break;
                                         case "2":

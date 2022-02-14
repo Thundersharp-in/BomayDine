@@ -31,17 +31,6 @@ public class ReportIssue extends AppCompatActivity {
 
         rv_report = findViewById(R.id.rv_report);
         modelList = new ArrayList<>();
-        /*
-        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type"));
-        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type"));
-        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type"));
-        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type"));
-        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type"));
-        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type"));
-        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type"));
-        modelList.add(new ReportModel("Name","Email","uid","phone","msg","id","type"));
-
-         */
 
         FirebaseDatabase
                 .getInstance()

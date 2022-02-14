@@ -66,9 +66,10 @@ public class ItemDeliverHolder extends RecyclerView.Adapter<ItemDeliverHolder.Vi
         holder.total_amat.setText("\u20B9"+orederBasicDetails.getTotalamt());
         holder.uid.setText(orederBasicDetails.getUid());
         holder.user_name.setText(orederBasicDetails.getDeliveryNameData());
-        holder.user_phone.setText("+91 9876543210");
+        holder.user_phone.setText(orederBasicDetails.getDeliveryNameData().substring(orederBasicDetails.getDeliveryNameData().indexOf("$&"+2)));
 
         switch (orederBasicDetails.getStatus()){
+
             case "2":
                 holder.btn_pick_up.setText("Picked Up");
                 holder.btn_navigate_map.setEnabled(true);
@@ -78,19 +79,8 @@ public class ItemDeliverHolder extends RecyclerView.Adapter<ItemDeliverHolder.Vi
                 holder.btn_delever.setClickable(true);
                 holder.btn_pick_up.setClickable(false);
                 break;
-            /*
-            case "3":
-                holder.btn_navigate_map.setEnabled(false);
-                holder.btn_delever.setEnabled(false);
-                holder.btn_pick_up.setEnabled(false);
-                holder.btn_navigate_map.setClickable(false);
-                holder.btn_delever.setClickable(false);
-                holder.btn_pick_up.setClickable(false);
-                break;
-             */
 
             case "10":
-
                 holder.btn_navigate_map.setEnabled(false);
                 holder.btn_delever.setEnabled(false);
                 holder.btn_pick_up.setEnabled(true);
@@ -118,7 +108,6 @@ public class ItemDeliverHolder extends RecyclerView.Adapter<ItemDeliverHolder.Vi
                     .getKitchenOrderInstance()
                     .setOnStatusSuccessFailureListner(this)
                     .setStatus(orederBasicDetails.getOrderID(),3,orederBasicDetails.getUid());
-            //getStatus("3");
             /*
             AlertDialog.Builder builder = new AlertDialog.Builder(context);
             builder.setTitle("Confirmation Dialog");

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:minHeight="180dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:cardElevation="6dp"
@@ -179,7 +179,9 @@
             android:text="DELIVERY STATUS : Delivered"
             android:ellipsize="end"/>
 
-        <LinearLayout
+
+
+<!--         <LinearLayout
             android:id="@+id/lower"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -232,31 +234,95 @@
                 android:singleLine="true"
                 />
 
+            android:layout_below="@+id/lower"
         </LinearLayout>
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_cancel"
+
+-->
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/update_status"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:hint="Category Type"
+            app:hintTextColor="#fff"
+            android:textColorHint="#ACACAC"
+            app:boxStrokeColor="#ACACAC"
             android:layout_marginStart="@dimen/dimen_10dp"
-            android:layout_marginEnd="5dp"
-            android:elevation="5dp"
-            android:background="@drawable/green_curve"
-            android:text="Cancel Order"
-            android:layout_marginBottom="15dp"
-            android:layout_marginTop="@dimen/dimen_10dp"
-            android:layout_below="@+id/lower"
-            android:textColor="#97FF00"
-            android:fontFamily="sans-serif-smallcaps"
-            android:textStyle="bold"
-            android:paddingHorizontal="5dp"
-            android:clickable="true"
-            android:gravity="center"
-            android:ellipsize="start"
-            android:textAllCaps="false"
-            android:enabled="true"
-            android:singleLine="true"
-            />
+            android:layout_below="@+id/status"
+            android:layout_marginEnd="@dimen/dimen_10dp"
+            android:layout_marginVertical="10dp"
+            >
 
+            <androidx.appcompat.widget.AppCompatAutoCompleteTextView
+                android:id="@+id/update"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="false"
+                android:clickable="true"
+                android:inputType="none"
+                android:textColorHint="#fff"
+                tools:ignore="KeyboardInaccessibleWidget"
+                />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/update_status"
+            android:orientation="horizontal"
+            android:layout_marginBottom="@dimen/dimen_5dp"
+            android:layout_marginTop="@dimen/dimen_7dp"
+            >
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_cancel"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/green_curve"
+                android:backgroundTint="#E91E63"
+                android:clickable="true"
+                android:elevation="5dp"
+                android:ellipsize="start"
+                android:enabled="true"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center"
+                android:paddingHorizontal="5dp"
+                android:singleLine="true"
+                android:text="Cancel Order"
+                android:textAllCaps="false"
+                android:textColor="#E91E63"
+                android:textStyle="bold" />
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_update"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/dimen_10dp"
+                android:layout_marginEnd="5dp"
+                android:layout_marginVertical="10dp"
+                android:background="@drawable/green_curve"
+                android:clickable="true"
+                android:elevation="5dp"
+                android:ellipsize="start"
+                android:enabled="true"
+                android:fontFamily="sans-serif-smallcaps"
+                android:gravity="center"
+                android:paddingHorizontal="5dp"
+                android:singleLine="true"
+                android:text="Update Order"
+                android:textAllCaps="false"
+                android:textColor="#4CAF50"
+                android:textStyle="bold" />
+
+
+        </LinearLayout>
 
     </RelativeLayout>
 

@@ -46,7 +46,7 @@ public class Discover extends Fragment implements OrderContract.onOrderFetch {
 
         //processing dilog
         builder = new AlertDialog.Builder(getActivity());
-        View dialogview = LayoutInflater.from(getActivity()).inflate(R.layout.progress_dialog,null,false);
+        View dialogview = LayoutInflater.from(getActivity()).inflate(R.layout.progress_dialog_admin,null,false);
         builder.setView(dialogview);
         builder.setCancelable(false);
 

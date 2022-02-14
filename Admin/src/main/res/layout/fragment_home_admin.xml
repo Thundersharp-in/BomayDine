@@ -77,11 +77,11 @@
                     android:id="@+id/restaurantStatus"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_gravity="end"
                     android:layout_marginTop="0dp"
                     android:layout_marginEnd="10dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginBottom="10dp"
-                    android:layout_gravity="end"/>
+                    android:layout_marginBottom="10dp" />
 
 
             </RelativeLayout>
@@ -179,12 +179,12 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
-                                android:layout_marginEnd="15dp"
-                                android:textColor="#ff975d"
-                                android:text="Create Order"
                                 android:layout_centerVertical="true"
                                 android:layout_marginStart="15dp"
-                                android:textSize="13sp"/>
+                                android:layout_marginEnd="15dp"
+                                android:text="Create Order"
+                                android:textColor="#ff975d"
+                                android:textSize="13sp" />
 
 
                         </RelativeLayout>

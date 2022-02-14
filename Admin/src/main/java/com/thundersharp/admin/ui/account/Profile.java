@@ -15,8 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.card.MaterialCardView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.thundersharp.admin.AdminModule;
 import com.thundersharp.admin.R;
 import com.thundersharp.admin.core.AdminHelpers;
@@ -43,12 +45,28 @@ public class Profile extends Fragment {
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_profiles_admin, container, false);
+        profile_name = view.findViewById(R.id.profile_name);
+        profile_email = view.findViewById(R.id.profile_email);
+        profilepic = view.findViewById(R.id.profilepic);
+
+        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+            profile_email.setText(FirebaseAuth.getInstance().getCurrentUser().getEmail());
+
+            profile_name.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName()+"(ADMIN)");
+
+            if (FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl()!=null){
+                Glide.with(getActivity()).load(FirebaseAuth.getInstance().getCurrentUser().getPhotoUrl().toString()).into(profilepic);
+            }else {
+                //Glide.with(getActivity()).load(R.mipmap.ic_launcher_round).into(profilepic);
+            }
+        }
+
 
         ((MaterialCardView)view.findViewById(R.id.allOffers)).setOnClickListener(allOffer -> startActivity(new Intent(getContext(), AllOffersActivity.class)));
 
         ((MaterialCardView)view.findViewById(R.id.reportIssue)).setOnClickListener(allOffer -> startActivity(new Intent(getContext(), ReportIssue.class)));
 
-        ((MaterialCardView)view.findViewById(R.id.your_orders)).setOnClickListener(allOffer -> startActivity(new Intent(getContext(), ReportIssue.class)));
+        //((MaterialCardView)view.findViewById(R.id.your_orders)).setOnClickListener(allOffer -> startActivity(new Intent(getContext(), ReportIssue.class)));
 
 
         ((TextView)view.findViewById(R.id.switchbtn)).setOnClickListener(C ->{

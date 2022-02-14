@@ -54,7 +54,7 @@ public class EmailLoginActivity extends AppCompatActivity implements FirebaseLog
 
 
         builder = new AlertDialog.Builder(this);
-        View dialogview = LayoutInflater.from(this).inflate(R.layout.progress_dialog,null,false);
+        View dialogview = LayoutInflater.from(this).inflate(R.layout.progress_dialog_admin,null,false);
         builder.setView(dialogview);
 
         dialog = builder.create();

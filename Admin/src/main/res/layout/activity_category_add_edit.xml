@@ -128,16 +128,36 @@
 
         </RelativeLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dimen_50dp"
-            android:background="@drawable/corner_rect_blue"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_alignParentBottom="true"
             android:layout_marginHorizontal="-9dp"
-            android:text="CREATE/UPDATE"
-            android:id="@+id/updatec"
-            android:gravity="center"
-            android:textColor="#fff"/>
+            >
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/delete"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/dimen_50dp"
+                android:background="@drawable/corner_rect_blue"
+                android:gravity="center"
+                android:text="DELETE"
+                android:textColor="#fff"
+                android:layout_marginEnd="2dp"
+                />
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/updatec"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="@dimen/dimen_50dp"
+                android:background="@drawable/corner_rect_blue"
+                android:gravity="center"
+                android:layout_marginStart="2dp"
+                android:text="CREATE/UPDATE"
+                android:textColor="#fff" />
+
+        </LinearLayout>
     </RelativeLayout>
 
 

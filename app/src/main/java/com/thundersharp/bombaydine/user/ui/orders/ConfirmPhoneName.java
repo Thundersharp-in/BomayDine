@@ -42,7 +42,7 @@ public class ConfirmPhoneName extends AppCompatActivity {
                 name.getEditText().setError("Check format!");
                 phone_no.getEditText().setError("Check format!");
             }else{
-                setResult(1008,getIntent().setData(Uri.parse(name.getEditText().getText().toString()+",+91"+phone_no.getEditText().getText().toString())));
+                setResult(1008,getIntent().setData(Uri.parse(name.getEditText().getText().toString()+"$&+91"+phone_no.getEditText().getText().toString())));
                 finish();
                 //Toast.makeText(this, "Procced to buy", Toast.LENGTH_SHORT).show();
             }

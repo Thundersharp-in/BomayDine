@@ -68,4 +68,17 @@
         android:layout_marginTop="15dp"
         android:layout_below="@id/txttop"/>
 
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:src="@drawable/ic_baseline_add_24"
+        android:background="@drawable/circle_blue"
+        android:tint="#fff"
+        android:padding="@dimen/dimen_5dp"
+        android:layout_margin="@dimen/dimen_10dp"
+        />
+
 </RelativeLayout>

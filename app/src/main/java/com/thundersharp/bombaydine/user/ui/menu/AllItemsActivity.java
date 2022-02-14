@@ -12,8 +12,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -47,14 +45,12 @@ import com.thundersharp.bombaydine.user.core.Data.HomeDataContract;
 import com.thundersharp.bombaydine.user.core.Data.HomeDataProvider;
 import com.thundersharp.bombaydine.user.core.Data.OfferListner;
 import com.thundersharp.bombaydine.user.core.Data.OffersProvider;
-import com.thundersharp.bombaydine.user.core.Model.AddressData;
 import com.thundersharp.bombaydine.user.core.Model.CartItemModel;
 import com.thundersharp.bombaydine.user.core.Model.FoodItemAdapter;
 import com.thundersharp.bombaydine.user.core.Model.OfferModel;
 import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
 import com.thundersharp.bombaydine.user.core.OfflineDataSync.OfflineDataProvider;
 import com.thundersharp.bombaydine.user.core.address.SharedPrefHelper;
-import com.thundersharp.bombaydine.user.core.address.SharedPrefUpdater;
 import com.thundersharp.bombaydine.user.core.animation.Animator;
 import com.thundersharp.bombaydine.user.core.cart.CartEmptyUpdater;
 import com.thundersharp.bombaydine.user.core.cart.CartHandler;
@@ -77,9 +73,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
@@ -185,7 +179,7 @@ public class AllItemsActivity extends AppCompatActivity implements
 
         //processing dilog
         builder = new AlertDialog.Builder(this);
-        View dialogview = LayoutInflater.from(this).inflate(R.layout.progress_dialog,null,false);
+        View dialogview = LayoutInflater.from(this).inflate(R.layout.progress_dialog_admin,null,false);
         builder.setView(dialogview);
         builder.setCancelable(false);
 
@@ -440,7 +434,7 @@ public class AllItemsActivity extends AppCompatActivity implements
         name_phone = bottomview.findViewById(R.id.name_phone);
         TextView changeName = bottomview.findViewById(R.id.change_Name);
         TextView change_address = bottomview.findViewById(R.id.ch_address);
-
+        RelativeLayout cod = bottomview.findViewById(R.id.cod);
         itemtotal = bottomview.findViewById(R.id.item_tot);
         delehevry = bottomview.findViewById(R.id.del_charges);
         promoamt = bottomview.findViewById(R.id.promotot);
@@ -465,7 +459,7 @@ public class AllItemsActivity extends AppCompatActivity implements
         if (sharedPrefHelper != null) {
             if (sharedPrefHelper.getNamePhoneData().getName().isEmpty() || sharedPrefHelper.getNamePhoneData().getPhone().isEmpty()) {
                 if (FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() != null || !FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber().isEmpty() || FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() != null) {
-                    name_phone.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + "," + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+                    name_phone.setText(FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + "$&" + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
                     sharedPrefHelper.saveNamePhoneData(FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
                 } else {
                     name_phone.setText("Update your phone no in profile first .");
@@ -473,7 +467,7 @@ public class AllItemsActivity extends AppCompatActivity implements
                 }
 
             } else {
-                name_phone.setText(sharedPrefHelper.getNamePhoneData().getName() + "," + sharedPrefHelper.getNamePhoneData().getPhone());
+                name_phone.setText(sharedPrefHelper.getNamePhoneData().getName() + "$&" + sharedPrefHelper.getNamePhoneData().getPhone());
             }
         }
 
@@ -483,9 +477,15 @@ public class AllItemsActivity extends AppCompatActivity implements
 
         shoe_offers.setOnClickListener(viewk -> startActivityForResult(new Intent(this, AllOffersActivity.class), 001));
 
-        pay.setOnClickListener(view -> {
+        /*
+        cod.setOnClickListener(vi->{
             dialog.show();
             if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                if (sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1().equals("Choose Location")){
+                    dialog.dismiss();
+                    Toast.makeText(AllItemsActivity.this, "Please the location before order confirmation!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 StringBuilder stringBuilder = new StringBuilder();
                 for (int q = 0; q < data.size(); q++) {
                     if (q == data.size() - 1) {
@@ -512,6 +512,91 @@ public class AllItemsActivity extends AppCompatActivity implements
                 String name_no = FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + "," + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
                 if (name_phone.getText().toString().isEmpty()){
                     name_no = FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + "," + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+                }else name_no = name_phone.getText().toString();
+
+                orederBasicDetails = new OrederBasicDetails(
+                        sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1(),
+                        sharedPrefHelper.getSavedHomeLocationData().getLAT_LONG(),
+                        PromoCode,
+                        stringBuilder.toString(),
+                        delehevry.getText().toString().replace("\u20B9", ""),
+                        grandtot.getText().toString().replace("\u20B9", ""),
+                        name_no,
+                        String.valueOf(System.currentTimeMillis()),
+                        "");
+
+                Resturant.isOpen(new com.thundersharp.conversation.utils.Resturant.Resturantopen() {
+                    @Override
+                    public void isOpen(boolean isOpen) {
+                        if (isOpen) {
+                            PrePayment
+                                    .getInstance()
+                                    .setDadaistListener(new parePayListener() {
+                                        @Override
+                                        public void addSuccess() {
+                                            Payments
+                                                    .initialize(AllItemsActivity.this)
+                                                    .startPayment("ORDER #" + orederBasicDetails.getOrderID(), Double.parseDouble(orederBasicDetails.getTotalamt()), "support@thundersharp.in", "7301694135");
+                                        }
+
+                                        @Override
+                                        public void addFailure(Exception exception) {
+                                            dialog.dismiss();
+                                            Toast.makeText(AllItemsActivity.this, "Payment cannot be initialized cause :" + exception.getMessage(), Toast.LENGTH_SHORT).show();
+                                        }
+                                    }).setOrderToDatabase(data, orederBasicDetails);
+
+                        } else {
+                            dialog.dismiss();
+                            Toast.makeText(AllItemsActivity.this, "Resturant not open", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
+            } else {
+                dialog.dismiss();
+                Toast.makeText(AllItemsActivity.this, "Log in first", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(AllItemsActivity.this, LoginActivity.class));
+            }
+
+        });
+         */
+
+        pay.setOnClickListener(view -> {
+            dialog.show();
+            if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                if (sharedPrefHelper.getSavedHomeLocationData().getADDRESS_LINE1().equals("Choose Location")){
+                    dialog.dismiss();
+                    Toast.makeText(AllItemsActivity.this, "Please the location before payment confirmation!", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                StringBuilder stringBuilder = new StringBuilder();
+                for (int q = 0; q < data.size(); q++) {
+                    if (q == data.size() - 1) {
+                        stringBuilder
+                                .append(data.get(q).getQUANTITY())
+                                .append(" X ")
+                                .append(data.get(q).getNAME());
+
+                    } else {
+                        stringBuilder
+                                .append(data.get(q).getQUANTITY())
+                                .append(" X ")
+                                .append(data.get(q).getNAME())
+                                .append(", ");
+                    }
+                }
+
+                if (offerModel!=null){
+                    PromoCode = offerModel.getCODE()+"$"+offerModel.getTYPE()+"#"+codeAmount;
+                }else {
+                    PromoCode = "";
+                }
+
+                String name_no = FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + "$&" + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+                if (name_phone.getText().toString().isEmpty()){
+                    name_no = FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + "$&" + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
                 }else name_no = name_phone.getText().toString();
 
                 orederBasicDetails = new OrederBasicDetails(
@@ -925,6 +1010,7 @@ public class AllItemsActivity extends AppCompatActivity implements
                     });
 
         }else {
+            Toast.makeText(AllItemsActivity.this, "Payment failed! ", Toast.LENGTH_SHORT).show();
             dialog.dismiss();
         }
     }
