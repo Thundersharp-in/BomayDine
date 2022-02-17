@@ -445,7 +445,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Repeat Order"
+            android:text="Generate Bill"
             android:textSize="16sp"
             android:textColor="#fff"
             />
@@ -453,7 +453,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="View cart in next step"
+            android:text="Download your bill for this order"
             android:textColor="#E6E6E6"
             />
 

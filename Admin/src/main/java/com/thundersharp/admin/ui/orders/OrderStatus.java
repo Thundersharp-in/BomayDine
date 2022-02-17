@@ -20,7 +20,10 @@ import com.github.vipulasri.timelineview.TimelineView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.razorpay.PaymentResultListener;
 import com.thundersharp.admin.R;
 import com.thundersharp.admin.core.Adapters.OrderItem;
@@ -47,7 +50,6 @@ import java.util.HashMap;
 import java.util.List;
 
 public class OrderStatus extends AppCompatActivity implements
-        OrderDetail.OrderListner,
         InvoiceGenerateObserver, PaymentResultListener {
     private List<OrderModel> modeldatas;
 
@@ -77,7 +79,7 @@ public class OrderStatus extends AppCompatActivity implements
     private RecyclerView recycler_dishes;
     private List<OrderModel> model;
     private Toolbar toolbar;
-    OrderDetailHelper helper;
+    //OrderDetailHelper helper;
     private LinearLayout button;
     LinearLayout repeatOrder;
 
@@ -89,8 +91,8 @@ public class OrderStatus extends AppCompatActivity implements
         setSupportActionBar(toolbar);
         if (getIntent().getSerializableExtra("data") != null) {
             orederBasicDetails = (OrederBasicDetails) getIntent().getSerializableExtra("data");
-
             initializeViews();
+
         } else {
             Toast.makeText(this, "Error in getting details", Toast.LENGTH_SHORT).show();
             finish();
@@ -103,36 +105,20 @@ public class OrderStatus extends AppCompatActivity implements
             fav.setVisibility(View.VISIBLE);
         });
 
-        toolbar.setNavigationOnClickListener(v ->finish());
+        toolbar.setNavigationOnClickListener(v -> finish());
         timelineView = findViewById(R.id.timeline);
         TimeLineAdapter timeLineAdapter = new TimeLineAdapter(getdata(), Integer.parseInt(orederBasicDetails.getStatus()));
         ((RecyclerView) findViewById(R.id.recycler)).setAdapter(timeLineAdapter);
 
-        helper = new OrderDetailHelper(OrderStatus.this);
+        //helper = new OrderDetailHelper(OrderStatus.this);
         setData();
 
-        if (TimeUtils.getTodaysDate().equals(TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID()))) repeatOrder.setVisibility(View.VISIBLE); else repeatOrder.setVisibility(View.GONE);
+        if (TimeUtils.getTodaysDate().equals(TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID())))
+            repeatOrder.setVisibility(View.VISIBLE);
+        else repeatOrder.setVisibility(View.GONE);
 
         repeatOrder.setOnClickListener(view -> {
-            //Toast.makeText(this, "yyy", Toast.LENGTH_SHORT).show();
-            RestHelper
-                    .getInstance()
-                    .getReference(this)
-                    .getValue(new RestStatus.updateRestStatus() {
-                        @Override
-                        public void onSuccess(@NonNull Boolean isOpen) {
-                            if (isOpen){
-                                repeatorder();
-                            }else {
-                                Toast.makeText(OrderStatus.this, "Restaurent is closed right now !", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Exception e) {
-                            Toast.makeText(OrderStatus.this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
-                        }
-                    });
+            repeatorder();
         });
 
 
@@ -141,18 +127,22 @@ public class OrderStatus extends AppCompatActivity implements
     private void repeatorder() {
         ArrayList<InvoiceTableHolder> holderArrayList = new ArrayList<>();
 
-        for (int u = 0; u < modeldatas.size(); u++) {
-            holderArrayList.add(new InvoiceTableHolder(modeldatas.get(u).getQuantity(), modeldatas.get(u).getAmount(), modeldatas.get(u).getName()));
-        }
-        try {
-            Billing
-                    .initializeBiller(OrderStatus.this)
-                    .setInfoData(InfoData.setData(R.drawable.ic_launcher, "Prateek", "7301694135", orederBasicDetails.getDelivery_address(), orederBasicDetails.getOrderID(), "These are terms and Conditions .", "Welcome50", 100))
-                    .attachObserver(this)
-                    .createPdf(holderArrayList);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        if (modeldatas != null && !modeldatas.isEmpty()) {
+            for (int u = 0; u < modeldatas.size(); u++) {
+                holderArrayList.add(new InvoiceTableHolder(modeldatas.get(u).getQuantity(), modeldatas.get(u).getAmount(), modeldatas.get(u).getName()));
+            }
+            try {
+                Billing
+                        .initializeBiller(OrderStatus.this)
+                        .setInfoData(InfoData.setData(R.drawable.ic_launcher, "Prateek", "7301694135", orederBasicDetails.getDelivery_address(), orederBasicDetails.getOrderID(), "These are terms and Conditions .", "Welcome50", 100))
+                        .attachObserver(this)
+                        .createPdf(holderArrayList);
+            } catch (Exception e) {
+                e.printStackTrace();
+                Toast.makeText(this, e.getMessage()+" ", Toast.LENGTH_SHORT).show();
+            }
+        } else
+            Toast.makeText(this, "Data not fetched cannot generate the invoice", Toast.LENGTH_SHORT).show();
     }
 
     private void setData() {
@@ -163,29 +153,16 @@ public class OrderStatus extends AppCompatActivity implements
         delevery_charge.setText("\u20B9" + orederBasicDetails.getDelivery_charge());
         promo_code.setText(orederBasicDetails.getPromocodeNameNdiscount());
         order_caller_no.setText("Call Resturant on : " + ResturantCoordinates.resturantcontact);
-        helper.FetchOrder(orederBasicDetails.getOrderID());
+        fatchOrder(orederBasicDetails.getOrderID(),orederBasicDetails.getUid());
 
-        if (orederBasicDetails.getStatus().equalsIgnoreCase("0")){
+        if (orederBasicDetails.getStatus().equalsIgnoreCase("0")) {
             textupdate.setText("Current order status is Payment pending, Click here to retry payment within 10 minutes.");
             textupdate.setOnClickListener(v -> {
-/*
-                Resturant.isOpen(new Resturant.Resturantopen() {
-                    @Override
-                    public void isOpen(boolean isOpen) {
-                        if (isOpen) {
-                            if (FirebaseAuth.getInstance().getCurrentUser().getEmail() != null && FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber() != null)
-                                Payments.initialize(OrderStatus.this).startPayment("Order #" + orederBasicDetails.getOrderID(), orederBasicDetails.getOrderID(), Double.parseDouble(orederBasicDetails.getTotalamt()), FirebaseAuth.getInstance().getCurrentUser().getEmail(), FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
-                            else
-                                Toast.makeText(OrderStatus.this, "Update phone no and email in profile", Toast.LENGTH_SHORT).show();
-                        }else Toast.makeText(OrderStatus.this,"Resturant not accepting orders",Toast.LENGTH_SHORT).show();
-                    }
-                });
-*/
             });
-        }else if (orederBasicDetails.getStatus().equalsIgnoreCase("1")){
+        } else if (orederBasicDetails.getStatus().equalsIgnoreCase("1")) {
             textupdate.setText("Your order is being prepared click here to chat with the cook for customisations.");
-            order_no.setText("#" + orederBasicDetails.getOrderID()+"\nPayment id : "+orederBasicDetails.getPaymentid());
-            textupdate.setOnClickListener(c ->{
+            order_no.setText("#" + orederBasicDetails.getOrderID() + "\nPayment id : " + orederBasicDetails.getPaymentid());
+            textupdate.setOnClickListener(c -> {
                 ChatStarter chatStarter = ChatStarter.initializeChat(this);
                 chatStarter.setChatType(ChatStarter.MODE_CHAT_FROM_COOK_SPECIFIC_ORDER);
                 chatStarter.setSenderUid(FirebaseAuth.getInstance().getUid());
@@ -202,9 +179,41 @@ public class OrderStatus extends AppCompatActivity implements
         }
     }
 
-    private void initializeViews() {
-        //fav=findViewById(R.id.fav);
+    private void fatchOrder(String orderID, String uid) {
 
+        List<OrderModel> modelList = new ArrayList<>();
+
+        FirebaseDatabase
+                .getInstance()
+                .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
+                .child(uid)
+                .child(CONSTANTS.DATABASE_NODE_ORDERS)
+                .child(CONSTANTS.DATABASE_NODE_DETAILS)
+                .child(orderID)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        if (snapshot.exists()) {
+                            for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                                modelList.add(snapshot1.getValue(OrderModel.class));
+                            }
+                            onSuccess(modelList);
+                        } else {
+                            Exception exception = new Exception("Data Not Exists");
+                            Toast.makeText(OrderStatus.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        //orderListner.onFailure(error.toException());
+                        Toast.makeText(OrderStatus.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+
+    }
+
+    private void initializeViews() {
         item_total = findViewById(R.id.item_total);
         promo_code = findViewById(R.id.promo_code);
         promo_amount = findViewById(R.id.promo_amount);
@@ -235,7 +244,6 @@ public class OrderStatus extends AppCompatActivity implements
     }
 
 
-    @Override
     public void onSuccess(List<OrderModel> model) {
         modeldatas = model;
         OrderItem adapter = new OrderItem(OrderStatus.this, model);
@@ -249,14 +257,15 @@ public class OrderStatus extends AppCompatActivity implements
         total_saving.setText("\u20B9" + String.valueOf(Double.parseDouble(orederBasicDetails.getTotalamt()) - (total + Double.parseDouble(orederBasicDetails.getDelivery_charge()))));
     }
 
-    @Override
-    public void onFailure(Exception e) {
-        Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
-    }
 
     @Override
     public void pdfCreatedSuccess(Uri pdfLink) {
-        Toast.makeText(this, ""+pdfLink, Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "" + pdfLink, Toast.LENGTH_SHORT).show();
+        Intent target = new Intent(Intent.ACTION_VIEW);
+        target.setDataAndType(pdfLink, "application/pdf");
+        target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivity(target);
     }
 
     @Override
@@ -291,14 +300,14 @@ public class OrderStatus extends AppCompatActivity implements
 
     @Override
     public void onPaymentSuccess(String s) {
-        if (s.contains("pay_")){
-            Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
-            HashMap<String,Object> updateDataRequest = new HashMap<>();
-            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS+"/"+TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID())+"/"+orederBasicDetails.getOrderID()+"/status","1");
-            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS+"/"+TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID())+"/"+orederBasicDetails.getOrderID()+"/paymentid",s);
+        if (s.contains("pay_")) {
+            Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
+            HashMap<String, Object> updateDataRequest = new HashMap<>();
+            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS + "/" + TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID()) + "/" + orederBasicDetails.getOrderID() + "/status", "1");
+            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS + "/" + TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID()) + "/" + orederBasicDetails.getOrderID() + "/paymentid", s);
 
-            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS+"/"+FirebaseAuth.getInstance().getUid()+"/"+CONSTANTS.DATABASE_NODE_ORDERS+"/"+CONSTANTS.DATABASE_NODE_OVERVIEW+"/"+orederBasicDetails.getOrderID()+"/status","1");
-            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS+"/"+FirebaseAuth.getInstance().getUid()+"/"+CONSTANTS.DATABASE_NODE_ORDERS+"/"+CONSTANTS.DATABASE_NODE_OVERVIEW+"/"+orederBasicDetails.getOrderID()+"/paymentid",s);
+            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS + "/" + FirebaseAuth.getInstance().getUid() + "/" + CONSTANTS.DATABASE_NODE_ORDERS + "/" + CONSTANTS.DATABASE_NODE_OVERVIEW + "/" + orederBasicDetails.getOrderID() + "/status", "1");
+            updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS + "/" + FirebaseAuth.getInstance().getUid() + "/" + CONSTANTS.DATABASE_NODE_ORDERS + "/" + CONSTANTS.DATABASE_NODE_OVERVIEW + "/" + orederBasicDetails.getOrderID() + "/paymentid", s);
 
             FirebaseDatabase
                     .getInstance()
@@ -307,16 +316,16 @@ public class OrderStatus extends AppCompatActivity implements
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
-                            if (task.isSuccessful()){
+                            if (task.isSuccessful()) {
                                 //TODO UPDATE DIALOG BOX LOGIC
-                                Toast.makeText(OrderStatus.this,"Order placed",Toast.LENGTH_LONG).show();
+                                Toast.makeText(OrderStatus.this, "Order placed", Toast.LENGTH_LONG).show();
                                 orederBasicDetails.setStatus("1");
                                 orederBasicDetails.setPaymentid(s);
                                 textupdate.setText("Your order is being prepared click here to chat with the cook for customisations.");
                                 recreate();
-                            }else {
+                            } else {
                                 //TODO UPDATE AUTO REFUND LOGIC
-                                Toast.makeText(OrderStatus.this,"Could not update order contact support for your refund if not generated automatically",Toast.LENGTH_LONG).show();
+                                Toast.makeText(OrderStatus.this, "Could not update order contact support for your refund if not generated automatically", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
@@ -326,7 +335,7 @@ public class OrderStatus extends AppCompatActivity implements
 
     @Override
     public void onPaymentError(int i, String s) {
-        Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, s, Toast.LENGTH_SHORT).show();
         try {
             String replace = s.replace("&error=", "");
             JSONObject jsonObject = new JSONObject(replace);
@@ -335,12 +344,12 @@ public class OrderStatus extends AppCompatActivity implements
                 JSONObject metadata = jsonObject.getJSONObject("metadata");
                 String payId = metadata.getString("payment_id");
 
-                HashMap<String,Object> updateDataRequest = new HashMap<>();
-                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS+"/"+TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID())+"/"+orederBasicDetails.getOrderID()+"/status","4");
-                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS+"/"+ TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID())+"/"+orederBasicDetails.getOrderID()+"/paymentid",payId);
+                HashMap<String, Object> updateDataRequest = new HashMap<>();
+                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS + "/" + TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID()) + "/" + orederBasicDetails.getOrderID() + "/status", "4");
+                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_ORDERS + "/" + TimeUtils.getDateFromTimeStamp(orederBasicDetails.getOrderID()) + "/" + orederBasicDetails.getOrderID() + "/paymentid", payId);
 
-                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS+"/"+FirebaseAuth.getInstance().getUid()+"/"+CONSTANTS.DATABASE_NODE_ORDERS+"/"+CONSTANTS.DATABASE_NODE_OVERVIEW+"/"+orederBasicDetails.getOrderID()+"/status","4");
-                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS+"/"+FirebaseAuth.getInstance().getUid()+"/"+CONSTANTS.DATABASE_NODE_ORDERS+"/"+CONSTANTS.DATABASE_NODE_OVERVIEW+"/"+orederBasicDetails.getOrderID()+"/paymentid",payId);
+                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS + "/" + FirebaseAuth.getInstance().getUid() + "/" + CONSTANTS.DATABASE_NODE_ORDERS + "/" + CONSTANTS.DATABASE_NODE_OVERVIEW + "/" + orederBasicDetails.getOrderID() + "/status", "4");
+                updateDataRequest.put(CONSTANTS.DATABASE_NODE_ALL_USERS + "/" + FirebaseAuth.getInstance().getUid() + "/" + CONSTANTS.DATABASE_NODE_ORDERS + "/" + CONSTANTS.DATABASE_NODE_OVERVIEW + "/" + orederBasicDetails.getOrderID() + "/paymentid", payId);
 
                 FirebaseDatabase
                         .getInstance()
@@ -349,9 +358,9 @@ public class OrderStatus extends AppCompatActivity implements
                         .addOnCompleteListener(new OnCompleteListener<Void>() {
                             @Override
                             public void onComplete(@NonNull Task<Void> task) {
-                                if (task.isSuccessful()){
+                                if (task.isSuccessful()) {
                                     //TODO UPDATE DIALOG BOX LOGIC
-                                    Toast.makeText(OrderStatus.this,"Payment Failed.",Toast.LENGTH_LONG).show();
+                                    Toast.makeText(OrderStatus.this, "Payment Failed.", Toast.LENGTH_LONG).show();
                                     orederBasicDetails.setStatus("4");
                                     orederBasicDetails.setPaymentid(payId);
                                     textupdate.setText("Payment Failed please re order !!");
@@ -359,9 +368,8 @@ public class OrderStatus extends AppCompatActivity implements
                                 }
                             }
                         });
-            }
-            else {
-                Toast.makeText(this, "Payment failed : "+jsonObject.getJSONObject("error").getString("code"), Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, "Payment failed : " + jsonObject.getJSONObject("error").getString("code"), Toast.LENGTH_SHORT).show();
             }
 
         } catch (JSONException e) {

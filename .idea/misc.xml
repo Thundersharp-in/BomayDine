@@ -50,7 +50,7 @@
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.37604166666666666" />
         <entry key="app/src/main/res/layout/activity_main_page.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/activity_order_details.xml" value="0.28229166666666666" />
-        <entry key="app/src/main/res/layout/activity_order_status.xml" value="0.1451388888888889" />
+        <entry key="app/src/main/res/layout/activity_order_status.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_profile_main.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/activity_recent_orders.xml" value="0.25092592592592594" />
         <entry key="app/src/main/res/layout/activity_refunds.xml" value="0.22" />
@@ -71,6 +71,8 @@
         <entry key="app/src/main/res/layout/progress_dialog.xml" value="0.16805555555555557" />
         <entry key="app/src/main/res/layout/uneversal_holder.xml" value="0.1701388888888889" />
         <entry key="app/src/main/res/menu/bottom_nav_menu.xml" value="0.28229166666666666" />
+        <entry key="app/src/main/res/menu/order_det_menu.xml" value="0.334375" />
+        <entry key="app/src/main/res/xml/provider_paths.xml" value="0.153125" />
       </map>
     </option>
   </component>

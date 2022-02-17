@@ -135,7 +135,7 @@ public class Discover extends Fragment implements OrderContract.onOrderFetch {
 
     @Override
     public void onOrderFetchSuccess(DataSnapshot data, boolean isNew) {
-        Toast.makeText(getActivity(), "e.getMessage()", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), "data fetched", Toast.LENGTH_LONG).show();
         if (isNew){
             if (recentOrderAdapter == null) {
                 List<DataSnapshot> list= new ArrayList<>();

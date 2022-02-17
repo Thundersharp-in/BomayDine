@@ -1,7 +1,9 @@
 package com.thundersharp.billgenerator;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -33,37 +35,45 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, Integer> {
+public class Billing {
 
-    private static Billing billing;
     @SuppressLint("StaticFieldLeak")
-    private static Context context;
+    private static Billing billing;
+    public static Activity context;
 
-    private InvoiceGenerateObserver invoiceGenerateObserver;
-    private InfoData infoData;
+    public static InvoiceGenerateObserver invoiceGenerateObserver;
+    public static InfoData infoData;
 
-    public static Billing initializeBiller(Context activityContext) {
+    public static Billing initializeBiller(Activity activityContext) {
         billing = new Billing();
         context = activityContext;
         return billing;
     }
 
     public Billing setInfoData(InfoData infoData) {
-        this.infoData = infoData;
+        Billing.infoData = infoData;
         return billing;
     }
 
     public Billing attachObserver(InvoiceGenerateObserver invoiceGenerateObserver) {
-        this.invoiceGenerateObserver = invoiceGenerateObserver;
+        Billing.invoiceGenerateObserver = invoiceGenerateObserver;
         return billing;
     }
 
     public void createPdf(ArrayList<InvoiceTableHolder> data) throws Exception {
-        if (billing == null) throw new Exception("initializeBiller() failed.");
-        else if (invoiceGenerateObserver == null) throw new Exception("Observer not attached.");
-        else if (infoData == null) throw new Exception("setInfoData() not called.");
-        else billing.doInBackground(data);
+        if (billing == null)
+            throw new Exception("initializeBiller() failed.");
+        else if (invoiceGenerateObserver == null)
+            throw new Exception("Observer not attached.");
+        else if (infoData == null)
+            throw new Exception("setInfoData() not called.");
+        else
+            new BillCore().doInBackground(data);
     }
+
+}
+
+class BillCore extends AsyncTask<ArrayList<InvoiceTableHolder>, String, Integer> {
 
     private static BaseColor printPrimary = new BaseColor(0, 133, 119);//A = 1
     private static BaseColor printPrimary1 = new BaseColor(60, 92, 195);//A = 1
@@ -73,10 +83,11 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
     private int itemCounter = 0;
     private double totalprice;
 
-    private static String FOLDER_PDF = Environment.getExternalStorageDirectory() + File.separator + "Thundersharp/Quotations";
+    //Environment.getExternalStorageDirectory()
+    public static String FOLDER_PDF = Environment.getExternalStorageDirectory().getPath() + File.separator + "Thundersharp/Quotations";
 
 
-    String path = FOLDER_PDF + "/" + "BILL_NO" + ".pdf";
+    String path = FOLDER_PDF + "/bnnk" + ".pdf";
     PdfWriter writer;
 
     @SuppressLint("WrongThread")
@@ -86,8 +97,7 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         /**
          * Creating Document for report
          */
-        //dialog.setCancelable(false);
-        //dialog.show();
+
         BaseFont baseFont = null;
         try {
             baseFont = BaseFont.createFont("res/font/montserratregular.ttf", "UTF-8", BaseFont.EMBEDDED);
@@ -106,21 +116,12 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         Font itemFont = new Font(baseFont, 7, Font.NORMAL, BaseColor.BLACK);
 
 
-
         Rectangle rectangle = new Rectangle(227, 1440);
         //A7 = 74mm in size
         Document document = new Document(rectangle, 3, 3, 15, 15);
         document.addCreationDate();
         document.addAuthor("Thundersharp");
         document.addCreator("thundersharp.in");
-
-        try {
-
-            writer = PdfWriter.getInstance(document, new FileOutputStream(path));
-        } catch (DocumentException | FileNotFoundException e) {
-            e.printStackTrace();
-            Log.d("msg", e.getCause().getMessage());
-        }
 
 
         document.open();
@@ -130,6 +131,13 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
         //5
 
+/*        try {
+
+            writer = PdfWriter.getInstance(document, new FileOutputStream(path));
+        } catch (DocumentException | FileNotFoundException e) {
+            e.printStackTrace();
+            Log.d("msg", e.getCause().getMessage());
+        }*/
 
         CustomDashedLineSeperator customDashedLineSeperator = new CustomDashedLineSeperator();
         customDashedLineSeperator.setDash(10);
@@ -198,7 +206,7 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 //        }
 
         try {
-            Drawable d = context.getDrawable(infoData.getLogo());
+            Drawable d = Billing.context.getDrawable(Billing.infoData.getLogo());
             BitmapDrawable bitDw = ((BitmapDrawable) d);
             Bitmap bmp = bitDw.getBitmap();
             ByteArrayOutputStream stream = new ByteArrayOutputStream();
@@ -240,12 +248,12 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         tableHeading.setSpacingBefore(0);
 
 
-        PdfPCell preAddress = new PdfPCell(new Phrase("Delivered to :" + infoData.getClientAddress(), regularHeadquotel));
-        PdfPCell prePhone = new PdfPCell(new Phrase("Phone: " + infoData.getClientPhone(), regularHeadquotel));
+        PdfPCell preAddress = new PdfPCell(new Phrase("Delivered to :" + Billing.infoData.getClientAddress(), regularHeadquotel));
+        PdfPCell prePhone = new PdfPCell(new Phrase("Phone: " + Billing.infoData.getClientPhone(), regularHeadquotel));
 
-        PdfPCell preBill = new PdfPCell(new Phrase("Bill no. #" + infoData.getOrderId(), regularHeadquotel));
+        PdfPCell preBill = new PdfPCell(new Phrase("Bill no. #" + Billing.infoData.getOrderId(), regularHeadquotel));
 
-        PdfPCell preDate = new PdfPCell(new Phrase("Bill Date\n" + TimeUtilities.getTimeFromTimeStamp(infoData.getOrderId()), regularHeadquotel));
+        PdfPCell preDate = new PdfPCell(new Phrase("Bill Date\n" + TimeUtilities.getTimeFromTimeStamp(Billing.infoData.getOrderId()), regularHeadquotel));
 
         PdfPCell lines = new PdfPCell();
         lines.setColspan(2);
@@ -304,7 +312,6 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         PdfPCell headDe = new PdfPCell(new Phrase("Rate", boldHeadSmall));
 
 
-
         headDate.setPaddingBottom(5);
         headDate.setVerticalAlignment(Element.ALIGN_LEFT);
 
@@ -326,15 +333,12 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         headDe.setVerticalAlignment(Element.ALIGN_CENTER);
 
 
-
-
         headDate.setBorder(Rectangle.NO_BORDER);
 
         headName.setBorder(Rectangle.NO_BORDER);
         headDis.setBorder(Rectangle.NO_BORDER);
         headCr.setBorder(Rectangle.NO_BORDER);
         headDe.setBorder(Rectangle.NO_BORDER);
-
 
 
         table.addCell(headDate);
@@ -372,7 +376,6 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
                 cellAmount.setBorder(Rectangle.TOP);
 
 
-
                 cellNo.setHorizontalAlignment(Element.ALIGN_CENTER);
                 cellNo.setVerticalAlignment(Element.ALIGN_CENTER);
 
@@ -385,7 +388,6 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
                 cellCompany.setHorizontalAlignment(Element.ALIGN_CENTER);
                 cellCompany.setVerticalAlignment(Element.ALIGN_CENTER);
-
 
 
                 cellAmount.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -403,7 +405,6 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
                 cellCompany.setHorizontalAlignment(Element.ALIGN_CENTER);
                 cellCompany.setVerticalAlignment(Element.ALIGN_MIDDLE);
-
 
 
                 cellAmount.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -428,7 +429,7 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         PdfPTable bottomRow = new PdfPTable(3);
 
         try {
-            bottomRow.setWidths(new float[]{3,3,1.9f});
+            bottomRow.setWidths(new float[]{3, 3, 1.9f});
         } catch (DocumentException e) {
             e.printStackTrace();
         }
@@ -436,9 +437,9 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         bottomRow.setSplitRows(false);
         bottomRow.setComplete(false);
 
-        PdfPCell items = new PdfPCell(new Phrase("Items "+arrayLists[0].size(), boldHeadSmall));
-        PdfPCell Qty = new PdfPCell(new Phrase("Qty "+itemCounter, boldHeadSmall));
-        PdfPCell total = new PdfPCell(new Phrase("Rs "+totalprice, boldHeadSmall));
+        PdfPCell items = new PdfPCell(new Phrase("Items " + arrayLists[0].size(), boldHeadSmall));
+        PdfPCell Qty = new PdfPCell(new Phrase("Qty " + itemCounter, boldHeadSmall));
+        PdfPCell total = new PdfPCell(new Phrase("Rs " + totalprice, boldHeadSmall));
 
 
         items.setBorder(Rectangle.TOP);
@@ -456,10 +457,10 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
         total.setHorizontalAlignment(Element.ALIGN_CENTER);
 
-            bottomRow.addCell(items);
-            bottomRow.addCell(Qty);
-            bottomRow.addCell(total);
-            bottomRow.setComplete(true);
+        bottomRow.addCell(items);
+        bottomRow.addCell(Qty);
+        bottomRow.addCell(total);
+        bottomRow.setComplete(true);
 
 
 
@@ -478,8 +479,8 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         table1.setComplete(false);
 
 
-        PdfPCell delivery=new PdfPCell(new Phrase("Delivery charges",boldHeadSmall));
-        PdfPCell deliverycharge=new PdfPCell(new Phrase("FREE",boldHeadSmall));
+        PdfPCell delivery = new PdfPCell(new Phrase("Delivery charges", boldHeadSmall));
+        PdfPCell deliverycharge = new PdfPCell(new Phrase("FREE", boldHeadSmall));
 
         delivery.setPaddingTop(2);
         deliverycharge.setPaddingTop(2);
@@ -494,8 +495,8 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         deliverycharge.setColspan(2);
         delivery.setPaddingRight(10);
 
-        PdfPCell subTotal = new PdfPCell(new Phrase(infoData.getPromoName(), boldHeadSmall));
-        PdfPCell subtotalamt = new PdfPCell(new Phrase("- Rs "+infoData.getDiscAmt(), boldHeadSmall));
+        PdfPCell subTotal = new PdfPCell(new Phrase(Billing.infoData.getPromoName(), boldHeadSmall));
+        PdfPCell subtotalamt = new PdfPCell(new Phrase("- Rs " + Billing.infoData.getDiscAmt(), boldHeadSmall));
 
         subTotal.setPaddingTop(2);
         subtotalamt.setPaddingTop(2);
@@ -513,7 +514,7 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
 
         PdfPCell preTotal = new PdfPCell(new Phrase("TOTAL", boldHeadSmall));
-        PdfPCell preTotalAmount = new PdfPCell(new Phrase("Rs "+(amountFull-infoData.getDiscAmt()), boldHeadSmall));
+        PdfPCell preTotalAmount = new PdfPCell(new Phrase("Rs " + (amountFull - Billing.infoData.getDiscAmt()), boldHeadSmall));
 
         preTotalAmount.setPaddingLeft(10);
         preTotalAmount.setBorder(Rectangle.TOP);
@@ -530,12 +531,14 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         preTotal.setPaddingBottom(7);
         preTotalAmount.setPaddingBottom(7);
 
-        PdfPCell terms=new PdfPCell(new Phrase("* Terms : "+infoData.getTerms()+"\nAll prices in the bill are inclusive of all taxes.",regularHeadquote));
+        PdfPCell terms = new PdfPCell(new Phrase("* Terms : " + Billing.infoData.getTerms() + "\nAll prices in the bill are inclusive of all taxes.", regularHeadquote));
         terms.setPadding(5);
         terms.setColspan(2);
         terms.setBorder(Rectangle.TOP);
 
-        PdfPCell barCode = new PdfPCell(BarCode.getBarCodeFromData(infoData.getOrderId(),writer));
+        //BarCode.getBarCodeFromData(infoData.getOrderId(),writer);
+
+        PdfPCell barCode = new PdfPCell();
         barCode.setBorder(Rectangle.NO_BORDER);
         barCode.setPaddingTop(20);
         barCode.setColspan(2);
@@ -543,7 +546,7 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
         PdfPCell qrCode = null;
         try {
-            qrCode = new PdfPCell(BarCode.geQrCodeFromData("Download from : https://play.google.com/store/apps/details?id="+context.getPackageName()));
+            qrCode = new PdfPCell(BarCode.geQrCodeFromData("Download from : https://play.google.com/store/apps/details?id=" + Billing.context.getPackageName()));
         } catch (BadElementException e) {
             e.printStackTrace();
         }
@@ -553,15 +556,15 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         qrCode.setHorizontalAlignment(Element.ALIGN_RIGHT);
 
 
-        PdfPCell qrdesc = new PdfPCell(new Phrase("Scan the Qr code to get the application now from the android store",regularHeadquote));
+        PdfPCell qrdesc = new PdfPCell(new Phrase("Scan the Qr code to get the application now from the android store", regularHeadquote));
         qrdesc.setBorder(Rectangle.NO_BORDER);
         qrdesc.setPaddingTop(20);
         qrdesc.setVerticalAlignment(Rectangle.ALIGN_CENTER);
         qrdesc.setHorizontalAlignment(Rectangle.LEFT);
 
-        PdfPTable bottomTerms =new PdfPTable(2);
+        PdfPTable bottomTerms = new PdfPTable(2);
         try {
-            bottomTerms.setWidths(new float[]{1,1});
+            bottomTerms.setWidths(new float[]{1, 1});
         } catch (DocumentException e) {
             e.printStackTrace();
         }
@@ -571,8 +574,6 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
             bottomTerms.addCell(qrCode);
             bottomTerms.addCell(qrdesc);
         }
-
-
 
 
         table.setComplete(true);
@@ -588,7 +589,6 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         table1.addCell(preTotalAmount);
 
 
-
         //table1.addCell(quotedesc);
 
 
@@ -596,7 +596,6 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         //table1.addCell(sign);
 
         table1.setComplete(true);
-
 
 
         try {
@@ -611,16 +610,17 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
 
         onProgressUpdate("Finishing up...");
         document.close();
+        //onPostExecute(1);
         return 1;
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
-
+        Log.e("XXX", "Pre execute");
 
         File file = new File(FOLDER_PDF);
-        if (file.exists()) {
+        if (!file.exists()) {
             file.mkdir();
         }
 
@@ -630,14 +630,7 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
     protected void onProgressUpdate(String... values) {
         super.onProgressUpdate(values);
         final String a = values[0].toString();
-/*
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                //txtUpdate.setText(a);
-            }
-        });
-*/
+        Log.e("UP ", a);
     }
 
     @Override
@@ -645,15 +638,13 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         super.onPostExecute(integer);
 
         File file = new File(path);
-        Uri pdfURI = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
-        invoiceGenerateObserver.pdfCreatedSuccess(pdfURI);
+        Uri pdfURI = FileProvider.getUriForFile(Billing.context, Billing.context.getPackageName() + ".provider", file);
+        Log.e("Path", pdfURI.getPath());
+        Billing.invoiceGenerateObserver.pdfCreatedSuccess(pdfURI);
         // path1 = pdfURI;
         //uploadtofirebase(QUOTATION_NUMBER, CLIENT_NAME, CLIENT_ADDRESS, VALID_FROM, VALID_TILL, itemholder);
         // target.setDataAndType(Uri.fromFile(file),"application/pdf");
-        /*Intent target = new Intent(Intent.ACTION_VIEW);
-        target.setDataAndType(pdfURI, "application/pdf");
-        target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-        target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);*/
+
         //txtUpdate.setText("Finished");
 
  /*       Intent intent = Intent.createChooser(target, "Open File");
@@ -664,5 +655,5 @@ public class Billing extends AsyncTask<ArrayList<InvoiceTableHolder>, String, In
         }*/
 
     }
-
 }
+

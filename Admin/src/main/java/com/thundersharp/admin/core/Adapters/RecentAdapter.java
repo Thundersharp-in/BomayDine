@@ -52,7 +52,7 @@ public class RecentAdapter extends RecyclerView.Adapter<RecentAdapter.ViewBinder
     }
 
     public void upDateExisting(DataSnapshot data) {
-        Toast.makeText(context, orderidS.get(0), Toast.LENGTH_SHORT).show();
+
         if (orderidS.contains(data.child("orderID").getValue(String.class))){
 
             int index = orderidS.indexOf(data.child("orderID").getValue(String.class));

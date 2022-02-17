@@ -107,51 +107,57 @@ public class OrderStatus extends AppCompatActivity implements
             finish();
         }
         //processing dilog
-        builder = new AlertDialog.Builder(this);
-        View dialogview = LayoutInflater.from(this).inflate(R.layout.progress_dialog_admin,null,false);
-        builder.setView(dialogview);
-        builder.setCancelable(false);
+        try {
 
-        dialog = builder.create();
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+            builder = new AlertDialog.Builder(this);
+            View dialogview = LayoutInflater.from(this).inflate(R.layout.progress_dialog_admin, null, false);
+            builder.setView(dialogview);
+            builder.setCancelable(false);
 
-        initializeViews();
+            dialog = builder.create();
+            dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
 
-
-        unfav.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                unfav.setVisibility(View.GONE);
-                fav.setVisibility(View.VISIBLE);
-            }
-        });
-
-        toolbar.setNavigationOnClickListener(v ->finish());
-        timelineView = findViewById(R.id.timeline);
-        TimeLineAdapter timeLineAdapter = new TimeLineAdapter(getdata(), Integer.parseInt(orederBasicDetails.getStatus()));
-        ((RecyclerView) findViewById(R.id.recycler)).setAdapter(timeLineAdapter);
-
-        helper = new OrderDetailHelper(OrderStatus.this);
-        setData();
+            initializeViews();
 
 
-        ((LinearLayout) findViewById(R.id.lllb)).setOnClickListener(view -> {
-            //Toast.makeText(this, "yyy", Toast.LENGTH_SHORT).show();
-            ArrayList<InvoiceTableHolder> holderArrayList = new ArrayList<>();
+            unfav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    unfav.setVisibility(View.GONE);
+                    fav.setVisibility(View.VISIBLE);
+                }
+            });
 
-            for (int u = 0; u < modeldatas.size(); u++) {
-                holderArrayList.add(new InvoiceTableHolder(modeldatas.get(u).getQuantity(), modeldatas.get(u).getAmount(), modeldatas.get(u).getName()));
-            }
-            try {
-                Billing
-                        .initializeBiller(OrderStatus.this)
-                        .setInfoData(InfoData.setData(R.drawable.ic_launcher, "Prateek", "7301694135", orederBasicDetails.getDelivery_address(), orederBasicDetails.getOrderID(), "These are terms and Conditions .", "Welcome50", 100))
-                        .attachObserver(this)
-                        .createPdf(holderArrayList);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        });
+            toolbar.setNavigationOnClickListener(v -> finish());
+            timelineView = findViewById(R.id.timeline);
+            TimeLineAdapter timeLineAdapter = new TimeLineAdapter(getdata(), Integer.parseInt(orederBasicDetails.getStatus()));
+            ((RecyclerView) findViewById(R.id.recycler)).setAdapter(timeLineAdapter);
+
+            helper = new OrderDetailHelper(OrderStatus.this);
+            setData();
+
+
+            ((LinearLayout) findViewById(R.id.lllb)).setOnClickListener(view -> {
+                //Toast.makeText(this, "yyy", Toast.LENGTH_SHORT).show();
+                ArrayList<InvoiceTableHolder> holderArrayList = new ArrayList<>();
+
+                for (int u = 0; u < modeldatas.size(); u++) {
+                    holderArrayList.add(new InvoiceTableHolder(modeldatas.get(u).getQuantity(), modeldatas.get(u).getAmount(), modeldatas.get(u).getName()));
+                }
+                try {
+                    Billing
+                            .initializeBiller(OrderStatus.this)
+                            .setInfoData(InfoData.setData(R.drawable.ic_launcher, "Prateek", "7301694135", orederBasicDetails.getDelivery_address(), orederBasicDetails.getOrderID(), "These are terms and Conditions .", "Welcome50", 100))
+                            .attachObserver(this)
+                            .createPdf(holderArrayList);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+
+        }catch (Exception e){
+            Toast.makeText(this, e.getMessage()+"", Toast.LENGTH_SHORT).show();
+        }
 
 
     }
