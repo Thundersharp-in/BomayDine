@@ -2,6 +2,7 @@ package com.thundersharp.billgenerator;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -84,10 +85,10 @@ class BillCore extends AsyncTask<ArrayList<InvoiceTableHolder>, String, Integer>
     private double totalprice;
 
     //Environment.getExternalStorageDirectory()
-    public static String FOLDER_PDF = Environment.getExternalStorageDirectory().getPath() + File.separator + "Thundersharp/Quotations";
+    public static String FOLDER_PDF = Environment.getExternalStorageDirectory().getPath() + File.separator + "BombayDine/Orders";
 
 
-    String path = FOLDER_PDF + "/bnnk" + ".pdf";
+    String path = FOLDER_PDF + "/BD"+Billing.infoData.getOrderId() + ".pdf";
     PdfWriter writer;
 
     @SuppressLint("WrongThread")
@@ -123,6 +124,14 @@ class BillCore extends AsyncTask<ArrayList<InvoiceTableHolder>, String, Integer>
         document.addAuthor("Thundersharp");
         document.addCreator("thundersharp.in");
 
+        try {
+
+            writer = PdfWriter.getInstance(document, new FileOutputStream(path));
+        } catch (DocumentException | FileNotFoundException e) {
+            e.printStackTrace();
+            Log.d("msg", e.getCause().getMessage());
+        }
+
 
         document.open();
 
@@ -130,14 +139,6 @@ class BillCore extends AsyncTask<ArrayList<InvoiceTableHolder>, String, Integer>
 
 
         //5
-
-/*        try {
-
-            writer = PdfWriter.getInstance(document, new FileOutputStream(path));
-        } catch (DocumentException | FileNotFoundException e) {
-            e.printStackTrace();
-            Log.d("msg", e.getCause().getMessage());
-        }*/
 
         CustomDashedLineSeperator customDashedLineSeperator = new CustomDashedLineSeperator();
         customDashedLineSeperator.setDash(10);
@@ -610,7 +611,8 @@ class BillCore extends AsyncTask<ArrayList<InvoiceTableHolder>, String, Integer>
 
         onProgressUpdate("Finishing up...");
         document.close();
-        //onPostExecute(1);
+        writer.close();
+        onPostExecute(1);
         return 1;
     }
 
@@ -636,11 +638,33 @@ class BillCore extends AsyncTask<ArrayList<InvoiceTableHolder>, String, Integer>
     @Override
     protected void onPostExecute(Integer integer) {
         super.onPostExecute(integer);
-
         File file = new File(path);
         Uri pdfURI = FileProvider.getUriForFile(Billing.context, Billing.context.getPackageName() + ".provider", file);
-        Log.e("Path", pdfURI.getPath());
+        //path1 = pdfURI;
         Billing.invoiceGenerateObserver.pdfCreatedSuccess(pdfURI);
+
+        Billing.invoiceGenerateObserver.pdfCreatedSuccess(pdfURI);
+        Intent target = new Intent(Intent.ACTION_VIEW);
+        target.setDataAndType(pdfURI, "application/pdf");
+        target.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        target.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+
+        Intent intent = Intent.createChooser(target, "Open File");
+        try {
+            Billing.context.startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            // Instruct the user to install a PDF reader here, or something
+        }
+
+
+
+
+
+        //File file = new File(path);
+        //Uri pdfURI = FileProvider.getUriForFile(Billing.context, Billing.context.getPackageName() + ".provider", file);
+        //Log.e("Path", pdfURI.getPath());
+        //Billing.invoiceGenerateObserver.pdfCreatedSuccess(pdfURI);
         // path1 = pdfURI;
         //uploadtofirebase(QUOTATION_NUMBER, CLIENT_NAME, CLIENT_ADDRESS, VALID_FROM, VALID_TILL, itemholder);
         // target.setDataAndType(Uri.fromFile(file),"application/pdf");

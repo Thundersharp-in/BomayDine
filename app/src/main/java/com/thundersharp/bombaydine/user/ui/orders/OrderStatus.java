@@ -145,6 +145,35 @@ public class OrderStatus extends AppCompatActivity implements
                     holderArrayList.add(new InvoiceTableHolder(modeldatas.get(u).getQuantity(), modeldatas.get(u).getAmount(), modeldatas.get(u).getName()));
                 }
                 try {
+
+                    /*
+                    try {
+
+                    int amt=0;
+                    String code="";
+                    if (orederBasicDetails.getPromocodeNameNdiscount().equals("")){
+                        amt = 0;
+                        code="";
+                    }else {
+                        try {
+                            amt = Math.round(Integer.parseInt(orederBasicDetails.getPromocodeNameNdiscount().substring(orederBasicDetails.getPromocodeNameNdiscount().indexOf("#")+1)));
+                        }catch (NumberFormatException exception){
+                            Toast.makeText(OrderStatus.this, "Invalid Discount Amount!", Toast.LENGTH_SHORT).show();
+                            amt = 0;
+                        }
+                        code = orederBasicDetails.getPromocodeNameNdiscount().substring(0,orederBasicDetails.getPromocodeNameNdiscount().indexOf("$"));
+
+                    }
+                    Billing
+                            .initializeBiller(OrderStatus.this)
+                            .setInfoData(InfoData.setData(R.drawable.ic_launcher, FirebaseAuth.getInstance().getCurrentUser().getDisplayName(), FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), orederBasicDetails.getDelivery_address(), orederBasicDetails.getOrderID(), "These are terms and Conditions .", code, amt))
+                            .attachObserver(this)
+                            .createPdf(holderArrayList);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                     */
+
                     Billing
                             .initializeBiller(OrderStatus.this)
                             .setInfoData(InfoData.setData(R.drawable.ic_launcher, "Prateek", "7301694135", orederBasicDetails.getDelivery_address(), orederBasicDetails.getOrderID(), "These are terms and Conditions .", "Welcome50", 100))
