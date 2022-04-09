@@ -539,7 +539,7 @@ class BillCore extends AsyncTask<ArrayList<InvoiceTableHolder>, String, Integer>
 
         //BarCode.getBarCodeFromData(infoData.getOrderId(),writer);
 
-        PdfPCell barCode = new PdfPCell();
+        PdfPCell barCode = new PdfPCell(BarCode.getBarCodeFromData(Billing.infoData.getOrderId(),writer));
         barCode.setBorder(Rectangle.NO_BORDER);
         barCode.setPaddingTop(20);
         barCode.setColspan(2);

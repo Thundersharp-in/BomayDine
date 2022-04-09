@@ -8,9 +8,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.razorpay.PaymentResultListener;
 import com.thundersharp.bombaydine.R;
 import com.thundersharp.bombaydine.user.core.Model.PaymentsRequestOptions;
+import com.thundersharp.bombaydine.user.ui.menu.AllItemsActivity;
 import com.thundersharp.conversation.ChatStarter;
 import com.thundersharp.payments.payments.PaymentObserver;
 
@@ -39,11 +41,8 @@ public class Payments extends AppCompatActivity implements PaymentResultListener
         setContentView(R.layout.activity_payments);
 
         com.thundersharp.payments.payments.Payments
-                .initialize(this)
-                .startPayment(requestOptions.getRequestOptions().getMerchantTittle(),
-                requestOptions.getRequestOptions().getTransactionAmount(),
-                requestOptions.getRequestOptions().getCustomerEmail(),
-                requestOptions.getRequestOptions().getCustomerPhone());
+                .initialize(Payments.this)
+                .startPayment("View payments", 1, FirebaseAuth.getInstance().getCurrentUser().getEmail(), FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
     }
 
     @Override

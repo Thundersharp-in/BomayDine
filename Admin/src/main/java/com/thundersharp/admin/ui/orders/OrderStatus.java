@@ -164,9 +164,10 @@ public class OrderStatus extends AppCompatActivity implements
             order_no.setText("#" + orederBasicDetails.getOrderID() + "\nPayment id : " + orederBasicDetails.getPaymentid());
             textupdate.setOnClickListener(c -> {
                 ChatStarter chatStarter = ChatStarter.initializeChat(this);
-                chatStarter.setChatType(ChatStarter.MODE_CHAT_FROM_COOK_SPECIFIC_ORDER);
-                chatStarter.setSenderUid(FirebaseAuth.getInstance().getUid());
-                chatStarter.setCostomerName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+                chatStarter.setChatType(ChatStarter.MODE_CHAT_ADMIN);
+                chatStarter.setSenderUid("SUPPORT56065");
+                chatStarter.setCustomerId(orederBasicDetails.getUid());
+                chatStarter.setCostomerName(orederBasicDetails.getDeliveryNameData());
                 chatStarter.setOrderId(orederBasicDetails.getOrderID());
 
                 try {
@@ -278,16 +279,11 @@ public class OrderStatus extends AppCompatActivity implements
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if (item.getItemId() == R.id.chat) {
             ChatStarter chatStarter = ChatStarter.initializeChat(this);
-
-            chatStarter.setSenderUid(FirebaseAuth.getInstance().getUid());
-            chatStarter.setCostomerName(FirebaseAuth.getInstance().getCurrentUser().getDisplayName());
+            chatStarter.setChatType(ChatStarter.MODE_CHAT_ADMIN);
+            chatStarter.setSenderUid("SUPPORT56065");
+            chatStarter.setCustomerId(orederBasicDetails.getUid());
+            chatStarter.setCostomerName(orederBasicDetails.getDeliveryNameData());
             chatStarter.setOrderId(orederBasicDetails.getOrderID());
-
-            if (orederBasicDetails.getStatus().equalsIgnoreCase("3")) {
-                chatStarter.setChatType(ChatStarter.MODE_CHAT_FROM_SPECIFIC_ORDER);
-
-            } else chatStarter.setChatType(ChatStarter.MODE_CHAT_FROM_SPECIFIC_ORDER_PRE_DELIVERY);
-
             try {
                 chatStarter.startChat();
             } catch (ParametersMissingException e) {

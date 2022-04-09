@@ -109,22 +109,30 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View 
     BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals("initialMessage")){
-                abc++;
-                Log.e("InitialMesage",String.valueOf(abc));
-                sendMessage("Hello on which order you need help today ?");
-                if (mChatRecyclerAdapter != null){
-                    Chat chat1 = new Chat(Resturant.RESTURANT_SUPPORT_NAME, "", Resturant.RESTURANT_SUPPORT_ID, FirebaseAuth.getInstance().getUid(), "::Chatchooser", System.currentTimeMillis());
-                    mChatRecyclerAdapter.add(chat1);
+            if (getArguments().getInt("CHAT_TYPE") != ChatStarter.MODE_CHAT_ADMIN) {
+                if (intent.getAction().equals("initialMessage")) {
+                    abc++;
+                    Log.e("InitialMesage", String.valueOf(abc));
+                    sendMessage("Hello on which order you need help today ?");
+                    if (mChatRecyclerAdapter != null) {
+                        Chat chat1 = new Chat(
+                                Resturant.RESTURANT_SUPPORT_NAME,
+                                "",
+                                Resturant.RESTURANT_SUPPORT_ID,
+                                FirebaseAuth.getInstance().getUid(),
+                                "::Chatchooser",
+                                System.currentTimeMillis());
+                        mChatRecyclerAdapter.add(chat1);
+                    }
+                } else if (intent.getAction().equals("updateRequest")) {
+                    ct2++;
+                    Log.e("updateRequest", String.valueOf(ct2));
+                    //TODO UPDATE FOR INSTANT UPDATE OF CHAT ELEMENTS
+                    dataBrodcast = intent.getStringExtra("data");
+                    sendMessage(dataBrodcast, 0);
+
+
                 }
-            }else if (intent.getAction().equals("updateRequest")){
-                ct2++;
-                Log.e("updateRequest",String.valueOf(ct2));
-                //TODO UPDATE FOR INSTANT UPDATE OF CHAT ELEMENTS
-                dataBrodcast= intent.getStringExtra("data");
-                sendMessage(dataBrodcast,0);
-
-
             }
         }
     };
@@ -200,40 +208,67 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View 
         String sender = getArguments().getString(Constants.ARG_NAME);
         String senderUid = getArguments().getString(Constants.ARG_SENDER_UID);
 
+        if (getArguments().getInt("CHAT_TYPE") != ChatStarter.MODE_CHAT_ADMIN) {
 
-        Chat chat = new Chat(sender,
-                receiver,
-                senderUid,
-                receiverUid,
-                message,
-                System.currentTimeMillis());
+            Chat chat = new Chat(sender,
+                    receiver,
+                    senderUid,
+                    receiverUid,
+                    message,
+                    System.currentTimeMillis());
 
-        mChatPresenter.sendMessage(getActivity().getApplicationContext(),
-                chat,
-                "");
+            mChatPresenter.sendMessage(getActivity().getApplicationContext(),
+                    chat,
+                    "");
+        }else {
+            Chat chat = new Chat(
+                    Resturant.RESTURANT_SUPPORT_NAME,
+                    receiver,
+                    Resturant.RESTURANT_SUPPORT_ID,
+                    receiverUid,
+                    message,
+                    System.currentTimeMillis());
+            mChatPresenter.sendMessage(getActivity().getApplicationContext(),
+                    chat,
+                    "");
+
+        }
     }
 
     private void sendMessage(String Custommesssage,int k) {
-        isBroadCasted = true;
-        if (mChatRecyclerAdapter != null){
-            mChatRecyclerAdapter.remove(mChatRecyclerAdapter.getItemCount()-1);
-        }
         String receiver = getArguments().getString(Constants.ARG_RECEIVER);
         String receiverUid = getArguments().getString(Constants.ARG_RECEIVER_UID);
         String sender = getArguments().getString(Constants.ARG_NAME);
         String senderUid = getArguments().getString(Constants.ARG_SENDER_UID);
 
+        if (getArguments().getInt("CHAT_TYPE") != ChatStarter.MODE_CHAT_ADMIN) {
+            isBroadCasted = true;
+            if (mChatRecyclerAdapter != null) {
+                mChatRecyclerAdapter.remove(mChatRecyclerAdapter.getItemCount() - 1);
+            }
 
-        Chat chat = new Chat(sender,
-                receiver,
-                senderUid,
-                receiverUid,
-                Custommesssage,
-                System.currentTimeMillis());
+            Chat chat = new Chat(sender,
+                    receiver,
+                    senderUid,
+                    receiverUid,
+                    Custommesssage,
+                    System.currentTimeMillis());
 
-        mChatPresenter.sendMessage(getActivity(),
-                chat,
-                "");
+            mChatPresenter.sendMessage(getActivity(),
+                    chat,
+                    "");
+        }else {
+            Chat chat = new Chat(
+                    Resturant.RESTURANT_SUPPORT_NAME,
+                    receiver,
+                    Resturant.RESTURANT_SUPPORT_ID,
+                    receiverUid,
+                    Custommesssage,
+                    System.currentTimeMillis());
+            mChatPresenter.sendMessage(getActivity().getApplicationContext(),
+                    chat,
+                    "");
+        }
     }
 
 
@@ -243,19 +278,20 @@ public class ChatFragmentInternal extends Fragment implements ChatContract.View 
         String receiverUid = getArguments().getString(Constants.ARG_RECEIVER_UID);
         String sender = getArguments().getString(Constants.ARG_NAME);
         String senderUid = getArguments().getString(Constants.ARG_SENDER_UID);
+        if (getArguments().getInt("CHAT_TYPE") != ChatStarter.MODE_CHAT_ADMIN) {
 
+            Chat chat = new Chat(
+                    Resturant.RESTURANT_SUPPORT_NAME,
+                    getArguments().getString(Constants.ARG_NAME),
+                    Resturant.RESTURANT_SUPPORT_ID,
+                    FirebaseAuth.getInstance().getUid(),
+                    message,
+                    System.currentTimeMillis());
 
-        Chat chat = new Chat(
-                Resturant.RESTURANT_SUPPORT_NAME,
-                getArguments().getString(Constants.ARG_NAME),
-                Resturant.RESTURANT_SUPPORT_ID,
-                FirebaseAuth.getInstance().getUid(),
-                message,
-                System.currentTimeMillis());
-
-        mChatPresenter.sendMessage(getActivity(),
-                chat,
-                "");
+            mChatPresenter.sendMessage(getActivity(),
+                    chat,
+                    "");
+        }
     }
 
 

@@ -94,7 +94,8 @@ import java.util.function.UnaryOperator;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class TableBookingMain extends Fragment implements PaymentObserver, DateSelectedListener {
+public class
+TableBookingMain extends Fragment implements PaymentObserver, DateSelectedListener {
 
     private static final int REQUEST_CHECK_SETTINGS = 1001;
     private TableGuestCounter tableGuestCounter;

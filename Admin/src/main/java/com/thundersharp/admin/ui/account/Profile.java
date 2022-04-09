@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
@@ -81,7 +82,32 @@ public class Profile extends Fragment {
             getActivity().finish();
         });
         bookmarks =  view.findViewById(R.id.bookmarks);
-        bookmarks.setOnClickListener(v -> startActivity(new Intent(getContext(), EditTopSelling.class)));
+        bookmarks.setOnClickListener(v -> Toast.makeText(getContext(), "Not Available for admin", Toast.LENGTH_SHORT).show());
+
+
+        ((LinearLayout)view.findViewById(R.id.settings)).setOnClickListener(vir ->{
+            Toast.makeText(getContext(), "Not Available for admin", Toast.LENGTH_SHORT).show();
+        });
+
+        ((LinearLayout)view.findViewById(R.id.bookmarks)).setOnClickListener(vir ->{
+            Toast.makeText(getContext(), "Not Available for admin", Toast.LENGTH_SHORT).show();
+        });
+
+        ((LinearLayout)view.findViewById(R.id.payments)).setOnClickListener(vir ->{
+           Toast.makeText(getContext(), "Not Available for admin", Toast.LENGTH_SHORT).show();
+        });
+
+        ((LinearLayout)view.findViewById(R.id.addAddress)).setOnClickListener(vir ->{
+            Toast.makeText(getContext(), "Not Available for admin", Toast.LENGTH_SHORT).show();
+        });
+
+        ((MaterialCardView)view.findViewById(R.id.ratingsNreview)).setOnClickListener(V ->{
+            Toast.makeText(getContext(), "Not Available for admin", Toast.LENGTH_SHORT).show();
+        });
+
+        ((MaterialCardView)view.findViewById(R.id.refunds)).setOnClickListener(V ->{
+            Toast.makeText(getContext(), "Not Available for admin", Toast.LENGTH_SHORT).show();
+        });
         return view;
     }
 

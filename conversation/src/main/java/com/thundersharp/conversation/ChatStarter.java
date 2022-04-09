@@ -1,6 +1,7 @@
 package com.thundersharp.conversation;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
@@ -114,7 +115,9 @@ public class ChatStarter {
             throw new ParametersMissingException(stringBuilder.toString());
 
         }else {
+            Log.e("MODE ",""+getChatMode());
             switch (getChatMode()){
+
                 case ChatStarter.MODE_CHAT_FROM_ORDERS:
                     ChatActivity
                             .startActivity(context,
@@ -189,7 +192,19 @@ public class ChatStarter {
 
                         throw new ParametersMissingException("Costumer id not defined. Have you called setCostumerId() ?");
 
-                    }else ChatActivity.startActivity(context,getCostomerName(),getCostumerUid(),Resturant.RESTURANT_SUPPORT_NAME,getSenderUid(),getChatMode());
+                    }else {
+                        Log.e("CoST ", getCostomerName());
+                        Log.e("CUSTUID ",getCostumerUid());
+                        Log.e("RN ",Resturant.RESTURANT_SUPPORT_NAME);
+                        Log.e("CM",getChatMode()+"");
+                        ChatActivity.startActivity(context,
+                                getCostomerName(),
+                                getCostumerUid(),
+                                Resturant.RESTURANT_SUPPORT_NAME,
+                                "SUPPORT56065",
+                                getChatMode());
+
+                    }
                     break;
 
                 default:

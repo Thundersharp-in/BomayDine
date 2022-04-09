@@ -4,7 +4,7 @@ import com.google.android.gms.maps.model.LatLng;
 
 public final class ResturantCoordinates {
 
-    public static final LatLng resturantLatLong = new LatLng(23.659914, 86.158865);
+    public static final LatLng resturantLatLong = new LatLng(13.083059, 77.482913);
 
     public static final double deliveryChargesPerKilometer = 10.0;
     public static final double maxDeliveryCharges = 100.0;

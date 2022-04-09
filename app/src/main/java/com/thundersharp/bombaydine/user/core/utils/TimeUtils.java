@@ -53,7 +53,6 @@ public class TimeUtils {
         c.set(Calendar.MILLISECOND,00);
 
         c.add(Calendar.DAY_OF_MONTH,noOfDays);
-
         return c.getTimeInMillis();
     }
 

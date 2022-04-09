@@ -46,7 +46,7 @@ public class AddressHelper implements AddressLoader,AddressUpdater.onAddressData
                             if (snapshot.exists()) {
                                 List<AddressData> addressData = new ArrayList<>();
                                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                                    addressData.add(dataSnapshot.getValue(AddressData.class));
+                                    addressData.add((AddressData)dataSnapshot.getValue(AddressData.class));
                                 }
 
                                 onAddresLoadListner.onAddressLoaded(addressData);

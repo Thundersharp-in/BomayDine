@@ -17,6 +17,7 @@ import android.os.Bundle;
 import android.os.Looper;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -58,6 +59,7 @@ import com.google.android.gms.location.LocationSettingsResponse;
 import com.google.android.gms.location.LocationSettingsStatusCodes;
 import com.google.android.gms.location.SettingsClient;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -72,6 +74,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.google.maps.android.PolyUtil;
 import com.thundersharp.bombaydine.user.core.Model.OrederBasicDetails;
 import com.thundersharp.bombaydine.user.core.utils.CONSTANTS;
@@ -98,6 +101,7 @@ import com.thundersharp.bombaydine.user.core.cart.CartHandler;
 import com.thundersharp.bombaydine.user.core.cart.CartProvider;
 import com.thundersharp.bombaydine.user.core.location.DistanceFromCoordinates;
 import com.thundersharp.bombaydine.user.core.location.StorageFailure;
+import com.thundersharp.bombaydine.user.core.utils.DataUtils;
 import com.thundersharp.bombaydine.user.core.utils.LatLongConverter;
 import com.thundersharp.bombaydine.user.core.utils.Resturant;
 import com.thundersharp.bombaydine.user.ui.account.UpdateProfileActivity;
@@ -258,6 +262,27 @@ public class HomeFragment extends Fragment implements
         swipe_refresh.setRefreshing(true);
 
         refresh(view);
+
+        FirebaseMessaging.getInstance()
+                .getToken()
+                .addOnCompleteListener(new OnCompleteListener<String>() {
+                    @Override
+                    public void onComplete(@NonNull Task<String> task) {
+                        Log.d("TAG", "Refreshed token: " + task.getResult());
+                        FirebaseDatabase
+                                .getInstance()
+                                .getReference(CONSTANTS.DATABASE_NODE_ALL_USERS)
+                                .child(FirebaseAuth.getInstance().getUid())
+                                .child("FCM_TOKEN")
+                                .setValue(task.getResult()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                            @Override
+                            public void onComplete(@NonNull Task<Void> task) {
+                                Toast.makeText(getContext(), ""+task.isSuccessful(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                });
+
 
 
         swipe_refresh.setOnRefreshListener(() -> {
