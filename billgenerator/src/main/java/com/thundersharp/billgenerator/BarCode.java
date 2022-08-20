@@ -1,6 +1,5 @@
 package com.thundersharp.billgenerator;
 
-
 import android.graphics.Bitmap;
 
 import com.google.zxing.BarcodeFormat;

@@ -111,7 +111,14 @@ TableBookingMain extends Fragment implements PaymentObserver, DateSelectedListen
     private Integer data;
 
     private TextView nameBott;
-    private String dataName_Phone = FirebaseAuth.getInstance().getCurrentUser().getDisplayName() + ", " + FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber();
+    private String dataName_Phone = FirebaseAuth
+            .getInstance()
+            .getCurrentUser()
+            .getDisplayName() + ", " +
+            FirebaseAuth
+                    .getInstance()
+                    .getCurrentUser()
+                    .getPhoneNumber();
 
 
     /**
